@@ -1,6 +1,5 @@
 package uk.gov.justice.services.metrics.interceptor;
 
-import uk.gov.justice.services.common.configuration.ServiceContextNameProvider;
 import uk.gov.justice.services.core.interceptor.Interceptor;
 import uk.gov.justice.services.core.interceptor.InterceptorChain;
 import uk.gov.justice.services.core.interceptor.InterceptorContext;
@@ -11,11 +10,9 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 
 public abstract class AbstractMetricsInterceptor implements Interceptor {
-    @Inject
-    MetricRegistry metricsRegistry;
 
     @Inject
-    ServiceContextNameProvider serviceContextNameProvider;
+    MetricRegistry metricsRegistry;
 
     @Override
     public InterceptorContext process(final InterceptorContext interceptorContext, final InterceptorChain interceptorChain) {
@@ -27,8 +24,8 @@ public abstract class AbstractMetricsInterceptor implements Interceptor {
         }
     }
 
-    protected String componentName() {
-        return serviceContextNameProvider.getServiceContextName();
+    protected String componentName(final InterceptorContext interceptorContext) {
+        return interceptorContext.getComponentName();
     }
 
     protected abstract String timerNameOf(final InterceptorContext interceptorContext);

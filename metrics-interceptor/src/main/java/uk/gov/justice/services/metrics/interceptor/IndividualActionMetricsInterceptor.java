@@ -9,6 +9,6 @@ public class IndividualActionMetricsInterceptor extends AbstractMetricsIntercept
 
     @Override
     protected String timerNameOf(final InterceptorContext interceptorContext) {
-        return format("%s.action.%s", componentName(), interceptorContext.inputEnvelope().metadata().name());
+        return format("%s.action.%s", componentName(interceptorContext), interceptorContext.inputEnvelope().metadata().name());
     }
 }
