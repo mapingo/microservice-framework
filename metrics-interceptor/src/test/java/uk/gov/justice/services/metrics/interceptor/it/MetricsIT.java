@@ -7,8 +7,8 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_LISTENER;
 import static uk.gov.justice.services.core.interceptor.DefaultInterceptorContext.interceptorContextWithInput;
-import static uk.gov.justice.services.messaging.DefaultJsonEnvelope.envelope;
-import static uk.gov.justice.services.messaging.JsonObjectMetadata.metadataWithRandomUUID;
+import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
+import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 
 import uk.gov.justice.services.common.configuration.GlobalValueProducer;
 import uk.gov.justice.services.common.converter.ObjectToJsonValueConverter;
@@ -40,11 +40,10 @@ import uk.gov.justice.services.core.interceptor.InterceptorChainProvider;
 import uk.gov.justice.services.core.json.JsonSchemaLoader;
 import uk.gov.justice.services.core.requester.RequesterProducer;
 import uk.gov.justice.services.core.sender.SenderProducer;
-import uk.gov.justice.services.messaging.DefaultJsonObjectEnvelopeConverter;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.jms.DefaultEnvelopeConverter;
 import uk.gov.justice.services.messaging.jms.DefaultJmsEnvelopeSender;
-import uk.gov.justice.services.messaging.logging.DefaultTraceLogger;
+import uk.gov.justice.services.messaging.spi.JsonEnvelopeProvider;
 import uk.gov.justice.services.metrics.interceptor.IndividualActionMetricsInterceptor;
 import uk.gov.justice.services.metrics.interceptor.MetricRegistryProducer;
 import uk.gov.justice.services.metrics.interceptor.TotalActionMetricsInterceptor;
@@ -101,7 +100,6 @@ public class MetricsIT {
             DefaultEnvelopeConverter.class,
 
             StringToJsonObjectConverter.class,
-            DefaultJsonObjectEnvelopeConverter.class,
             ObjectToJsonValueConverter.class,
             ObjectMapper.class,
             Enveloper.class,
@@ -123,7 +121,7 @@ public class MetricsIT {
             EnvelopeValidationExceptionHandlerProducer.class,
             GlobalValueProducer.class,
             JsonSchemaLoader.class,
-            DefaultTraceLogger.class
+            JsonEnvelopeProvider.class
     })
     public WebApp war() {
         return new WebApp()
