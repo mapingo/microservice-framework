@@ -8,6 +8,6 @@ public class TotalActionMetricsInterceptor extends AbstractMetricsInterceptor {
 
     @Override
     protected String timerNameOf(final InterceptorContext interceptorContext) {
-        return format("%s.action.total", componentName());
+        return format("%s.action.total", componentName(interceptorContext));
     }
 }

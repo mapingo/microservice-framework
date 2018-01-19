@@ -34,9 +34,6 @@ public class TotalActionMetricsInterceptorTest {
     private Timer.Context timerContext;
 
     @Mock
-    private ServiceContextNameProvider serviceContextNameProvider;
-
-    @Mock
     private InterceptorContext interceptorContext;
 
     @InjectMocks
@@ -45,7 +42,7 @@ public class TotalActionMetricsInterceptorTest {
     @Test
     public void shouldGetTimerFromRegistryByContextName() {
 
-        when(serviceContextNameProvider.getServiceContextName()).thenReturn("someCtxNameABC");
+        when(interceptorContext.getComponentName()).thenReturn("someCtxNameABC");
         when(metricsRegistry.timer("someCtxNameABC.action.total")).thenReturn(timer);
         when(timer.time()).thenReturn(timerContext);
 

@@ -4,11 +4,10 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.core.interceptor.DefaultInterceptorContext.interceptorContextWithInput;
-import static uk.gov.justice.services.messaging.JsonObjectMetadata.metadataWithDefaults;
-import static uk.gov.justice.services.messaging.JsonObjectMetadata.metadataWithRandomUUID;
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
+import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithDefaults;
+import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 
-import uk.gov.justice.services.common.configuration.ServiceContextNameProvider;
 import uk.gov.justice.services.core.interceptor.InterceptorChain;
 import uk.gov.justice.services.core.interceptor.InterceptorContext;
 
@@ -37,9 +36,6 @@ public class IndividualActionMetricsInterceptorTest {
     @Mock
     private Timer.Context timerContext;
 
-    @Mock
-    ServiceContextNameProvider serviceContextNameProvider;
-
     @InjectMocks
     private IndividualActionMetricsInterceptor interceptor;
 
@@ -47,12 +43,14 @@ public class IndividualActionMetricsInterceptorTest {
     @Test
     public void shouldGetTimerFromRegistryByContextName() {
 
-        when(serviceContextNameProvider.getServiceContextName()).thenReturn("someCtxName");
         when(metricsRegistry.timer("someCtxName.action.actionNameABC")).thenReturn(timer);
         when(timer.time()).thenReturn(timerContext);
 
-        interceptor.process(interceptorContextWithInput(
-                envelope().with(metadataWithRandomUUID("actionNameABC")).build()), interceptorChain);
+        final InterceptorContext interceptorContext = interceptorContextWithInput(
+                envelope().with(metadataWithRandomUUID("actionNameABC")).build());
+        interceptorContext.setInputParameter("component", "someCtxName");
+
+        interceptor.process(interceptorContext, interceptorChain);
 
         verify(metricsRegistry).timer("someCtxName.action.actionNameABC");
     }

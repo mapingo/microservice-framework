@@ -7,11 +7,10 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_LISTENER;
 import static uk.gov.justice.services.core.interceptor.DefaultInterceptorContext.interceptorContextWithInput;
-import static uk.gov.justice.services.messaging.DefaultJsonEnvelope.envelope;
-import static uk.gov.justice.services.messaging.JsonObjectMetadata.metadataWithRandomUUID;
+import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
+import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 
 import uk.gov.justice.services.common.configuration.GlobalValueProducer;
-import uk.gov.justice.services.common.configuration.ServiceContextNameProvider;
 import uk.gov.justice.services.common.converter.ObjectToJsonValueConverter;
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
 import uk.gov.justice.services.common.util.UtcClock;
@@ -38,15 +37,13 @@ import uk.gov.justice.services.core.interceptor.InterceptorChainObserver;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProcessor;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProcessorProducer;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProvider;
-import uk.gov.justice.services.core.json.DefaultJsonSchemaValidator;
 import uk.gov.justice.services.core.json.JsonSchemaLoader;
 import uk.gov.justice.services.core.requester.RequesterProducer;
 import uk.gov.justice.services.core.sender.SenderProducer;
-import uk.gov.justice.services.messaging.DefaultJsonObjectEnvelopeConverter;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.jms.DefaultEnvelopeConverter;
 import uk.gov.justice.services.messaging.jms.DefaultJmsEnvelopeSender;
-import uk.gov.justice.services.messaging.logging.DefaultTraceLogger;
+import uk.gov.justice.services.messaging.spi.JsonEnvelopeProvider;
 import uk.gov.justice.services.metrics.interceptor.IndividualActionMetricsInterceptor;
 import uk.gov.justice.services.metrics.interceptor.MetricRegistryProducer;
 import uk.gov.justice.services.metrics.interceptor.TotalActionMetricsInterceptor;
@@ -103,7 +100,6 @@ public class MetricsIT {
             DefaultEnvelopeConverter.class,
 
             StringToJsonObjectConverter.class,
-            DefaultJsonObjectEnvelopeConverter.class,
             ObjectToJsonValueConverter.class,
             ObjectMapper.class,
             Enveloper.class,
@@ -120,14 +116,12 @@ public class MetricsIT {
             TotalActionMetricsInterceptor.class,
             IndividualActionMetricsInterceptor.class,
             SystemUserUtil.class,
-            TestServiceContextNameProvider.class,
             UtcClock.class,
 
             EnvelopeValidationExceptionHandlerProducer.class,
             GlobalValueProducer.class,
-            DefaultJsonSchemaValidator.class,
             JsonSchemaLoader.class,
-            DefaultTraceLogger.class
+            JsonEnvelopeProvider.class
     })
     public WebApp war() {
         return new WebApp()
@@ -181,15 +175,6 @@ public class MetricsIT {
 
         assertThat(countAbc, is(2L));
         assertThat(countBcd, is(1L));
-    }
-
-    @ApplicationScoped
-    public static class TestServiceContextNameProvider implements ServiceContextNameProvider {
-
-        @Override
-        public String getServiceContextName() {
-            return "test-component";
-        }
     }
 
     @ServiceComponent(EVENT_LISTENER)

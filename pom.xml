@@ -21,11 +21,14 @@
     </modules>
 
     <properties>
-        <common-bom.version>1.21.0</common-bom.version>
-        <microservice-framework.version>2.4.1</microservice-framework.version>
-        <utilities.version>1.10.0</utilities.version>
-        <test-utils.version>1.13.1</test-utils.version>
         <cpp.repo.name>metrics</cpp.repo.name>
+
+        <common-bom.version>1.22.0</common-bom.version>
+        <framework-api.version>1.1.0</framework-api.version>
+        <microservice-framework.version>3.0.0</microservice-framework.version>
+
+        <test-utils.version>1.16.0</test-utils.version>
+        <utilities.version>1.11.0</utilities.version>
     </properties>
 
     <scm>
