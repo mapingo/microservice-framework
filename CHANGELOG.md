@@ -5,7 +5,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## Unreleased
 
-## [1.2.3] - 2018-07-11
+## [1.2.3] - 2018-07-12
 
 ### Changed
 - Upgrade framework to version 4.3.2
