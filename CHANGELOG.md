@@ -5,6 +5,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## Unreleased
 
+### Changed
+- Upgrade framework to version 4.3.3
+- Updated common-bom version to 1.28.0
+- Updated utilities version to 1.15.0 to fix integer enum serialization/deserialization
+
 ## [1.2.3] - 2018-07-12
 
 ### Changed
