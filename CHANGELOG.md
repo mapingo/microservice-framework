@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## Unreleased
 
+## [1.3.1] - 2018-08-14
+
+### No changes
+
 ## [1.2.5] - 2018-08-13
 
 ### Changed
