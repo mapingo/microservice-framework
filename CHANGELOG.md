@@ -4,6 +4,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+### No changes
+
+## [1.3.2] - 2018-09-10
+### Changed
+-Change MetricRegistryProducer to produce a static instance of MetricRegistry
 
 ## [1.3.1] - 2018-08-14
 
