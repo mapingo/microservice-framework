@@ -10,10 +10,18 @@ import com.codahale.metrics.MetricRegistry;
 @ApplicationScoped
 public class MetricRegistryProducer {
 
+    private static final MetricRegistry METRICS_REGISTRY = createMetricsRegistry();
+
     @Produces
     public MetricRegistry metricRegistry() {
-        final MetricRegistry metricRegistry = new MetricRegistry();
-        JmxReporter.forRegistry(metricRegistry).inDomain("uk.gov.justice.metrics").build().start();
-        return metricRegistry;
+        return METRICS_REGISTRY;
+    }
+
+    private static MetricRegistry createMetricsRegistry() {
+
+        final MetricRegistry aMetricsRegistry = new MetricRegistry();
+        JmxReporter.forRegistry(aMetricsRegistry).inDomain("uk.gov.justice.metrics").build().start();
+
+        return aMetricsRegistry;
     }
 }
