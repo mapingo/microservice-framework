@@ -4,7 +4,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
-### No changes
+
+## [2.0.1] - 2018-11-15
+### Changed
+- Updated framework-api to version 3.0.1
+- Updated framework to version 5.0.4
 
 ## [2.0.0] - 2018-11-08
 ### Changed
