@@ -23,7 +23,7 @@
     <properties>
         <cpp.repo.name>metrics</cpp.repo.name>
 
-        <microservice-framework.version>5.0.4</microservice-framework.version>
+        <microservice-framework.version>5.0.5</microservice-framework.version>
         <common-bom.version>1.28.0</common-bom.version>
         <framework-api.version>3.0.1</framework-api.version>
         <test-utils.version>1.18.1</test-utils.version>
