@@ -5,6 +5,13 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## Unreleased
 
+## [2.1.0] - 2019-01-09
+### Chnaged
+- Updated framework-api to version 3.1.0
+- Updated framework to version 5.1.0
+- Updated test-utils to version 1.19.1
+- Updated utilities to version 1.16.2
+
 ## [2.0.3] - 2018-12-20
 ### Changed
 - Updated framework to version 5.0.6
