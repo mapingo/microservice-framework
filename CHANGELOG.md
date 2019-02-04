@@ -5,6 +5,15 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## Unreleased
 
+## [2.1.1] - 2019-02-04
+### Chnaged
+- Updated common-bom to version 1.29.0
+- Updated framework-api to version 3.2.0
+- Updated framework to version 5.1.1
+- Updated test-utils to version 1.22.0
+- Updated utilities to version 1.16.4
+
+
 ## [2.1.0] - 2019-01-09
 ### Chnaged
 - Updated framework-api to version 3.1.0
