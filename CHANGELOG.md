@@ -5,6 +5,14 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## Unreleased
 
+## [2.1.4] - 2019-05-07
+### Changed
+- microservice-framework -> 6.0.0-M22
+- common-bom -> 2.0.2
+- framework-api -> 4.0.0-M18
+- test-utils -> 1.23.0
+- utilities ->1.18.0
+
 ## [2.1.2] - 2019-02-27
 ### Chnaged
 - Updated framework-api to version 3.4.0-M1
