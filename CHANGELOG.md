@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## Unreleased
 
+## [3.0.0-RC2] - 2019-07-04
+### Changed
+- microservice-framework -> 6.0.0-RC2
+
 ## [3.0.0-RC1] - 2019-06-27
 ### Changed
 - microservice-framework -> 6.0.0-RC1
@@ -27,7 +31,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - utilities ->1.18.0
 
 ## [2.1.2] - 2019-02-27
-### Chnaged
+### Changed
 - Updated framework-api to version 3.4.0-M1
 - Updated framework to version 5.3.0-M2
 
