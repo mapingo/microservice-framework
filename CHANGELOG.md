@@ -5,37 +5,14 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## Unreleased
 
-## [3.0.0-RC6] - 2019-07-18
-### Changed
-- microservice-framework -> 6.0.0-RC9
+## [3.0.0] - 2019-08-15
 
-## [3.0.0-RC5] - 2019-07-18
 ### Changed
-- microservice-framework -> 6.0.0-RC8
-
-## [3.0.0-RC4] - 2019-07-16
-### Changed
-- microservice-framework -> 6.0.0-RC7
-
-## [3.0.0-RC3] - 2019-07-12
-### Changed
-- microservice-framework -> 6.0.0-RC4
+- microservice-framework -> 6.0.2
 - common-bom -> 2.4.0
 - framework-api -> 4.0.1
 - test-utils -> 1.24.3
-- utilities ->1.20.1
-
-## [3.0.0-RC2] - 2019-07-04
-### Changed
-- microservice-framework -> 6.0.0-RC2
-
-## [3.0.0-RC1] - 2019-06-27
-### Changed
-- microservice-framework -> 6.0.0-RC1
-- common-bom -> 2.3.0
-- framework-api -> 4.0.0
-- test-utils -> 1.24.2
-- utilities ->1.20.0
+- utilities ->1.20.2
 
 ## [2.1.5] - 2019-05-13
 ### Changed
