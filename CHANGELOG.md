@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## Unreleased
 
+## [3.1.0] - 2019-10-01
+### Changed
+- microservice-framework -> 6.1.1
+
 ## [3.0.8] - 2019-09-23
 ### Changed
 - microservice-framework -> 6.0.16
