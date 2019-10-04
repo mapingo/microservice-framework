@@ -12,7 +12,7 @@
 
     <groupId>uk.gov.justice.metrics</groupId>
     <artifactId>metrics</artifactId>
-    <version>3.0.9-SNAPSHOT</version>
+    <version>3.0.9</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -23,7 +23,7 @@
     <properties>
         <cpp.repo.name>metrics</cpp.repo.name>
 
-        <microservice-framework.version>6.0.16</microservice-framework.version>
+        <microservice-framework.version>6.0.17</microservice-framework.version>
         <common-bom.version>2.4.0</common-bom.version>
         <framework-api.version>4.1.0</framework-api.version>
         <test-utils.version>1.24.3</test-utils.version>
