@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/json/schema/contexta.commanda.json",
+  "type": "object",
+  "properties": {
+    "someField1": {
+      "id": "/someField1",
+      "type": "string"
+    }
+  },
+  "required": [
+    "someField1"
+  ]
+}
