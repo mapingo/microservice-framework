@@ -1,0 +1,14 @@
+event_sources:
+  - name: default
+    is_default: true
+    location:
+      jms_uri: jms:topic:default
+      rest_uri: http://localhost:8080/default/event-source-api/rest
+      data_source: java:/app/default/DS.eventstore
+  - name: no-data-source
+    location:
+      jms_uri: jms:topic:no.data.source
+      rest_uri: http://localhost:8080/no-data-source/event-source-api/rest
+  - name: no-data-source-or-rest-uri
+    location:
+      jms_uri: jms:topic:no.data.source.or.rest.uri

@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "filter": {
+      "type": "object",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/fieldFilter"
+        }
+      ]
+    }
+  },
+  "required": [
+    "filter"
+  ],
+  "definitions": {
+    "uuid": {
+      "$ref": "http://justice.gov.uk/json/schemas/core/data-types.json#/definitions/uuid"
+    },
+    "fieldFilter": {
+      "properties": {
+        "type": {
+          "enum": [
+            "FIELD"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/definitions/uuid"
+        },
+        "operation": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "value",
+        "operation"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

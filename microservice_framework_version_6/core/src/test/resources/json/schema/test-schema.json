@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "test-schema",
+  "type": "object",
+  "properties": {
+    "testField": {
+      "id": "/testField",
+      "type": "string"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "testField",
+    "created"
+  ]
+}

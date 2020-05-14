@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/schemas/test/example.get-recipe.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "id": "/name",
+      "type": "string"
+    },
+    "glutenFree": {
+      "id": "/glutenFree",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "name",
+    "glutenFree"
+  ]
+}

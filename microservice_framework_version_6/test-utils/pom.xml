@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>microservice-framework</artifactId>
+        <groupId>uk.gov.justice.services</groupId>
+        <version>6.4.3-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>test-utils</artifactId>
+    <description>Set of utility classes and dependencies to be used to assist in testing the
+        framework
+    </description>
+    <modules>
+        <module>test-utils-core</module>
+        <module>test-utils-common</module>
+        <module>test-utils-enveloper-provider</module>
+        <module>test-utils-framework-persistence</module>
+        <module>test-utils-messaging</module>
+        <module>test-utils-jmx</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>
