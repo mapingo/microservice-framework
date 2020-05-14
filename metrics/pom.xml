@@ -5,36 +5,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>uk.gov.justice</groupId>
-        <artifactId>maven-framework-parent-pom</artifactId>
-        <version>1.13.0</version>
+        <artifactId>microservice-framework</artifactId>
+        <groupId>uk.gov.justice.services</groupId>
+        <version>7.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>uk.gov.justice.metrics</groupId>
     <artifactId>metrics</artifactId>
-    <version>3.3.3-SNAPSHOT</version>
+    <version>7.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>metrics-interceptor</module>
         <module>metrics-servlet</module>
     </modules>
-
-    <properties>
-        <cpp.repo.name>metrics</cpp.repo.name>
-
-        <microservice-framework.version>6.4.2</microservice-framework.version>
-        <common-bom.version>2.4.0</common-bom.version>
-        <framework-api.version>4.3.0</framework-api.version>
-        <test-utils.version>1.24.3</test-utils.version>
-        <utilities.version>1.20.3</utilities.version>
-    </properties>
-
-    <scm>
-        <connection>${cpp.scm.connection}</connection>
-        <developerConnection>${cpp.scm.developerConnection}</developerConnection>
-        <url>${cpp.scm.url}</url>
-    </scm>
 
     <dependencyManagement>
         <dependencies>

@@ -10,10 +10,13 @@ import static uk.gov.justice.services.core.interceptor.InterceptorContext.interc
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 
+import uk.gov.justice.schema.service.SchemaCatalogResolverProducer;
 import uk.gov.justice.services.cdi.LoggerProducer;
+import uk.gov.justice.services.common.annotation.ComponentNameExtractor;
 import uk.gov.justice.services.common.configuration.GlobalValueProducer;
 import uk.gov.justice.services.common.converter.ObjectToJsonValueConverter;
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
+import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
 import uk.gov.justice.services.common.util.UtcClock;
 import uk.gov.justice.services.core.accesscontrol.AccessControlFailureMessageGenerator;
 import uk.gov.justice.services.core.accesscontrol.AllowAllPolicyEvaluator;
@@ -24,10 +27,15 @@ import uk.gov.justice.services.core.annotation.FrameworkComponent;
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.annotation.ServiceComponent;
 import uk.gov.justice.services.core.dispatcher.DispatcherCache;
+import uk.gov.justice.services.core.dispatcher.DispatcherFactory;
 import uk.gov.justice.services.core.dispatcher.EmptySystemUserProvider;
+import uk.gov.justice.services.core.dispatcher.EnvelopePayloadTypeConverter;
+import uk.gov.justice.services.core.dispatcher.JsonEnvelopeRepacker;
 import uk.gov.justice.services.core.dispatcher.ServiceComponentObserver;
 import uk.gov.justice.services.core.dispatcher.SystemUserUtil;
+import uk.gov.justice.services.core.envelope.EnvelopeInspector;
 import uk.gov.justice.services.core.envelope.EnvelopeValidationExceptionHandlerProducer;
+import uk.gov.justice.services.core.envelope.MediaTypeProvider;
 import uk.gov.justice.services.core.enveloper.Enveloper;
 import uk.gov.justice.services.core.extension.BeanInstantiater;
 import uk.gov.justice.services.core.extension.ServiceComponentScanner;
@@ -38,8 +46,11 @@ import uk.gov.justice.services.core.interceptor.InterceptorChainObserver;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProcessor;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProcessorProducer;
 import uk.gov.justice.services.core.json.JsonSchemaLoader;
+import uk.gov.justice.services.core.json.MediaTypesMappingCacheMock;
+import uk.gov.justice.services.core.mapping.DefaultNameToMediaTypeConverter;
 import uk.gov.justice.services.core.requester.RequesterProducer;
 import uk.gov.justice.services.core.sender.SenderProducer;
+import uk.gov.justice.services.messaging.DefaultJsonObjectEnvelopeConverter;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.jms.DefaultEnvelopeConverter;
 import uk.gov.justice.services.messaging.jms.DefaultJmsEnvelopeSender;
@@ -47,6 +58,7 @@ import uk.gov.justice.services.messaging.spi.JsonEnvelopeProvider;
 import uk.gov.justice.services.metrics.interceptor.IndividualActionMetricsInterceptor;
 import uk.gov.justice.services.metrics.interceptor.MetricRegistryProducer;
 import uk.gov.justice.services.metrics.interceptor.TotalActionMetricsInterceptor;
+import uk.gov.justice.services.test.utils.common.validator.DummyJsonSchemaValidator;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
@@ -57,7 +69,6 @@ import javax.inject.Inject;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.openejb.jee.Application;
 import org.apache.openejb.jee.WebApp;
 import org.apache.openejb.junit.ApplicationComposer;
@@ -74,6 +85,7 @@ public class MetricsIT {
 
     private static final String EVENT_ABC = "event-abc";
     private static final String EVENT_BCD = "event-bcd";
+    private static final String EVENT_TOTAL = "event-total";
 
     @Inject
     private InterceptorChainProcessor interceptorChainProcessor;
@@ -86,8 +98,12 @@ public class MetricsIT {
             ServiceComponentScanner.class,
             RequesterProducer.class,
             ServiceComponentObserver.class,
+            JsonEnvelopeRepacker.class,
+            DefaultNameToMediaTypeConverter.class,
+            DummyJsonSchemaValidator.class,
 
             InterceptorChainProcessorProducer.class,
+            ComponentNameExtractor.class,
             InterceptorChainProcessor.class,
             InterceptorCache.class,
             InterceptorChainObserver.class,
@@ -96,16 +112,22 @@ public class MetricsIT {
             SenderProducer.class,
             DefaultJmsEnvelopeSender.class,
             DefaultEnvelopeConverter.class,
+            DefaultJsonObjectEnvelopeConverter.class,
+            EnvelopeInspector.class,
+            MediaTypeProvider.class,
+            MediaTypesMappingCacheMock.class,
 
             StringToJsonObjectConverter.class,
             ObjectToJsonValueConverter.class,
-            ObjectMapper.class,
+            ObjectMapperProducer.class,
             Enveloper.class,
 
             AccessControlFailureMessageGenerator.class,
             AllowAllPolicyEvaluator.class,
             DefaultAccessControlService.class,
             DispatcherCache.class,
+            EnvelopePayloadTypeConverter.class,
+            DispatcherFactory.class,
             PolicyEvaluator.class,
             LoggerProducer.class,
             EmptySystemUserProvider.class,
@@ -119,7 +141,8 @@ public class MetricsIT {
             EnvelopeValidationExceptionHandlerProducer.class,
             GlobalValueProducer.class,
             JsonSchemaLoader.class,
-            JsonEnvelopeProvider.class
+            JsonEnvelopeProvider.class,
+            SchemaCatalogResolverProducer.class
     })
     public WebApp war() {
         return new WebApp()
@@ -131,13 +154,13 @@ public class MetricsIT {
     public void shouldExposeTotalComponentMetrics() throws Exception {
 
         final JsonEnvelope jsonEnvelope = envelope()
-                .with(metadataWithRandomUUID(EVENT_ABC))
+                .with(metadataWithRandomUUID(EVENT_TOTAL))
                 .build();
 
         interceptorChainProcessor.process(interceptorContextWithInput(jsonEnvelope));
         interceptorChainProcessor.process(interceptorContextWithInput(jsonEnvelope));
 
-        final ObjectName metricsObjectName = new ObjectName("uk.gov.justice.metrics:name=test-component.action.total");
+        final ObjectName metricsObjectName = new ObjectName("uk.gov.justice.metrics:name=EVENT_LISTENER.action.total");
 
         final Object count = server.getAttribute(metricsObjectName, "Count");
         final Object mean = server.getAttribute(metricsObjectName, "Mean");
@@ -165,8 +188,8 @@ public class MetricsIT {
         interceptorChainProcessor.process(interceptorContextWithInput(jsonEnvelope_2));
         interceptorChainProcessor.process(interceptorContextWithInput(jsonEnvelope_1));
 
-        final ObjectName metricsAbcObjectName = new ObjectName("uk.gov.justice.metrics:name=test-component.action.event-abc");
-        final ObjectName metricsBcdObjectName = new ObjectName("uk.gov.justice.metrics:name=test-component.action.event-bcd");
+        final ObjectName metricsAbcObjectName = new ObjectName("uk.gov.justice.metrics:name=EVENT_LISTENER.action.event-abc");
+        final ObjectName metricsBcdObjectName = new ObjectName("uk.gov.justice.metrics:name=EVENT_LISTENER.action.event-bcd");
 
         final Object countAbc = server.getAttribute(metricsAbcObjectName, "Count");
         final Object countBcd = server.getAttribute(metricsBcdObjectName, "Count");
@@ -186,6 +209,11 @@ public class MetricsIT {
 
         @Handles(EVENT_BCD)
         public void handleBcd(final JsonEnvelope envelope) {
+
+        }
+
+        @Handles(EVENT_TOTAL)
+        public void handleTotal(final JsonEnvelope envelope) {
 
         }
 

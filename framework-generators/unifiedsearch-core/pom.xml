@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>generators</artifactId>
+        <artifactId>framework-generators</artifactId>
         <groupId>uk.gov.justice.framework-generators</groupId>
-        <version>2.4.5-SNAPSHOT</version>
+        <version>7.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>uk.gov.justice.maven.generator</groupId>
             <artifactId>parser-common</artifactId>
-            <version>${generator-maven-plugin.version}</version>
+            <version>${framework-libraries.version}</version>
         </dependency>
 
         <dependency>

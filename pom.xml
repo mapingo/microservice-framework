@@ -12,7 +12,7 @@
 
     <groupId>uk.gov.justice.services</groupId>
     <artifactId>microservice-framework</artifactId>
-    <version>6.4.3-SNAPSHOT</version>
+    <version>7.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Microservice Framework</name>
@@ -25,30 +25,33 @@
     </scm>
 
     <modules>
-        <module>messaging</module>
-        <module>core</module>
-        <module>components</module>
-        <module>common</module>
-        <module>persistence</module>
-        <module>test-utils</module>
-        <module>framework-bom</module>
-        <module>common-rest</module>
         <module>aggregate</module>
+        <module>components</module>
+        <module>core</module>
+        <module>common</module>
+        <module>common-rest</module>
         <module>event-subscription</module>
         <module>event-subscription-test-utils</module>
-        <module>jmx</module>
+        <module>framework-bom</module>
+        <module>framework-generators</module>
+        <module>framework-jmx-command-client</module>
         <module>framework-system</module>
         <module>framework-utilities</module>
+        <module>jmx</module>
+        <module>messaging</module>
+        <module>metrics</module>
+        <module>persistence</module>
+        <module>raml-lint-check</module>
+        <module>test-utils</module>
     </modules>
 
     <properties>
         <cpp.repo.name>microservice_framework</cpp.repo.name>
 
         <common-bom.version>2.4.0</common-bom.version>
-        <test-utils.version>1.24.3</test-utils.version>
         <framework-api.version>4.3.0</framework-api.version>
-        <utilities.version>1.20.3</utilities.version>
-        <json-schema-catalog.version>1.7.6</json-schema-catalog.version>
+        <framework-utilities.version>7.0.0-M2</framework-utilities.version>
+        <framework-libraries.version>7.0.0-M2</framework-libraries.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
         <jboss-ejb3-ext-api.version>2.2.0.Final</jboss-ejb3-ext-api.version>
     </properties>
@@ -71,7 +74,7 @@
             <dependency>
                 <groupId>uk.gov.justice.utils</groupId>
                 <artifactId>utilities-core</artifactId>
-                <version>${utilities.version}</version>
+                <version>${framework-utilities.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.ejb3</groupId>
@@ -81,13 +84,13 @@
             <dependency>
                 <groupId>uk.gov.justice.utils</groupId>
                 <artifactId>test-utils-logging-simple</artifactId>
-                <version>${test-utils.version}</version>
+                <version>${framework-utilities.version}</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.utils</groupId>
                 <artifactId>test-utils-logging-log4j</artifactId>
-                <version>${test-utils.version}</version>
+                <version>${framework-utilities.version}</version>
                 <type>pom</type>
             </dependency>
             <dependency>
