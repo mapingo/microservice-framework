@@ -9,21 +9,21 @@ cache:
   directories:
   - "$HOME/.m2"
 services:
-  - postgresql
+- postgresql
 before_script:
-  - psql -c 'create database frameworkeventstore;' -U postgres
-  - psql -c 'create database frameworkviewstore;' -U postgres
-  - psql -c 'create database frameworkfilestore;' -U postgres
-  - psql -c 'create database frameworksystem;' -U postgres
-  - psql -c 'create database fileservice;' -U postgres
-  - psql -c "CREATE USER framework WITH PASSWORD 'framework';" -U postgres
-  - psql -c "CREATE USER fileservice WITH PASSWORD 'fileservice';" -U postgres
+- psql -c 'create database frameworkeventstore;' -U postgres
+- psql -c 'create database frameworkviewstore;' -U postgres
+- psql -c 'create database frameworkfilestore;' -U postgres
+- psql -c 'create database frameworksystem;' -U postgres
+- psql -c 'create database fileservice;' -U postgres
+- psql -c "CREATE USER framework WITH PASSWORD 'framework';" -U postgres
+- psql -c "CREATE USER fileservice WITH PASSWORD 'fileservice';" -U postgres
 addons:
-  postgresql: "9.5"
+  postgresql: '9.5'
   sonarcloud:
     organization: cjscommonplatform
     token:
-      secure: fhcsB8ws4DAVDSODGqDbOUttXU+qSfRylwvyNue2s7e6SAIvXS9L6doQ/mgJbDDtV7eysmin0ojs787sGbwHpssDO1VsogUJPXN2FhVW8+poTnAfLbjJmQmt16mh1iKa4iYcj1tjymvHQu6E8Kp+6x10ID6wgIqTzvfU1n+Th1Ap2Gg+Rb/tdCyDuiGb9qL3bBin97vjTa5+KpjzwCiXEqDpe8c1y82s8EfXh83fg+qWSW+i5O/yrlBfZFsvsCajCWP6TxhRSMK0/cUWrlcEwLUTBBOQFdnRsp5i1f7BcHSzzYRnVnbHDSrourpzWBhqfKjaYKaOQENJphlH8uDDx3f5HpZoeRmcIWPzzPPaz1P5Mh7tng0e8jvhpe8NLRMr/Q7wTLM53JbkPmGc+SHDwPlmbD4Avjgdz8uEgeVrWTQkn7JQnzLAtmkQBMWZZJM3MpNjOx4UXIkKG06wg3h7Ijy3E3+r0Anwv9bV+SswS8/pmpf2tBEad5ijO2tOhU2eDzzAW/36lw/ueWpdrgKhWfZTxyaU2OIj3G2blKml0PLsA8OAlEJ8hOMMdYlN0k0UExh80Zhb6EvJZmXyRpWsSC4lCdUDT1Gw/Bm0Pxs22X01muWFRz0IxLz+9ycugtlLyt48cjzYRInf6VnkKS615gixdh1TOwABVKgkVHq/UBM=
+      secure: FAGcFnJBPKyUQLCNA1ZjAQ0eLUZ+HQIDtJh10o9aML8bO+3GE8z8B+pIvAVYwepekXG1YfMvBT3+CmLiLVLO1G+oiI8Ov3tZnIUxWAjGmbyElcXp/FYlc/gemIx9yteZWd6Qi4KXpTARSJuFvSlHU1KoOduNSOPAzi1h4rVIEv27XlmKft3y/X5xWPFLTFnTMD8GP+NSF1JwiHzlbpiKFFgd2iIt5zufsQgdQOLiU3CdxGbKeejbUH7uau8X0xvVFTCa3cnv7YeWakSjSV2fO1WQMONRkr4zZ2vhI1GIREMfiiBhJYqAAs/mErJ7p6BVno2pIr4Si9Vml/xbPPuY6xWYzAd1KG/NdMzFgCNIwRW0MSPHaK5R9DrNqsagJqaa3TGGsFkOK9cQgaPz5BASPCryJG2oBHcwHyexLo5gR3KPLK5g+kedFn4F7olkeiDYtsDeVi1xtiGqUviG/PQR3VcUcRN/KmIcx/nr63k6LYKL7sD0wH9okz6ltLPqOe1baOsvBwzJeAibR+Y8yCFffNL790g9bTXpnWB8VCOUdyDiaXi1g9ZYBfi/zeiytSDpsGElLL4emyf/amZh5i/QBn0glJ5GOmRbaaCHhrhs3ZrQZ7Xqc0wPBjcB0NTdycmlFweP+jeRWsgd5vqzICOrH+kxRJlhGW4v+r+pUeFtXyI=
 before_install:
 - git clone https://github.com/CJSCommonPlatform/travis-settings.git target/travis-settings
 - ln -sfT ${PWD}/target/travis-settings/settings.xml ${HOME}/.m2/settings.xml
