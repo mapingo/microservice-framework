@@ -13,20 +13,7 @@
 
     <artifactId>framework-jmx-command-client</artifactId>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>uk.gov.justice</groupId>
-                <artifactId>maven-common-bom</artifactId>
-                <version>${common-bom.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
-
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>jmx-api</artifactId>
@@ -57,7 +44,6 @@
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-client-all</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -69,7 +55,6 @@
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
@@ -80,8 +65,6 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-
-
     </dependencies>
 
     <build>
