@@ -25,7 +25,6 @@
         <dependency>
             <groupId>uk.gov.justice.framework-generators</groupId>
             <artifactId>generators-commons</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- Test Dependencies -->
@@ -44,13 +43,11 @@
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>common</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>test-utils-core</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
