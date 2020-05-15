@@ -107,7 +107,6 @@
         <dependency>
             <groupId>uk.gov.justice.framework-generators</groupId>
             <artifactId>generators-test-utils</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
