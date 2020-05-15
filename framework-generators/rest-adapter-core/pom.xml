@@ -28,7 +28,6 @@
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>common-rest</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.utils</groupId>
@@ -114,13 +113,11 @@
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>test-utils-common</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>test-utils-core</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

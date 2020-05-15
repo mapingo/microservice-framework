@@ -28,7 +28,6 @@
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>core</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- Test Dependencies -->
