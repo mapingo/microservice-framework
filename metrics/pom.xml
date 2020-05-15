@@ -12,24 +12,11 @@
 
     <groupId>uk.gov.justice.metrics</groupId>
     <artifactId>metrics</artifactId>
-    <version>7.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>metrics-interceptor</module>
         <module>metrics-servlet</module>
     </modules>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>uk.gov.justice</groupId>
-                <artifactId>maven-common-bom</artifactId>
-                <version>${common-bom.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
 </project>
