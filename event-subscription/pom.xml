@@ -40,7 +40,6 @@
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>persistence-jdbc</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- Test Dependencies -->
