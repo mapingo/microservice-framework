@@ -5,7 +5,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
-## [7.0.0] - 2020-05-18
+## [7.0.1] - 2020-05-18
 
 ### Changed
 - Update maven common bom version to 2.5.0
