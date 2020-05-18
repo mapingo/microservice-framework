@@ -12,6 +12,10 @@
     <artifactId>framework-bom</artifactId>
     <packaging>pom</packaging>
 
+    <properties>
+        <framework.version>${project.version}</framework.version>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -60,79 +64,116 @@
                 <version>${framework-api.version}</version>
             </dependency>
             <dependency>
+                <groupId>uk.gov.justice.framework-api</groupId>
+                <artifactId>framework-api-event-buffer</artifactId>
+                <version>${framework-api.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>framework-utilities</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>common</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>core</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>messaging-core</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>persistence-deltaspike</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>persistence-jdbc</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>test-utils-core</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>test-utils-persistence</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>custom</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>jmx-command-handling</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>aggregate</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>test-utils-enveloper-provider</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>test-utils-framework-persistence</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>test-utils-messaging</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice.services</groupId>
                 <artifactId>framework-management</artifactId>
-                <version>${project.version}</version>
+                <version>${framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.services</groupId>
+                <artifactId>test-utils-common</artifactId>
+                <version>${framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.services</groupId>
+                <artifactId>common-rest</artifactId>
+                <version>${framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.utils</groupId>
+                <artifactId>utilities-core</artifactId>
+                <version>${framework-utilities.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.utils</groupId>
+                <artifactId>test-utils-logging-simple</artifactId>
+                <version>${framework-utilities.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.utils</groupId>
+                <artifactId>test-utils-logging-log4j</artifactId>
+                <version>${framework-utilities.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>uk.gov.justice.utils</groupId>
+                <artifactId>test-utils-core</artifactId>
+                <version>${framework-utilities.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

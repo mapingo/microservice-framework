@@ -5,6 +5,25 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [7.0.0] - 2020-05-18
+
+### Changed
+- Update maven common bom version to 2.5.0
+- Update framework-api version to 7.0.0
+- Update framework-utilities version to 7.0.1
+- Update framework-libraries version to 7.0.1
+- Combined the following repos into microservice-framework
+    microservice_framework_version_6
+    framework-generators
+    framework-jmx-command-client
+    mertrics
+    
+### Added
+- microservice_framework_version_6 6.4.2: now set to version 7.0.0
+- framework-generators 2.4.4: now set to version 7.0.0
+- framework-jmx-command-client 2.4.2: now set to version 7.0.0
+- metrics 3.3.2: now set to version 7.0.0
+
 ## [6.4.2] - 2020-04-23
 ### Changed
 - Update framework-api to 4.3.0

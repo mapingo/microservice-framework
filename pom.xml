@@ -48,10 +48,10 @@
     <properties>
         <cpp.repo.name>microservice_framework</cpp.repo.name>
 
-        <common-bom.version>2.4.0</common-bom.version>
-        <framework-api.version>4.3.0</framework-api.version>
-        <framework-utilities.version>7.0.0-M2</framework-utilities.version>
-        <framework-libraries.version>7.0.0-M2</framework-libraries.version>
+        <common-bom.version>2.5.0</common-bom.version>
+        <framework-api.version>7.0.0</framework-api.version>
+        <framework-utilities.version>7.0.1</framework-utilities.version>
+        <framework-libraries.version>7.0.1</framework-libraries.version>
         <embedded-artemis.version>1.2.0</embedded-artemis.version>
         <jboss-ejb3-ext-api.version>2.2.0.Final</jboss-ejb3-ext-api.version>
     </properties>
