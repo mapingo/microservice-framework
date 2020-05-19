@@ -27,7 +27,6 @@
         <dependency>
             <groupId>uk.gov.justice.maven.generator</groupId>
             <artifactId>generator-core</artifactId>
-            <version>${framework-libraries.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>

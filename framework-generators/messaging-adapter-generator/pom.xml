@@ -34,12 +34,10 @@
         <dependency>
             <groupId>uk.gov.justice.framework-api</groupId>
             <artifactId>framework-api-event-listener-interceptors</artifactId>
-            <version>${framework-api.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.framework-api</groupId>
             <artifactId>framework-api-messaging-jms</artifactId>
-            <version>${framework-api.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.gov.justice.services</groupId>
@@ -176,7 +174,6 @@
         <dependency>
             <groupId>uk.gov.justice.maven.generator</groupId>
             <artifactId>generator-maven-test-utils</artifactId>
-            <version>${framework-libraries.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

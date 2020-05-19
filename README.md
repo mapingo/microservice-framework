@@ -55,13 +55,8 @@ Clone the following CJSCommonPlatform projects into the same directory level:
 * [maven-parent-pom](https://github.com/CJSCommonPlatform/maven-parent-pom)
 * [maven-common-bom](https://github.com/CJSCommonPlatform/maven-common-bom)
 * [maven-common](https://github.com/CJSCommonPlatform/maven-common)
-* [raml-maven](https://github.com/CJSCommonPlatform/raml-maven)
-* [embedded-artemis](https://github.com/CJSCommonPlatform/embedded-artemis)
+* [framework-libraries](https://github.com/CJSCommonPlatform/framework-libraries)
 * [maven-framework-parent-pom](https://github.com/CJSCommonPlatform/maven-framework-parent-pom)
-* [test-utils](https://github.com/CJSCommonPlatform/test-utils)
-* [utilities](https://github.com/CJSCommonPlatform/utilities)
-* [file-service](https://github.com/CJSCommonPlatform/file-service)
-* [json-schema](https://github.com/CJSCommonPlatform/json-schema)
 * [microservice_framework](https://github.com/CJSCommonPlatform/microservice_framework)
 
 #### Run dependency installation script

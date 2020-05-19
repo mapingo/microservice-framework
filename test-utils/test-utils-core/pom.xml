@@ -111,7 +111,6 @@
         <dependency>
             <groupId>uk.gov.justice.schema</groupId>
             <artifactId>catalog-test-utils</artifactId>
-            <version>${framework-libraries.version}</version>
         </dependency>
     </dependencies>
 

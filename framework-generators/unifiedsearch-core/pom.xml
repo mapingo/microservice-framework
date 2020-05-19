@@ -26,7 +26,6 @@
         <dependency>
             <groupId>uk.gov.justice.maven.generator</groupId>
             <artifactId>parser-common</artifactId>
-            <version>${framework-libraries.version}</version>
         </dependency>
 
         <dependency>
