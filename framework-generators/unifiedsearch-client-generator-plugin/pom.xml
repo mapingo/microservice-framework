@@ -36,7 +36,6 @@
         <dependency>
             <groupId>uk.gov.justice.maven.generator</groupId>
             <artifactId>generator-plugin</artifactId>
-            <version>${framework-libraries.version}</version>
         </dependency>
 
         <dependency>
