@@ -5,7 +5,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
-## [7.0.2] - 2020-05-21
+## [7.0.3] - 2020-05-21
 
 ### Changed
 - Change dependencies to only depend on framework-libraries 7.0.4
