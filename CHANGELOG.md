@@ -5,6 +5,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+### Added
+- Added metrics modules to framework-bom
+
 ## [7.0.3] - 2020-05-21
 
 ### Changed
