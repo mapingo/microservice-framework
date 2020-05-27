@@ -18,6 +18,7 @@
         <module>generators-test-utils</module>
         <module>messaging-adapter-core</module>
         <module>messaging-adapter-generator</module>
+        <module>messaging-adapter-generator-test</module>
         <module>messaging-client-generator</module>
         <module>rest-adapter-core</module>
         <module>rest-adapter-generator</module>
@@ -26,7 +27,6 @@
         <module>rest-adapter-file-service</module>
         <module>direct-adapter-core</module>
         <module>direct-client-generator</module>
-        <module>messaging-adapter-generator-plugin</module>
         <module>messaging-client-generator-plugin</module>
         <module>direct-client-generator-plugin</module>
         <module>rest-client-generator-plugin</module>
