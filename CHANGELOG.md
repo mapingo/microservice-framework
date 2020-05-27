@@ -5,11 +5,13 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [7.0.4] - 2020-05-27
+### Changed
+- Updated to framework-libraries 7.0.5
 ### Added
-- Added metrics modules to framework-bom
+- Added metrics dependencies to the bom
 
 ## [7.0.3] - 2020-05-21
-
 ### Changed
 - Change dependencies to only depend on framework-libraries 7.0.4
 
