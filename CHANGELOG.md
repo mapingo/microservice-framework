@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [7.0.7] - 2020-07-07
+### Changed
+- Update to framework-libraries 7.0.9
+
 ## [7.0.6] - 2020-06-03
 ### Changed
 - Update to framework-libraries 7.0.8
