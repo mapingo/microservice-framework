@@ -27,6 +27,7 @@ import uk.gov.justice.services.core.annotation.CustomAdapter;
 import uk.gov.justice.services.core.annotation.CustomServiceComponent;
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.dispatcher.DispatcherCache;
+import uk.gov.justice.services.core.dispatcher.DispatcherConfiguration;
 import uk.gov.justice.services.core.dispatcher.DispatcherFactory;
 import uk.gov.justice.services.core.dispatcher.EmptySystemUserProvider;
 import uk.gov.justice.services.core.dispatcher.EnvelopePayloadTypeConverter;
@@ -161,7 +162,9 @@ public class CustomServiceComponentHandlerIT {
             MediaTypesMappingCacheInitialiser.class,
             SchemaIdMappingCacheInitialiser.class,
 
-            SchemaValidationErrorMessageGenerator.class
+            SchemaValidationErrorMessageGenerator.class,
+
+            DispatcherConfiguration.class
 
     })
     public WebApp war() {
