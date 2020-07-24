@@ -2,6 +2,7 @@ package uk.gov.justice.services.core.sender;
 
 import uk.gov.justice.services.core.annotation.ServiceComponent;
 import uk.gov.justice.services.core.dispatcher.DispatcherCache;
+import uk.gov.justice.services.core.dispatcher.DispatcherConfiguration;
 import uk.gov.justice.services.core.dispatcher.DispatcherDelegate;
 import uk.gov.justice.services.core.dispatcher.EnvelopePayloadTypeConverter;
 import uk.gov.justice.services.core.dispatcher.JsonEnvelopeRepacker;
@@ -28,34 +29,37 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SenderProducer {
 
     @Inject
-    JsonSchemaValidator jsonSchemaValidator;
+    private JsonSchemaValidator jsonSchemaValidator;
 
     @Inject
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Inject
-    EnvelopeValidationExceptionHandler envelopeValidationExceptionHandler;
+    private EnvelopeValidationExceptionHandler envelopeValidationExceptionHandler;
 
     @Inject
-    NameToMediaTypeConverter nameToMediaTypeConverter;
+    private NameToMediaTypeConverter nameToMediaTypeConverter;
 
     @Inject
-    MediaTypeProvider mediaTypeProvider;
+    private MediaTypeProvider mediaTypeProvider;
 
     @Inject
-    EnvelopeInspector envelopeInspector;
+    private EnvelopeInspector envelopeInspector;
 
     @Inject
-    DispatcherCache dispatcherCache;
+    private DispatcherCache dispatcherCache;
 
     @Inject
-    SystemUserUtil systemUserUtil;
+    private SystemUserUtil systemUserUtil;
 
     @Inject
-    EnvelopePayloadTypeConverter envelopePayloadTypeConverter;
+    private EnvelopePayloadTypeConverter envelopePayloadTypeConverter;
 
     @Inject
-    JsonEnvelopeRepacker jsonEnvelopeRepacker;
+    private JsonEnvelopeRepacker jsonEnvelopeRepacker;
+
+    @Inject
+    private DispatcherConfiguration dispatcherConfiguration;
 
     /**
      * Produces the correct implementation of a requester depending on the {@link ServiceComponent}
@@ -85,6 +89,7 @@ public class SenderProducer {
                 systemUserUtil,
                 requestResponseEnvelopeValidator,
                 envelopePayloadTypeConverter,
-                jsonEnvelopeRepacker);
+                jsonEnvelopeRepacker,
+                dispatcherConfiguration);
     }
 }

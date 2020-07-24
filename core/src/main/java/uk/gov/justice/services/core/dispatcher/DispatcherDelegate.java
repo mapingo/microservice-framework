@@ -18,17 +18,20 @@ public class DispatcherDelegate implements Requester, Sender {
     private final RequestResponseEnvelopeValidator requestResponseEnvelopeValidator;
     private final EnvelopePayloadTypeConverter envelopePayloadTypeConverter;
     private final JsonEnvelopeRepacker jsonEnvelopeRepacker;
+    private final DispatcherConfiguration dispatcherConfiguration;
 
     public DispatcherDelegate(final Dispatcher dispatcher,
                               final SystemUserUtil systemUserUtil,
                               final RequestResponseEnvelopeValidator requestResponseEnvelopeValidator,
                               final EnvelopePayloadTypeConverter envelopePayloadTypeConverter,
-                              final JsonEnvelopeRepacker jsonEnvelopeRepacker) {
+                              final JsonEnvelopeRepacker jsonEnvelopeRepacker,
+                              final DispatcherConfiguration dispatcherConfiguration) {
         this.dispatcher = dispatcher;
         this.systemUserUtil = systemUserUtil;
         this.requestResponseEnvelopeValidator = requestResponseEnvelopeValidator;
         this.envelopePayloadTypeConverter = envelopePayloadTypeConverter;
         this.jsonEnvelopeRepacker = jsonEnvelopeRepacker;
+        this.dispatcherConfiguration = dispatcherConfiguration;
     }
 
     @Override
@@ -46,7 +49,11 @@ public class DispatcherDelegate implements Requester, Sender {
     @Override
     public JsonEnvelope requestAsAdmin(final JsonEnvelope envelope) {
         final JsonEnvelope response = dispatchAsAdmin().apply(envelope);
-        requestResponseEnvelopeValidator.validateResponse(response);
+
+        if (dispatcherConfiguration.shouldValidateRestResponseJson()) {
+            requestResponseEnvelopeValidator.validateResponse(response);
+        }
+
         return response;
     }
 
@@ -54,7 +61,9 @@ public class DispatcherDelegate implements Requester, Sender {
     public <T> Envelope<T> requestAsAdmin(final Envelope<?> envelope, final Class<T> clazz) {
         final JsonEnvelope response = dispatchAsAdmin().compose(convertAndRepackEnvelope()).apply(envelope);
 
-        requestResponseEnvelopeValidator.validateResponse(response);
+        if (dispatcherConfiguration.shouldValidateRestResponseJson()) {
+            requestResponseEnvelopeValidator.validateResponse(response);
+        }
 
         return envelopePayloadTypeConverter.convert(response, clazz);
     }
@@ -64,7 +73,6 @@ public class DispatcherDelegate implements Requester, Sender {
         final JsonEnvelope jsonEnvelope = convertAndRepackEnvelope().apply(envelope);
 
         requestResponseEnvelopeValidator.validateRequest(jsonEnvelope);
-
         dispatch().apply(jsonEnvelope);
     }
 
@@ -86,7 +94,10 @@ public class DispatcherDelegate implements Requester, Sender {
     private JsonEnvelope dispatchAndValidateResponse(final Envelope<?> envelope) {
         final JsonEnvelope response = dispatch().compose(convertAndRepackEnvelope()).apply(envelope);
 
-        requestResponseEnvelopeValidator.validateResponse(response);
+        if (dispatcherConfiguration.shouldValidateRestResponseJson()) {
+            requestResponseEnvelopeValidator.validateResponse(response);
+        }
+
         return response;
     }
 
@@ -99,7 +110,7 @@ public class DispatcherDelegate implements Requester, Sender {
         return (jsonEnvelope) -> dispatcher.dispatch(jsonEnvelope);
     }
 
-    private Function<JsonEnvelope, JsonEnvelope> dispatchAsAdmin(){
+    private Function<JsonEnvelope, JsonEnvelope> dispatchAsAdmin() {
         return (jsonEnvelope) -> dispatcher.dispatch(systemUserUtil.asEnvelopeWithSystemUserId(jsonEnvelope));
     }
 }

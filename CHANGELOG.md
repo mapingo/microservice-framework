@@ -5,6 +5,12 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [7.0.8] - 2020-07-24
+### Added
+- New JNDI property `rest.dispatcher.response.json.validation.enabled` to 
+enable/disable rest json response validation in the query pillar. Disabled
+by default
+
 ## [7.0.7] - 2020-07-07
 ### Changed
 - Update to framework-libraries 7.0.9

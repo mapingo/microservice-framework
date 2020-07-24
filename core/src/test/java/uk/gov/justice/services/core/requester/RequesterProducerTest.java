@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import uk.gov.justice.services.core.dispatcher.Dispatcher;
 import uk.gov.justice.services.core.dispatcher.DispatcherCache;
+import uk.gov.justice.services.core.dispatcher.DispatcherConfiguration;
 import uk.gov.justice.services.core.dispatcher.DispatcherDelegate;
 import uk.gov.justice.services.core.dispatcher.EnvelopePayloadTypeConverter;
 import uk.gov.justice.services.core.dispatcher.JsonEnvelopeRepacker;
@@ -34,34 +35,37 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class RequesterProducerTest {
 
     @Mock
-    JsonSchemaValidator jsonSchemaValidator;
+    private JsonSchemaValidator jsonSchemaValidator;
 
     @Mock
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Mock
-    EnvelopeValidationExceptionHandler envelopeValidationExceptionHandler;
+    private EnvelopeValidationExceptionHandler envelopeValidationExceptionHandler;
 
     @Mock
-    NameToMediaTypeConverter nameToMediaTypeConverter;
+    private NameToMediaTypeConverter nameToMediaTypeConverter;
 
     @Mock
-    MediaTypeProvider mediaTypeProvider;
+    private MediaTypeProvider mediaTypeProvider;
 
     @Mock
-    EnvelopeInspector envelopeInspector;
+    private EnvelopeInspector envelopeInspector;
 
     @Mock
-    DispatcherCache dispatcherCache;
+    private DispatcherCache dispatcherCache;
 
     @Mock
-    EnvelopePayloadTypeConverter envelopePayloadTypeConverter;
+    private EnvelopePayloadTypeConverter envelopePayloadTypeConverter;
 
     @Mock
-    SystemUserUtil systemUserUtil;
+    private SystemUserUtil systemUserUtil;
 
     @Mock
-    JsonEnvelopeRepacker jsonEnvelopeRepacker;
+    private JsonEnvelopeRepacker jsonEnvelopeRepacker;
+
+    @Mock
+    private DispatcherConfiguration dispatcherConfiguration;
 
     @InjectMocks
     private RequesterProducer requesterProducer;
@@ -77,7 +81,7 @@ public class RequesterProducerTest {
         final DispatcherDelegate dispatcherDelegate = (DispatcherDelegate) requesterProducer.produceRequester(injectionPoint);
 
         assertThat(privateField("dispatcher", dispatcherDelegate, Dispatcher.class), is(dispatcher));
-
+        assertThat(privateField("dispatcherConfiguration", dispatcherDelegate, DispatcherConfiguration.class), is(dispatcherConfiguration));
 
         assertThat(privateField("systemUserUtil", dispatcherDelegate, SystemUserUtil.class), is(systemUserUtil));
         assertThat(privateField("envelopePayloadTypeConverter", dispatcherDelegate, EnvelopePayloadTypeConverter.class), is(envelopePayloadTypeConverter));

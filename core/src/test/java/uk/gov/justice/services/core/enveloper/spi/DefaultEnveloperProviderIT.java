@@ -21,6 +21,7 @@ import uk.gov.justice.services.core.accesscontrol.AllowAllPolicyEvaluator;
 import uk.gov.justice.services.core.accesscontrol.DefaultAccessControlService;
 import uk.gov.justice.services.core.accesscontrol.PolicyEvaluator;
 import uk.gov.justice.services.core.dispatcher.DispatcherCache;
+import uk.gov.justice.services.core.dispatcher.DispatcherConfiguration;
 import uk.gov.justice.services.core.dispatcher.DispatcherFactory;
 import uk.gov.justice.services.core.dispatcher.EmptySystemUserProvider;
 import uk.gov.justice.services.core.dispatcher.EnvelopePayloadTypeConverter;
@@ -146,7 +147,9 @@ public class DefaultEnveloperProviderIT {
             DefaultEnveloper.class,
             ObjectMapperProducer.class,
 
-            SchemaValidationErrorMessageGenerator.class
+            SchemaValidationErrorMessageGenerator.class,
+
+            DispatcherConfiguration.class
     })
     public WebApp war() {
         return new WebApp()
