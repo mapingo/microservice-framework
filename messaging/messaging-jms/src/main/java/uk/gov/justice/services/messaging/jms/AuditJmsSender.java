@@ -4,6 +4,7 @@ import static java.lang.String.format;
 import static javax.jms.Session.AUTO_ACKNOWLEDGE;
 
 import uk.gov.justice.services.messaging.JsonEnvelope;
+import uk.gov.justice.services.messaging.jms.annotation.ConnectionFactoryName;
 import uk.gov.justice.services.messaging.jms.exception.JmsEnvelopeSenderException;
 
 import javax.inject.Inject;
@@ -14,9 +15,10 @@ import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 
-public class JmsSender implements EnvelopeSender {
+public class AuditJmsSender implements EnvelopeSender {
 
     @Inject
+    @ConnectionFactoryName("java:comp/AuditJMSConnectionFactory")
     private ConnectionFactory connectionFactory;
 
     @Inject

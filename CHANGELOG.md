@@ -5,6 +5,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [7.0.9-M1] - 2020-08-10
+- Added a separate Jms sender for Audit
+
 ## [7.0.8] - 2020-07-24
 ### Added
 - New JNDI property `rest.dispatcher.response.json.validation.enabled` to 
