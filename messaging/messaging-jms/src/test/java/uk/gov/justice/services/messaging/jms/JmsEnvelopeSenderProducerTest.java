@@ -9,6 +9,7 @@ import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_CONTROLLER;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.core.annotation.Component.QUERY_API;
+import static uk.gov.justice.services.messaging.jms.JmsEnvelopeSenderProducer.AUDIT_CLIENT;
 import static uk.gov.justice.services.test.utils.common.MemberInjectionPoint.injectionPointWithMemberAsFirstMethodOf;
 
 import uk.gov.justice.services.common.annotation.ComponentNameExtractor;
@@ -34,6 +35,7 @@ public class JmsEnvelopeSenderProducerTest {
     private InjectionPoint adaptorQueryApiInjectionPoint = injectionPointWithMemberAsFirstMethodOf(TestQueryApiAdaptor.class);
     private InjectionPoint noAnnotationInjectionPoint = injectionPointWithMemberAsFirstMethodOf(TestNoAnnotation.class);
     private InjectionPoint adaptorCommandControllerInjectionPoint = injectionPointWithMemberAsFirstMethodOf(TestCommandControllerAdaptor.class);
+    private InjectionPoint auditClientInjectionPoint = injectionPointWithMemberAsFirstMethodOf(TestAuditClientAdaptor.class);
 
     @Mock
     private JmsSender jmsSender;
@@ -104,6 +106,14 @@ public class JmsEnvelopeSenderProducerTest {
         assertThat(jmsEnvelopeSender_1, is(not(sameInstance(jmsEnvelopeSender_2))));
     }
 
+    @Test
+    public void shouldReturnAuditJmsEnvelopeSenderForAuditClientInjectionPoints() throws Exception {
+
+        final JmsEnvelopeSender jmsEnvelopeSender = jmsEnvelopeSenderProducer.createJmsEnvelopeSender(auditClientInjectionPoint);
+
+        assertThat(jmsEnvelopeSender, is(instanceOf(AuditJmsEnvelopeSender.class)));
+    }
+
     @FrameworkComponent(COMMAND_API)
     public static class TestCommandApiAdaptorA {
 
@@ -155,6 +165,15 @@ public class JmsEnvelopeSenderProducerTest {
 
     @FrameworkComponent(COMMAND_CONTROLLER)
     public static class TestCommandControllerAdaptor {
+
+        @Inject
+        InterceptorChainProcessor interceptorChainProcessor;
+
+        public void dummyMethod() {
+        }
+    }
+    @FrameworkComponent(AUDIT_CLIENT)
+    public static class TestAuditClientAdaptor {
 
         @Inject
         InterceptorChainProcessor interceptorChainProcessor;
