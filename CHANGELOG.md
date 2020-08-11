@@ -5,6 +5,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [7.0.9-M2] - 2020-08-11
+- Fix JNDI name of AuditConnectionFactory
+
 ## [7.0.9-M1] - 2020-08-10
 - Added a separate Jms sender for Audit
 
