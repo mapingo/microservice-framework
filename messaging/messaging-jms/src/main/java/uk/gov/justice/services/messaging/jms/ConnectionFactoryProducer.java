@@ -36,7 +36,7 @@ public class ConnectionFactoryProducer {
     private final Map<String, ConnectionFactory> connectionFactories = new ConcurrentHashMap<>();
 
     @Produces
-    public ConnectionFactory getConnectionFactory(final String jndiName) {
+    public ConnectionFactory getConnectionFactory() {
         return connectionFactories.computeIfAbsent(DEFAULT_CONNECTION_FACTORY_JNDI_PATTERN, this::connectionFactory);
     }
 
@@ -56,7 +56,7 @@ public class ConnectionFactoryProducer {
                     .lookup(jndiName);
             return connectionFactory;
         } catch (final NamingException e) {
-            throw new JdbcRepositoryException(format("Failed to lookup ConnectionFactory using jndi name '%s'", jndiName), e);
+            throw new JndiException(format("Failed to lookup ConnectionFactory using jndi name '%s'", jndiName), e);
         }
     }
 }

@@ -44,7 +44,7 @@ public class ConnectionFactoryProducerTest {
     @Test
     public void shouldCreateDefaultConnectionFactoryWhenNoConnectionFactoryNameQualifierSet() throws Exception {
         when(initialContext.lookup(DEFAULT_CONNECTION_FACTORY_JNDI_PATTERN)).thenReturn(defaultConnectionFactory);
-        assertThat(connectionFactoryProducer.getConnectionFactory(DEFAULT_CONNECTION_FACTORY_JNDI_PATTERN), is(defaultConnectionFactory));
+        assertThat(connectionFactoryProducer.getConnectionFactory(), is(defaultConnectionFactory));
     }
 
     @Test
