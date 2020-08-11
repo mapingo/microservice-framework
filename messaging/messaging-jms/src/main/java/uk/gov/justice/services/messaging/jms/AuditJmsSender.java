@@ -18,7 +18,7 @@ import javax.jms.Session;
 public class AuditJmsSender implements EnvelopeSender {
 
     @Inject
-    @ConnectionFactoryName("java:comp/AuditJMSConnectionFactory")
+    @ConnectionFactoryName("java:jboss/AuditJMSConnectionFactory")
     private ConnectionFactory connectionFactory;
 
     @Inject
