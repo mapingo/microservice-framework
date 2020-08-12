@@ -5,10 +5,17 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+### Added
+- The Audit JMS Connection Factory will now only be used
+if the Correct JNDI property `jms.connection.audit.message.broker.enabled' 
+is set to true
+
 ## [7.0.9-M2] - 2020-08-11
+### Changed
 - Fix JNDI name of AuditConnectionFactory
 
 ## [7.0.9-M1] - 2020-08-10
+### Added
 - Added a separate Jms sender for Audit
 
 ## [7.0.8] - 2020-07-24
