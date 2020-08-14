@@ -4,10 +4,8 @@ import static java.lang.Boolean.parseBoolean;
 
 import uk.gov.justice.services.common.configuration.GlobalValue;
 
-import javax.ejb.Singleton;
 import javax.inject.Inject;
 
-@Singleton
 public class JmsConnectionConfig {
 
     @Inject

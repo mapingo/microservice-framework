@@ -5,6 +5,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [7.0.10] - 2020-08-14
+### Changed
+- Fix of hanging deployment in wildfly caused by using @Singleton annotation
+on a class that is called by wildfly Observer/Observable event architecture   
+
 ## [7.0.9] - 2020-08-13
 ### Added
 - Added a separate Jms sender for Audit
