@@ -12,6 +12,7 @@ import uk.gov.justice.schema.service.SchemaCatalogService;
 import uk.gov.justice.services.cdi.LoggerProducer;
 import uk.gov.justice.services.common.annotation.ComponentNameExtractor;
 import uk.gov.justice.services.common.configuration.GlobalValueProducer;
+import uk.gov.justice.services.common.converter.JsonObjectConvertersProducer;
 import uk.gov.justice.services.common.converter.ObjectToJsonValueConverter;
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
@@ -149,7 +150,9 @@ public class DefaultEnveloperProviderIT {
 
             SchemaValidationErrorMessageGenerator.class,
 
-            DispatcherConfiguration.class
+            DispatcherConfiguration.class,
+
+            JsonObjectConvertersProducer.class
     })
     public WebApp war() {
         return new WebApp()

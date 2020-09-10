@@ -44,6 +44,7 @@ import uk.gov.justice.services.clients.core.webclient.WebTargetFactory;
 import uk.gov.justice.services.common.annotation.ComponentNameExtractor;
 import uk.gov.justice.services.common.configuration.GlobalValueProducer;
 import uk.gov.justice.services.common.configuration.JndiBasedServiceContextNameProvider;
+import uk.gov.justice.services.common.converter.JsonObjectConvertersProducer;
 import uk.gov.justice.services.common.converter.ObjectToJsonValueConverter;
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
@@ -223,7 +224,9 @@ public class RemoteExampleEventProcessorIT {
 
             SchemaValidationErrorMessageGenerator.class,
 
-            DispatcherConfiguration.class
+            DispatcherConfiguration.class,
+
+            JsonObjectConvertersProducer.class
     })
     public WebApp war() {
         return new WebApp()
