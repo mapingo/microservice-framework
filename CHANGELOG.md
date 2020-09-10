@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [7.0.11] - 2020-09-10
+### Changed
+- Update to framework-libraries 7.0.11
+
 ## [7.0.10] - 2020-08-14
 ### Changed
 - Fix of hanging deployment in wildfly caused by using @Singleton annotation
