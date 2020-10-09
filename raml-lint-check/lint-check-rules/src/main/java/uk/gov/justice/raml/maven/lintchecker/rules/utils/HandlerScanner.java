@@ -1,6 +1,7 @@
 package uk.gov.justice.raml.maven.lintchecker.rules.utils;
 
 import static java.util.stream.Collectors.toList;
+import static uk.gov.justice.services.adapter.rest.administration.Naming.ADMINISTRATION_NAMING_PREFIX;
 
 import uk.gov.justice.raml.maven.lintchecker.LintCheckPluginException;
 import uk.gov.justice.services.core.annotation.CustomServiceComponent;
@@ -41,8 +42,13 @@ public class HandlerScanner {
                 .getMethodsAnnotatedWith(Handles.class)
                 .stream()
                 .filter(this::isServiceComponent)
+                .filter(this::isNotAdministrationHandler)
                 .map(this::actionName)
                 .collect(toList());
+    }
+
+    private boolean isNotAdministrationHandler(final Method method) {
+        return ! method.getAnnotation(Handles.class).value().startsWith(ADMINISTRATION_NAMING_PREFIX);
     }
 
     private String actionName(final Method method) {

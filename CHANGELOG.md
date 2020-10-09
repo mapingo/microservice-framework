@@ -4,6 +4,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [7.1.2] - 2020-10-09
+### Changed
+- Raml-lint-checker will now allow handler methods whose names are not specified in the
+raml file if the handler name starts with 'administration'
+- Updated framework-libraries to version 7.1.2
 
 ## [7.1.1] - 2020-09-25
 ### Changed
