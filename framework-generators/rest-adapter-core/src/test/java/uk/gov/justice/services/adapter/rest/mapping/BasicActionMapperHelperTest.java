@@ -2,7 +2,7 @@ package uk.gov.justice.services.adapter.rest.mapping;
 
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.generators.test.utils.builder.HeadersBuilder.headersWith;
 
 import uk.gov.justice.services.adapter.rest.exception.BadRequestException;

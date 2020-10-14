@@ -1,6 +1,6 @@
 package uk.gov.justice.services.clients.core;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Set;
 

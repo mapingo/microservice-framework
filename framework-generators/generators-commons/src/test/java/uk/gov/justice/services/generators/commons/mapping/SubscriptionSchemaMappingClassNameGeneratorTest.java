@@ -1,7 +1,7 @@
 package uk.gov.justice.services.generators.commons.mapping;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import uk.gov.justice.services.core.mapping.MediaTypeToSchemaIdMapper;
 

@@ -3,7 +3,7 @@ package uk.gov.justice.services.clients.unifiedsearch.core;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import uk.gov.justice.services.yaml.YamlFileValidator;
 

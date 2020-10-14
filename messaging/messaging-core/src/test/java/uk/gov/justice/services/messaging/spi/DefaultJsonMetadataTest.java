@@ -5,7 +5,7 @@ import static javax.json.Json.createObjectBuilder;
 import static javax.json.JsonValue.NULL;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.messaging.JsonEnvelope.METADATA;
 import static uk.gov.justice.services.messaging.JsonMetadata.CAUSATION;
 import static uk.gov.justice.services.messaging.JsonMetadata.CLIENT_ID;

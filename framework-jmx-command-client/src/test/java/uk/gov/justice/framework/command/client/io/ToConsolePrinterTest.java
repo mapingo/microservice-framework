@@ -1,7 +1,7 @@
 package uk.gov.justice.framework.command.client.io;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
 
 import java.io.ByteArrayOutputStream;

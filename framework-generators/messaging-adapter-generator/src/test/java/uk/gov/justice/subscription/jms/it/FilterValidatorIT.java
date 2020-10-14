@@ -2,7 +2,7 @@ package uk.gov.justice.subscription.jms.it;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.messaging.jms.HeaderConstants.JMS_HEADER_CPPNAME;
 
 import uk.gov.justice.api.subscription.Service2EventListenerAnotherPeopleEventEventFilter;

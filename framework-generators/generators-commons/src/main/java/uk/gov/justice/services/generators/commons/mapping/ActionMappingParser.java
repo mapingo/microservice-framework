@@ -1,6 +1,6 @@
 package uk.gov.justice.services.generators.commons.mapping;
 
-import static com.google.common.base.CharMatcher.WHITESPACE;
+import static com.google.common.base.CharMatcher.whitespace;
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -97,7 +97,7 @@ public class ActionMappingParser {
         try {
             final Map<String, String> map = Splitter.on("\n")
                     .omitEmptyStrings()
-                    .trimResults(WHITESPACE)
+                    .trimResults(whitespace())
                     .withKeyValueSeparator(": ").split(mappingString);
             return new ActionMapping(map.get(NAME_KEY), map.get(REQUEST_TYPE_KEY), map.get(RESPONSE_TYPE_KEY));
         } catch (IllegalArgumentException ex) {

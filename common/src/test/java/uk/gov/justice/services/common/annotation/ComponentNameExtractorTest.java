@@ -3,7 +3,7 @@ package uk.gov.justice.services.common.annotation;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.test.utils.common.MemberInjectionPoint.injectionPointWith;
 
 import uk.gov.justice.services.core.annotation.Adapter;

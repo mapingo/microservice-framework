@@ -17,7 +17,9 @@ import java.io.File;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -26,7 +28,8 @@ import org.raml.model.Resource;
 @RunWith(MockitoJUnitRunner.class)
 public class JmsCommandHandlerDestinationNameProviderCodeGeneratorTest {
 
-    private static final File COMPILATION_OUTPUT_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
+    @Rule
+    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @InjectMocks
     private JmsCommandHandlerDestinationNameProviderCodeGenerator jmsCommandHandlerDestinationNameProviderCodeGenerator;
@@ -47,14 +50,14 @@ public class JmsCommandHandlerDestinationNameProviderCodeGeneratorTest {
         final Resource resource = resource().withRelativeUri("/" + destination).build();
         final TypeSpec typeSpec = jmsCommandHandlerDestinationNameProviderCodeGenerator.generate(resource, classNameFactory);
 
-        final File outputDirectory = getOutputDirectory("./target/test-generation");
+        final File outputDirectory = temporaryFolder.newFolder("test-generation");
         builder(packageName, typeSpec)
                 .build()
                 .writeTo(outputDirectory);
 
         final Class<?> compiledClass = javaCompilerUtil().compiledClassOf(
                 outputDirectory,
-                COMPILATION_OUTPUT_DIRECTORY,
+                temporaryFolder.newFolder(getClass().getSimpleName()),
                 packageName,
                 simpleName);
 
@@ -65,18 +68,5 @@ public class JmsCommandHandlerDestinationNameProviderCodeGeneratorTest {
         final JmsCommandHandlerDestinationNameProvider jmsCommandHandlerDestinationNameProvider = (JmsCommandHandlerDestinationNameProvider) newInstance;
 
         assertThat(jmsCommandHandlerDestinationNameProvider.destinationName(), is(destination));
-    }
-
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "SameParameterValue"})
-    private File getOutputDirectory(final String path) {
-        final File outputDirectory = new File(path);
-
-        if (outputDirectory.exists()) {
-            outputDirectory.delete();
-        }
-
-        outputDirectory.mkdirs();
-
-        return outputDirectory;
     }
 }

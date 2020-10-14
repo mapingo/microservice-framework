@@ -1,7 +1,7 @@
 package uk.gov.justice.raml.jms.core;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.raml.model.ActionType.POST;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_CONTROLLER;
 import static uk.gov.justice.services.generators.test.utils.builder.HttpActionBuilder.SCHEMA_ID;

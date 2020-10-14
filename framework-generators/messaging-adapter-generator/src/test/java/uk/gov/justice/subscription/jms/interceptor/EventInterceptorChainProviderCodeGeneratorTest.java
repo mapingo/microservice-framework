@@ -3,7 +3,7 @@ package uk.gov.justice.subscription.jms.interceptor;
 import static com.squareup.javapoet.JavaFile.builder;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
@@ -19,7 +19,9 @@ import java.util.List;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -27,8 +29,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class EventInterceptorChainProviderCodeGeneratorTest {
 
-    private static final File CODE_GENERATION_OUTPUT_DIRECTORY = new File("./target/test-generation");
-    private static final File COMPILATION_OUTPUT_DIRECTORY = new File(System.getProperty("java.io.tmpdir"), "interceptorChainProvider-generation");
+    @Rule
+    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @InjectMocks
     private EventInterceptorChainProviderCodeGenerator eventInterceptorChainProviderCodeGenerator;
@@ -52,8 +54,8 @@ public class EventInterceptorChainProviderCodeGeneratorTest {
                 componentName,
                 classNameFactory);
 
-        final File codeGenerationOutputDirectory = getDirectory(CODE_GENERATION_OUTPUT_DIRECTORY);
-        final File compilationOutputDirectory = getDirectory(COMPILATION_OUTPUT_DIRECTORY);
+        final File codeGenerationOutputDirectory = temporaryFolder.newFolder("test-generation");
+        final File compilationOutputDirectory = temporaryFolder.newFolder("interceptorChainProvider-generation");
 
         builder(packageName, typeSpec)
                 .build()

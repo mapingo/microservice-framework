@@ -3,11 +3,11 @@ package uk.gov.justice.services.core.dispatcher;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static javax.json.Json.createObjectBuilder;
 import static javax.json.JsonValue.ValueType.OBJECT;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;

@@ -3,8 +3,8 @@ package uk.gov.justice.services.generators.commons.helper;
 
 import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.POST;

@@ -1,7 +1,7 @@
 package uk.gov.justice.services.generators.commons.client;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static uk.gov.justice.services.generators.commons.client.ActionMimeTypeDefinition.definitionWithRequest;
 import static uk.gov.justice.services.generators.commons.client.ActionMimeTypeDefinition.definitionWithRequestAndResponse;

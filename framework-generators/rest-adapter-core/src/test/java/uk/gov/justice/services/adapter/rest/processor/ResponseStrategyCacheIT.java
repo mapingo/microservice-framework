@@ -1,8 +1,8 @@
 package uk.gov.justice.services.adapter.rest.processor;
 
 import static java.util.Optional.empty;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 import uk.gov.justice.services.adapter.rest.processor.response.ResponseStrategy;
 import uk.gov.justice.services.messaging.JsonEnvelope;

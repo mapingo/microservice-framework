@@ -1,7 +1,7 @@
 package uk.gov.justice.services.jmx.runner;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_RECEIVED;

@@ -2,7 +2,7 @@ package uk.gov.justice.services.core.handler;
 
 import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.handler.registry.exception.InvalidHandlerException;

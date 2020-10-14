@@ -2,7 +2,7 @@ package uk.gov.justice.services.core.json;
 
 import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import uk.gov.justice.services.core.mapping.MediaType;
 import uk.gov.justice.services.core.mapping.MediaTypeToSchemaIdMapper;
