@@ -1,8 +1,8 @@
 package uk.gov.justice.services.metrics.servlet;
 
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 import com.codahale.metrics.MetricRegistry;
 import org.junit.Test;

@@ -2,7 +2,7 @@ package uk.gov.justice.services.common.http;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.common.http.DefaultServerPortProvider.DEFAULT_PORT;
 
 import org.junit.After;

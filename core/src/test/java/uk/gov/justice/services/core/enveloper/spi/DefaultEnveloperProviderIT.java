@@ -1,8 +1,8 @@
 package uk.gov.justice.services.core.enveloper.spi;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 
 import uk.gov.justice.domain.annotation.Event;

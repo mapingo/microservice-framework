@@ -2,7 +2,7 @@ package uk.gov.justice.subscription.jms.it;
 
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import uk.gov.justice.api.subscription.CustomEventListenerExampleEventEventFilter;
 import uk.gov.justice.api.subscription.CustomEventListenerExampleEventEventFilterInterceptor;

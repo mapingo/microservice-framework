@@ -2,8 +2,8 @@ package uk.gov.justice.services.test.utils.core.helper;
 
 import static java.util.stream.Collectors.toList;
 import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
 import uk.gov.justice.services.eventsourcing.source.core.EventStream;

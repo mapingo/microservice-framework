@@ -19,7 +19,9 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 
 import com.squareup.javapoet.TypeSpec;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -28,8 +30,10 @@ import org.raml.model.Raml;
 @RunWith(MockitoJUnitRunner.class)
 public class LoggerRequestDataFilterGeneratorTest {
 
-    private static final File COMPILATION_OUTPUT_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
     private static final String SERVICE_COMPONENT_NAME = "CUSTOM_API";
+
+    @Rule
+    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @InjectMocks
     private LoggerRequestDataFilterGenerator loggerRequestDataFilterGenerator;
@@ -54,14 +58,14 @@ public class LoggerRequestDataFilterGeneratorTest {
                 raml,
                 generatorConfig);
 
-        final File outputDirectory = getOutputDirectory("./target/test-generation");
+        final File outputDirectory = temporaryFolder.newFolder("test-generation");
         builder(packageName, typeSpec.get(0))
                 .build()
                 .writeTo(outputDirectory);
 
         final Class<?> compiledClass = javaCompilerUtil().compiledClassOf(
                 outputDirectory,
-                COMPILATION_OUTPUT_DIRECTORY,
+                temporaryFolder.newFolder(getClass().getSimpleName()),
                 packageName,
                 simpleName);
 
@@ -90,18 +94,5 @@ public class LoggerRequestDataFilterGeneratorTest {
         filterResponse.invoke(customFilter, containerRequestContext, containerResponseContext);
 
         verify(loggerRequestDataAdder).clearMdc();
-    }
-
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "SameParameterValue"})
-    private File getOutputDirectory(final String path) {
-        final File outputDirectory = new File(path);
-
-        if (outputDirectory.exists()) {
-            outputDirectory.delete();
-        }
-
-        outputDirectory.mkdirs();
-
-        return outputDirectory;
     }
 }

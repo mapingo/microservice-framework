@@ -10,8 +10,6 @@ import java.util.Optional;
 
 import javax.inject.Singleton;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 @Singleton
 public class RecordingInterceptorChainProcessor extends EnvelopeRecorder implements InterceptorChainProcessor {
 

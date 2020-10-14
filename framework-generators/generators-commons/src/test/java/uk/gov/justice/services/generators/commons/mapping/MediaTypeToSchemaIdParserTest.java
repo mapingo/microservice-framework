@@ -2,7 +2,7 @@ package uk.gov.justice.services.generators.commons.mapping;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.HEAD;

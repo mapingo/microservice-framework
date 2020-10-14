@@ -1,12 +1,9 @@
 package uk.gov.justice.services.clients.unifiedsearch.core;
 
 import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.net.URL;
-import java.nio.file.Path;
-import java.util.List;
 
 import org.junit.Rule;
 import org.junit.Test;

@@ -2,7 +2,7 @@ package uk.gov.justice.services.jmx.bootstrap.blacklist;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 

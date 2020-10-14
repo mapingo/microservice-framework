@@ -3,7 +3,7 @@ package uk.gov.justice.services.management.suspension.executors;
 import static java.util.Optional.empty;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;

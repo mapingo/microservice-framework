@@ -3,7 +3,7 @@ package uk.gov.justice.raml.jms.interceptor;
 import static com.squareup.javapoet.ClassName.get;
 import static com.squareup.javapoet.JavaFile.builder;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.raml.jms.core.ClassNameFactory.EVENT_FILTER;
@@ -22,7 +22,9 @@ import javax.jms.TextMessage;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -30,8 +32,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class EventValidationInterceptorCodeGeneratorTest {
 
-    private static final File CODE_GENERATION_OUTPUT_DIRECTORY = new File("./target/test-generation");
-    private static final File COMPILATION_OUTPUT_DIRECTORY = new File(System.getProperty("java.io.tmpdir"), "java-test-classes");
+    @Rule
+    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @InjectMocks
     private EventValidationInterceptorCodeGenerator eventValidationInterceptorCodeGenerator;
@@ -52,8 +54,8 @@ public class EventValidationInterceptorCodeGeneratorTest {
         final TypeSpec typeSpec = eventValidationInterceptorCodeGenerator.generate(
                 classNameFactory);
 
-        final File codeGenerationOutputDirectory = getDirectory(CODE_GENERATION_OUTPUT_DIRECTORY);
-        final File compilationOutputDirectory = getDirectory(COMPILATION_OUTPUT_DIRECTORY);
+        final File codeGenerationOutputDirectory = temporaryFolder.newFolder("test-generation");
+        final File compilationOutputDirectory = temporaryFolder.newFolder("java-test-classes");
 
         builder(packageName, typeSpec)
                 .addStaticImport(get(HeaderConstants.class), "JMS_HEADER_CPPNAME")
@@ -111,17 +113,5 @@ public class EventValidationInterceptorCodeGeneratorTest {
         eventFilterField.set(myCustomEventFilterInterceptor, myCustomEventFilter);
 
         return (JsonSchemaValidationInterceptor) myCustomEventFilterInterceptor;
-    }
-
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "SameParameterValue"})
-    private File getDirectory(final File aTemporaryDirectory) {
-
-        if (aTemporaryDirectory.exists()) {
-            aTemporaryDirectory.delete();
-        }
-
-        aTemporaryDirectory.mkdirs();
-
-        return aTemporaryDirectory;
     }
 }

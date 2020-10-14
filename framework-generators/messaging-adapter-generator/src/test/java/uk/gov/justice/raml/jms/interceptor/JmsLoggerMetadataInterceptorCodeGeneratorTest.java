@@ -3,7 +3,7 @@ package uk.gov.justice.raml.jms.interceptor;
 import static com.squareup.javapoet.ClassName.get;
 import static com.squareup.javapoet.JavaFile.builder;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,7 +22,9 @@ import javax.interceptor.InvocationContext;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -30,8 +32,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class JmsLoggerMetadataInterceptorCodeGeneratorTest {
 
-    private static final File COMPILATION_OUTPUT_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
     private static final String SERVICE_COMPONENT_NAME = "CUSTOM";
+
+    @Rule
+    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @InjectMocks
     private JmsLoggerMetadataInterceptorCodeGenerator jmsLoggerMetadataInterceptorCodeGenerator;
@@ -53,14 +57,14 @@ public class JmsLoggerMetadataInterceptorCodeGeneratorTest {
                 commonGeneratorProperties,
                 classNameFactory);
 
-        final File outputDirectory = getOutputDirectory("./target/test-generation");
+        final File outputDirectory = temporaryFolder.newFolder("test-generation");
         builder(packageName, typeSpec)
                 .build()
                 .writeTo(outputDirectory);
 
         final Class<?> compiledClass = javaCompilerUtil().compiledClassOf(
                 outputDirectory,
-                COMPILATION_OUTPUT_DIRECTORY,
+                temporaryFolder.newFolder(getClass().getSimpleName()),
                 packageName,
                 simpleName);
 
@@ -87,18 +91,5 @@ public class JmsLoggerMetadataInterceptorCodeGeneratorTest {
         assertThat(result, is(expected));
 
         verify(jmsLoggerMetadataAdder).addRequestDataToMdc(invocationContext, SERVICE_COMPONENT_NAME);
-    }
-
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "SameParameterValue"})
-    private File getOutputDirectory(final String path) {
-        final File outputDirectory = new File(path);
-
-        if (outputDirectory.exists()) {
-            outputDirectory.delete();
-        }
-
-        outputDirectory.mkdirs();
-
-        return outputDirectory;
     }
 }

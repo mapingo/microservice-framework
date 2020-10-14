@@ -1,8 +1,8 @@
 package uk.gov.justice.services.test.utils.core.converter;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 import uk.gov.justice.services.common.converter.JsonObjectToObjectConverter;
 

@@ -3,7 +3,7 @@ package uk.gov.justice.services.core.envelope;
 import static java.util.Optional.of;
 import static javax.json.JsonValue.NULL;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;

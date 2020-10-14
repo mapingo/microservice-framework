@@ -2,7 +2,7 @@ package uk.gov.justice.services.jmx.system.command.client.connection;
 
 import static javax.management.remote.JMXConnector.CREDENTIALS;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 
 import java.util.Map;
