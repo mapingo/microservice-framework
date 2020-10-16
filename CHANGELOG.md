@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file, which follo
 on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
+## [7.1.4] - 2020-10-16
+### Changed
+- Updated framework-libraries to version 7.1.5
+    - Builders of generated pojos now have a `withValuesFrom(...)` method 
+to allow the builder to be initialised with the values of another pojo instance  
+
 ## [7.1.3] - 2020-10-14
 ### Changed
 - Security updates to apache.tika, commons.beanutils, commons.guava and junit in common-bom
