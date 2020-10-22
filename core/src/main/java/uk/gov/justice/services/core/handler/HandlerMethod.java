@@ -13,6 +13,7 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Optional;
 
 import javax.json.JsonValue;
@@ -32,6 +33,7 @@ public class HandlerMethod {
 
     private final Object handlerInstance;
     private final Method handlerMethod;
+    private final List<String> featureNames;
     private final boolean isSynchronous;
     private final Class<?> payloadType;
 
@@ -42,7 +44,11 @@ public class HandlerMethod {
      * @param method             the method on the handler object
      * @param expectedReturnType the expected return type for the method
      */
-    public HandlerMethod(final Object object, final Method method, final Class<?> expectedReturnType) {
+    public HandlerMethod(
+            final Object object,
+            final Method method,
+            final Class<?> expectedReturnType,
+            final List<String> featureNames) {
 
         if (object == null) {
             throw new IllegalArgumentException("Handler instance cannot be null");
@@ -91,6 +97,7 @@ public class HandlerMethod {
 
         this.handlerInstance = object;
         this.handlerMethod = method;
+        this.featureNames = featureNames;
     }
 
     private static boolean isVoid(final Class<?> clazz) {
@@ -160,5 +167,9 @@ public class HandlerMethod {
 
     public Class<?> getPayloadType() {
         return payloadType;
+    }
+
+    public List<String> getFeatureNames() {
+        return featureNames;
     }
 }

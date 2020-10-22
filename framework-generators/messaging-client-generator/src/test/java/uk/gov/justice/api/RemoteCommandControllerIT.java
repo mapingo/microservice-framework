@@ -33,6 +33,8 @@ import uk.gov.justice.services.core.envelope.EnvelopeInspector;
 import uk.gov.justice.services.core.envelope.EnvelopeValidationExceptionHandlerProducer;
 import uk.gov.justice.services.core.envelope.MediaTypeProvider;
 import uk.gov.justice.services.core.extension.BeanInstantiater;
+import uk.gov.justice.services.core.featurecontrol.FeatureControlAnnotationFinder;
+import uk.gov.justice.services.core.handler.registry.HandlerRegistryCacheProducer;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProcessor;
 import uk.gov.justice.services.core.json.FileBasedJsonSchemaValidator;
 import uk.gov.justice.services.core.json.JsonSchemaLoader;
@@ -53,6 +55,7 @@ import uk.gov.justice.services.jdbc.persistence.JndiAppNameProvider;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.logging.DefaultTraceLogger;
 import uk.gov.justice.services.test.utils.common.validator.DummyJsonSchemaValidator;
+import uk.gov.justice.services.test.utils.core.handler.registry.TestHandlerRegistryCacheProducer;
 import uk.gov.justice.services.test.utils.messaging.jms.RecordingJmsEnvelopeSender;
 import uk.gov.justice.subscription.domain.eventsource.DefaultEventSourceDefinitionFactory;
 
@@ -150,7 +153,9 @@ public class RemoteCommandControllerIT {
 
             SchemaValidationErrorMessageGenerator.class,
 
-            DispatcherConfiguration.class
+            DispatcherConfiguration.class,
+            FeatureControlAnnotationFinder.class,
+            TestHandlerRegistryCacheProducer.class
     })
     public WebApp war() {
         return new WebApp()

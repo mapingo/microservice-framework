@@ -15,6 +15,7 @@ import static uk.gov.justice.services.messaging.JsonEnvelope.metadataBuilder;
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.annotation.ServiceComponent;
+import uk.gov.justice.services.core.featurecontrol.FeatureControlAnnotationFinder;
 import uk.gov.justice.services.core.handler.TestPojo;
 import uk.gov.justice.services.core.handler.exception.MissingHandlerException;
 import uk.gov.justice.services.core.handler.registry.HandlerRegistry;
@@ -43,6 +44,9 @@ public class DispatcherTest {
     @Mock
     private Logger logger;
 
+    @Mock
+    private FeatureControlAnnotationFinder featureControlAnnotationFinder;
+
     private final Metadata metadata = metadataBuilder()
             .withId(randomUUID())
             .withName(ACTION_NAME).build();
@@ -53,7 +57,7 @@ public class DispatcherTest {
 
     @Before
     public void setup() {
-        handlerRegistry = new HandlerRegistry(logger);
+        handlerRegistry = new HandlerRegistry(logger, featureControlAnnotationFinder);
         dispatcher = new Dispatcher(handlerRegistry, new EnvelopePayloadTypeConverter(new ObjectMapperProducer().objectMapper()), new JsonEnvelopeRepacker());
     }
 

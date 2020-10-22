@@ -68,6 +68,7 @@ import uk.gov.justice.services.core.envelope.EnvelopeValidationExceptionHandlerP
 import uk.gov.justice.services.core.envelope.MediaTypeProvider;
 import uk.gov.justice.services.core.enveloper.DefaultEnveloper;
 import uk.gov.justice.services.core.extension.BeanInstantiater;
+import uk.gov.justice.services.core.featurecontrol.FeatureControlAnnotationFinder;
 import uk.gov.justice.services.core.interceptor.InterceptorCache;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProcessor;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProcessorProducer;
@@ -92,6 +93,7 @@ import uk.gov.justice.services.messaging.DefaultJsonObjectEnvelopeConverter;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.logging.DefaultTraceLogger;
 import uk.gov.justice.services.test.utils.common.validator.DummyJsonSchemaValidator;
+import uk.gov.justice.services.test.utils.core.handler.registry.TestHandlerRegistryCacheProducer;
 import uk.gov.justice.subscription.domain.eventsource.DefaultEventSourceDefinitionFactory;
 
 import java.util.Properties;
@@ -226,7 +228,9 @@ public class RemoteExampleEventProcessorIT {
 
             DispatcherConfiguration.class,
 
-            JsonObjectConvertersProducer.class
+            JsonObjectConvertersProducer.class,
+            FeatureControlAnnotationFinder.class,
+            TestHandlerRegistryCacheProducer.class
     })
     public WebApp war() {
         return new WebApp()

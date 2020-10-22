@@ -15,6 +15,7 @@ import uk.gov.justice.services.core.json.JsonSchemaValidator;
 import uk.gov.justice.services.core.mapping.DefaultNameToMediaTypeConverter;
 import uk.gov.justice.services.core.mapping.MediaType;
 import uk.gov.justice.services.messaging.logging.DefaultJmsMessageLoggerHelper;
+import uk.gov.justice.services.test.utils.core.handler.registry.TestHandlerRegistryCacheProducer;
 
 import java.util.Optional;
 
@@ -58,7 +59,8 @@ public class FilterValidatorIT extends AbstractJmsAdapterGenerationIT {
             DefaultJsonValidationLoggerHelper.class,
             DefaultJmsMessageLoggerHelper.class,
             RecordingJsonSchemaValidator.class,
-            DefaultNameToMediaTypeConverter.class
+            DefaultNameToMediaTypeConverter.class,
+            TestHandlerRegistryCacheProducer.class
 
     })
     public WebApp war() {

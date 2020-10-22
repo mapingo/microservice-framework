@@ -1,6 +1,8 @@
 package uk.gov.justice.services.core.handler.registry;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,18 +14,23 @@ import static org.mockito.Mockito.verify;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_HANDLER;
 
 import uk.gov.justice.services.core.annotation.Direct;
+import uk.gov.justice.services.core.annotation.FeatureControl;
 import uk.gov.justice.services.core.annotation.FrameworkComponent;
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.annotation.ServiceComponent;
+import uk.gov.justice.services.core.featurecontrol.FeatureControlAnnotationFinder;
 import uk.gov.justice.services.core.handler.HandlerMethod;
 import uk.gov.justice.services.core.handler.registry.exception.DuplicateHandlerException;
 import uk.gov.justice.services.core.handler.registry.exception.InvalidHandlerException;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.test.utils.common.envelope.TestEnvelopeRecorder;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
@@ -35,6 +42,9 @@ public class HandlerRegistryTest {
 
     private static final String COMMAND_NAME = "test.command.mock-command";
 
+    private static final String FEATURE_NAME_1 = "feature-1";
+    private static final String FEATURE_NAME_2 = "feature-2";
+
     @Mock
     private Logger logger;
 
@@ -43,6 +53,9 @@ public class HandlerRegistryTest {
 
     @Mock
     private TestCommandHandlerDuplicate commandHandlerDuplicate;
+
+    @Spy
+    private FeatureControlAnnotationFinder featureControlAnnotationFinder = new FeatureControlAnnotationFinder();
 
     private HandlerRegistry registry;
 
@@ -114,6 +127,24 @@ public class HandlerRegistryTest {
         assertHandlerMethodInvokesHandler(handlerMethod, testDirectComponentAHandler);
     }
 
+    @Test
+    public void shouldListAndAnnotatedControlFeatureNamesWithTheHandlerMethod() throws Exception {
+
+        final TestCommandHandlerWithFeatures testCommandHandlerWithFeatures = new TestCommandHandlerWithFeatures();
+
+        createRegistryWith(testCommandHandlerWithFeatures);
+
+        final HandlerMethod handlerMethod = registry.get(COMMAND_NAME);
+
+        final List<String> featureNames = handlerMethod.getFeatureNames();
+
+        assertThat(featureNames.size(), is(2));
+        assertThat(featureNames, hasItem(FEATURE_NAME_1));
+        assertThat(featureNames, hasItem(FEATURE_NAME_2));
+
+        verify(logger).info("FeatureControl found on 'TestCommandHandlerWithFeatures.handle(...)': [feature-1, feature-2]");
+    }
+
     @Test(expected = DuplicateHandlerException.class)
     public void shouldThrowExceptionIfAttemptingToRegisterDuplicateDirectHandler() throws Exception {
 
@@ -160,7 +191,7 @@ public class HandlerRegistryTest {
     }
 
     private void createRegistryWith(Object... handlers) {
-        registry = new HandlerRegistry(logger);
+        registry = new HandlerRegistry(logger, featureControlAnnotationFinder);
         asList(handlers).forEach(x -> registry.register(x));
     }
 
@@ -197,7 +228,6 @@ public class HandlerRegistryTest {
         @Handles(COMMAND_NAME)
         public void handle1(JsonEnvelope envelope, Object invalidSecondArgument) {
         }
-
     }
 
     @ServiceComponent(COMMAND_HANDLER)
@@ -207,7 +237,6 @@ public class HandlerRegistryTest {
         public JsonEnvelope handle1(JsonEnvelope envelope, Object invalidSecondArgument) {
             return null;
         }
-
     }
 
     @ServiceComponent(COMMAND_HANDLER)
@@ -218,7 +247,6 @@ public class HandlerRegistryTest {
             record(envelope);
             return envelope;
         }
-
     }
 
     @ServiceComponent(COMMAND_HANDLER)
@@ -238,7 +266,6 @@ public class HandlerRegistryTest {
         public void handle1(JsonEnvelope envelope) {
 
         }
-
     }
 
     @ServiceComponent(COMMAND_HANDLER)
@@ -247,7 +274,6 @@ public class HandlerRegistryTest {
         @Handles(COMMAND_NAME)
         public void handle1(Object invalidSecondArgument) {
         }
-
     }
 
     @ServiceComponent(COMMAND_HANDLER)
@@ -256,7 +282,6 @@ public class HandlerRegistryTest {
         @Handles(COMMAND_NAME)
         public void handle1(Object invalidSecondArgument) {
         }
-
     }
 
     @ServiceComponent(COMMAND_HANDLER)
@@ -298,5 +323,14 @@ public class HandlerRegistryTest {
         }
     }
 
+    @ServiceComponent(COMMAND_HANDLER)
+    public static class TestCommandHandlerWithFeatures extends TestEnvelopeRecorder {
 
+        @Handles(COMMAND_NAME)
+        @FeatureControl(FEATURE_NAME_1)
+        @FeatureControl(FEATURE_NAME_2)
+        public void handle(JsonEnvelope envelope) {
+            record(envelope);
+        }
+    }
 }

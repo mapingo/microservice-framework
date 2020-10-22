@@ -34,6 +34,8 @@ import uk.gov.justice.services.core.envelope.EnvelopeValidationExceptionHandlerP
 import uk.gov.justice.services.core.envelope.MediaTypeProvider;
 import uk.gov.justice.services.core.extension.BeanInstantiater;
 import uk.gov.justice.services.core.extension.ServiceComponentScanner;
+import uk.gov.justice.services.core.featurecontrol.FeatureControlAnnotationFinder;
+import uk.gov.justice.services.core.handler.registry.HandlerRegistryCacheProducer;
 import uk.gov.justice.services.core.interceptor.InterceptorCache;
 import uk.gov.justice.services.core.interceptor.InterceptorChainEntry;
 import uk.gov.justice.services.core.interceptor.InterceptorChainEntryProvider;
@@ -63,6 +65,7 @@ import uk.gov.justice.services.messaging.logging.DefaultTraceLogger;
 import uk.gov.justice.services.test.utils.common.envelope.EnvelopeRecordingInterceptor;
 import uk.gov.justice.services.test.utils.common.envelope.TestEnvelopeRecorder;
 import uk.gov.justice.services.test.utils.common.validator.DummyJsonSchemaValidator;
+import uk.gov.justice.services.test.utils.core.handler.registry.TestHandlerRegistryCacheProducer;
 import uk.gov.justice.services.test.utils.messaging.jms.DummyJmsEnvelopeSender;
 import uk.gov.justice.subscription.domain.eventsource.DefaultEventSourceDefinitionFactory;
 
@@ -168,7 +171,9 @@ public class DirectAdapterIT {
 
             SchemaValidationErrorMessageGenerator.class,
 
-            DispatcherConfiguration.class
+            DispatcherConfiguration.class,
+            FeatureControlAnnotationFinder.class,
+            TestHandlerRegistryCacheProducer.class
     })
     public WebApp war() {
         return new WebApp()

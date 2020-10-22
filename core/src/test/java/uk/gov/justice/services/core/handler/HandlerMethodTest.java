@@ -27,6 +27,8 @@ import uk.gov.justice.services.messaging.Metadata;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.google.common.io.Resources;
@@ -138,7 +140,13 @@ public class HandlerMethodTest {
         expectedException.expect(HandlerExecutionException.class);
         expectedException.expectCause(is(thrownException));
 
-        new HandlerMethod(checkedExcCommandHandler, method(new CheckedExceptionThrowingCommandHandler(), "handles"), JsonEnvelope.class).execute(envelope);
+        final List<String> features = new ArrayList<>();
+        new HandlerMethod(
+                checkedExcCommandHandler,
+                method(new CheckedExceptionThrowingCommandHandler(), "handles"),
+                JsonEnvelope.class,
+                features
+        ).execute(envelope);
     }
 
     @Test
@@ -148,55 +156,104 @@ public class HandlerMethodTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWithNullHandlerInstance() {
-        new HandlerMethod(null, method(new AsynchronousCommandHandler(), "handles"), Void.TYPE);
+        final List<String> features = new ArrayList<>();
+        new HandlerMethod(null, method(new AsynchronousCommandHandler(), "handles"), Void.TYPE, features);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWithNullMethod() {
-        new HandlerMethod(asynchronousCommandHandler, null, Void.TYPE);
+        final List<String> features = new ArrayList<>();
+        new HandlerMethod(asynchronousCommandHandler, null, Void.TYPE, features);
     }
 
     @Test(expected = InvalidHandlerException.class)
     public void shouldThrowExceptionWithSynchronousMethod() {
-        new HandlerMethod(asynchronousCommandHandler, method(new AsynchronousCommandHandler(), "handlesSync"), Void.TYPE);
+        final List<String> features = new ArrayList<>();
+        new HandlerMethod(
+                asynchronousCommandHandler,
+                method(new AsynchronousCommandHandler(), "handlesSync"),
+                Void.TYPE,
+                features);
     }
 
     @Test(expected = InvalidHandlerException.class)
     public void shouldThrowExceptionWithAsynchronousMethod() {
-        new HandlerMethod(synchronousCommandHandler, method(new SynchronousCommandHandler(), "handlesAsync"), JsonEnvelope.class);
+        final List<String> features = new ArrayList<>();
+        new HandlerMethod(
+                synchronousCommandHandler,
+                method(new SynchronousCommandHandler(), "handlesAsync"),
+                JsonEnvelope.class,
+                features);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldOnlyAcceptVoidOrEnvelopeReturnTypes() {
-        new HandlerMethod(synchronousCommandHandler, method(new SynchronousCommandHandler(), "handles"), Object.class);
+        final List<String> features = new ArrayList<>();
+        new HandlerMethod(
+                synchronousCommandHandler,
+                method(new SynchronousCommandHandler(), "handles"),
+                Object.class,
+                features);
     }
 
     @Test
     public void shouldReturnFalseIfNoDirectAnnotation() throws Exception {
         final SynchronousCommandHandler handler = new SynchronousCommandHandler();
-        assertThat(new HandlerMethod(new SynchronousCommandHandler(), method(handler, "handles"), JsonEnvelope.class).isDirect(), is(false));
+        final List<String> features = new ArrayList<>();
+        assertThat(new HandlerMethod(
+                new SynchronousCommandHandler(),
+                method(handler, "handles"),
+                JsonEnvelope.class,
+                features
+        ).isDirect(), is(false));
     }
 
     @Test
     public void shouldReturnTrueIfDirectAnnotationPresent() throws Exception {
         final TestDirectComponentAHandler handler = new TestDirectComponentAHandler();
-        assertThat(new HandlerMethod(handler, method(handler, "handles"), JsonEnvelope.class).isDirect(), is(true));
+        final List<String> features = new ArrayList<>();
+        assertThat(new HandlerMethod(
+                handler,
+                method(handler, "handles"),
+                JsonEnvelope.class,
+                features
+        ).isDirect(), is(true));
     }
 
     private HandlerMethod asyncHandlerInstance() {
-        return new HandlerMethod(asynchronousCommandHandler, method(new AsynchronousCommandHandler(), "handles"), Void.TYPE);
+        final List<String> features = new ArrayList<>();
+        return new HandlerMethod(
+                asynchronousCommandHandler,
+                method(new AsynchronousCommandHandler(), "handles"),
+                Void.TYPE,
+                features);
     }
 
     private HandlerMethod asyncPojoHandlerInstance() {
-        return new HandlerMethod(asynchronousPojoCommandHandler, method(new AsynchronousPojoCommandHandler(), "handles"), Void.TYPE);
+        final List<String> features = new ArrayList<>();
+        return new HandlerMethod(
+                asynchronousPojoCommandHandler,
+                method(new AsynchronousPojoCommandHandler(), "handles"),
+                Void.TYPE,
+                features);
     }
 
     private HandlerMethod syncPojoHandlerInstance() {
-        return new HandlerMethod(synchronousPojoCommandHandler, method(new SynchronousPojoCommandHandler(), "handles"), Envelope.class);
+        final List<String> features = new ArrayList<>();
+        return new HandlerMethod(
+                synchronousPojoCommandHandler,
+                method(new SynchronousPojoCommandHandler(), "handles"),
+                Envelope.class,
+                features);
     }
 
     private HandlerMethod syncHandlerInstance() {
-        return new HandlerMethod(synchronousCommandHandler, method(new SynchronousCommandHandler(), "handles"), JsonEnvelope.class);
+        final List<String> features = new ArrayList<>();
+        return new HandlerMethod(
+                synchronousCommandHandler,
+                method(new SynchronousCommandHandler(), "handles"),
+                JsonEnvelope.class,
+                features);
     }
 
     private Method method(final Object object, final String methofName) {
