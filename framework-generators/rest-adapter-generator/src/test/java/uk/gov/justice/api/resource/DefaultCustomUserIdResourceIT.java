@@ -2,8 +2,8 @@ package uk.gov.justice.api.resource;
 
 import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import uk.gov.justice.api.CustomApiRestExampleApplication;
 import uk.gov.justice.api.filter.CustomApiRestExampleLoggerRequestDataFilter;

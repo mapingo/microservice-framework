@@ -1,7 +1,6 @@
 package uk.gov.justice.framework.command.client;
 
 import uk.gov.justice.framework.command.client.io.CommandPrinter;
-import uk.gov.justice.framework.command.client.io.ToConsolePrinter;
 import uk.gov.justice.framework.command.client.jmx.SystemCommandInvoker;
 import uk.gov.justice.services.jmx.api.command.SystemCommandDetails;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;

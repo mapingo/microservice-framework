@@ -1,8 +1,8 @@
 package uk.gov.justice.raml.jms.core;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 
 import org.junit.Test;
 

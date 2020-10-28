@@ -1,8 +1,8 @@
 package uk.gov.justice.framework.command.client.util;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

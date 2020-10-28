@@ -1,8 +1,6 @@
 package uk.gov.justice.framework.command.client;
 
 import static java.util.Arrays.asList;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -11,7 +9,6 @@ import static org.mockito.Mockito.when;
 import uk.gov.justice.framework.command.client.io.CommandPrinter;
 import uk.gov.justice.framework.command.client.io.ToConsolePrinter;
 import uk.gov.justice.framework.command.client.jmx.SystemCommandInvoker;
-import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.api.command.SystemCommandDetails;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 

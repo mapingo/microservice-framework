@@ -6,7 +6,6 @@ import static java.time.Duration.between;
 import uk.gov.justice.framework.command.client.io.ToConsolePrinter;
 import uk.gov.justice.framework.command.client.util.Sleeper;
 import uk.gov.justice.framework.command.client.util.UtcClock;
-import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
 
 import java.time.ZonedDateTime;
