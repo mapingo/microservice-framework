@@ -22,6 +22,8 @@ import uk.gov.justice.services.core.dispatcher.DispatcherCache;
 import uk.gov.justice.services.core.dispatcher.DispatcherFactory;
 import uk.gov.justice.services.core.dispatcher.EnvelopePayloadTypeConverter;
 import uk.gov.justice.services.core.dispatcher.JsonEnvelopeRepacker;
+import uk.gov.justice.services.core.featurecontrol.FeatureControlAnnotationFinder;
+import uk.gov.justice.services.core.handler.registry.HandlerRegistryCache;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.test.utils.common.MemberInjectionPoint;
 import uk.gov.justice.services.test.utils.common.envelope.EnvelopeRecordingInterceptor;
@@ -68,7 +70,8 @@ public class InterceptorChainProcessorProducerTest {
         dispatcherCache = new DispatcherCache(
                 new DispatcherFactory(
                         new EnvelopePayloadTypeConverter(new ObjectMapperProducer().objectMapper()),
-                        new JsonEnvelopeRepacker()),
+                        new JsonEnvelopeRepacker(),
+                        new HandlerRegistryCache(new FeatureControlAnnotationFinder())),
                 componentNameExtractor);
 
         setField(interceptorChainProcessorProducer, "dispatcherCache", dispatcherCache);

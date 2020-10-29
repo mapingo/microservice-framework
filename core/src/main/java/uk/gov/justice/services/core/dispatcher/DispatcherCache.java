@@ -45,8 +45,16 @@ public class DispatcherCache {
      * @return the {@link Dispatcher}
      */
     public Dispatcher dispatcherFor(final InjectionPoint injectionPoint) {
-        return createDispatcherIfAbsent(new DispatcherKey(
-                componentNameExtractor.componentFrom(injectionPoint), componentLocationFrom(injectionPoint)));
+        final String componentName = componentNameExtractor.componentFrom(injectionPoint);
+        final ServiceComponentLocation location = componentLocationFrom(injectionPoint);
+
+        final DispatcherKey component = new DispatcherKey(
+                componentName,
+                location);
+        return dispatcherMap.computeIfAbsent(component, c -> dispatcherFactory.createNew(
+                componentName,
+                location
+        ));
     }
 
     /**
@@ -56,8 +64,14 @@ public class DispatcherCache {
      * @return the {@link Dispatcher}
      */
     public Dispatcher dispatcherFor(final ServiceComponentFoundEvent event) {
-        return createDispatcherIfAbsent(new DispatcherKey(
-                event.getComponentName(), event.getLocation()));
+        final String componentName = event.getComponentName();
+        final ServiceComponentLocation location = event.getLocation();
+        final DispatcherKey component = new DispatcherKey(
+                componentName,
+                location);
+        return dispatcherMap.computeIfAbsent(component, c -> dispatcherFactory.createNew(
+                componentName,
+                location));
     }
 
     /**
@@ -69,20 +83,19 @@ public class DispatcherCache {
      * @return the {@link Dispatcher}
      */
     public Dispatcher dispatcherFor(final String component, final ServiceComponentLocation location) {
-        return createDispatcherIfAbsent(new DispatcherKey(component, location));
+        final DispatcherKey dispatcherKey = new DispatcherKey(component, location);
+        return dispatcherMap.computeIfAbsent(
+                dispatcherKey,
+                theDispatcherKey -> dispatcherFactory.createNew(component, location));
     }
 
-    private Dispatcher createDispatcherIfAbsent(final DispatcherKey component) {
-        return dispatcherMap.computeIfAbsent(component, c -> dispatcherFactory.createNew());
-    }
+    private static class DispatcherKey {
 
-    private class DispatcherKey {
-
-        private final String componentType;
+        private final String componentName;
         private final ServiceComponentLocation location;
 
-        private DispatcherKey(final String componentType, final ServiceComponentLocation location) {
-            this.componentType = componentType;
+        private DispatcherKey(final String componentName, final ServiceComponentLocation location) {
+            this.componentName = componentName;
             this.location = location;
         }
 
@@ -91,13 +104,13 @@ public class DispatcherCache {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             final DispatcherKey that = (DispatcherKey) o;
-            return Objects.equals(componentType, that.componentType) &&
+            return Objects.equals(componentName, that.componentName) &&
                     location == that.location;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(componentType, location);
+            return Objects.hash(componentName, location);
         }
     }
 }

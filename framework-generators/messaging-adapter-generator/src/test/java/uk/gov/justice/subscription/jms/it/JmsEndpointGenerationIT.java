@@ -43,6 +43,8 @@ import uk.gov.justice.services.core.envelope.MediaTypeProvider;
 import uk.gov.justice.services.core.enveloper.Enveloper;
 import uk.gov.justice.services.core.extension.BeanInstantiater;
 import uk.gov.justice.services.core.extension.ServiceComponentScanner;
+import uk.gov.justice.services.core.featurecontrol.FeatureControlAnnotationFinder;
+import uk.gov.justice.services.core.handler.registry.HandlerRegistryCacheProducer;
 import uk.gov.justice.services.core.interceptor.DefaultInterceptorChainProcessor;
 import uk.gov.justice.services.core.interceptor.InterceptorCache;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProcessor;
@@ -69,6 +71,7 @@ import uk.gov.justice.services.messaging.logging.DefaultJmsMessageLoggerHelper;
 import uk.gov.justice.services.messaging.logging.DefaultTraceLogger;
 import uk.gov.justice.services.subscription.SubscriptionManager;
 import uk.gov.justice.services.subscription.annotation.SubscriptionName;
+import uk.gov.justice.services.test.utils.core.handler.registry.TestHandlerRegistryCacheProducer;
 import uk.gov.justice.services.test.utils.messaging.jms.DummyJmsEnvelopeSender;
 import uk.gov.justice.subscription.domain.eventsource.DefaultEventSourceDefinitionFactory;
 
@@ -183,7 +186,9 @@ public class JmsEndpointGenerationIT extends AbstractJmsAdapterGenerationIT {
 
             JndiAppNameProvider.class,
 
-            DispatcherConfiguration.class
+            DispatcherConfiguration.class,
+            FeatureControlAnnotationFinder.class,
+            TestHandlerRegistryCacheProducer.class
     })
     public WebApp war() {
         return new WebApp()

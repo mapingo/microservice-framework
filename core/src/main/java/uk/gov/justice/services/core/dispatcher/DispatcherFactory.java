@@ -1,27 +1,30 @@
 package uk.gov.justice.services.core.dispatcher;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
-import uk.gov.justice.services.core.handler.registry.HandlerRegistry;
+import uk.gov.justice.services.core.annotation.ServiceComponentLocation;
+import uk.gov.justice.services.core.handler.registry.HandlerRegistryCache;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-
 public class DispatcherFactory {
-
-    private static final Logger LOGGER = getLogger(HandlerRegistry.class);
 
     private EnvelopePayloadTypeConverter envelopePayloadTypeConverter;
     private JsonEnvelopeRepacker jsonEnvelopeRepacker;
+    private HandlerRegistryCache handlerRegistryCache;
 
     @Inject
-    public DispatcherFactory(final EnvelopePayloadTypeConverter envelopePayloadTypeConverter, final JsonEnvelopeRepacker jsonEnvelopeRepacker) {
+    public DispatcherFactory(
+            final EnvelopePayloadTypeConverter envelopePayloadTypeConverter,
+            final JsonEnvelopeRepacker jsonEnvelopeRepacker,
+            final HandlerRegistryCache handlerRegistryCache) {
         this.envelopePayloadTypeConverter = envelopePayloadTypeConverter;
         this.jsonEnvelopeRepacker = jsonEnvelopeRepacker;
+        this.handlerRegistryCache = handlerRegistryCache;
     }
 
-    public Dispatcher createNew() {
-        return new Dispatcher(new HandlerRegistry(LOGGER), envelopePayloadTypeConverter, jsonEnvelopeRepacker);
+    public Dispatcher createNew(final String serviceComponent, final ServiceComponentLocation location) {
+        return new Dispatcher(
+                handlerRegistryCache.handlerRegistryFor(serviceComponent, location),
+                envelopePayloadTypeConverter,
+                jsonEnvelopeRepacker);
     }
 }

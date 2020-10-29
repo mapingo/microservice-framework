@@ -43,6 +43,7 @@ import uk.gov.justice.services.core.envelope.MediaTypeProvider;
 import uk.gov.justice.services.core.enveloper.Enveloper;
 import uk.gov.justice.services.core.extension.BeanInstantiater;
 import uk.gov.justice.services.core.extension.ServiceComponentScanner;
+import uk.gov.justice.services.core.featurecontrol.FeatureControlAnnotationFinder;
 import uk.gov.justice.services.core.it.util.producer.TestEnvelopeValidationExceptionHandlerProducer;
 import uk.gov.justice.services.core.json.FileBasedJsonSchemaValidator;
 import uk.gov.justice.services.core.json.JsonSchemaLoader;
@@ -65,6 +66,7 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.logging.DefaultTraceLogger;
 import uk.gov.justice.services.test.utils.common.envelope.TestEnvelopeRecorder;
 import uk.gov.justice.services.test.utils.common.validator.DummyJsonSchemaValidator;
+import uk.gov.justice.services.core.handler.registry.TestHandlerRegistryCacheProducer;
 import uk.gov.justice.services.test.utils.messaging.jms.DummyJmsEnvelopeSender;
 
 import java.util.UUID;
@@ -176,7 +178,9 @@ public class SenderRequesterHandlerIT {
 
             SchemaValidationErrorMessageGenerator.class,
 
-            DispatcherConfiguration.class
+            DispatcherConfiguration.class,
+            FeatureControlAnnotationFinder.class,
+            TestHandlerRegistryCacheProducer.class
     })
     public WebApp war() {
         return new WebApp()

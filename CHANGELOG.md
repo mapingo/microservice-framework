@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file, which follo
 on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
+## [7.2.0-M1] - 2020-10-28
+
+### Added
+- Added support for FeatureControl toggling by annotating service component
+handler methods with @FeatureControl
+### Changed
+- Updated framework-libraries to version 7.2.0-M1
+
 ## [7.1.4] - 2020-10-16
 ### Changed
 - Updated framework-libraries to version 7.1.5

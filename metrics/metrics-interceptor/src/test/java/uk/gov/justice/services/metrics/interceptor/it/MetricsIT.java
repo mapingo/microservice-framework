@@ -1,6 +1,5 @@
 package uk.gov.justice.services.metrics.interceptor.it;
 
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -40,6 +39,8 @@ import uk.gov.justice.services.core.envelope.MediaTypeProvider;
 import uk.gov.justice.services.core.enveloper.Enveloper;
 import uk.gov.justice.services.core.extension.BeanInstantiater;
 import uk.gov.justice.services.core.extension.ServiceComponentScanner;
+import uk.gov.justice.services.core.featurecontrol.FeatureControlAnnotationFinder;
+import uk.gov.justice.services.core.handler.registry.HandlerRegistryCacheProducer;
 import uk.gov.justice.services.core.interceptor.InterceptorCache;
 import uk.gov.justice.services.core.interceptor.InterceptorChainEntry;
 import uk.gov.justice.services.core.interceptor.InterceptorChainEntryProvider;
@@ -60,6 +61,7 @@ import uk.gov.justice.services.metrics.interceptor.IndividualActionMetricsInterc
 import uk.gov.justice.services.metrics.interceptor.MetricRegistryProducer;
 import uk.gov.justice.services.metrics.interceptor.TotalActionMetricsInterceptor;
 import uk.gov.justice.services.test.utils.common.validator.DummyJsonSchemaValidator;
+import uk.gov.justice.services.test.utils.core.handler.registry.TestHandlerRegistryCacheProducer;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
@@ -77,7 +79,6 @@ import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Module;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 
 @RunWith(ApplicationComposer.class)
 @FrameworkComponent("CORE_TEST")
@@ -145,7 +146,9 @@ public class MetricsIT {
             JsonEnvelopeProvider.class,
             SchemaCatalogResolverProducer.class,
 
-            DispatcherConfiguration.class
+            DispatcherConfiguration.class,
+            FeatureControlAnnotationFinder.class,
+            TestHandlerRegistryCacheProducer.class
     })
     public WebApp war() {
         return new WebApp()

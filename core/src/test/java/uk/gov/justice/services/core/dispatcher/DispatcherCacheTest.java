@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
+import static org.mockito.Mockito.mock;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.annotation.Component.QUERY_API;
 import static uk.gov.justice.services.core.annotation.ServiceComponentLocation.LOCAL;
@@ -15,6 +16,7 @@ import uk.gov.justice.services.common.annotation.ComponentNameExtractor;
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
 import uk.gov.justice.services.core.annotation.Adapter;
 import uk.gov.justice.services.core.extension.ServiceComponentFoundEvent;
+import uk.gov.justice.services.core.handler.registry.HandlerRegistryCache;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProcessor;
 
 import javax.enterprise.inject.spi.InjectionPoint;
@@ -36,14 +38,18 @@ public class DispatcherCacheTest {
     private InjectionPoint adaptorQueryApiInjectionPoint = injectionPointWithMemberAsFirstMethodOf(TestQueryApiAdaptor.class);
 
     @Spy
-    private DispatcherFactory dispatcherFactory =
-            new DispatcherFactory(new EnvelopePayloadTypeConverter(new ObjectMapperProducer().objectMapper()), new JsonEnvelopeRepacker());
+    private DispatcherFactory dispatcherFactory = new DispatcherFactory(
+            new EnvelopePayloadTypeConverter(new ObjectMapperProducer().objectMapper()),
+            new JsonEnvelopeRepacker(),
+            mock(HandlerRegistryCache.class)
+    );
 
     @Spy
     private ComponentNameExtractor componentNameExtractor = new ComponentNameExtractor();
 
     @InjectMocks
     private DispatcherCache dispatcherCache;
+    
 
     @Test
     public void shouldReturnTheSameDispatcherForTwoInjectionPoints() throws Exception {
