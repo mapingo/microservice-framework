@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.slf4j.Logger;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,6 +30,9 @@ public class WildflyDeploymentDirLocalFeatureFileLocatorTest {
 
     @Mock
     private WildflyDeploymentDirectoryLocator wildflyDeploymentDirectoryLocator;
+
+    @Mock
+    private Logger logger;
 
     @InjectMocks
     private WildflyDeploymentDirLocalFeatureFileLocator wildflyDeploymentDirLocalFeatureFileLocator;
@@ -72,9 +76,7 @@ public class WildflyDeploymentDirLocalFeatureFileLocatorTest {
 
     private Path directoryOfFileOnClasspath(final String fileOnClasspath) throws URISyntaxException {
 
-        final URL localFeatureFileLocation = new ClasspathLocalFeatureFileLocator()
-                .findLocalFeatureFileLocation(fileOnClasspath)
-                .orElseThrow(AssertionError::new);
+        final URL localFeatureFileLocation =  getClass().getClassLoader().getResource(fileOnClasspath);
 
         return get(localFeatureFileLocation.toURI()).getParent().toAbsolutePath();
     }

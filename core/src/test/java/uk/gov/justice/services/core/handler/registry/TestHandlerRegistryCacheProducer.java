@@ -1,7 +1,6 @@
 package uk.gov.justice.services.core.handler.registry;
 
 import uk.gov.justice.services.core.featurecontrol.FeatureControlAnnotationFinder;
-import uk.gov.justice.services.core.handler.registry.HandlerRegistryCache;
 
 import javax.enterprise.inject.Produces;
 

@@ -1,7 +1,6 @@
 package uk.gov.justice.services.core.featurecontrol;
 
 import static java.lang.String.format;
-import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.justice.services.core.annotation.ServiceComponentLocation.LOCAL;
 
 import uk.gov.justice.services.core.annotation.FeatureControl;
