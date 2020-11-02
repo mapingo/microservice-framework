@@ -38,6 +38,7 @@ import uk.gov.justice.services.core.extension.BeanInstantiater;
 import uk.gov.justice.services.core.extension.EventFoundEvent;
 import uk.gov.justice.services.core.extension.ServiceComponentScanner;
 import uk.gov.justice.services.core.featurecontrol.FeatureControlAnnotationFinder;
+import uk.gov.justice.services.core.handler.registry.TestHandlerRegistryCacheProducer;
 import uk.gov.justice.services.core.interceptor.InterceptorCache;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProcessor;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProcessorProducer;
@@ -63,7 +64,6 @@ import uk.gov.justice.services.messaging.Metadata;
 import uk.gov.justice.services.messaging.logging.DefaultTraceLogger;
 import uk.gov.justice.services.messaging.spi.DefaultEnvelope;
 import uk.gov.justice.services.test.utils.common.validator.DummyJsonSchemaValidator;
-import uk.gov.justice.services.core.handler.registry.TestHandlerRegistryCacheProducer;
 import uk.gov.justice.services.test.utils.messaging.jms.DummyJmsEnvelopeSender;
 
 import java.util.UUID;

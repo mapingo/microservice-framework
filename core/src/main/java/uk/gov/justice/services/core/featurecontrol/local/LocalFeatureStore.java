@@ -1,5 +1,6 @@
 package uk.gov.justice.services.core.featurecontrol.local;
 
+import static java.lang.String.format;
 import static java.util.Optional.empty;
 
 import uk.gov.justice.services.core.featurecontrol.domain.Feature;
@@ -11,6 +12,8 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+
 public class LocalFeatureStore {
 
     @Inject
@@ -19,14 +22,20 @@ public class LocalFeatureStore {
     @Inject
     private LocalFeatureFileLocator localFeatureFileLocator;
 
+    @Inject
+    private Logger logger;
+
     public Optional<Feature> lookup(final String featureName) {
 
-        final Optional<URL> localFeatureFileLocation = localFeatureFileLocator.findLocalFeatureFileLocation();
+        final Optional<URL> url = localFeatureFileLocator.findLocalFeatureFileLocation();
 
-        if (localFeatureFileLocation.isPresent()) {
+        if (url.isPresent()) {
+
+            final URL localFeatureFileLocation = url.get();
+            logger.warn(format("Loading FeatureControl list from local file: '%s'", localFeatureFileLocation));
 
             final FeatureControl featureControlList = yamlParser.parseYamlFrom(
-                    localFeatureFileLocation.get(),
+                    localFeatureFileLocation,
                     FeatureControl.class);
 
             return featureControlList

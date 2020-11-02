@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.core.annotation.ServiceComponentLocation.LOCAL;
 
 import uk.gov.justice.services.common.exception.ForbiddenRequestException;
-import uk.gov.justice.services.core.annotation.ServiceComponentLocation;
 import uk.gov.justice.services.core.handler.HandlerMethod;
 import uk.gov.justice.services.core.handler.registry.HandlerRegistry;
 import uk.gov.justice.services.core.handler.registry.HandlerRegistryCache;
