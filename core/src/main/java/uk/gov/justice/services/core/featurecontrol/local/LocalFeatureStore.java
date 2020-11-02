@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 
 public class LocalFeatureStore {
 
+    public static final String FEATURE_CONTROL_FILE_NAME = "feature-control.yaml";
+
     @Inject
     private YamlParser yamlParser;
 
@@ -27,7 +29,7 @@ public class LocalFeatureStore {
 
     public Optional<Feature> lookup(final String featureName) {
 
-        final Optional<URL> url = localFeatureFileLocator.findLocalFeatureFileLocation();
+        final Optional<URL> url = localFeatureFileLocator.findLocalFeatureFileLocation(FEATURE_CONTROL_FILE_NAME);
 
         if (url.isPresent()) {
 

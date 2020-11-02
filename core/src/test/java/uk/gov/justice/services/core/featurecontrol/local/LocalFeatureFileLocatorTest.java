@@ -1,83 +1,83 @@
 package uk.gov.justice.services.core.featurecontrol.local;
 
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
+import static java.nio.file.Paths.get;
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-import static uk.gov.justice.services.core.featurecontrol.local.LocalFeatureFileLocator.FEATURE_CONTROL_FILE_NAME;
+import static uk.gov.justice.services.core.featurecontrol.local.LocalFeatureStore.FEATURE_CONTROL_FILE_NAME;
 
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.slf4j.Logger;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class LocalFeatureFileLocatorTest {
 
-    @Mock
-    private ClasspathLocalFeatureFileLocator classpathLocalFeatureFileLocator;
+    @Spy
+    private FileToUrlConverter fileToUrlConverter = new FileToUrlConverter();
 
     @Mock
-    private WildflyDeploymentDirLocalFeatureFileLocator wildflyDeploymentDirLocalFeatureFileLocator;
+    private WildflyDeploymentDirectoryLocator wildflyDeploymentDirectoryLocator;
+
+    @Mock
+    private Logger logger;
 
     @InjectMocks
     private LocalFeatureFileLocator localFeatureFileLocator;
 
     @Test
-    public void shouldReturnTheFileLocationFromTheClasspathIfItExists() throws Exception {
+    public void shouldGetTheUrlOfAFileInTheWildflyDeploymentDirectory() throws Exception {
 
-        final URL classpathUrl = aRealUrlBecauseWeCannotMockTheDamnThings();
-        when(classpathLocalFeatureFileLocator.findLocalFeatureFileLocation(FEATURE_CONTROL_FILE_NAME)).thenReturn(of(classpathUrl));
+        final Path aDirectory = directoryOfFileOnClasspath(FEATURE_CONTROL_FILE_NAME);
+        when(wildflyDeploymentDirectoryLocator.getDeploymentDirectory()).thenReturn(aDirectory);
 
-        final Optional<URL> localFeatureFileLocation = localFeatureFileLocator.findLocalFeatureFileLocation();
-
-        if (localFeatureFileLocation.isPresent()) {
-            assertThat(localFeatureFileLocation.get(), is(classpathUrl));
-        } else {
-            fail();
-        }
-
-        verifyZeroInteractions(wildflyDeploymentDirLocalFeatureFileLocator);
-    }
-
-    @Test
-    public void shouldReturnTheFileLocationFromWildflyDeploymentDirectoryIfTheClasspathFileDoesNotExists() throws Exception {
-
-        final Optional<URL> classpathUrl = empty();
-
-        final URL wildflyDeploymentDirUrl = aRealUrlBecauseWeCannotMockTheDamnThings();
-        when(classpathLocalFeatureFileLocator.findLocalFeatureFileLocation(FEATURE_CONTROL_FILE_NAME)).thenReturn(classpathUrl);
-        when(wildflyDeploymentDirLocalFeatureFileLocator.findLocalFeatureFileLocation(FEATURE_CONTROL_FILE_NAME)).thenReturn(of(wildflyDeploymentDirUrl));
-        final Optional<URL> localFeatureFileLocation = localFeatureFileLocator.findLocalFeatureFileLocation();
+        final Optional<URL> localFeatureFileLocation = localFeatureFileLocator.findLocalFeatureFileLocation(FEATURE_CONTROL_FILE_NAME);
 
         if (localFeatureFileLocation.isPresent()) {
-            assertThat(localFeatureFileLocation.get(), is(wildflyDeploymentDirUrl));
+            assertThat(localFeatureFileLocation.get().getFile(), endsWith("/" + FEATURE_CONTROL_FILE_NAME));
         } else {
             fail();
         }
     }
 
     @Test
-    public void shouldReturnEmptyIfNotFoundOnClasspathNorWildflyDeploymentDirectory() throws Exception {
+    public void shouldReturnEmptyIfTheFileCannotBeFoundInTheWildflyDeploymentDirectory() throws Exception {
 
-        when(classpathLocalFeatureFileLocator.findLocalFeatureFileLocation(FEATURE_CONTROL_FILE_NAME)).thenReturn(empty());
-        when(wildflyDeploymentDirLocalFeatureFileLocator.findLocalFeatureFileLocation(FEATURE_CONTROL_FILE_NAME)).thenReturn(empty());
+        final Path aDirectory = directoryOfFileOnClasspath("json/envelope.json");
+        when(wildflyDeploymentDirectoryLocator.getDeploymentDirectory()).thenReturn(aDirectory);
 
-        assertThat(localFeatureFileLocator.findLocalFeatureFileLocation().isPresent(), is(false));
+        final Optional<URL> localFeatureFileLocation = localFeatureFileLocator.findLocalFeatureFileLocation(FEATURE_CONTROL_FILE_NAME);
 
+        assertThat(localFeatureFileLocation.isPresent(), is(false));
     }
 
-    private URL aRealUrlBecauseWeCannotMockTheDamnThings() {
-        final URL url = getClass().getClassLoader().getResource("feature-control.yaml");
-        assertThat(url, is(notNullValue()));
-        return url;
+    @Test
+    public void shouldReturnEmptyIfTheWildflyDeploymentDirectoryDoesNotExist() throws Exception {
+
+        final Path aDirectory = get("/this/directory-does-not-exist");
+        when(wildflyDeploymentDirectoryLocator.getDeploymentDirectory()).thenReturn(aDirectory);
+
+        final Optional<URL> localFeatureFileLocation = localFeatureFileLocator.findLocalFeatureFileLocation(FEATURE_CONTROL_FILE_NAME);
+
+        assertThat(localFeatureFileLocation.isPresent(), is(false));
+    }
+
+    private Path directoryOfFileOnClasspath(final String fileOnClasspath) throws URISyntaxException {
+
+        final URL localFeatureFileLocation =  getClass().getClassLoader().getResource(fileOnClasspath);
+
+        return get(localFeatureFileLocation.toURI()).getParent().toAbsolutePath();
     }
 }

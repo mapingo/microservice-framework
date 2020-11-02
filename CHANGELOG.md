@@ -3,8 +3,11 @@ All notable changes to this project will be documented in this file, which follo
 on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
-## [7.2.0-M1] - 2020-10-28
+## [7.2.0-M2] - 2020-11-02
+### Added
+- Support for fetching features from azure with a dummy implementation for the framework
 
+## [7.2.0-M1] - 2020-10-28
 ### Added
 - Added support for FeatureControl toggling by annotating service component
 handler methods with @FeatureControl

@@ -7,6 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.justice.services.core.featurecontrol.local.LocalFeatureStore.FEATURE_CONTROL_FILE_NAME;
 
 import uk.gov.justice.services.core.featurecontrol.domain.Feature;
 import uk.gov.justice.services.yaml.YamlParser;
@@ -42,9 +43,9 @@ public class LocalFeatureStoreTest {
     public void shouldGetAFeatureFromALocalFile() throws Exception {
 
         final String featureName = "enabled-feature-2";
-        final URL localFeatureFileLocation = getClass().getClassLoader().getResource("feature-control.yaml");
+        final URL localFeatureFileLocation = getClass().getClassLoader().getResource(FEATURE_CONTROL_FILE_NAME);
 
-        when(localFeatureFileLocator.findLocalFeatureFileLocation()).thenReturn(ofNullable(localFeatureFileLocation));
+        when(localFeatureFileLocator.findLocalFeatureFileLocation(FEATURE_CONTROL_FILE_NAME)).thenReturn(ofNullable(localFeatureFileLocation));
 
         final Optional<Feature> feature = localFeatureStore.lookup(featureName);
 
@@ -66,7 +67,7 @@ public class LocalFeatureStoreTest {
         final String featureName = "missing-feature";
         final URL localFeatureFileLocation = getClass().getClassLoader().getResource("feature-control.yaml");
 
-        when(localFeatureFileLocator.findLocalFeatureFileLocation()).thenReturn(ofNullable(localFeatureFileLocation));
+        when(localFeatureFileLocator.findLocalFeatureFileLocation(FEATURE_CONTROL_FILE_NAME)).thenReturn(ofNullable(localFeatureFileLocation));
 
         assertThat(localFeatureStore.lookup(featureName).isPresent(), is(false));
 
@@ -78,7 +79,7 @@ public class LocalFeatureStoreTest {
 
         final String featureName = "enabled-feature-2";
         
-        when(localFeatureFileLocator.findLocalFeatureFileLocation()).thenReturn(empty());
+        when(localFeatureFileLocator.findLocalFeatureFileLocation(FEATURE_CONTROL_FILE_NAME)).thenReturn(empty());
 
         assertThat(localFeatureStore.lookup(featureName).isPresent(), is(false));
     }
