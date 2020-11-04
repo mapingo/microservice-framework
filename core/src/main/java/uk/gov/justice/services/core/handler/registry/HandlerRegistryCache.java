@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.inject.Inject;
-
 /**
  * Cache of all {@link HandlerRegistry}s keyed by their {@link Component} name and the
  * {@link ServiceComponentLocation}. This class is a Singleton. This is manged by its producer

@@ -1,6 +1,5 @@
 package uk.gov.justice.services.core.featurecontrol.remote;
 
-import static java.lang.Boolean.parseBoolean;
 import static java.lang.Long.parseLong;
 
 import uk.gov.justice.services.common.configuration.GlobalValue;
