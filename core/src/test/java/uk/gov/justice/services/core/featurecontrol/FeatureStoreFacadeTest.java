@@ -12,8 +12,6 @@ import uk.gov.justice.services.core.featurecontrol.domain.Feature;
 import uk.gov.justice.services.core.featurecontrol.local.LocalFeatureStore;
 import uk.gov.justice.services.core.featurecontrol.remote.FeatureStoreTimerBean;
 
-import java.util.Optional;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

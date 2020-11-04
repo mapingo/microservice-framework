@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file, which follo
 on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+## [7.2.0-M4] - 2020-11-04
+### Added
+- New timer bean for fetching and storing of feature control Features
+### Changed
+- Updated framework-libraries to 7.2.0-M3
+
 ## [7.2.0-M3] - 2020-11-02
 ### Changed
 - Updated framework-libraries to 7.2.0-M2

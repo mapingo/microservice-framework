@@ -34,7 +34,6 @@ import uk.gov.justice.services.core.envelope.EnvelopeValidationExceptionHandlerP
 import uk.gov.justice.services.core.envelope.MediaTypeProvider;
 import uk.gov.justice.services.core.extension.BeanInstantiater;
 import uk.gov.justice.services.core.featurecontrol.FeatureControlAnnotationFinder;
-import uk.gov.justice.services.core.handler.registry.HandlerRegistryCacheProducer;
 import uk.gov.justice.services.core.interceptor.InterceptorChainProcessor;
 import uk.gov.justice.services.core.json.FileBasedJsonSchemaValidator;
 import uk.gov.justice.services.core.json.JsonSchemaLoader;
