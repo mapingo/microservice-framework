@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [7.2.0-M5] - 2020-11-11
+### Added
+- New SystemCommand `REFRESH_FEATURE_CACHE` to force a refresh of the Feature Control cache
+
 ## [7.2.0-M4] - 2020-11-04
 ### Added
 - New timer bean for fetching and storing of feature control Features

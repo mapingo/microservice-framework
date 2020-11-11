@@ -79,4 +79,30 @@ public class FeatureStoreTimerBeanTest {
         assertThat(foundFeature_2, is(feature_2));
         assertThat(foundFeature_3, is(feature_3));
     }
+
+    @Test
+    public void shouldFetchFeaturesAndStoreOnTimeout() throws Exception {
+
+        final Feature feature_1 = new Feature("some-feature-1", "some-description-1", true);
+        final Feature feature_2 = new Feature("some-feature-2", "some-description-2", true);
+        final Feature feature_3 = new Feature("some-feature-3", "some-description-3", true);
+
+        assertThat(featureStoreTimerBean.lookup(feature_1.getFeatureName()).isPresent(), is(false));
+        assertThat(featureStoreTimerBean.lookup(feature_2.getFeatureName()).isPresent(), is(false));
+        assertThat(featureStoreTimerBean.lookup(feature_3.getFeatureName()).isPresent(), is(false));
+
+        when(featureFetcher.fetchFeatures()).thenReturn(asList(feature_1, feature_2, feature_3));
+        featureStoreTimerBean.reloadFeaturesOnTimeout();
+
+        final Feature foundFeature_1 = featureStoreTimerBean.lookup(feature_1.getFeatureName())
+                .orElseThrow(AssertionError::new);
+        final Feature foundFeature_2 = featureStoreTimerBean.lookup(feature_2.getFeatureName())
+                .orElseThrow(AssertionError::new);
+        final Feature foundFeature_3 = featureStoreTimerBean.lookup(feature_3.getFeatureName())
+                .orElseThrow(AssertionError::new);
+
+        assertThat(foundFeature_1, is(feature_1));
+        assertThat(foundFeature_2, is(feature_2));
+        assertThat(foundFeature_3, is(feature_3));
+    }
 }

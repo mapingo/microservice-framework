@@ -50,8 +50,11 @@ public class FeatureStoreTimerBean {
     }
 
     @Timeout
-    public void reloadFeatures() {
+    public void reloadFeaturesOnTimeout() {
+        reloadFeatures();
+    }
 
+    public void reloadFeatures() {
         final Map<String, Feature> featureMap = new HashMap<>();
 
         featureFetcher

@@ -34,6 +34,10 @@
             <groupId>uk.gov.justice.services</groupId>
             <artifactId>framework-utilities</artifactId>
         </dependency>
+        <dependency>
+            <groupId>uk.gov.justice.services</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
 
         <!-- Test Dependencies -->
         <dependency>
