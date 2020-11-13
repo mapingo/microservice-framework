@@ -51,7 +51,6 @@ public class LocalFeatureStoreTest {
 
         if (feature.isPresent()) {
             assertThat(feature.get().getFeatureName(), is(featureName));
-            assertThat(feature.get().getDescription(), is("enabled-description-2"));
             assertThat(feature.get().isEnabled(), is(true));
 
         } else {

@@ -32,7 +32,6 @@ public class DefaultFeatureControlGuardTest {
 
         final Feature feature = new Feature(
                 featureName,
-                "Some stuff we're working on",
                 enabled
         );
 
@@ -49,7 +48,6 @@ public class DefaultFeatureControlGuardTest {
 
         final Feature feature = new Feature(
                 featureName,
-                "Some stuff we're working on",
                 enabled
         );
 

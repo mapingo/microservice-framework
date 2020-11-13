@@ -5,30 +5,14 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
-## [7.2.0-M5] - 2020-11-11
+## [7.2.0] - 2020-11-13
 ### Added
-- New SystemCommand `REFRESH_FEATURE_CACHE` to force a refresh of the Feature Control cache
-
-## [7.2.0-M4] - 2020-11-04
-### Added
-- New timer bean for fetching and storing of feature control Features
-### Changed
-- Updated framework-libraries to 7.2.0-M3
-
-## [7.2.0-M3] - 2020-11-02
-### Changed
-- Updated framework-libraries to 7.2.0-M2
-
-## [7.2.0-M2] - 2020-11-02
-### Added
-- Support for fetching features from azure with a dummy implementation for the framework
-
-## [7.2.0-M1] - 2020-10-28
-### Added
-- Added support for FeatureControl toggling by annotating service component
+- Support for FeatureControl toggling by annotating service component
 handler methods with @FeatureControl
+- New timer bean for fetching and storing of feature control Features
+- New SystemCommand `REFRESH_FEATURE_CACHE` to force a refresh of the Feature Control cache
 ### Changed
-- Updated framework-libraries to version 7.2.0-M1
+- Updated framework-libraries to version 7.2.0
 
 ## [7.1.4] - 2020-10-16
 ### Changed

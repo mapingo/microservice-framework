@@ -57,9 +57,9 @@ public class FeatureStoreTimerBeanTest {
     @Test
     public void shouldFetchFeaturesAndStore() throws Exception {
 
-        final Feature feature_1 = new Feature("some-feature-1", "some-description-1", true);
-        final Feature feature_2 = new Feature("some-feature-2", "some-description-2", true);
-        final Feature feature_3 = new Feature("some-feature-3", "some-description-3", true);
+        final Feature feature_1 = new Feature("some-feature-1", true);
+        final Feature feature_2 = new Feature("some-feature-2", true);
+        final Feature feature_3 = new Feature("some-feature-3", true);
 
         assertThat(featureStoreTimerBean.lookup(feature_1.getFeatureName()).isPresent(), is(false));
         assertThat(featureStoreTimerBean.lookup(feature_2.getFeatureName()).isPresent(), is(false));
@@ -83,9 +83,9 @@ public class FeatureStoreTimerBeanTest {
     @Test
     public void shouldFetchFeaturesAndStoreOnTimeout() throws Exception {
 
-        final Feature feature_1 = new Feature("some-feature-1", "some-description-1", true);
-        final Feature feature_2 = new Feature("some-feature-2", "some-description-2", true);
-        final Feature feature_3 = new Feature("some-feature-3", "some-description-3", true);
+        final Feature feature_1 = new Feature("some-feature-1", true);
+        final Feature feature_2 = new Feature("some-feature-2", true);
+        final Feature feature_3 = new Feature("some-feature-3", true);
 
         assertThat(featureStoreTimerBean.lookup(feature_1.getFeatureName()).isPresent(), is(false));
         assertThat(featureStoreTimerBean.lookup(feature_2.getFeatureName()).isPresent(), is(false));
