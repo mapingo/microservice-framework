@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [7.2.2] - 2020-11-18
+### Added
+- Moved in EmptyFeatureFetcher from framework-api
+ 
 ## [7.2.1] - 2020-11-18
 ### Added
 - New JNDI variable `feature-control-cache.enabled` to control whether the results 
