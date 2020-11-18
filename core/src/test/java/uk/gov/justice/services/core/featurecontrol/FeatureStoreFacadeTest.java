@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 
 import uk.gov.justice.services.core.featurecontrol.domain.Feature;
 import uk.gov.justice.services.core.featurecontrol.local.LocalFeatureStore;
-import uk.gov.justice.services.core.featurecontrol.remote.FeatureStoreTimerBean;
+import uk.gov.justice.services.core.featurecontrol.remote.RemoteFeatureStore;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,20 +25,20 @@ public class FeatureStoreFacadeTest {
     private LocalFeatureStore localFeatureStore;
 
     @Mock
-    private FeatureStoreTimerBean featureStoreTimerBean;
+    private RemoteFeatureStore remoteFeatureStore;
 
     @InjectMocks
     private FeatureStoreFacade featureStoreFacade;
 
     @Test
-    public void shouldLookupFeaturesInTheFeatureStoreTimerBean() throws Exception {
+    public void shouldLookupFeaturesInTheRemoteFeatureStore() throws Exception {
 
         final String featureName = "some-feature";
 
         final Feature feature = mock(Feature.class);
 
         when(localFeatureStore.lookup(featureName)).thenReturn(empty());
-        when(featureStoreTimerBean.lookup(featureName)).thenReturn(of(feature));
+        when(remoteFeatureStore.lookup(featureName)).thenReturn(of(feature));
 
         assertThat(featureStoreFacade.lookup(featureName), is(of(feature)));
     }
@@ -49,7 +49,7 @@ public class FeatureStoreFacadeTest {
         final String unknownFeatureName = "some-unknown-feature";
 
         when(localFeatureStore.lookup(unknownFeatureName)).thenReturn(empty());
-        when(featureStoreTimerBean.lookup(unknownFeatureName)).thenReturn(empty());
+        when(remoteFeatureStore.lookup(unknownFeatureName)).thenReturn(empty());
 
         assertThat(featureStoreFacade.lookup(unknownFeatureName).isPresent(), is(false));
     }
@@ -65,6 +65,6 @@ public class FeatureStoreFacadeTest {
 
         assertThat(featureStoreFacade.lookup(featureName), is(of(feature)));
 
-        verifyZeroInteractions(featureStoreTimerBean);
+        verifyZeroInteractions(remoteFeatureStore);
     }
 }

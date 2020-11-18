@@ -7,7 +7,7 @@ import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_IN_PRO
 import static uk.gov.justice.services.management.suspension.commands.RefreshFeatureControlCacheCommand.REFRESH_FEATURE_CACHE;
 
 import uk.gov.justice.services.common.util.UtcClock;
-import uk.gov.justice.services.core.featurecontrol.remote.FeatureStoreTimerBean;
+import uk.gov.justice.services.core.featurecontrol.remote.CachingFeatureProviderTimerBean;
 import uk.gov.justice.services.jmx.command.HandlesSystemCommand;
 import uk.gov.justice.services.jmx.state.events.SystemCommandStateChangedEvent;
 import uk.gov.justice.services.management.suspension.commands.RefreshFeatureControlCacheCommand;
@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 public class RefreshFeatureControlCacheCommandHandler {
 
     @Inject
-    private FeatureStoreTimerBean featureStoreTimerBean;
+    private CachingFeatureProviderTimerBean cachingFeatureProviderTimerBean;
 
     @Inject
     private Event<SystemCommandStateChangedEvent> systemCommandStateChangedEventFirer;
@@ -52,7 +52,7 @@ public class RefreshFeatureControlCacheCommandHandler {
         ));
 
         try {
-            featureStoreTimerBean.reloadFeatures();
+            cachingFeatureProviderTimerBean.reloadFeatures();
             final ZonedDateTime completedAt = clock.now();
             final String endMessage = format("%s command completed at %tc", systemCommandName, completedAt);
             logger.info(endMessage);

@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 @Singleton
 @Startup
-public class FeatureStoreTimerBean {
+public class CachingFeatureProviderTimerBean {
 
     private static final String TIMER_JOB_NAME = "framework.feature-store-refresh.job";
 
@@ -37,15 +37,15 @@ public class FeatureStoreTimerBean {
     private TimerService timerService;
 
     @Inject
-    private FeatureRefreshTimerConfig featureRefreshTimerConfig;
+    private FeatureCachingConfiguration featureCachingConfiguration;
 
     @PostConstruct
     public void startTimerService() {
 
         timerServiceManager.createIntervalTimer(
                 TIMER_JOB_NAME,
-                featureRefreshTimerConfig.getTimerStartWaitMilliseconds(),
-                featureRefreshTimerConfig.getTimerIntervalMilliseconds(),
+                featureCachingConfiguration.getTimerStartWaitMilliseconds(),
+                featureCachingConfiguration.getTimerIntervalMilliseconds(),
                 timerService);
     }
 

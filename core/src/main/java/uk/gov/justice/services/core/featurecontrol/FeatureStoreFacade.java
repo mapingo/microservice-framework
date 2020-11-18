@@ -3,7 +3,7 @@ package uk.gov.justice.services.core.featurecontrol;
 import uk.gov.justice.services.core.featurecontrol.domain.Feature;
 import uk.gov.justice.services.core.featurecontrol.local.LocalFeatureStore;
 import uk.gov.justice.services.core.featurecontrol.lookup.FeatureStore;
-import uk.gov.justice.services.core.featurecontrol.remote.FeatureStoreTimerBean;
+import uk.gov.justice.services.core.featurecontrol.remote.RemoteFeatureStore;
 
 import java.util.Optional;
 
@@ -15,7 +15,7 @@ public class FeatureStoreFacade implements FeatureStore {
     private LocalFeatureStore localFeatureStore;
 
     @Inject
-    private FeatureStoreTimerBean featureStoreTimerBean;
+    private RemoteFeatureStore remoteFeatureStore;
 
     @Override
     public Optional<Feature> lookup(final String featureName) {
@@ -26,6 +26,6 @@ public class FeatureStoreFacade implements FeatureStore {
             return feature;
         }
 
-        return featureStoreTimerBean.lookup(featureName);
+        return remoteFeatureStore.lookup(featureName);
     }
 }

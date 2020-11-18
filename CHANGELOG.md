@@ -5,6 +5,14 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [7.2.1] - 2020-11-18
+### Added
+- New JNDI variable `feature-control-cache.enabled` to control whether the results 
+of the fetch of Features are cached 
+### Changed
+- The caching of features is now disabled by default
+- Updated framework-libraries to version 7.2.1
+
 ## [7.2.0] - 2020-11-13
 ### Added
 - Support for FeatureControl toggling by annotating service component

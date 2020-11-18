@@ -5,12 +5,10 @@ import org.junit.runner.RunWith;
 import static java.time.ZoneOffset.UTC;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InOrder;
@@ -19,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
@@ -28,23 +25,21 @@ import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_IN_PROGRESS;
 
 import uk.gov.justice.services.common.util.UtcClock;
-import uk.gov.justice.services.core.featurecontrol.remote.FeatureStoreTimerBean;
+import uk.gov.justice.services.core.featurecontrol.remote.CachingFeatureProviderTimerBean;
 import uk.gov.justice.services.jmx.state.events.SystemCommandStateChangedEvent;
 import uk.gov.justice.services.management.suspension.commands.RefreshFeatureControlCacheCommand;
 
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import javax.enterprise.event.Event;
-import javax.inject.Inject;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RefreshFeatureControlCacheCommandHandlerTest {
 
     @Mock
-    private FeatureStoreTimerBean featureStoreTimerBean;
+    private CachingFeatureProviderTimerBean cachingFeatureProviderTimerBean;
 
     @Mock
     private Event<SystemCommandStateChangedEvent> systemCommandStateChangedEventFirer;
@@ -78,12 +73,12 @@ public class RefreshFeatureControlCacheCommandHandlerTest {
 
         final InOrder inOrder = inOrder(
                 logger,
-                featureStoreTimerBean,
+                cachingFeatureProviderTimerBean,
                 systemCommandStateChangedEventFirer);
 
         inOrder.verify(logger).info("REFRESH_FEATURE_CACHE command started at Wed Nov 11 13:29:50 Z 2020");
         inOrder.verify(systemCommandStateChangedEventFirer).fire(systemCommandStateChangedEventCaptor.capture());
-        inOrder.verify(featureStoreTimerBean).reloadFeatures();
+        inOrder.verify(cachingFeatureProviderTimerBean).reloadFeatures();
         inOrder.verify(logger).info("REFRESH_FEATURE_CACHE command completed at Wed Nov 11 13:31:50 Z 2020");
         inOrder.verify(systemCommandStateChangedEventFirer).fire(systemCommandStateChangedEventCaptor.capture());
 
@@ -115,7 +110,7 @@ public class RefreshFeatureControlCacheCommandHandlerTest {
         final ZonedDateTime completedAt = refreshStartedAt.plusMinutes(2);
 
         when(clock.now()).thenReturn(refreshStartedAt, completedAt);
-        doThrow(nullPointerException).when(featureStoreTimerBean).reloadFeatures();
+        doThrow(nullPointerException).when(cachingFeatureProviderTimerBean).reloadFeatures();
 
         refreshFeatureControlCacheCommandHandler.onRefreshFeatureControlCache(
                 refreshFeatureControlCacheCommand,
@@ -124,12 +119,12 @@ public class RefreshFeatureControlCacheCommandHandlerTest {
 
         final InOrder inOrder = inOrder(
                 logger,
-                featureStoreTimerBean,
+                cachingFeatureProviderTimerBean,
                 systemCommandStateChangedEventFirer);
 
         inOrder.verify(logger).info("REFRESH_FEATURE_CACHE command started at Wed Nov 11 13:29:50 Z 2020");
         inOrder.verify(systemCommandStateChangedEventFirer).fire(systemCommandStateChangedEventCaptor.capture());
-        inOrder.verify(featureStoreTimerBean).reloadFeatures();
+        inOrder.verify(cachingFeatureProviderTimerBean).reloadFeatures();
         inOrder.verify(logger).error("REFRESH_FEATURE_CACHE command failed at Wed Nov 11 13:31:50 Z 2020: NullPointerException: Ooops", nullPointerException);
         inOrder.verify(systemCommandStateChangedEventFirer).fire(systemCommandStateChangedEventCaptor.capture());
 

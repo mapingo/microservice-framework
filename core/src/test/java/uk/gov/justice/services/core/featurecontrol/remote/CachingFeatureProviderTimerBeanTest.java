@@ -19,7 +19,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class FeatureStoreTimerBeanTest {
+public class CachingFeatureProviderTimerBeanTest {
 
     @Mock
     private FeatureFetcher featureFetcher;
@@ -31,10 +31,10 @@ public class FeatureStoreTimerBeanTest {
     private TimerService timerService;
 
     @Mock
-    private FeatureRefreshTimerConfig featureRefreshTimerConfig;
+    private FeatureCachingConfiguration featureCachingConfiguration;
 
     @InjectMocks
-    private FeatureStoreTimerBean featureStoreTimerBean;
+    private CachingFeatureProviderTimerBean cachingFeatureProviderTimerBean;
 
     @Test
     public void shouldStartTheTimerServiceOnStartup() throws Exception {
@@ -42,10 +42,10 @@ public class FeatureStoreTimerBeanTest {
         final long timerStartWaitMilliseconds = 934L;
         final long timerIntervalMilliseconds = 987234L;
 
-        when(featureRefreshTimerConfig.getTimerStartWaitMilliseconds()).thenReturn(timerStartWaitMilliseconds);
-        when(featureRefreshTimerConfig.getTimerIntervalMilliseconds()).thenReturn(timerIntervalMilliseconds);
+        when(featureCachingConfiguration.getTimerStartWaitMilliseconds()).thenReturn(timerStartWaitMilliseconds);
+        when(featureCachingConfiguration.getTimerIntervalMilliseconds()).thenReturn(timerIntervalMilliseconds);
 
-        featureStoreTimerBean.startTimerService();
+        cachingFeatureProviderTimerBean.startTimerService();
 
         verify(timerServiceManager).createIntervalTimer(
                 "framework.feature-store-refresh.job",
@@ -61,18 +61,18 @@ public class FeatureStoreTimerBeanTest {
         final Feature feature_2 = new Feature("some-feature-2", true);
         final Feature feature_3 = new Feature("some-feature-3", true);
 
-        assertThat(featureStoreTimerBean.lookup(feature_1.getFeatureName()).isPresent(), is(false));
-        assertThat(featureStoreTimerBean.lookup(feature_2.getFeatureName()).isPresent(), is(false));
-        assertThat(featureStoreTimerBean.lookup(feature_3.getFeatureName()).isPresent(), is(false));
+        assertThat(cachingFeatureProviderTimerBean.lookup(feature_1.getFeatureName()).isPresent(), is(false));
+        assertThat(cachingFeatureProviderTimerBean.lookup(feature_2.getFeatureName()).isPresent(), is(false));
+        assertThat(cachingFeatureProviderTimerBean.lookup(feature_3.getFeatureName()).isPresent(), is(false));
 
         when(featureFetcher.fetchFeatures()).thenReturn(asList(feature_1, feature_2, feature_3));
-        featureStoreTimerBean.reloadFeatures();
+        cachingFeatureProviderTimerBean.reloadFeatures();
 
-        final Feature foundFeature_1 = featureStoreTimerBean.lookup(feature_1.getFeatureName())
+        final Feature foundFeature_1 = cachingFeatureProviderTimerBean.lookup(feature_1.getFeatureName())
                 .orElseThrow(AssertionError::new);
-        final Feature foundFeature_2 = featureStoreTimerBean.lookup(feature_2.getFeatureName())
+        final Feature foundFeature_2 = cachingFeatureProviderTimerBean.lookup(feature_2.getFeatureName())
                 .orElseThrow(AssertionError::new);
-        final Feature foundFeature_3 = featureStoreTimerBean.lookup(feature_3.getFeatureName())
+        final Feature foundFeature_3 = cachingFeatureProviderTimerBean.lookup(feature_3.getFeatureName())
                 .orElseThrow(AssertionError::new);
 
         assertThat(foundFeature_1, is(feature_1));
@@ -87,18 +87,18 @@ public class FeatureStoreTimerBeanTest {
         final Feature feature_2 = new Feature("some-feature-2", true);
         final Feature feature_3 = new Feature("some-feature-3", true);
 
-        assertThat(featureStoreTimerBean.lookup(feature_1.getFeatureName()).isPresent(), is(false));
-        assertThat(featureStoreTimerBean.lookup(feature_2.getFeatureName()).isPresent(), is(false));
-        assertThat(featureStoreTimerBean.lookup(feature_3.getFeatureName()).isPresent(), is(false));
+        assertThat(cachingFeatureProviderTimerBean.lookup(feature_1.getFeatureName()).isPresent(), is(false));
+        assertThat(cachingFeatureProviderTimerBean.lookup(feature_2.getFeatureName()).isPresent(), is(false));
+        assertThat(cachingFeatureProviderTimerBean.lookup(feature_3.getFeatureName()).isPresent(), is(false));
 
         when(featureFetcher.fetchFeatures()).thenReturn(asList(feature_1, feature_2, feature_3));
-        featureStoreTimerBean.reloadFeaturesOnTimeout();
+        cachingFeatureProviderTimerBean.reloadFeaturesOnTimeout();
 
-        final Feature foundFeature_1 = featureStoreTimerBean.lookup(feature_1.getFeatureName())
+        final Feature foundFeature_1 = cachingFeatureProviderTimerBean.lookup(feature_1.getFeatureName())
                 .orElseThrow(AssertionError::new);
-        final Feature foundFeature_2 = featureStoreTimerBean.lookup(feature_2.getFeatureName())
+        final Feature foundFeature_2 = cachingFeatureProviderTimerBean.lookup(feature_2.getFeatureName())
                 .orElseThrow(AssertionError::new);
-        final Feature foundFeature_3 = featureStoreTimerBean.lookup(feature_3.getFeatureName())
+        final Feature foundFeature_3 = cachingFeatureProviderTimerBean.lookup(feature_3.getFeatureName())
                 .orElseThrow(AssertionError::new);
 
         assertThat(foundFeature_1, is(feature_1));
