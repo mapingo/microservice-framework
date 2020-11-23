@@ -15,10 +15,10 @@ public class RemoteFeatureStore {
     private NonCachingFeatureProvider nonCachingFeatureProvider;
 
     @Inject
-    private FeatureCachingConfiguration featureCachingConfiguration;
+    private FeatureControlConfiguration featureControlConfiguration;
 
     public Optional<Feature> lookup(final String featureName) {
-        if(featureCachingConfiguration.isFeatureCacheEnabled()) {
+        if(featureControlConfiguration.isFeatureControlCacheEnabled()) {
             return cachingFeatureProviderTimerBean.lookup(featureName);
         }
 

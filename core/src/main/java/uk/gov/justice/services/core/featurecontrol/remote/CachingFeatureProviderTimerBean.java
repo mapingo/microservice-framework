@@ -2,7 +2,6 @@ package uk.gov.justice.services.core.featurecontrol.remote;
 
 import static java.util.Optional.ofNullable;
 
-import uk.gov.justice.services.core.featurecontrol.FeatureFetcher;
 import uk.gov.justice.services.core.featurecontrol.domain.Feature;
 import uk.gov.justice.services.ejb.timer.TimerServiceManager;
 
@@ -28,7 +27,7 @@ public class CachingFeatureProviderTimerBean {
     private AtomicReference<Map<String, Feature>> atomicFeatureMapReference = new AtomicReference<>(new HashMap<>());
 
     @Inject
-    private FeatureFetcher featureFetcher;
+    private FeatureFetcherFacade featureFetcherFacade;
 
     @Inject
     private TimerServiceManager timerServiceManager;
@@ -37,15 +36,15 @@ public class CachingFeatureProviderTimerBean {
     private TimerService timerService;
 
     @Inject
-    private FeatureCachingConfiguration featureCachingConfiguration;
+    private FeatureControlConfiguration featureControlConfiguration;
 
     @PostConstruct
     public void startTimerService() {
 
         timerServiceManager.createIntervalTimer(
                 TIMER_JOB_NAME,
-                featureCachingConfiguration.getTimerStartWaitMilliseconds(),
-                featureCachingConfiguration.getTimerIntervalMilliseconds(),
+                featureControlConfiguration.getTimerStartWaitMilliseconds(),
+                featureControlConfiguration.getTimerIntervalMilliseconds(),
                 timerService);
     }
 
@@ -57,7 +56,7 @@ public class CachingFeatureProviderTimerBean {
     public void reloadFeatures() {
         final Map<String, Feature> featureMap = new HashMap<>();
 
-        featureFetcher
+        featureFetcherFacade
                 .fetchFeatures()
                 .forEach(feature -> featureMap.put(feature.getFeatureName(), feature));
 

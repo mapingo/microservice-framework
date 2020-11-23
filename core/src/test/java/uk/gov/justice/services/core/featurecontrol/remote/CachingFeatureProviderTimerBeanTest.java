@@ -6,7 +6,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import uk.gov.justice.services.core.featurecontrol.FeatureFetcher;
 import uk.gov.justice.services.core.featurecontrol.domain.Feature;
 import uk.gov.justice.services.ejb.timer.TimerServiceManager;
 
@@ -22,7 +21,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class CachingFeatureProviderTimerBeanTest {
 
     @Mock
-    private FeatureFetcher featureFetcher;
+    private FeatureFetcherFacade featureFetcherFacade;
 
     @Mock
     private TimerServiceManager timerServiceManager;
@@ -31,7 +30,7 @@ public class CachingFeatureProviderTimerBeanTest {
     private TimerService timerService;
 
     @Mock
-    private FeatureCachingConfiguration featureCachingConfiguration;
+    private FeatureControlConfiguration featureControlConfiguration;
 
     @InjectMocks
     private CachingFeatureProviderTimerBean cachingFeatureProviderTimerBean;
@@ -42,8 +41,8 @@ public class CachingFeatureProviderTimerBeanTest {
         final long timerStartWaitMilliseconds = 934L;
         final long timerIntervalMilliseconds = 987234L;
 
-        when(featureCachingConfiguration.getTimerStartWaitMilliseconds()).thenReturn(timerStartWaitMilliseconds);
-        when(featureCachingConfiguration.getTimerIntervalMilliseconds()).thenReturn(timerIntervalMilliseconds);
+        when(featureControlConfiguration.getTimerStartWaitMilliseconds()).thenReturn(timerStartWaitMilliseconds);
+        when(featureControlConfiguration.getTimerIntervalMilliseconds()).thenReturn(timerIntervalMilliseconds);
 
         cachingFeatureProviderTimerBean.startTimerService();
 
@@ -65,7 +64,7 @@ public class CachingFeatureProviderTimerBeanTest {
         assertThat(cachingFeatureProviderTimerBean.lookup(feature_2.getFeatureName()).isPresent(), is(false));
         assertThat(cachingFeatureProviderTimerBean.lookup(feature_3.getFeatureName()).isPresent(), is(false));
 
-        when(featureFetcher.fetchFeatures()).thenReturn(asList(feature_1, feature_2, feature_3));
+        when(featureFetcherFacade.fetchFeatures()).thenReturn(asList(feature_1, feature_2, feature_3));
         cachingFeatureProviderTimerBean.reloadFeatures();
 
         final Feature foundFeature_1 = cachingFeatureProviderTimerBean.lookup(feature_1.getFeatureName())
@@ -91,7 +90,7 @@ public class CachingFeatureProviderTimerBeanTest {
         assertThat(cachingFeatureProviderTimerBean.lookup(feature_2.getFeatureName()).isPresent(), is(false));
         assertThat(cachingFeatureProviderTimerBean.lookup(feature_3.getFeatureName()).isPresent(), is(false));
 
-        when(featureFetcher.fetchFeatures()).thenReturn(asList(feature_1, feature_2, feature_3));
+        when(featureFetcherFacade.fetchFeatures()).thenReturn(asList(feature_1, feature_2, feature_3));
         cachingFeatureProviderTimerBean.reloadFeaturesOnTimeout();
 
         final Feature foundFeature_1 = cachingFeatureProviderTimerBean.lookup(feature_1.getFeatureName())

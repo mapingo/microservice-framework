@@ -8,7 +8,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import uk.gov.justice.services.core.featurecontrol.FeatureFetcher;
 import uk.gov.justice.services.core.featurecontrol.domain.Feature;
 
 import org.junit.Test;
@@ -21,7 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class NonCachingFeatureProviderTest {
 
     @Mock
-    private FeatureFetcher featureFetcher;
+    private FeatureFetcherFacade featureFetcherFacade;
 
     @InjectMocks
     private NonCachingFeatureProvider nonCachingFeatureProvider;
@@ -37,7 +36,7 @@ public class NonCachingFeatureProviderTest {
         final Feature feature_2 = mock(Feature.class);
         final Feature feature_3 = mock(Feature.class);
 
-        when(featureFetcher.fetchFeatures()).thenReturn(asList(feature_1, feature_2, feature_3));
+        when(featureFetcherFacade.fetchFeatures()).thenReturn(asList(feature_1, feature_2, feature_3));
         when(feature_1.getFeatureName()).thenReturn(featureName_1);
         when(feature_2.getFeatureName()).thenReturn(featureName_2);
         when(feature_3.getFeatureName()).thenReturn(featureName_3);
@@ -56,7 +55,7 @@ public class NonCachingFeatureProviderTest {
         final Feature feature_2 = mock(Feature.class);
         final Feature feature_3 = mock(Feature.class);
 
-        when(featureFetcher.fetchFeatures()).thenReturn(asList(feature_1, feature_2, feature_3));
+        when(featureFetcherFacade.fetchFeatures()).thenReturn(asList(feature_1, feature_2, feature_3));
         when(feature_1.getFeatureName()).thenReturn(featureName_1);
         when(feature_2.getFeatureName()).thenReturn(featureName_2);
         when(feature_3.getFeatureName()).thenReturn(featureName_3);

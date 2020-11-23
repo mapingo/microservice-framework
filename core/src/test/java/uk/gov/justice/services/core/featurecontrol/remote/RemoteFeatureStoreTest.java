@@ -28,7 +28,7 @@ public class RemoteFeatureStoreTest {
     private NonCachingFeatureProvider nonCachingFeatureProvider;
 
     @Mock
-    private FeatureCachingConfiguration featureCachingConfiguration;
+    private FeatureControlConfiguration featureControlConfiguration;
 
     @InjectMocks
     private RemoteFeatureStore remoteFeatureStore;
@@ -39,7 +39,7 @@ public class RemoteFeatureStoreTest {
         final String featureName = "some-feature";
         final Optional<Feature> feature = of(mock(Feature.class));
 
-        when(featureCachingConfiguration.isFeatureCacheEnabled()).thenReturn(true);
+        when(featureControlConfiguration.isFeatureControlCacheEnabled()).thenReturn(true);
         when(cachingFeatureProviderTimerBean.lookup(featureName)).thenReturn(feature);
 
         assertThat(remoteFeatureStore.lookup(featureName), is(feature));
@@ -53,7 +53,7 @@ public class RemoteFeatureStoreTest {
         final String featureName = "some-feature";
         final Optional<Feature> feature = of(mock(Feature.class));
 
-        when(featureCachingConfiguration.isFeatureCacheEnabled()).thenReturn(false);
+        when(featureControlConfiguration.isFeatureControlCacheEnabled()).thenReturn(false);
         when(nonCachingFeatureProvider.lookup(featureName)).thenReturn(feature);
 
         assertThat(remoteFeatureStore.lookup(featureName), is(feature));

@@ -7,13 +7,17 @@ import uk.gov.justice.services.common.configuration.GlobalValue;
 
 import javax.inject.Inject;
 
-public class FeatureCachingConfiguration {
+public class FeatureControlConfiguration {
 
     private final String TEN_MINUTES_IN_MILLISECONDS = 10 * 60 * 1000 + "";
 
     @Inject
+    @GlobalValue(key = "feature-control.enabled", defaultValue = "false")
+    private String featureControlEnabled;
+
+    @Inject
     @GlobalValue(key = "feature-control-cache.enabled", defaultValue = "false")
-    private String featureCacheEnabled;
+    private String featureControlCacheEnabled;
 
     @Inject
     @GlobalValue(key = "feature-control-cache-refresh-rate.timer.interval.milliseconds", defaultValue = TEN_MINUTES_IN_MILLISECONDS)
@@ -24,6 +28,10 @@ public class FeatureCachingConfiguration {
     private String timerStartWaitMilliseconds;
 
 
+    public boolean isFeatureControlEnabled() {
+        return parseBoolean(featureControlEnabled);
+    }
+
     public long getTimerStartWaitMilliseconds() {
         return parseLong(timerStartWaitMilliseconds);
     }
@@ -32,7 +40,7 @@ public class FeatureCachingConfiguration {
         return parseLong(timerIntervalMilliseconds);
     }
 
-    public boolean isFeatureCacheEnabled() {
-        return parseBoolean(featureCacheEnabled);
+    public boolean isFeatureControlCacheEnabled() {
+        return parseBoolean(featureControlCacheEnabled);
     }
 }
