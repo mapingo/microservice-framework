@@ -3,19 +3,15 @@ package uk.gov.justice.services.adapter.rest.mapping;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static uk.gov.justice.services.generators.test.utils.builder.HeadersBuilder.headersWith;
 
 import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class BasicActionMapperHelperTest {
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     private BasicActionMapperHelper mapping;
 
@@ -66,9 +62,11 @@ public class BasicActionMapperHelperTest {
 
     @Test
     public void shouldThrowExceptionIfGetRequestMediaTypeDoesNotMatch() throws Exception {
-        exception.expect(BadRequestException.class);
-        exception.expectMessage("No matching action for accept media types: [application/vnd.unknown+json]");
 
-        mapping.actionOf("methodA", "GET", headersWith("Accept", "application/vnd.unknown+json"));
+        final BadRequestException badRequestException = assertThrows(BadRequestException.class, () ->
+                mapping.actionOf("methodA", "GET", headersWith("Accept", "application/vnd.unknown+json"))
+        );
+
+        assertThat(badRequestException.getMessage(), is("No matching action for accept media types: [application/vnd.unknown+json]"));
     }
 }

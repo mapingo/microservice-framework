@@ -1,5 +1,8 @@
 package uk.gov.justice.services.clients.direct.generator;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.HEAD;
 import static uk.gov.justice.services.generators.test.utils.builder.HttpActionBuilder.defaultGetAction;
@@ -15,7 +18,6 @@ import uk.gov.justice.services.generators.commons.validator.RamlValidationExcept
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 
 public class DirectClientGeneratorErrorHandlingTest {
@@ -25,105 +27,110 @@ public class DirectClientGeneratorErrorHandlingTest {
     @Rule
     public TemporaryFolder outputFolder = new TemporaryFolder();
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     private final DirectClientGenerator generator = new DirectClientGenerator();
 
     @Test
     public void shouldThrowExceptionIfMappingInDescriptionFieldSyntacticallyIncorrect() throws Exception {
-        thrown.expect(RamlValidationException.class);
-        thrown.expectMessage("Invalid action mapping in RAML file");
 
-        generator.run(
-                restRamlWithDefaults()
-                        .with(resource("/user")
-                                .with(defaultGetAction()
-                                        .withDescription("........ aaa incorrect mapping")
-                                )
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                generator.run(
+                        restRamlWithDefaults()
+                                .with(resource("/user")
+                                        .with(defaultGetAction()
+                                                .withDescription("........ aaa incorrect mapping")
+                                        )
 
-                        ).build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+                                ).build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
+
+        assertThat(ramlValidationException.getMessage(), is("Invalid action mapping in RAML file"));
     }
 
     @Test
     public void shouldThrowExceptionIfMappingNull() throws Exception {
-        thrown.expect(RamlValidationException.class);
-        thrown.expectMessage("Invalid action mapping in RAML file");
 
-        generator.run(
-                restRamlWithDefaults()
-                        .with(resource("/user")
-                                .with(httpAction()
-                                        .withHttpActionType(GET)
-                                        .withResponseTypes("application/vnd.ctx.query.defquery+json")
-                                )
-                        ).build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                generator.run(
+                        restRamlWithDefaults()
+                                .with(resource("/user")
+                                        .with(httpAction()
+                                                .withHttpActionType(GET)
+                                                .withResponseTypes("application/vnd.ctx.query.defquery+json")
+                                        )
+                                ).build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
+
+        assertThat(ramlValidationException.getMessage(), is("Invalid action mapping in RAML file"));
     }
 
     @Test
     public void shouldThrowExceptionIfNoResourcesInRaml() throws Exception {
 
-        thrown.expect(RamlValidationException.class);
-        thrown.expectMessage("No resources specified");
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                generator.run(
+                        raml().build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
 
-        generator.run(
-                raml().build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
-
+        assertThat(ramlValidationException.getMessage(), is("No resources specified"));
     }
 
     @Test
     public void shouldThrowExceptionIfNoActionsInRaml() throws Exception {
 
-        thrown.expect(RamlValidationException.class);
-        thrown.expectMessage("No actions to process");
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                generator.run(
+                        raml()
+                                .with(resource("/path"))
+                                .build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
 
-        generator.run(
-                raml()
-                        .with(resource("/path"))
-                        .build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+        assertThat(ramlValidationException.getMessage(), is("No actions to process"));
     }
 
     @Test
     public void shouldThrowExceptionIfResponseTypeNotSetForGETAction() throws Exception {
 
-        thrown.expect(RamlValidationException.class);
-        thrown.expectMessage("Response type not set");
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                generator.run(
+                        restRamlWithDefaults()
+                                .with(resource("/path")
+                                        .with(httpActionWithDefaultMapping(GET))
+                                ).build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
 
-        generator.run(
-                restRamlWithDefaults()
-                        .with(resource("/path")
-                                .with(httpActionWithDefaultMapping(GET))
-                        ).build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+        assertThat(ramlValidationException.getMessage(), is("Response type not set"));
     }
 
     @Test
     public void shouldThrowExceptionForPOST() throws Exception {
 
-        thrown.expect(RamlValidationException.class);
-        thrown.expectMessage("Http action type not supported: POST");
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                generator.run(
+                        restRamlWithDefaults().withDefaultPostResource().build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
 
-        generator.run(
-                restRamlWithDefaults().withDefaultPostResource().build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
-
+        assertThat(ramlValidationException.getMessage(), is("Http action type not supported: POST"));
     }
 
     @Test
     public void shouldThrowExceptionIfActionTypeIsHEAD() throws Exception {
-        thrown.expect(RamlValidationException.class);
-        thrown.expectMessage("Http action type not supported: HEAD");
 
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
         generator.run(
                 restRamlWithDefaults()
                         .with(resource("/some/path")
                                 .with(httpAction().withHttpActionType(HEAD))
                         ).build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
+
+        assertThat(ramlValidationException.getMessage(), is("Http action type not supported: HEAD"));
     }
 
 }

@@ -3,6 +3,7 @@ package uk.gov.justice.services.generators.commons.config;
 import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThrows;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_CONTROLLER;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_HANDLER;
@@ -15,14 +16,9 @@ import static uk.gov.justice.services.generators.test.utils.config.GeneratorConf
 
 import uk.gov.justice.maven.generator.io.files.parser.core.GeneratorProperties;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class GeneratorPropertiesHelperTest {
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     private static final GeneratorProperties QUERY_API_PROPERTY = generatorProperties()
             .withServiceComponentOf(QUERY_API);
@@ -79,17 +75,21 @@ public class GeneratorPropertiesHelperTest {
 
     @Test
     public void shouldThrowExceptionIfGeneratorPropertiesAreNullForServiceComponent() {
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("serviceComponent generator property not set in the plugin config");
 
-        serviceComponentOf(emptyPathConfigurationWith(null));
+        final IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () ->
+                serviceComponentOf(emptyPathConfigurationWith(null))
+        );
+
+        assertThat(illegalArgumentException.getMessage(), is("serviceComponent generator property not set in the plugin config"));
     }
 
     @Test
     public void shouldThrowExceptionIfServiceComponentPropertyNotSet() {
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("serviceComponent generator property not set in the plugin config");
 
-        serviceComponentOf(emptyPathConfigurationWith(new CommonGeneratorProperties()));
+        final IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () ->
+                serviceComponentOf(emptyPathConfigurationWith(new CommonGeneratorProperties()))
+        );
+
+        assertThat(illegalArgumentException.getMessage(), is("serviceComponent generator property not set in the plugin config"));
     }
 }

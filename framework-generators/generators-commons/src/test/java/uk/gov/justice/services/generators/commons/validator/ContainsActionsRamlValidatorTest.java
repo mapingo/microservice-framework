@@ -1,18 +1,17 @@
 package uk.gov.justice.services.generators.commons.validator;
 
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static uk.gov.justice.services.generators.test.utils.builder.HttpActionBuilder.httpAction;
 import static uk.gov.justice.services.generators.test.utils.builder.RamlBuilder.raml;
 import static uk.gov.justice.services.generators.test.utils.builder.ResourceBuilder.resource;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class ContainsActionsRamlValidatorTest {
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
     private RamlValidator validator = new ContainsActionsRamlValidator();
 
     @Test
@@ -23,11 +22,11 @@ public class ContainsActionsRamlValidatorTest {
     @Test
     public void shouldThrowExceptionIfNoActionsInRaml() throws Exception {
 
-        exception.expect(RamlValidationException.class);
-        exception.expectMessage("No actions to process");
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                validator.validate(raml().with(resource()).build())
 
-        validator.validate(raml().with(resource()).build());
+        );
 
+        assertThat(ramlValidationException.getMessage(), is("No actions to process"));
     }
-
 }

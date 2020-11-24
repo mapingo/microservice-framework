@@ -6,13 +6,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 
 import java.io.File;
 import java.net.URL;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -22,9 +21,6 @@ public class FileContentsAsStringLoaderTest {
 
     @InjectMocks
     private FileContentsAsStringLoader fileContentsAsStringLoader;
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void shouldLoadADocumentAsAString() throws Exception {
@@ -45,12 +41,14 @@ public class FileContentsAsStringLoaderTest {
     @Test
     public void shouldFailIfReadingTheFileThrowsAnIOException() throws Exception {
 
-        exception.expect(UnifiedSearchException.class);
-        exception.expectMessage(startsWith("Failed to read file contents from 'file:"));
-        exception.expectMessage(endsWith("this/file/does/not/exist.json'"));
-
         final URL url = new File("this/file/does/not/exist.json").toURI().toURL();
-        fileContentsAsStringLoader.readFileContents(url);
+
+        final UnifiedSearchException unifiedSearchException = assertThrows(UnifiedSearchException.class, () ->
+                fileContentsAsStringLoader.readFileContents(url)
+        );
+
+        assertThat(unifiedSearchException.getMessage(), startsWith("Failed to read file contents from 'file:"));
+        assertThat(unifiedSearchException.getMessage(), endsWith("this/file/does/not/exist.json'"));
     }
 }
 

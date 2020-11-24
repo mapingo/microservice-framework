@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThrows;
 import static org.raml.model.ActionType.GET;
 import static uk.gov.justice.config.GeneratorPropertiesFactory.generatorProperties;
 import static uk.gov.justice.services.generators.test.utils.builder.HttpActionBuilder.httpAction;
@@ -36,7 +37,6 @@ import javax.inject.Inject;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 
 public class DirectClientGeneratorCodeStructureTest {
@@ -48,9 +48,6 @@ public class DirectClientGeneratorCodeStructureTest {
 
     @Rule
     public TemporaryFolder outputFolder = new TemporaryFolder();
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void shouldGenerateClassWithAnnotations() throws Exception {
@@ -161,14 +158,15 @@ public class DirectClientGeneratorCodeStructureTest {
     @Test
     public void shouldThrowExceptionIfServiceComponentPropertyNotSet() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("serviceComponent generator property not set in the plugin config");
+        final IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () ->
+                generator.run(
+                        restRamlWithDefaults()
+                                .withDefaultGetResource()
+                                .build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
 
-        generator.run(
-                restRamlWithDefaults()
-                        .withDefaultGetResource()
-                        .build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+        assertThat(illegalArgumentException.getMessage(), is("serviceComponent generator property not set in the plugin config"));
     }
 
     @Test

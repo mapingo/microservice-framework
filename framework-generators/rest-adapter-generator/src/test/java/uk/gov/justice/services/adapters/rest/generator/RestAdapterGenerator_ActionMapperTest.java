@@ -29,14 +29,9 @@ import java.lang.reflect.Method;
 import javax.inject.Named;
 
 import org.hamcrest.Matchers;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class RestAdapterGenerator_ActionMapperTest extends BaseRestAdapterGeneratorTest {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     @SuppressWarnings("unchecked")
     @Test

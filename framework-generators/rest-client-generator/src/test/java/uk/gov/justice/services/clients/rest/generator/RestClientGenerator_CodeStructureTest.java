@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThrows;
 import static org.raml.model.ActionType.DELETE;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.PATCH;
@@ -45,7 +46,6 @@ import javax.inject.Inject;
 import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -89,9 +89,6 @@ public class RestClientGenerator_CodeStructureTest {
     private static final String BASE_URI_WITH_MORE_THAN_EIGHT_PARTS = "http://localhost:8080/warname/command/api/rest/service/extra";
     private static final String BASE_URI_WITH_HYPHENATED_SERVICE_NAME = "http://localhost:8080/warname/command/api/rest/service-with-hyphens";
     private static final JavaCompilerUtility COMPILER = javaCompilerUtil();
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     @Rule
     public TemporaryFolder outputFolder = new TemporaryFolder();
@@ -327,38 +324,39 @@ public class RestClientGenerator_CodeStructureTest {
     @Test
     public void shouldThrowExceptionIfServiceComponentPropertyNotSet() {
 
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("serviceComponent generator property not set in the plugin config");
+        final IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () ->
+                generator.run(
+                        restRamlWithDefaults()
+                                .withDefaultPostResource()
+                                .build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
 
-        generator.run(
-                restRamlWithDefaults()
-                        .withDefaultPostResource()
-                        .build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+        assertThat(illegalArgumentException.getMessage(), is("serviceComponent generator property not set in the plugin config"));
     }
 
     @Test
     public void shouldThrowExceptionIfBaseUriHasLessThanEightParts() {
 
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage(containsString("baseUri must have 8 parts"));
+        final IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () ->
+                generator.run(
+                        restRamlWithTitleVersion().withBaseUri(BASE_URI_WITH_LESS_THAN_EIGHT_PARTS).build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("CUSTOM_COMPONENT")))
+        );
 
-        generator.run(
-                restRamlWithTitleVersion().withBaseUri(BASE_URI_WITH_LESS_THAN_EIGHT_PARTS).build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("CUSTOM_COMPONENT")));
-
+        assertThat(illegalArgumentException.getMessage(), containsString("baseUri must have 8 parts"));
     }
 
     @Test
     public void shouldThrowExceptionIfBaseUriHasMoreThanEightParts() {
 
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage(containsString("baseUri must have 8 parts"));
+        final IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () ->
+                generator.run(
+                        restRamlWithTitleVersion().withBaseUri(BASE_URI_WITH_MORE_THAN_EIGHT_PARTS).build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withDefaultServiceComponent()))
+        );
 
-        generator.run(
-                restRamlWithTitleVersion().withBaseUri(BASE_URI_WITH_MORE_THAN_EIGHT_PARTS).build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withDefaultServiceComponent()));
-
+        assertThat(illegalArgumentException.getMessage(), containsString("baseUri must have 8 parts"));
     }
 
     @Test

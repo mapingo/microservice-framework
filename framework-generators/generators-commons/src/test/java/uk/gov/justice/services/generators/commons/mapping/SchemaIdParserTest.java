@@ -4,13 +4,12 @@ import static java.lang.String.format;
 import static java.util.Optional.empty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static uk.gov.justice.services.generators.test.utils.builder.HttpActionBuilder.VALID_JSON_SCHEMA;
 
 import java.util.Optional;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.raml.model.MimeType;
 
 public class SchemaIdParserTest {
@@ -32,8 +31,6 @@ public class SchemaIdParserTest {
             "  ]\n" +
             "}";
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
     private final SchemaIdParser schemaIdParser = new SchemaIdParser();
 
     @Test
@@ -53,10 +50,11 @@ public class SchemaIdParserTest {
         mimeType.setType(MEDIA_TYPE);
         mimeType.setSchema(format(VALID_JSON_SCHEMA, ""));
 
-        expectedException.expect(SchemaParsingException.class);
-        expectedException.expectMessage(is("Schema for media type: " + MEDIA_TYPE + " has a blank schema id"));
+        final SchemaParsingException schemaParsingException = assertThrows(SchemaParsingException.class, () ->
+                schemaIdParser.schemaIdFrom(mimeType)
+        );
 
-        schemaIdParser.schemaIdFrom(mimeType);
+        assertThat(schemaParsingException.getMessage(), is("Schema for media type: " + MEDIA_TYPE + " has a blank schema id"));
     }
 
     @Test

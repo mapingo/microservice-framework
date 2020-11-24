@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
+import static org.junit.Assert.assertThrows;
 
 import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
 
@@ -14,16 +15,11 @@ import java.math.BigDecimal;
 import java.util.Collection;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class ValidParameterCollectionBuilderTest {
 
     private ValidParameterCollectionBuilder validParameterCollectionBuilder;
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     @Before
     public void setup() {
@@ -86,52 +82,59 @@ public class ValidParameterCollectionBuilderTest {
 
     @Test
     public void shouldThrowExceptionIfRequiredParameterHasNullValue() throws Exception {
-        exception.expect(BadRequestException.class);
-        exception.expectMessage("The required parameter Name1 has no value.");
 
-        validParameterCollectionBuilder
-                .putRequired("Name1", null, ParameterType.STRING)
-                .parameters();
+        final BadRequestException badRequestException = assertThrows(BadRequestException.class, () ->
+                validParameterCollectionBuilder
+                        .putRequired("Name1", null, ParameterType.STRING)
+                        .parameters()
+        );
+
+        assertThat(badRequestException.getMessage(), is("The required parameter Name1 has no value."));
+
     }
 
     @Test
     public void shouldThrowExceptionInCaseOfInvalidNumericParamValue() throws Exception {
-        exception.expect(BadRequestException.class);
-        exception.expectMessage("Invalid parameter value.");
 
-        validParameterCollectionBuilder
-                .putRequired("param", "NonNumeric", ParameterType.NUMERIC)
-                .parameters();
+        final BadRequestException badRequestException = assertThrows(BadRequestException.class, () ->
+                validParameterCollectionBuilder
+                        .putRequired("param", "NonNumeric", ParameterType.NUMERIC)
+                        .parameters()
+        );
+        
+        assertThat(badRequestException.getMessage(), is("Invalid parameter value."));
     }
 
     @Test
     public void shouldThrowExceptionInCaseOfInvalidNumericParamValue2() throws Exception {
-        exception.expect(BadRequestException.class);
-        exception.expectMessage("Invalid parameter value.");
+        final BadRequestException badRequestException = assertThrows(BadRequestException.class, () ->
+                validParameterCollectionBuilder
+                        .putOptional("param", "NonNumeric", ParameterType.NUMERIC)
+                        .parameters()
+        );
 
-        validParameterCollectionBuilder
-                .putOptional("param", "NonNumeric", ParameterType.NUMERIC)
-                .parameters();
+        assertThat(badRequestException.getMessage(), is("Invalid parameter value."));
     }
 
     @Test
     public void shouldThrowExceptionInCaseOfInvalidBooleanParamValue() throws Exception {
-        exception.expect(BadRequestException.class);
-        exception.expectMessage("Invalid parameter value.");
+        final BadRequestException badRequestException = assertThrows(BadRequestException.class, () ->
+                validParameterCollectionBuilder
+                        .putRequired("param", "NonBoolean", ParameterType.BOOLEAN)
+                        .parameters()
+        );
 
-        validParameterCollectionBuilder
-                .putRequired("param", "NonBoolean", ParameterType.BOOLEAN)
-                .parameters();
+        assertThat(badRequestException.getMessage(), is("Invalid parameter value."));
     }
 
     @Test
     public void shouldThrowExceptionInCaseOfInvalidBooleanParamValue2() throws Exception {
-        exception.expect(BadRequestException.class);
-        exception.expectMessage("Invalid parameter value.");
+        final BadRequestException badRequestException = assertThrows(BadRequestException.class, () ->
+                validParameterCollectionBuilder
+                        .putOptional("param", "NonBoolean", ParameterType.BOOLEAN)
+                        .parameters()
+        );
 
-        validParameterCollectionBuilder
-                .putOptional("param", "NonBoolean", ParameterType.BOOLEAN)
-                .parameters();
+        assertThat(badRequestException.getMessage(), is("Invalid parameter value."));
     }
-
 }

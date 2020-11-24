@@ -78,7 +78,6 @@ import org.jboss.ejb3.annotation.Pool;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -96,10 +95,7 @@ public class JmsEndpointGeneratorTest {
 
     @Rule
     public TemporaryFolder outputFolder = new TemporaryFolder();
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
+    
     @Mock
     private JmsProcessor jmsProcessor;
 

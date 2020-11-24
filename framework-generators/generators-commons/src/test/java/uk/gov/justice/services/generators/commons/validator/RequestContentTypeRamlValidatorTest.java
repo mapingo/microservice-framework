@@ -1,5 +1,8 @@
 package uk.gov.justice.services.generators.commons.validator;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.HEAD;
 import static org.raml.model.ActionType.OPTIONS;
@@ -9,14 +12,9 @@ import static uk.gov.justice.services.generators.test.utils.builder.HttpActionBu
 import static uk.gov.justice.services.generators.test.utils.builder.RamlBuilder.raml;
 import static uk.gov.justice.services.generators.test.utils.builder.ResourceBuilder.resource;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class RequestContentTypeRamlValidatorTest {
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void shouldPassIfMediaTypeContainsAValidCommand() throws Exception {
@@ -57,27 +55,29 @@ public class RequestContentTypeRamlValidatorTest {
     @Test
     public void shouldNotPassIfMediaTypeContainsInvalidCommand() throws Exception {
 
-        exception.expect(RamlValidationException.class);
-        exception.expectMessage("Request type not set");
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                new RequestContentTypeRamlValidator(POST).validate(
+                        raml()
+                                .with(resource()
+                                        .with(httpActionWithDefaultMapping(POST)))
+                                .build())
+        );
 
-        new RequestContentTypeRamlValidator(POST).validate(
-                raml()
-                        .with(resource()
-                                .with(httpActionWithDefaultMapping(POST)))
-                        .build());
+        assertThat(ramlValidationException.getMessage(), is("Request type not set"));
     }
 
     @Test
     public void shouldNotPassIfAllMediaTypesContainInvalidCommand() throws Exception {
 
-        exception.expect(RamlValidationException.class);
-        exception.expectMessage("Request type not set");
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                new RequestContentTypeRamlValidator(POST, PUT).validate(
+                        raml()
+                                .with(resource()
+                                        .with(httpActionWithDefaultMapping(POST, "application/vnd.command1+json"))
+                                        .with(httpActionWithDefaultMapping(PUT)))
+                                .build())
+        );
 
-        new RequestContentTypeRamlValidator(POST, PUT).validate(
-                raml()
-                        .with(resource()
-                                .with(httpActionWithDefaultMapping(POST, "application/vnd.command1+json"))
-                                .with(httpActionWithDefaultMapping(PUT)))
-                        .build());
+        assertThat(ramlValidationException.getMessage(), is("Request type not set"));
     }
 }

@@ -6,6 +6,8 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -18,9 +20,7 @@ import java.util.List;
 
 import javax.enterprise.inject.spi.Bean;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -32,9 +32,6 @@ public class InterceptorCacheTest {
     private static final InterceptorOne INTERCEPTOR_1 = new InterceptorOne();
     private static final InterceptorTwo INTERCEPTOR_2 = new InterceptorTwo();
     private static final InterceptorThree INTERCEPTOR_3 = new InterceptorThree();
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     @Mock
     private InterceptorChainObserver observer;
@@ -131,20 +128,19 @@ public class InterceptorCacheTest {
 
     @Test
     public void shouldThrowExceptionIfComponentHasNoInterceptorChainProviderRegistered() throws Exception {
-        expectedException.expect(InterceptorCacheException.class);
-        expectedException.expectMessage("Component [Unknown Component] does not have any cached Interceptors, check if there is an InterceptorChainProvider for this component.");
 
-        interceptorCache.getInterceptors("Unknown Component");
+        final InterceptorCacheException interceptorCacheException = assertThrows(InterceptorCacheException.class, () ->
+                interceptorCache.getInterceptors("Unknown Component")
+        );
+
+        assertThat(interceptorCacheException.getMessage(), is("Component [Unknown Component] does not have any cached Interceptors, check if there is an InterceptorChainProvider for this component."));
     }
 
     @SuppressWarnings("unchecked")
     @Test
     public void shouldThrowExceptionIfInterceptorBeanNotInstantiated() throws Exception {
-        expectedException.expect(InterceptorCacheException.class);
-        expectedException.expectMessage("Could not instantiate interceptor bean of type: uk.gov.justice.services.core.interceptor.InterceptorCacheTest$InterceptorOne");
 
         final Class interceptorClass_1 = InterceptorOne.class;
-
 
         final Bean<Interceptor> interceptorBean_1 = mock(Bean.class);
         when(observer.getInterceptorBeans()).thenReturn(singletonList(interceptorBean_1));
@@ -168,9 +164,11 @@ public class InterceptorCacheTest {
             }
         });
 
-        interceptorCache.initialise();
+        final InterceptorCacheException interceptorCacheException = assertThrows(InterceptorCacheException.class, () ->
+                interceptorCache.initialise()
+        );
 
-
+        assertThat(interceptorCacheException.getMessage(), is("Could not instantiate interceptor bean of type: uk.gov.justice.services.core.interceptor.InterceptorCacheTest$InterceptorOne"));
     }
 
     @SuppressWarnings("unchecked")

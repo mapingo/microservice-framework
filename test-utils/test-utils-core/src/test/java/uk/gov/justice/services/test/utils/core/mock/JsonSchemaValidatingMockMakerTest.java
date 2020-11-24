@@ -3,8 +3,10 @@ package uk.gov.justice.services.test.utils.core.mock;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.core.AllOf.allOf;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -19,9 +21,7 @@ import uk.gov.justice.services.core.requester.Requester;
 import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -40,34 +40,34 @@ public class JsonSchemaValidatingMockMakerTest {
                         .build());
     }
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
     @Test
     public void shouldThrowExceptionWhenPayloadPassedToSenderDoesNotAdhereToSchema() {
 
-        exception.expect(MockitoException.class);
-        exception.expectCause(allOf(instanceOf(EnvelopeValidationException.class),
+        final MockitoException mockitoException = assertThrows(MockitoException.class, () ->
+                new SendingHandler(mock(Sender.class)).handle(
+                        envelope()
+                                .with(metadataWithRandomUUID("example.add-recipe"))
+                                .withPayloadOf(true, "glutenFree")
+                                .build())
+        );
+
+        assertThat(mockitoException.getCause(), allOf(instanceOf(EnvelopeValidationException.class),
                 hasProperty("message", containsString("#: required key [name] not found"))));
-        new SendingHandler(mock(Sender.class)).handle(
-                envelope()
-                        .with(metadataWithRandomUUID("example.add-recipe"))
-                        .withPayloadOf(true, "glutenFree")
-                        .build());
     }
 
     @Test
     public void shouldThrowExceptionIfNoMetadataInEnvelope() {
 
-        exception.expect(MockitoException.class);
-        exception.expectCause(allOf(instanceOf(EnvelopeValidationException.class),
-                hasProperty("message", equalTo("Metadata not set in the envelope."))));
+        final MockitoException mockitoException = assertThrows(MockitoException.class, () ->
+                new SendingHandler(mock(Sender.class)).handle(
+                        envelope()
+                                .withPayloadOf("someName", "name")
+                                .withPayloadOf(true, "glutenFree")
+                                .build())
+        );
 
-        new SendingHandler(mock(Sender.class)).handle(
-                envelope()
-                        .withPayloadOf("someName", "name")
-                        .withPayloadOf(true, "glutenFree")
-                        .build());
+        assertThat(mockitoException.getCause(), allOf(instanceOf(EnvelopeValidationException.class),
+                hasProperty("message", equalTo("Metadata not set in the envelope."))));
     }
 
     @Test
@@ -87,9 +87,6 @@ public class JsonSchemaValidatingMockMakerTest {
     @Test
     public void shouldThrowExceptionWhenPayloadReturnedByRequesterDoesNotAdhereToSchema() {
 
-        exception.expect(MockitoException.class);
-        exception.expectCause(allOf(instanceOf(EnvelopeValidationException.class),
-                hasProperty("message", containsString("#: required key [glutenFree] not found"))));
 
         final Requester requester = mock(Requester.class);
 
@@ -98,7 +95,12 @@ public class JsonSchemaValidatingMockMakerTest {
                 .withPayloadOf("someName", "name")
                 .build());
 
-        new RequestingHandler(requester).handle(envelope().build());
+        final MockitoException mockitoException = assertThrows(MockitoException.class, () ->
+                new RequestingHandler(requester).handle(envelope().build())
+        );
+
+        assertThat(mockitoException.getCause(), allOf(instanceOf(EnvelopeValidationException.class),
+                hasProperty("message", containsString("#: required key [glutenFree] not found"))));
     }
 
     @Test

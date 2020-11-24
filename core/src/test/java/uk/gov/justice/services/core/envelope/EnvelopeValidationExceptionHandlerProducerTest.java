@@ -1,11 +1,11 @@
 package uk.gov.justice.services.core.envelope;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.junit.Assert.assertThrows;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -28,18 +28,14 @@ public class EnvelopeValidationExceptionHandlerProducerTest {
         assertThat(producer.envelopeValidationExceptionHandler(), instanceOf(LoggingValidationExceptionHandler.class));
     }
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
     @Test
     public void shouldThrowExceptionIfClassDoesNotExist() {
         producer.handlerClass = "uk.gov.justice.services.core.envelope.NonExisting";
 
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Could not instantiate validation exception handler.");
+        final IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () ->
+                producer.envelopeValidationExceptionHandler()
+        );
 
-        producer.envelopeValidationExceptionHandler();
-
+        assertThat(illegalArgumentException.getMessage(), is("Could not instantiate validation exception handler."));
     }
-
 }

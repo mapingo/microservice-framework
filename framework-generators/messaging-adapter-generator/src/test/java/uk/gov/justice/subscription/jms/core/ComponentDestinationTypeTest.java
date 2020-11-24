@@ -1,7 +1,9 @@
 package uk.gov.justice.subscription.jms.core;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_CONTROLLER;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_HANDLER;
@@ -17,18 +19,12 @@ import javax.jms.Queue;
 import javax.jms.Topic;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class ComponentDestinationTypeTest {
-
-
+    
     private static final String UNKNOWN = "unknown";
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
     private ComponentDestinationType componentDestinationType;
-
 
     @Before
     public void setup() {
@@ -86,10 +82,12 @@ public class ComponentDestinationTypeTest {
 
     @Test
     public void shouldThrowExceptionIfNoInputDestinationTypeFound() {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("No input destination type defined for service component of type EVENT_API");
 
-        componentDestinationType.inputTypeFor(EVENT_API);
+        final IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () ->
+                componentDestinationType.inputTypeFor(EVENT_API)
+        );
+
+        assertThat(illegalArgumentException.getMessage(), is("No input destination type defined for service component of type EVENT_API"));
     }
 
 }

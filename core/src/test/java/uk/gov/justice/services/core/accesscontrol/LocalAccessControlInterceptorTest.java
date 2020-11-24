@@ -1,5 +1,8 @@
 package uk.gov.justice.services.core.accesscontrol;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
@@ -21,9 +24,7 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -33,9 +34,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class LocalAccessControlInterceptorTest {
 
     private static final int ACCESS_CONTROL_PRIORITY = 6000;
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     @Mock
     private JsonEnvelope envelope;
@@ -81,10 +79,11 @@ public class LocalAccessControlInterceptorTest {
         when(accessControlService.checkAccessControl("command", envelope)).thenReturn(Optional.of(accessControlViolation));
         when(accessControlFailureMessageGenerator.errorMessageFrom(envelope, accessControlViolation)).thenReturn("Error message");
 
-        exception.expect(AccessControlViolationException.class);
-        exception.expectMessage("Error message");
+        final AccessControlViolationException accessControlViolationException = assertThrows(AccessControlViolationException.class, () ->
+                interceptorChain.processNext(inputContext)
+        );
 
-        interceptorChain.processNext(inputContext);
+        assertThat(accessControlViolationException.getMessage(), is("Error message"));
     }
 
     @Adapter(COMMAND_API)

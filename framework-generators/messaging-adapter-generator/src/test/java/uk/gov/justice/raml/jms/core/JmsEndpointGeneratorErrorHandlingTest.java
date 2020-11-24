@@ -1,5 +1,8 @@
 package uk.gov.justice.raml.jms.core;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.raml.model.ActionType.POST;
 import static uk.gov.justice.services.core.annotation.Component.QUERY_API;
 import static uk.gov.justice.services.generators.test.utils.builder.HttpActionBuilder.httpAction;
@@ -14,10 +17,8 @@ import uk.gov.justice.services.generators.commons.validator.RamlValidationExcept
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.raml.model.Raml;
-
 
 public class JmsEndpointGeneratorErrorHandlingTest {
 
@@ -26,92 +27,98 @@ public class JmsEndpointGeneratorErrorHandlingTest {
     @Rule
     public TemporaryFolder outputFolder = new TemporaryFolder();
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
     private Generator<Raml> generator = new JmsEndpointGenerator();
 
     @Test
     public void shouldThrowExceptionIfNoResourcesInRaml() throws Exception {
 
-        exception.expect(RamlValidationException.class);
-        exception.expectMessage("No resources specified");
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                generator.run(
+                        raml().build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
 
-        generator.run(
-                raml().build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+        assertThat(ramlValidationException.getMessage(), is("No resources specified"));
     }
 
     @Test
     public void shouldThrowExceptionIfNoActionsInRaml() throws Exception {
 
-        exception.expect(RamlValidationException.class);
-        exception.expectMessage("No actions to process");
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                generator.run(
+                        raml()
+                                .with(resource()
+                                        .withRelativeUri("/structure.controller.command"))
+                                .build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
 
-        generator.run(
-                raml()
-                        .with(resource()
-                                .withRelativeUri("/structure.controller.command"))
-                        .build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+        assertThat(ramlValidationException.getMessage(), is("No actions to process"));
     }
 
     @Test
     public void shouldThrowExceptionIfMediaTypeNotSet() throws Exception {
 
-        exception.expect(RamlValidationException.class);
-        exception.expectMessage("Request type not set");
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                generator.run(
+                        raml()
+                                .with(resource()
+                                        .with(httpAction().withHttpActionType(POST)))
+                                .build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
 
-        generator.run(
-                raml()
-                        .with(resource()
-                                .with(httpAction().withHttpActionType(POST)))
-                        .build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+        assertThat(ramlValidationException.getMessage(), is("Request type not set"));
     }
 
     @Test
     public void shouldThrowExceptionWhenBaseUriNotSetWhileGeneratingEventListener() throws Exception {
-        exception.expect(RamlValidationException.class);
-        exception.expectMessage("Base uri not set");
 
-        generator.run(
-                raml()
-                        .withBaseUri(null)
-                        .with(resource()
-                                .withRelativeUri("/structure.event")
-                                .withDefaultPostAction())
-                        .build(),
-                configurationWithBasePackage("uk.somepackage", outputFolder, new CommonGeneratorProperties()));
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                generator.run(
+                        raml()
+                                .withBaseUri(null)
+                                .with(resource()
+                                        .withRelativeUri("/structure.event")
+                                        .withDefaultPostAction())
+                                .build(),
+                        configurationWithBasePackage("uk.somepackage", outputFolder, new CommonGeneratorProperties()))
+        );
+
+        assertThat(ramlValidationException.getMessage(), is("Base uri not set"));
     }
 
     @Test
     public void shouldThrowExceptionWhenInvalidBaseUriWhileGeneratingEventListener() throws Exception {
-        exception.expect(RamlValidationException.class);
-        exception.expectMessage("Invalid base uri: message://too/short/uri");
 
-        generator.run(
-                raml()
-                        .withBaseUri("message://too/short/uri")
-                        .with(resource()
-                                .withRelativeUri("/structure.event")
-                                .withDefaultPostAction())
-                        .build(),
-                configurationWithBasePackage("uk.somepackage", outputFolder, new CommonGeneratorProperties()));
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                generator.run(
+                        raml()
+                                .withBaseUri("message://too/short/uri")
+                                .with(resource()
+                                        .withRelativeUri("/structure.event")
+                                        .withDefaultPostAction())
+                                .build(),
+                        configurationWithBasePackage("uk.somepackage", outputFolder, new CommonGeneratorProperties()))
+        );
+
+        assertThat(ramlValidationException.getMessage(), is("Invalid base uri: message://too/short/uri"));
     }
 
     @Test
     public void shouldThrowExceptionWhenUnsupportedFrameworkComponent() throws Exception {
-        exception.expect(IllegalStateException.class);
-        exception.expectMessage("JMS Endpoint generation is unsupported for framework component type QUERY_API");
 
-        generator.run(
-                raml()
-                        .withBaseUri("message://query/api/message/people")
-                        .with(resource()
-                                .withRelativeUri("/structure.event")
-                                .withDefaultPostAction())
-                        .build(),
-                configurationWithBasePackage("uk.somepackage", outputFolder, new GeneratorPropertiesFactory().withServiceComponentOf(QUERY_API)));
+        final IllegalStateException illegalStateException = assertThrows(IllegalStateException.class, () ->
+                generator.run(
+                        raml()
+                                .withBaseUri("message://query/api/message/people")
+                                .with(resource()
+                                        .withRelativeUri("/structure.event")
+                                        .withDefaultPostAction())
+                                .build(),
+                        configurationWithBasePackage("uk.somepackage", outputFolder, new GeneratorPropertiesFactory().withServiceComponentOf(QUERY_API)))
+        );
+
+        assertThat(illegalStateException.getMessage(), is("JMS Endpoint generation is unsupported for framework component type QUERY_API"));
     }
 }

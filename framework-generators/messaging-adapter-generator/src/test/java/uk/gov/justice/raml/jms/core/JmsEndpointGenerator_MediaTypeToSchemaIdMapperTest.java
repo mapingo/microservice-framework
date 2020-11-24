@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.raml.model.Raml;
 
@@ -31,9 +30,6 @@ public class JmsEndpointGenerator_MediaTypeToSchemaIdMapperTest {
 
     @Rule
     public TemporaryFolder outputFolder = new TemporaryFolder();
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private Generator<Raml> generator = new JmsEndpointGenerator();
 

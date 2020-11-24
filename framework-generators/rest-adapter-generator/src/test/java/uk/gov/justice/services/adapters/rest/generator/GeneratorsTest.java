@@ -13,16 +13,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.raml.model.MimeType;
 import org.raml.model.Resource;
 
 public class GeneratorsTest {
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void shouldBeWellDefinedUtilityClass() {

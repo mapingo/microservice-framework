@@ -31,7 +31,6 @@ import javax.enterprise.context.ApplicationScoped;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
 import org.raml.model.Raml;
@@ -44,9 +43,6 @@ public class JmsEndpointGenerator_EventFilterTest {
 
     @Rule
     public TemporaryFolder outputFolder = new TemporaryFolder();
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Mock
     private JmsProcessor jmsProcessor;

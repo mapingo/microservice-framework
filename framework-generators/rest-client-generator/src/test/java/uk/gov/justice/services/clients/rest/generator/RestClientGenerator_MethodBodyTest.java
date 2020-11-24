@@ -50,7 +50,6 @@ import java.util.function.Function;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -75,9 +74,6 @@ public class RestClientGenerator_MethodBodyTest {
 
     @Rule
     public TemporaryFolder outputFolder = new TemporaryFolder();
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private final RestClientGenerator generator = new RestClientGenerator();
 

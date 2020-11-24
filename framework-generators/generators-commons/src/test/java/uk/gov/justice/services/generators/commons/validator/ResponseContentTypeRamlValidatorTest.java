@@ -1,19 +1,18 @@
 package uk.gov.justice.services.generators.commons.validator;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.POST;
 import static uk.gov.justice.services.generators.test.utils.builder.HttpActionBuilder.httpActionWithDefaultMapping;
 import static uk.gov.justice.services.generators.test.utils.builder.RamlBuilder.raml;
 import static uk.gov.justice.services.generators.test.utils.builder.ResourceBuilder.resource;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class ResponseContentTypeRamlValidatorTest {
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
     private RamlValidator validator = new ResponseContentTypeRamlValidator(GET);
 
     @Test
@@ -41,13 +40,14 @@ public class ResponseContentTypeRamlValidatorTest {
     @Test
     public void shouldThrowExceptionIfResponseContentTypeNotSet() throws Exception {
 
-        exception.expect(RamlValidationException.class);
-        exception.expectMessage("Response type not set");
+        final RamlValidationException ramlValidationException = assertThrows(RamlValidationException.class, () ->
+                validator.validate(
+                        raml().with(
+                                resource("/some/path")
+                                        .with(httpActionWithDefaultMapping(GET))
+                        ).build())
+        );
 
-        validator.validate(
-                raml().with(
-                        resource("/some/path")
-                                .with(httpActionWithDefaultMapping(GET))
-                ).build());
+        assertThat(ramlValidationException.getMessage(), is("Response type not set"));
     }
 }

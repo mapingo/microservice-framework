@@ -17,6 +17,7 @@ import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThrows;
 import static org.raml.model.ActionType.DELETE;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.PATCH;
@@ -70,9 +71,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 
 public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGeneratorTest {
@@ -630,21 +629,20 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
         assertThat(resourceClass.getAnnotation(CustomAdapter.class).value(), is("CUSTOM_API"));
     }
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
     @Test
     public void shouldThrowExceptionIfUnknownPillarNameInUriAndServiceComponentIsNotSet() throws Exception {
-        expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("serviceComponent generator property not set in the plugin config");
 
-        generator.run(
-                restRamlWithDefaults()
-                        .withBaseUri("http://localhost:8080/warname/custom/api/rest/service")
-                        .with(resource("/some/path")
-                                .withDefaultPostAction()
-                        ).build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+        final IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () ->
+                generator.run(
+                        restRamlWithDefaults()
+                                .withBaseUri("http://localhost:8080/warname/custom/api/rest/service")
+                                .with(resource("/some/path")
+                                        .withDefaultPostAction()
+                                ).build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
+        );
+
+        assertThat(illegalArgumentException.getMessage(), is("serviceComponent generator property not set in the plugin config"));
     }
 
     @Test

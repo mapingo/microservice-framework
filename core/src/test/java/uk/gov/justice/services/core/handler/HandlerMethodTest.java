@@ -7,6 +7,8 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -33,9 +35,7 @@ import java.util.UUID;
 
 import com.google.common.io.Resources;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -119,17 +119,15 @@ public class HandlerMethodTest {
         assertThat(resultPojo.getPayloadVersion(), is(payloadVersion));
     }
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
     @Test
     public void shouldRethrowRuntimeException() throws Exception {
         doThrow(new RuntimeException("messageABC")).when(asynchronousCommandHandler).handles(envelope);
 
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage("messageABC");
+        final RuntimeException runtimeException = assertThrows(RuntimeException.class, () ->
+                asyncHandlerInstance().execute(envelope)
+        );
 
-        asyncHandlerInstance().execute(envelope);
+        assertThat(runtimeException.getMessage(), is("messageABC"));
     }
 
     @Test
@@ -137,16 +135,18 @@ public class HandlerMethodTest {
         final Exception thrownException = new Exception("messageABC");
         doThrow(thrownException).when(checkedExcCommandHandler).handles(envelope);
 
-        expectedException.expect(HandlerExecutionException.class);
-        expectedException.expectCause(is(thrownException));
-
         final List<String> features = new ArrayList<>();
-        new HandlerMethod(
-                checkedExcCommandHandler,
-                method(new CheckedExceptionThrowingCommandHandler(), "handles"),
-                JsonEnvelope.class,
-                features
-        ).execute(envelope);
+        final HandlerExecutionException handlerExecutionException = assertThrows(HandlerExecutionException.class, () ->
+                new HandlerMethod(
+                        checkedExcCommandHandler,
+                        method(new CheckedExceptionThrowingCommandHandler(), "handles"),
+                        JsonEnvelope.class,
+                        features
+                ).execute(envelope)
+        );
+
+        assertThat(handlerExecutionException.getMessage(), startsWith("Error while invoking handler method"));
+        assertThat(handlerExecutionException.getCause(), is(thrownException));
     }
 
     @Test

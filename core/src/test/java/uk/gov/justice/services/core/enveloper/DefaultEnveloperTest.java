@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertThrows;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataBuilder;
 
@@ -24,9 +25,7 @@ import java.util.UUID;
 import javax.json.JsonValue;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -38,9 +37,6 @@ public class DefaultEnveloperTest {
     private static final UUID OLD_CAUSATION_ID = randomUUID();
     private static final String TEST_NAME = "test.query.query-response";
     private final UUID STREAM_ID = UUID.randomUUID();
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     private DefaultEnveloper enveloper;
 
@@ -142,10 +138,18 @@ public class DefaultEnveloperTest {
 
     @Test
     public void shouldThrowExceptionIfProvidedInvalidEventObject() {
-        exception.expect(InvalidEventException.class);
-        exception.expectMessage("Failed to map event. No event registered for class java.lang.String");
 
-        enveloper.withMetadataFrom(envelopeFrom(metadataBuilder().withId(randomUUID()).withName("name"), createObjectBuilder())).apply("InvalidEventObject");
+        final InvalidEventException invalidEventException = assertThrows(InvalidEventException.class, () ->
+                enveloper.withMetadataFrom(
+                        envelopeFrom(
+                                metadataBuilder()
+                                        .withId(randomUUID())
+                                        .withName("name"), createObjectBuilder()))
+                        .apply("InvalidEventObject")
+
+        );
+
+        assertThat(invalidEventException.getMessage(), is("Failed to map event. No event registered for class java.lang.String"));
     }
 
     @Test

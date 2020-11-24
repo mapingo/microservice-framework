@@ -6,9 +6,11 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.Is.isA;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -50,17 +52,12 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.impl.tl.ThreadLocalHttpHeaders;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 
 public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGeneratorTest {
 
     private static final String NULL_STRING_VALUE = null;
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     @SuppressWarnings("unchecked")
     @Test
@@ -611,8 +608,6 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
     public void shouldThrowExceptionIfRequiredQueryParamIsNull() throws Exception {
-        exception.expect(InvocationTargetException.class);
-        exception.expectCause(isA(BadRequestException.class));
 
         generator.run(
                 restRamlWithQueryApiDefaults().with(
@@ -634,7 +629,10 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
 
         final Method method = firstMethodOf(resourceClass).get();
 
-        method.invoke(resourceObject, NULL_STRING_VALUE);
-    }
+        final InvocationTargetException invocationTargetException = assertThrows(InvocationTargetException.class, () ->
+                method.invoke(resourceObject, NULL_STRING_VALUE)
+        );
 
+        assertThat(invocationTargetException.getCause(), is(instanceOf(BadRequestException.class)));
+    }
 }

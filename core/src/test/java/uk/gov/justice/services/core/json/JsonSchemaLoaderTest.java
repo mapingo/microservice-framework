@@ -2,6 +2,7 @@ package uk.gov.justice.services.core.json;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -11,9 +12,7 @@ import uk.gov.justice.schema.catalog.SchemaCatalogResolver;
 
 import org.everit.json.schema.Schema;
 import org.json.JSONObject;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -50,22 +49,23 @@ public class JsonSchemaLoaderTest {
         verify(logger).trace("Loading schema {}", "/json/schema/test-schema.json");
     }
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
-
     @Test
     public void shouldThrowExceptionIfSchemaNotFound() {
-        expectedException.expect(SchemaLoadingException.class);
-        expectedException.expectMessage("Unable to load JSON schema /json/schema/non-existent.json from classpath");
-        loader.loadSchema("non-existent");
+
+        final SchemaLoadingException schemaLoadingException = assertThrows(SchemaLoadingException.class, () ->
+                loader.loadSchema("non-existent")
+        );
+
+        assertThat(schemaLoadingException.getMessage(), is("Unable to load JSON schema /json/schema/non-existent.json from classpath"));
     }
 
     @Test
     public void shouldThrowExceptionIfSchemaMalformed() {
-        expectedException.expect(SchemaLoadingException.class);
-        expectedException.expectMessage("Unable to load JSON schema /json/schema/malformed-schema.json from classpath");
+        
+        final SchemaLoadingException schemaLoadingException = assertThrows(SchemaLoadingException.class, () ->
+                loader.loadSchema("malformed-schema")
+        );
 
-        loader.loadSchema("malformed-schema");
+        assertThat(schemaLoadingException.getMessage(), is("Unable to load JSON schema /json/schema/malformed-schema.json from classpath"));
     }
 }

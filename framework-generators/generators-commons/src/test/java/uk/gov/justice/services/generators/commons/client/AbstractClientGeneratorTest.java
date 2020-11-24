@@ -13,6 +13,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.raml.model.ActionType.DELETE;
@@ -56,7 +57,6 @@ import com.squareup.javapoet.TypeName;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -297,32 +297,32 @@ public class AbstractClientGeneratorTest {
         assertThat(result, is(12345678));
     }
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
     @Test
     public void shouldThrowExceptionIfServiceComponentPropertyNotSet() {
 
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("serviceComponent generator property not set in the plugin config");
+        final IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () ->
+                generator.run(
+                        messagingRamlWithDefaults().withDefaultMessagingResource().build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
 
-        generator.run(
-                messagingRamlWithDefaults().withDefaultMessagingResource().build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+        );
 
+        assertThat(illegalArgumentException.getMessage(), is("serviceComponent generator property not set in the plugin config"));
     }
 
     @Test
     public void shouldThrowExceptionIfActionOtherThanPOSTorGET() throws Exception {
-        exception.expect(IllegalStateException.class);
-        exception.expectMessage(containsString("Unsupported httpAction type TRACE"));
+
+        final IllegalStateException illegalStateException = assertThrows(IllegalStateException.class, () ->
         generator.run(
                 messagingRamlWithDefaults()
                         .with(resource()
                                 .with(httpActionWithDefaultMapping(TRACE, "application/vnd.cakeshop.actionabc+json")))
                         .build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withDefaultServiceComponent()));
+                configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withDefaultServiceComponent()))
+        );
 
+        assertThat(illegalStateException.getMessage(), containsString("Unsupported httpAction type TRACE"));
     }
 
 

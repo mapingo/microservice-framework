@@ -2,6 +2,7 @@ package uk.gov.justice.services.generators.commons.helper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -11,14 +12,9 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class PathToUrlResolverTest {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void shouldResolvePathToUrl() {
@@ -33,8 +29,6 @@ public class PathToUrlResolverTest {
     @Test
     public void shouldThrowUnifiedSearchExceptionWhenResolutionFailsForPathToUrl() {
 
-        expectedException.expectMessage("Cannot resolve path as URL nul");
-        expectedException.expect(FileParserException.class);
         final PathToUrlResolver pathToUrlResolver = spy(PathToUrlResolver.class);
         final Path basedir = mock(Path.class);
         final Path url = mock(Path.class);
@@ -43,9 +37,10 @@ public class PathToUrlResolverTest {
             throw new MalformedURLException("oops");
         });
 
-        pathToUrlResolver.resolveToUrl(basedir, url);
+        final FileParserException fileParserException = assertThrows(FileParserException.class, () ->
+                pathToUrlResolver.resolveToUrl(basedir, url)
+        );
 
-
+        assertThat(fileParserException.getMessage(), is("Cannot resolve path as URL null"));
     }
-
 }

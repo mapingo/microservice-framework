@@ -10,6 +10,7 @@ import static javax.json.Json.createObjectBuilder;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThrows;
 import static uk.gov.justice.services.adapter.rest.parameter.ParameterType.BOOLEAN;
 import static uk.gov.justice.services.adapter.rest.parameter.ParameterType.NUMERIC;
 import static uk.gov.justice.services.adapter.rest.parameter.ParameterType.STRING;
@@ -47,9 +48,7 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.jboss.resteasy.specimpl.ResteasyHttpHeaders;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -70,9 +69,6 @@ public class RestEnvelopeBuilderTest {
     private static final UUID SINGLE_CAUSATION_ID = randomUUID();
 
     private static final String EXPECTED_MESSAGE_TEMPLATE = "The metadata of payload and the headers both have %s set and the values are not equal: payload = %s, headers = %s";
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void shouldBuildEnvelopeWithUUID() throws Exception {
@@ -318,8 +314,6 @@ public class RestEnvelopeBuilderTest {
         final String payloadUserId = UUID_USER_ID.toString();
         final String headerUserId = randomUUID().toString();
 
-        expectedException.expect(BadRequestException.class);
-        expectedException.expectMessage(format(EXPECTED_MESSAGE_TEMPLATE, "User Id", payloadUserId, headerUserId));
 
         final Optional<JsonObject> initialPayload = Optional.of(createObjectBuilder()
                 .add(METADATA, createObjectBuilder()
@@ -330,20 +324,21 @@ public class RestEnvelopeBuilderTest {
                         ))
                 .build());
 
-        builderWithDefaultAction()
-                .withInitialPayload(initialPayload)
-                .withHeaders(
-                        httpHeadersOf(ImmutableMap.of(HeaderConstants.USER_ID, headerUserId)))
-                .build();
+        final BadRequestException badRequestException = assertThrows(BadRequestException.class, () ->
+                builderWithDefaultAction()
+                        .withInitialPayload(initialPayload)
+                        .withHeaders(
+                                httpHeadersOf(ImmutableMap.of(HeaderConstants.USER_ID, headerUserId)))
+                        .build()
+        );
+
+        assertThat(badRequestException.getMessage(), is(format(EXPECTED_MESSAGE_TEMPLATE, "User Id", payloadUserId, headerUserId)));
     }
 
     @Test
     public void shouldFailIfCausationIsSetInBothHeaderAndPayloadAndAreNotEqual() throws Exception {
 
         final String payloadCausationId = randomUUID().toString();
-
-        expectedException.expect(BadRequestException.class);
-        expectedException.expectMessage(format(EXPECTED_MESSAGE_TEMPLATE, "Causation", singletonList(payloadCausationId), SINGLE_CAUSATION_ID.toString()));
 
         final Optional<JsonObject> initialPayload = Optional.of(createObjectBuilder()
                 .add(METADATA, createObjectBuilder()
@@ -353,11 +348,15 @@ public class RestEnvelopeBuilderTest {
                 )
                 .build());
 
-        builderWithDefaultAction()
-                .withInitialPayload(initialPayload)
-                .withHeaders(
-                        httpHeadersOf(ImmutableMap.of(HeaderConstants.CAUSATION, SINGLE_CAUSATION_ID.toString())))
-                .build();
+        final BadRequestException badRequestException = assertThrows(BadRequestException.class, () ->
+                builderWithDefaultAction()
+                        .withInitialPayload(initialPayload)
+                        .withHeaders(
+                                httpHeadersOf(ImmutableMap.of(HeaderConstants.CAUSATION, SINGLE_CAUSATION_ID.toString())))
+                        .build()
+        );
+
+        assertThat(badRequestException.getMessage(), is(format(EXPECTED_MESSAGE_TEMPLATE, "Causation", singletonList(payloadCausationId), SINGLE_CAUSATION_ID.toString())));
     }
 
     @Test
@@ -388,9 +387,6 @@ public class RestEnvelopeBuilderTest {
         final String payloadSessionId = UUID_SESSION_ID.toString();
         final String headerSessionId = randomUUID().toString();
 
-        expectedException.expect(BadRequestException.class);
-        expectedException.expectMessage(format(EXPECTED_MESSAGE_TEMPLATE, "Session Id", payloadSessionId, headerSessionId));
-
         final Optional<JsonObject>
                 initialPayload = Optional.of(createObjectBuilder()
                 .add(METADATA, createObjectBuilder()
@@ -401,11 +397,15 @@ public class RestEnvelopeBuilderTest {
                         ))
                 .build());
 
-        builderWithDefaultAction()
-                .withInitialPayload(initialPayload)
-                .withHeaders(
-                        httpHeadersOf(ImmutableMap.of(HeaderConstants.SESSION_ID, headerSessionId)))
-                .build();
+        final BadRequestException badRequestException = assertThrows(BadRequestException.class, () ->
+                builderWithDefaultAction()
+                        .withInitialPayload(initialPayload)
+                        .withHeaders(
+                                httpHeadersOf(ImmutableMap.of(HeaderConstants.SESSION_ID, headerSessionId)))
+                        .build()
+        );
+
+        assertThat(badRequestException.getMessage(), is(format(EXPECTED_MESSAGE_TEMPLATE, "Session Id", payloadSessionId, headerSessionId)));
     }
 
     @Test
@@ -437,8 +437,6 @@ public class RestEnvelopeBuilderTest {
         final String payloadClientId = UUID_CLIENT_CORRELATION_ID.toString();
         final String headerClientId = randomUUID().toString();
 
-        expectedException.expect(BadRequestException.class);
-        expectedException.expectMessage(format(EXPECTED_MESSAGE_TEMPLATE, "Client Correlation Id", payloadClientId, headerClientId));
 
         final Optional<JsonObject>
                 initialPayload = Optional.of(createObjectBuilder()
@@ -450,11 +448,15 @@ public class RestEnvelopeBuilderTest {
                         ))
                 .build());
 
-        builderWithDefaultAction()
-                .withInitialPayload(initialPayload)
-                .withHeaders(
-                        httpHeadersOf(ImmutableMap.of(CLIENT_CORRELATION_ID, headerClientId)))
-                .build();
+        final BadRequestException badRequestException = assertThrows(BadRequestException.class, () ->
+                builderWithDefaultAction()
+                        .withInitialPayload(initialPayload)
+                        .withHeaders(
+                                httpHeadersOf(ImmutableMap.of(CLIENT_CORRELATION_ID, headerClientId)))
+                        .build()
+        );
+
+        assertThat(badRequestException.getMessage(), is(format(EXPECTED_MESSAGE_TEMPLATE, "Client Correlation Id", payloadClientId, headerClientId)));
     }
 
     @Test

@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThrows;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.POST;
 import static uk.gov.justice.config.GeneratorPropertiesFactory.generatorProperties;
@@ -37,7 +38,6 @@ import javax.inject.Inject;
 import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.slf4j.Logger;
 
@@ -250,20 +250,16 @@ public class MessagingClientGenerator_CodeStructureTest {
                 "RemoteCommandController2EventProcessorMessageContextWithHyphensCakeshopControllerCommand");
     }
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
     @Test
     public void shouldThrowExceptionIfServiceComponentPropertyNotSet() {
 
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("serviceComponent generator property not set in the plugin config");
+        final IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () ->
+                generator.run(
+                        messagingRamlWithDefaults().withDefaultMessagingResource().build(),
+                        configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()))
 
-        generator.run(
-                messagingRamlWithDefaults().withDefaultMessagingResource().build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+        );
 
+        assertThat(illegalArgumentException.getMessage(), is("serviceComponent generator property not set in the plugin config"));
     }
-
-
 }

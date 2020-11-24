@@ -1,19 +1,15 @@
 package uk.gov.justice.services.clients.unifiedsearch.core;
 
 import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThrows;
 
 import java.net.URL;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class UnifiedSearchFileFinderTest {
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
-
 
     @Test
     public void shouldFindTransformerPaths() throws Exception {
@@ -27,10 +23,11 @@ public class UnifiedSearchFileFinderTest {
     @Test
     public void shouldThrowExceptionWhenTransformerNotFound() throws Exception {
 
-        exception.expect(UnifiedSearchException.class);
-        exception.expectMessage("Unable to find file on classpath: non-existent-spec.json");
-
         final UnifiedSearchFileFinder unifiedSearchFileFinder = new UnifiedSearchFileFinder();
-        unifiedSearchFileFinder.getTransformerPaths("non-existent-spec.json");
+        final UnifiedSearchException unifiedSearchException = assertThrows(UnifiedSearchException.class, () ->
+                unifiedSearchFileFinder.getTransformerPaths("non-existent-spec.json")
+        );
+
+        assertThat(unifiedSearchException.getMessage(), is("Unable to find file on classpath: non-existent-spec.json"));
     }
 }
