@@ -16,11 +16,11 @@ public class JsonEnvelopeWriterTest {
 
     private static final String EXPECTED_JSON =
             "\n{\n" +
-                    "    \"aProperty\":\"value a\",\n" +
-                    "    \"bProperty\":\"value b\",\n" +
-                    "    \"cProperty\":\"value c\",\n" +
-                    "    \"anObject\":{\n" +
-                    "        \"innerProperty\":\"innerValue\"\n" +
+                    "    \"aProperty\": \"value a\",\n" +
+                    "    \"bProperty\": \"value b\",\n" +
+                    "    \"cProperty\": \"value c\",\n" +
+                    "    \"anObject\": {\n" +
+                    "        \"innerProperty\": \"innerValue\"\n" +
                     "    }\n" +
                     "}";
 

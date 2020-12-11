@@ -11,6 +11,7 @@ import uk.gov.justice.services.yaml.YamlParser;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,8 +24,8 @@ public class UnifiedSearchDescriptorParser implements FileParser<UnifiedSearchDe
 
     private static final String UNIFIED_SEARCH_SCHEMA_PATH = "/schema/unified-search-schema.json";
 
-    private static final TypeReference<Map<String, UnifiedSearchDescriptor>> UNIFIED_SEARCH_DESCRIPTOR_TYPE_REF
-            = new TypeReference<Map<String, UnifiedSearchDescriptor>>() {
+    private static final TypeReference<HashMap<String, UnifiedSearchDescriptor>> UNIFIED_SEARCH_DESCRIPTOR_TYPE_REF
+            = new TypeReference<HashMap<String, UnifiedSearchDescriptor>>() {
     };
 
     private static final String UNIFIED_SEARCH_DESCRIPTOR = "unified_search_descriptor";

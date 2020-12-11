@@ -4,10 +4,16 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-### Added
-- New JNDI variable `feature-control.enabled` for enabling/disabling of remote fetching of Features
+
+## [7.2.2] - 2020-12-22
+### Changed
+- Update to OpenJDK 11
+    - Update framework-libraries to 8.0.0-M1
+    - Update framework-parent-pom to 8.0.0-M2
+
 ## [7.2.2] - 2020-11-18
 ### Added
+- New JNDI variable `feature-control.enabled` for enabling/disabling of remote fetching of Features
 - Moved in EmptyFeatureFetcher from framework-api
  
 ## [7.2.1] - 2020-11-18
