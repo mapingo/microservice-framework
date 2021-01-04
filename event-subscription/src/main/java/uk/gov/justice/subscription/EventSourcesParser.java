@@ -5,6 +5,7 @@ import uk.gov.justice.services.yaml.YamlParser;
 import uk.gov.justice.subscription.domain.eventsource.EventSourceDefinition;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -18,8 +19,8 @@ public class EventSourcesParser {
 
     private static final String EVENT_SOURCES_SCHEMA_PATH = "/json/schema/event-source-schema.json";
     private static final String EVENT_SOURCES = "event_sources";
-    private static final TypeReference<Map<String, List<EventSourceDefinition>>> EVENT_SOURCES_TYPE_REF
-            = new TypeReference<Map<String, List<EventSourceDefinition>>>() {
+    private static final TypeReference<HashMap<String, List<EventSourceDefinition>>> EVENT_SOURCES_TYPE_REF
+            = new TypeReference<HashMap<String, List<EventSourceDefinition>>>() {
     };
 
     private final YamlParser yamlParser;

@@ -8,6 +8,7 @@ import uk.gov.justice.subscription.domain.subscriptiondescriptor.SubscriptionsDe
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -20,8 +21,8 @@ public class SubscriptionsDescriptorParser {
 
     private static final String SUBSCRIPTION_SCHEMA_PATH = "/json/schema/subscription-schema.json";
     private static final String SUBSCRIPTIONS_DESCRIPTOR = "subscriptions_descriptor";
-    private static final TypeReference<Map<String, SubscriptionsDescriptor>> SUBSCRIPTIONS_DESCRIPTOR_TYPE_REF
-            = new TypeReference<Map<String, SubscriptionsDescriptor>>() {
+    private static final TypeReference<HashMap<String, SubscriptionsDescriptor>> SUBSCRIPTIONS_DESCRIPTOR_TYPE_REF
+            = new TypeReference<>() {
     };
 
     private YamlParser yamlParser;
