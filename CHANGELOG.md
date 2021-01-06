@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [8.0.0-M2] - 2021-01-06
+### Changed
+- Update  framework-libraries to 8.0.0-M2
+
 ## [8.0.0-M1] - 2021-01-04
 ### Changed
 - Update to OpenJDK 11
