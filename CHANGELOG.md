@@ -5,19 +5,24 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [11.0.0-M1] - 2021-01-26
+### Changed
+- Update framework-parent-pom to 11.0.0-M1
+- Update framework-libraries to 11.0.0-M1
+
 ## [8.0.0-M3] - 2021-01-06
 ### Changed
-- Update  framework-libraries to 8.0.0-M3
+- Update framework-libraries to 8.0.0-M3
 
 ## [8.0.0-M2] - 2021-01-06
 ### Changed
-- Update  framework-libraries to 8.0.0-M2
+- Update framework-libraries to 8.0.0-M2
 
 ## [8.0.0-M1] - 2021-01-04
 ### Changed
 - Update to OpenJDK 11
-    - Update framework-libraries to 8.0.0-M1
-    - Update framework-parent-pom to 8.0.0-M2
+- Update framework-libraries to 8.0.0-M1
+- Update framework-parent-pom to 8.0.0-M2
 
 ## [7.2.2] - 2020-11-18
 ### Added
