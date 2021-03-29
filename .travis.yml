@@ -20,17 +20,20 @@ before_script:
 - psql -c "CREATE USER fileservice WITH PASSWORD 'fileservice';" -U postgres
 addons:
   postgresql: '9.5'
-  sonarcloud:
-    organization: cjscommonplatform
-    token:
-      secure: FAGcFnJBPKyUQLCNA1ZjAQ0eLUZ+HQIDtJh10o9aML8bO+3GE8z8B+pIvAVYwepekXG1YfMvBT3+CmLiLVLO1G+oiI8Ov3tZnIUxWAjGmbyElcXp/FYlc/gemIx9yteZWd6Qi4KXpTARSJuFvSlHU1KoOduNSOPAzi1h4rVIEv27XlmKft3y/X5xWPFLTFnTMD8GP+NSF1JwiHzlbpiKFFgd2iIt5zufsQgdQOLiU3CdxGbKeejbUH7uau8X0xvVFTCa3cnv7YeWakSjSV2fO1WQMONRkr4zZ2vhI1GIREMfiiBhJYqAAs/mErJ7p6BVno2pIr4Si9Vml/xbPPuY6xWYzAd1KG/NdMzFgCNIwRW0MSPHaK5R9DrNqsagJqaa3TGGsFkOK9cQgaPz5BASPCryJG2oBHcwHyexLo5gR3KPLK5g+kedFn4F7olkeiDYtsDeVi1xtiGqUviG/PQR3VcUcRN/KmIcx/nr63k6LYKL7sD0wH9okz6ltLPqOe1baOsvBwzJeAibR+Y8yCFffNL790g9bTXpnWB8VCOUdyDiaXi1g9ZYBfi/zeiytSDpsGElLL4emyf/amZh5i/QBn0glJ5GOmRbaaCHhrhs3ZrQZ7Xqc0wPBjcB0NTdycmlFweP+jeRWsgd5vqzICOrH+kxRJlhGW4v+r+pUeFtXyI=
+# Sonar no longer works with java 8 - commenting out until the upgrade to 11 is complete
+#  sonarcloud:
+#    organization: cjscommonplatform
+#    token:
+#      secure: FAGcFnJBPKyUQLCNA1ZjAQ0eLUZ+HQIDtJh10o9aML8bO+3GE8z8B+pIvAVYwepekXG1YfMvBT3+CmLiLVLO1G+oiI8Ov3tZnIUxWAjGmbyElcXp/FYlc/gemIx9yteZWd6Qi4KXpTARSJuFvSlHU1KoOduNSOPAzi1h4rVIEv27XlmKft3y/X5xWPFLTFnTMD8GP+NSF1JwiHzlbpiKFFgd2iIt5zufsQgdQOLiU3CdxGbKeejbUH7uau8X0xvVFTCa3cnv7YeWakSjSV2fO1WQMONRkr4zZ2vhI1GIREMfiiBhJYqAAs/mErJ7p6BVno2pIr4Si9Vml/xbPPuY6xWYzAd1KG/NdMzFgCNIwRW0MSPHaK5R9DrNqsagJqaa3TGGsFkOK9cQgaPz5BASPCryJG2oBHcwHyexLo5gR3KPLK5g+kedFn4F7olkeiDYtsDeVi1xtiGqUviG/PQR3VcUcRN/KmIcx/nr63k6LYKL7sD0wH9okz6ltLPqOe1baOsvBwzJeAibR+Y8yCFffNL790g9bTXpnWB8VCOUdyDiaXi1g9ZYBfi/zeiytSDpsGElLL4emyf/amZh5i/QBn0glJ5GOmRbaaCHhrhs3ZrQZ7Xqc0wPBjcB0NTdycmlFweP+jeRWsgd5vqzICOrH+kxRJlhGW4v+r+pUeFtXyI=
 before_install:
 - git clone https://github.com/CJSCommonPlatform/travis-settings.git target/travis-settings
 - ln -sfT ${PWD}/target/travis-settings/settings.xml ${HOME}/.m2/settings.xml
 - ln -sfT ${PWD}/target/travis-settings/mvnw mvnw
 - ln -sft ${PWD} ${PWD}/target/travis-settings/.mvn
 install: "${PWD}/target/travis-settings/java/install.sh -e -DexcludeGroupIds=uk.gov.justice.service,uk.gov.justice.services"
-script: "${PWD}/target/travis-settings/java/script-install.sh coveralls:report sonar:sonar"
+# original command before removing sonar:
+# script: "${PWD}/target/travis-settings/java/script-install.sh coveralls:report sonar:sonar"
+script: "${PWD}/target/travis-settings/java/script-install.sh coveralls:report"
 after_success: "${PWD}/target/travis-settings/java/after_success.sh"
 notifications:
   slack:

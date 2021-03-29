@@ -20,6 +20,7 @@ import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilderWithFilter;
 import static uk.gov.justice.services.messaging.logging.ResponseLoggerHelper.toResponseTrace;
 
+import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
 import uk.gov.justice.services.clients.core.exception.InvalidResponseException;
 import uk.gov.justice.services.clients.core.webclient.WebTargetFactory;
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
@@ -292,6 +293,8 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
                 return jsonObjectEnvelopeConverter.asEnvelope(addMetadataIfMissing(responseAsJsonObject, envelope.metadata(), response.getHeaderString(CPPID)));
             case NOT_FOUND:
                 return enveloper.withMetadataFrom(envelope, envelope.metadata().name()).apply(null);
+            case BAD_REQUEST:
+                throw new BadRequestException(response.readEntity(String.class));
             case FORBIDDEN:
                 throw new AccessControlViolationException(response.readEntity(String.class));
             default:

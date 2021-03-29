@@ -36,6 +36,7 @@ import static uk.gov.justice.services.common.http.HeaderConstants.USER_ID;
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataOf;
 
+import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
 import uk.gov.justice.services.adapter.rest.parameter.ParameterType;
 import uk.gov.justice.services.clients.core.exception.InvalidResponseException;
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
@@ -624,6 +625,25 @@ public class RestClientProcessorIT {
                 .withHeader(SESSION_ID, equalTo(SESSION_ID_VALUE))
                 .willReturn(aResponse()
                         .withStatus(403)));
+
+        EndpointDefinition endpointDefinition = new EndpointDefinition(BASE_URI, path, emptySet(), emptySet(), QUERY_NAME);
+
+        restClientProcessor.get(endpointDefinition, requestEnvelopeParamAParamB());
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void shouldThrowBadRequestExceptionFor400ResponseCode() throws Exception {
+
+        final String path = "/my/resource";
+        final String mimetype = format("application/vnd.%s+json", QUERY_NAME);
+
+        stubFor(get(urlEqualTo(REMOTE_BASE_PATH + path))
+                .withHeader(ACCEPT, equalTo(mimetype))
+                .withHeader(CLIENT_CORRELATION_ID, equalTo(CLIENT_CORRELATION_ID_VALUE))
+                .withHeader(USER_ID, equalTo(USER_ID_VALUE))
+                .withHeader(SESSION_ID, equalTo(SESSION_ID_VALUE))
+                .willReturn(aResponse()
+                        .withStatus(400)));
 
         EndpointDefinition endpointDefinition = new EndpointDefinition(BASE_URI, path, emptySet(), emptySet(), QUERY_NAME);
 
