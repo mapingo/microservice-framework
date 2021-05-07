@@ -27,6 +27,7 @@ import static uk.gov.justice.services.generators.test.utils.builder.ResourceBuil
 import static uk.gov.justice.services.generators.test.utils.config.GeneratorConfigUtil.configurationWithBasePackage;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
+import uk.gov.justice.maven.generator.io.files.parser.core.GeneratorConfig;
 import uk.gov.justice.services.adapter.rest.application.CommonProviders;
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
 
@@ -43,6 +44,7 @@ import javax.ws.rs.core.Application;
 
 import com.google.common.reflect.TypeToken;
 import org.junit.Test;
+import org.raml.model.Raml;
 
 public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGeneratorTest {
 
@@ -252,18 +254,25 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
     @Test
     public void shouldLogWarningIfClassExists() throws Exception {
 
-        generator.run(
-                restRamlWithQueryApiDefaults()
-                        .with(resource("/pathA").with(httpActionWithDefaultMapping(GET).withDefaultResponseType()))
-                        .build(),
-                configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties(), singletonList(existingFilePath())));
+        final Raml raml = restRamlWithQueryApiDefaults()
+                .with(resource("/pathA")
+                        .with(httpActionWithDefaultMapping(GET)
+                                .withDefaultResponseType()))
+                .build();
+        final GeneratorConfig configuration = configurationWithBasePackage(
+                BASE_PACKAGE,
+                outputFolder,
+                new CommonGeneratorProperties(),
+                singletonList(existingFilePath()));
+
+        generator.run(raml, configuration);
+        generator.run(raml, configuration);
 
         verify(logger).warn("The class {} already exists, skipping code generation.", "QueryApiPathAResource");
     }
 
     private Path existingFilePath() {
-        final URL resource = getClass().getClassLoader().getResource(EXISTING_FILE_PATH);
-        return Paths.get(new File(resource.getPath()).getPath()).getParent().getParent().getParent().getParent().getParent();
+        return Paths.get(outputFolder.getRoot().getAbsolutePath());
     }
 
     private static class JaxRsProviderA {
@@ -273,6 +282,4 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
     private static class JaxRsProviderB {
 
     }
-
-
 }

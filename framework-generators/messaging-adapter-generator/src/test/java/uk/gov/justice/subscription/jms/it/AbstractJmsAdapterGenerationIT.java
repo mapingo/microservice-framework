@@ -72,7 +72,11 @@ public abstract class AbstractJmsAdapterGenerationIT {
         try (final Connection connection = getConnection();
              final Session session = connection.createSession()) {
             final TextMessage message = session.createTextMessage();
-            message.setText(envelope().with(metadataOf(metadataId, commandName)).toJsonString());
+            final String envopleJson = envelope()
+                    .with(metadataOf(metadataId, commandName))
+                    .withPayloadOf("Frederico Bloggaso", "name")
+                    .toJsonString();
+            message.setText(envopleJson);
             message.setStringProperty("CPPNAME", commandName);
             try (final MessageProducer producer = session.createProducer(queue)) {
                 producer.send(message);

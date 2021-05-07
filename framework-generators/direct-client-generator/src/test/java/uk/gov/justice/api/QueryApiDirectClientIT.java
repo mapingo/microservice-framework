@@ -172,7 +172,10 @@ public class QueryApiDirectClientIT {
     @Test
     public void shouldPassEnvelopeToAdapter() throws Exception {
 
-        final JsonEnvelope envelopePassedToAdapter = envelope().with(metadataWithRandomUUID(GET_USER_ACTION)).build();
+        final JsonEnvelope envelopePassedToAdapter = envelope()
+                .with(metadataWithRandomUUID(GET_USER_ACTION))
+                .withPayloadOf("Freddy O'Bloggs", "name")
+                .build();
         requester.request(envelopePassedToAdapter);
 
         assertThat(testDirectAdapter.firstRecordedEnvelope(), is(envelopePassedToAdapter));
@@ -182,10 +185,17 @@ public class QueryApiDirectClientIT {
 
     @Test
     public void shouldReturnEnvelopeReturnedByAdapter() {
-        final JsonEnvelope responseEnvelope = envelope().with(metadataWithDefaults()).build();
+        final JsonEnvelope inputEnvelope = envelope()
+                .with(metadataWithRandomUUID(GET_USER_ACTION))
+                .withPayloadOf("Mavis Davis", "name")
+                .build();
+        final JsonEnvelope responseEnvelope = envelope()
+                .with(metadataWithDefaults())
+                .withPayloadOf("Mavis Davis", "name")
+                .build();
         testDirectAdapter.setUpResponse(responseEnvelope);
 
-        assertThat(requester.request(envelope().with(metadataWithRandomUUID(GET_USER_ACTION)).build()),
+        assertThat(requester.request(inputEnvelope),
                 is(responseEnvelope));
 
     }

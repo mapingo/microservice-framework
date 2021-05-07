@@ -184,7 +184,10 @@ public class DirectAdapterIT {
     @Test
     public void shouldProcessEnvelopePassedToAdapter() throws Exception {
 
-        final JsonEnvelope envelopePassedToAdapter = envelope().with(metadataWithRandomUUID(GET_USER_ACTION)).build();
+        final JsonEnvelope envelopePassedToAdapter = envelope()
+                .with(metadataWithRandomUUID(GET_USER_ACTION))
+                .withPayloadOf("Frederique Blouggheuxs", "nom")
+                .build();
         directAdapter.process(envelopePassedToAdapter);
 
         assertThat(testInterceptor.firstRecordedEnvelope(), is(envelopePassedToAdapter));
@@ -194,10 +197,17 @@ public class DirectAdapterIT {
 
     @Test
     public void shouldReturnEnvelopeReturnedByHandler() {
-        final JsonEnvelope responseEnvelope = envelope().with(metadataWithDefaults()).build();
+        final JsonEnvelope inputEnvelope = envelope()
+                .with(metadataWithRandomUUID(GET_USER_ACTION))
+                .withPayloadOf("Friederich Blraugtenhiem", "name")
+                .build();
+        final JsonEnvelope responseEnvelope = envelope()
+                .with(metadataWithDefaults())
+                .withPayloadOf("Friederich Blraugtenhiem", "name")
+                .build();
         testHandler.setUpResponse(responseEnvelope);
 
-        assertThat(directAdapter.process(envelope().with(metadataWithRandomUUID(GET_USER_ACTION)).build()),
+        assertThat(directAdapter.process(inputEnvelope),
                 is(responseEnvelope));
 
     }
