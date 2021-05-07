@@ -171,7 +171,6 @@
                                     <message>Please define plugin versions</message>
                                     <banSnapshots>false</banSnapshots>
                                 </requirePluginVersions>
-                                <dependencyConvergence/>
                             </rules>
                         </configuration>
                     </execution>

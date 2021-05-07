@@ -1,5 +1,6 @@
 package uk.gov.justice.services.adapters.rest.generator;
 
+import static javax.json.Json.createObjectBuilder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
@@ -24,7 +25,6 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
 
-import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -34,7 +34,9 @@ import org.mockito.ArgumentCaptor;
 
 public class RestAdapterGenerator_PATCHMethodBodyTest extends BaseRestAdapterGeneratorTest {
 
-    private static final JsonObject NOT_USED_JSONOBJECT = Json.createObjectBuilder().build();
+    private static final JsonObject NOT_USED_JSONOBJECT = createObjectBuilder()
+            .add("name", "Frederick Bloggs")
+            .build();
 
     @Test
     @SuppressWarnings("unchecked")

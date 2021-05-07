@@ -373,7 +373,10 @@ public class DefaultUsersUserIdResourceIT {
 
     @Test
     public void shouldDispatchGetUserCommandWithOtherMediaType() throws Exception {
-        interceptorChainProcessor.setupResponse("userId", "4444-5555", envelope().with(metadataWithDefaults()).build());
+        interceptorChainProcessor.setupResponse("userId", "4444-5555", envelope()
+                .with(metadataWithDefaults())
+                .withPayloadOf("Frederick Bloggs", "name")
+                .build());
 
         final HttpResponse response = httpClient.execute(getRequestFor("/users/4444-5555", "application/vnd.people.user-summary+json"));
 
@@ -392,7 +395,10 @@ public class DefaultUsersUserIdResourceIT {
 
     @Test
     public void shouldReturnResponseWithContentType() throws Exception {
-        interceptorChainProcessor.setupResponse("userId", "4444-5556", envelope().with(metadataWithDefaults()).build());
+        interceptorChainProcessor.setupResponse("userId", "4444-5556", envelope()
+                .with(metadataWithDefaults())
+                .withPayloadOf("Frederick Bloggs", "name")
+                .build());
 
         final HttpResponse response = httpClient.execute(getRequestFor("/users/4444-5556", "application/vnd.people.user+json"));
 
@@ -402,7 +408,10 @@ public class DefaultUsersUserIdResourceIT {
 
     @Test
     public void shouldReturnResponseWithSecondContentType() throws Exception {
-        interceptorChainProcessor.setupResponse("userId", "4444-5556", envelope().with(metadataWithDefaults()).build());
+        interceptorChainProcessor.setupResponse("userId", "4444-5556", envelope()
+                .with(metadataWithDefaults())
+                .withPayloadOf("Frederick Bloggs", "name")
+                .build());
 
         final HttpResponse response = httpClient.execute(getRequestFor("/users/4444-5556", "application/vnd.people.user-summary+json"));
 
@@ -412,7 +421,12 @@ public class DefaultUsersUserIdResourceIT {
 
     @Test
     public void shouldDispatchUsersQueryWithQueryParams() throws Exception {
-        interceptorChainProcessor.setupResponse("lastname", "Smith", envelope().with(metadataWithDefaults()).build());
+        final JsonEnvelope envelope = envelope()
+                .with(metadataWithDefaults())
+                .withPayloadOf("Frederick Bloggs", "name")
+                .build();
+
+        interceptorChainProcessor.setupResponse("lastname", "Smith", envelope);
 
         final String uri = new URIBuilder()
                 .setPath("/users")
@@ -451,7 +465,10 @@ public class DefaultUsersUserIdResourceIT {
 
     @Test
     public void shouldReturn200WhenOptionalParameterIsNotProvided() throws Exception {
-        interceptorChainProcessor.setupResponse("lastname", "lastname", envelope().with(metadataWithDefaults()).build());
+        interceptorChainProcessor.setupResponse("lastname", "lastname", envelope()
+                .with(metadataWithDefaults())
+                .withPayloadOf("Frederick Bloggs", "name")
+                .build());
 
         final String uri = new URIBuilder()
                 .setPath("/users")

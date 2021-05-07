@@ -4,6 +4,12 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [11.0.0-M3] - 2021-05-07
+### Changed
+- Update framework-libraries to 11.0.0-M4
+- Update maven-framework-parent-pom to 11.0.0-M3
+- Fixed all tests affected by the update to OpenEjb 8.0.6
+
 ## [11.0.0-M2] - 2021-02-04
 ### Changed
 - Update to JEE 8

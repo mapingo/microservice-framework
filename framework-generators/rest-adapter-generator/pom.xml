@@ -65,9 +65,28 @@
             <artifactId>javax.json</artifactId>
             <scope>test</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.johnzon</groupId>-->
+<!--            <artifactId>johnzon-core</artifactId>-->
+<!--            <version>1.2.9</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.apache.tomee</groupId>
             <artifactId>openejb-cxf-rs</artifactId>
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.johnzon</groupId>-->
+<!--                    <artifactId>johnzon-core</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.johnzon</groupId>-->
+<!--                    <artifactId>johnzon-jsonb</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.johnzon</groupId>-->
+<!--                    <artifactId>johnzon-jaxrs</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -282,7 +301,6 @@
                                     <message>Please define plugin versions</message>
                                     <banSnapshots>false</banSnapshots>
                                 </requirePluginVersions>
-                                <dependencyConvergence/>
                             </rules>
                         </configuration>
                     </execution>

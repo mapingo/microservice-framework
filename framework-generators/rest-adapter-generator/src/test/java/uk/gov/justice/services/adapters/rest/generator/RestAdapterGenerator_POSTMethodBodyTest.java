@@ -1,6 +1,7 @@
 package uk.gov.justice.services.adapters.rest.generator;
 
 import static java.lang.String.valueOf;
+import static javax.json.Json.createObjectBuilder;
 import static javax.ws.rs.core.Response.Status.ACCEPTED;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
@@ -56,7 +57,9 @@ import org.mockito.ArgumentCaptor;
 
 public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGeneratorTest {
 
-    private static final JsonObject NOT_USED_JSONOBJECT = Json.createObjectBuilder().build();
+    private static final JsonObject NOT_USED_JSONOBJECT = createObjectBuilder()
+            .add("name", "Frederick Bloggs")
+            .build();
 
     @SuppressWarnings("unchecked")
     @Test
@@ -187,7 +190,7 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
 
         final Object resourceObject = getInstanceOf(resourceClass);
 
-        final Optional<JsonObject> jsonObject = Optional.of(Json.createObjectBuilder().add("dummy", "abc").build());
+        final Optional<JsonObject> jsonObject = Optional.of(createObjectBuilder().add("dummy", "abc").build());
 
         final Method method = firstMethodOf(resourceClass).get();
         method.invoke(resourceObject, jsonObject.get());
