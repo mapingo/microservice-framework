@@ -6,7 +6,6 @@ import static java.util.Collections.emptyList;
 import uk.gov.justice.services.core.featurecontrol.FeatureFetcher;
 import uk.gov.justice.services.core.featurecontrol.domain.Feature;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
