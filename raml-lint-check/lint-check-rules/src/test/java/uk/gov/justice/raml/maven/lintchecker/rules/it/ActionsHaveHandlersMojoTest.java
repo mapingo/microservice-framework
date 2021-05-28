@@ -12,7 +12,6 @@ import java.io.File;
 import java.net.URL;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.codehaus.plexus.DefaultContainerConfiguration;
 
 public class ActionsHaveHandlersMojoTest extends BetterAbstractMojoTestCase {
 
