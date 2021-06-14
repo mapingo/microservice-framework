@@ -47,7 +47,7 @@
 
     <properties>
         <cpp.repo.name>microservice_framework</cpp.repo.name>
-        <framework-libraries.version>11.0.0-M6</framework-libraries.version>
+        <framework-libraries.version>11.0.0-M7</framework-libraries.version>
     </properties>
 
     <dependencyManagement>
