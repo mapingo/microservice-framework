@@ -1,6 +1,6 @@
 package uk.gov.justice.services.generators.test.utils.interceptor;
 
-import static com.jayway.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.await;
 
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
