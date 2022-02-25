@@ -4,6 +4,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [11.0.0-M7] - 2022-02-25
+### Changed
+- Update framework-libraries to allow
+    - Update log4j2 to 2.17.1 to fix critical security violation
+
 ## [11.0.0-M6] - 2021-06-15
 ### Changed
 - Update framework-libraries to 11.0.0-M7
