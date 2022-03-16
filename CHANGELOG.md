@@ -4,6 +4,12 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+### Changed
+## [11.0.0-M8] - 2022-03-16
+- Fix Jmx Command Client to run with Wildfly 20.0.1
+- Update to log4j 2
+
 ## [11.0.0-M7] - 2022-02-25
 ### Changed
 - Update framework-libraries to allow
