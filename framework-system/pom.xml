@@ -16,5 +16,6 @@
         <module>framework-management</module>
         <module>shuttering-persistence</module>
         <module>framework-system-liquibase</module>
+        <module>framework-healthcheck</module>
     </modules>
 </project>

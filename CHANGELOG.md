@@ -6,6 +6,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [Unreleased]
 
 ### Changed
+## [11.0.0-M9] - 2022-03-22
+- Added mechanism for running better healthchecks
+
 ## [11.0.0-M8] - 2022-03-16
 - Fix Jmx Command Client to run with Wildfly 20.0.1
 - Update to log4j 2

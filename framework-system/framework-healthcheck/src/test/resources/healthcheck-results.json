@@ -1,0 +1,23 @@
+{
+  "contextName": "people",
+  "dateRun": "2022-03-21T16:06:00.899Z",
+  "allHealthchecksPassed": false,
+  "results": "ERROR: 1 out of 2 healthchecks failed",
+  "totalNumberOfHealthchecksRun": 2,
+  "numberOfSuccesses": 1,
+  "numberOfFailures": 1,
+  "ignoredHealthchecks": "[file-store-healthcheck,job-store-healthcheck]",
+  "details": [
+    {
+      "healthcheckName": "event-store-database-online",
+      "description": "Checks connectivity to the eventstore database and that all framework tables are available",
+      "passed": true
+    },
+    {
+      "healthcheckName": "view-store-database-online",
+      "description": "Checks connectivity to the viewstore database and that all framework tables are available",
+      "passed": false,
+      "errorMessage": "Socket timeout"
+    }
+  ]
+}
