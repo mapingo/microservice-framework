@@ -6,6 +6,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [Unreleased]
 
 ### Changed
+## [11.0.0-M10] - 2022-03-23
+- Update framework-libraries to version 11.0.0-M13
+
+### Changed
 ## [11.0.0-M9] - 2022-03-22
 - Added mechanism for running better healthchecks
 
