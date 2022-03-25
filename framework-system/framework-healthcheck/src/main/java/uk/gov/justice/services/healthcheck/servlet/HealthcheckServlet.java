@@ -1,5 +1,6 @@
 package uk.gov.justice.services.healthcheck.servlet;
 
+import static java.lang.String.format;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 import uk.gov.justice.services.healthcheck.run.HealthcheckProcessRunner;
@@ -13,6 +14,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
 
 @WebServlet(
         name = "healthcheckServlet",
@@ -28,23 +31,30 @@ public class HealthcheckServlet extends HttpServlet {
     @Inject
     private HealthcheckToJsonConverter healthcheckToJsonConverter;
 
+    @Inject
+    private Logger logger;
+
     @Override
     protected void doGet(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse) throws IOException {
+
+        logger.debug("Calling healthchecks..");
 
         final HealthcheckRunResults healthcheckRunResults = healthcheckProcessRunner.runAllHealthchecks();
         final String json = healthcheckToJsonConverter.toJson(healthcheckRunResults);
 
         final PrintWriter out = httpServletResponse.getWriter();
 
+        if (healthcheckRunResults.isAllHealthchecksPassed()) {
+            httpServletResponse.setStatus(SC_OK);
+            logger.debug("All healthchecks passed");
+        } else {
+            httpServletResponse.setStatus(CUSTOM_HTTP_500_ERROR_RESPONSE_FOR_HEALTHCHECK_FAILURES);
+            logger.error(format("Healthchecks failed: %s", json));
+        }
+
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setCharacterEncoding("UTF-8");
         out.println(json);
         out.flush();
-
-        if (healthcheckRunResults.isAllHealthchecksPassed()) {
-            httpServletResponse.setStatus(SC_OK);
-        } else {
-            httpServletResponse.setStatus(CUSTOM_HTTP_500_ERROR_RESPONSE_FOR_HEALTHCHECK_FAILURES);
-        }
     }
 }

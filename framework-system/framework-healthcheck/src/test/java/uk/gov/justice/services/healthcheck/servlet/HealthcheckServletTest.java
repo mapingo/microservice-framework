@@ -20,6 +20,7 @@ import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.slf4j.Logger;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HealthcheckServletTest {
@@ -30,6 +31,9 @@ public class HealthcheckServletTest {
     @Mock
     private HealthcheckToJsonConverter healthcheckToJsonConverter;
 
+    @Mock
+    private Logger logger;
+    
     @InjectMocks
     private HealthcheckServlet healthcheckServlet;
 
@@ -50,13 +54,15 @@ public class HealthcheckServletTest {
 
         healthcheckServlet.doGet(httpServletRequest, httpServletResponse);
 
-        final InOrder inOrder = inOrder(httpServletResponse, out);
+        final InOrder inOrder = inOrder(logger, httpServletResponse, out);
 
+        inOrder.verify(logger).debug("Calling healthchecks..");
+        inOrder.verify(httpServletResponse).setStatus(SC_OK);
+        inOrder.verify(logger).debug("All healthchecks passed");
         inOrder.verify(httpServletResponse).setContentType("application/json");
         inOrder.verify(httpServletResponse).setCharacterEncoding("UTF-8");
         inOrder.verify(out).println(responseJson);
         inOrder.verify(out).flush();
-        inOrder.verify(httpServletResponse).setStatus(SC_OK);
     }
 
     @Test
@@ -76,12 +82,14 @@ public class HealthcheckServletTest {
 
         healthcheckServlet.doGet(httpServletRequest, httpServletResponse);
 
-        final InOrder inOrder = inOrder(httpServletResponse, out);
+        final InOrder inOrder = inOrder(logger, httpServletResponse, out);
 
+        inOrder.verify(logger).debug("Calling healthchecks..");
+        inOrder.verify(httpServletResponse).setStatus(CUSTOM_HTTP_500_ERROR_RESPONSE_FOR_HEALTHCHECK_FAILURES);
+        inOrder.verify(logger).error("Healthchecks failed: the response json");
         inOrder.verify(httpServletResponse).setContentType("application/json");
         inOrder.verify(httpServletResponse).setCharacterEncoding("UTF-8");
         inOrder.verify(out).println(responseJson);
         inOrder.verify(out).flush();
-        inOrder.verify(httpServletResponse).setStatus(CUSTOM_HTTP_500_ERROR_RESPONSE_FOR_HEALTHCHECK_FAILURES);
     }
 }
