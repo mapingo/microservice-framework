@@ -5,8 +5,12 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
-### Changed
+## [11.0.0-M11] - 2022-03-25
+### Fixed
+- Fixed problem of healthcheck servlet returning 200 even if the healthchecks failed
+
 ## [11.0.0-M10] - 2022-03-23
+### Changed
 - Update framework-libraries to version 11.0.0-M13
 
 ### Changed
