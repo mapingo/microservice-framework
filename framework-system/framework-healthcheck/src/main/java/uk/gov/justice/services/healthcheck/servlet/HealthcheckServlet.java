@@ -41,6 +41,8 @@ public class HealthcheckServlet extends HttpServlet {
 
         final HealthcheckRunResults healthcheckRunResults = healthcheckProcessRunner.runAllHealthchecks();
         final String json = healthcheckToJsonConverter.toJson(healthcheckRunResults);
+        httpServletResponse.setContentType("application/json; charset=UTF-8");
+        httpServletResponse.setCharacterEncoding("UTF-8");
 
         final PrintWriter out = httpServletResponse.getWriter();
 
@@ -52,8 +54,6 @@ public class HealthcheckServlet extends HttpServlet {
             logger.error(format("Healthchecks failed: %s", json));
         }
 
-        httpServletResponse.setContentType("application/json");
-        httpServletResponse.setCharacterEncoding("UTF-8");
         out.println(json);
         out.flush();
     }
