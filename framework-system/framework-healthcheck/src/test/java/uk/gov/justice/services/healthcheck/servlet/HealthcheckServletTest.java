@@ -57,10 +57,10 @@ public class HealthcheckServletTest {
         final InOrder inOrder = inOrder(logger, httpServletResponse, out);
 
         inOrder.verify(logger).debug("Calling healthchecks..");
+        inOrder.verify(httpServletResponse).setContentType("application/json; charset=UTF-8");
+        inOrder.verify(httpServletResponse).setCharacterEncoding("UTF-8");
         inOrder.verify(httpServletResponse).setStatus(SC_OK);
         inOrder.verify(logger).debug("All healthchecks passed");
-        inOrder.verify(httpServletResponse).setContentType("application/json");
-        inOrder.verify(httpServletResponse).setCharacterEncoding("UTF-8");
         inOrder.verify(out).println(responseJson);
         inOrder.verify(out).flush();
     }
@@ -85,10 +85,10 @@ public class HealthcheckServletTest {
         final InOrder inOrder = inOrder(logger, httpServletResponse, out);
 
         inOrder.verify(logger).debug("Calling healthchecks..");
+        inOrder.verify(httpServletResponse).setContentType("application/json; charset=UTF-8");
+        inOrder.verify(httpServletResponse).setCharacterEncoding("UTF-8");
         inOrder.verify(httpServletResponse).setStatus(CUSTOM_HTTP_500_ERROR_RESPONSE_FOR_HEALTHCHECK_FAILURES);
         inOrder.verify(logger).error("Healthchecks failed: the response json");
-        inOrder.verify(httpServletResponse).setContentType("application/json");
-        inOrder.verify(httpServletResponse).setCharacterEncoding("UTF-8");
         inOrder.verify(out).println(responseJson);
         inOrder.verify(out).flush();
     }
