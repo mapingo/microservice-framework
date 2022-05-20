@@ -4,10 +4,14 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-### Fixed
-- Healthchecks how return json with correct UTF-8 charset
+
+## [11.0.0-M13] - 2022-05-20
+### Changed
+- Update liquibase to 4.10.0
 
 ## [11.0.0-M11] - 2022-03-25
+### Fixed
+- Healthchecks how return json with correct UTF-8 charset
 
 ## [11.0.0-M10] - 2022-03-23
 ### Changed

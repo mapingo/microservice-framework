@@ -32,7 +32,7 @@ public class MediaTypesMappingCacheInitialiserTest {
     @InjectMocks
     private MediaTypesMappingCacheInitialiser mediaTypesMappingCacheInitialiser;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "OptionalGetWithoutIsPresent"})
     @Test
     public void shouldInitialiseTheMappingCache() throws Exception {
         final String actionName = "example.add-recipe";
