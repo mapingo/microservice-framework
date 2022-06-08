@@ -20,7 +20,7 @@ A Java framework to support applications utilising CQRS and Event Sourcing archi
 * persistence - Support for persistence layer, such as deltaspike.
 
 ## Integration Tests
-The Integraion Tests expect a running [Postgres]([maven-super-pom](https://github.com/CJSCommonPlatform/maven-super-pom)) database, 
+The integration Tests expect a running [Postgres]([maven-super-pom](https://github.com/CJSCommonPlatform/maven-super-pom)) database, 
 with the correct users and databases configured. The integration tests can be skipped if no local Postgres database is installed
 
 To run with the Integration Tests then your postgress should be configured so, with the folowing user:
