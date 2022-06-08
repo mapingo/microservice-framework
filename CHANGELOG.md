@@ -5,7 +5,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
-## [11.0.0-M18] - 2022-06-08
+## [11.0.0-M16] - 2022-06-08
 ### Changed
 - Update framework-libraries to version 11.0.0-M18
 
