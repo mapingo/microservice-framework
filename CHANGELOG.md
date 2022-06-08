@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [11.0.0-M18] - 2022-06-08
+### Changed
+- Update framework-libraries to version 11.0.0-M18
+
 ## [11.0.0-M15] - 2022-05-30
 ### Changed
 - Removed strict checking of liquibase.properties files
