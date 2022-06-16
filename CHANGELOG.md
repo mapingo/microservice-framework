@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [11.0.0-M17] - 2022-06-16
+### Added
+- Added a utility in healthchecks for checking the names of tables in a postgres database
+
 ## [11.0.0-M16] - 2022-06-08
 ### Changed
 - Update framework-libraries to version 11.0.0-M18
