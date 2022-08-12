@@ -5,6 +5,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [11.0.0-M18] - 2022-08-12
+### Changed
+- Update common bom to 11.0.0-M15 in order to:
+    - Update artemis-jms-client to 2.10.1
+
 ## [11.0.0-M17] - 2022-06-16
 ### Added
 - Added a utility in healthchecks for checking the names of tables in a postgres database
