@@ -28,6 +28,17 @@ public class MessageProducerClient implements AutoCloseable {
     private MessageProducer messageProducer;
     private Connection connection;
 
+    private ActiveMQConnectionFactory activeMQConnectionFactory;
+
+    @Deprecated(since = "Please use MessageProducerClientBuilder  to create instead of using this constructor")
+    public MessageProducerClient() {
+        this(new ActiveMQConnectionFactory());
+    }
+
+    MessageProducerClient(final ActiveMQConnectionFactory activeMQConnectionFactory) {
+        this.activeMQConnectionFactory = activeMQConnectionFactory;
+    }
+
     /**
      * Starts the message producer for a specific topic. Must be called
      * before any messages can be sent.
@@ -37,8 +48,8 @@ public class MessageProducerClient implements AutoCloseable {
     public void startProducer(final String topicName) {
 
         try {
-            final ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory(QUEUE_URI);
-            connection = factory.createConnection();
+            activeMQConnectionFactory.setBrokerURL(QUEUE_URI);
+            connection = activeMQConnectionFactory.createConnection();
             connection.start();
 
             session = connection.createSession(false, AUTO_ACKNOWLEDGE);

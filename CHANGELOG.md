@@ -4,6 +4,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Added MessageProducerClientBuilder for creating configurable message producer clients
 
 ## [11.0.0-M18] - 2022-08-12
 ### Changed
