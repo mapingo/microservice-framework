@@ -4,8 +4,15 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [11.0.0-M19] - 2022-08-31
 ### Added
 - Added MessageProducerClientBuilder for creating configurable message producer clients
+### Changed
+- Update framework-libraries to 11.0.0-M20 for:
+    - A default name of `jms.queue.DLQ` rather than the original name of `DLQ`
+    - A new constructor to pass the name in if you don't want the default name
+    - New builder `MessageConsumerClientBuilder` that allows ActiveMQ connection parameters to be specified
 
 ## [11.0.0-M18] - 2022-08-12
 ### Changed
