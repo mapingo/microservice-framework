@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 ## [Unreleased]
 
+## [11.0.0-M20] - 2022-09-05
+### Changed
+- MessageProducerClient is now idempotent when calling `startProducer(...)`
+
 ## [11.0.0-M19] - 2022-08-31
 ### Added
 - Added MessageProducerClientBuilder for creating configurable message producer clients
