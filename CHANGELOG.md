@@ -3,7 +3,9 @@ All notable changes to this project will be documented in this file, which follo
 on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [11.0.0-M23] - 2022-11-09
+### Added
+- Add messaging-jms dependency to framework-bom
 
 ## [11.0.0-M22] - 2022-11-03
 ### Security
