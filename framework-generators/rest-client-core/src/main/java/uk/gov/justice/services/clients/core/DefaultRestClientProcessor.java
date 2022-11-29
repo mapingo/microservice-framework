@@ -22,6 +22,7 @@ import static uk.gov.justice.services.messaging.logging.ResponseLoggerHelper.toR
 
 import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
 import uk.gov.justice.services.clients.core.exception.InvalidResponseException;
+import uk.gov.justice.services.clients.core.webclient.BaseUriFactory;
 import uk.gov.justice.services.clients.core.webclient.WebTargetFactory;
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
 import uk.gov.justice.services.core.accesscontrol.AccessControlViolationException;
@@ -69,7 +70,7 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
     Enveloper enveloper;
 
     @Inject
-    WebTargetFactory webTargetFactory;
+    BaseUriFactory baseUriFactory;
 
     @Inject
     TraceLogger traceLogger;
@@ -84,19 +85,22 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public JsonEnvelope get(final EndpointDefinition definition, final JsonEnvelope envelope) {
+        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
 
-        final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
+            final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
-        final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
-        populateHeadersFromMetadata(builder, envelope.metadata());
+            final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
+            populateHeadersFromMetadata(builder, envelope.metadata());
 
-        traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, GET, target.getUri().toString(), envelope));
+            traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, GET, target.getUri().toString(), envelope));
 
-        final Response response = builder.get();
+            final Response response = builder.get();
 
-        traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, GET, envelope.metadata().id().toString(), toResponseTrace(response)));
+            traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, GET, envelope.metadata().id().toString(), toResponseTrace(response)));
 
-        return processedResponse(envelope, response);
+            return processedResponse(envelope, response);
+
+        }
     }
 
     /**
@@ -108,19 +112,23 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public void post(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
+        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
 
-        final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
-        populateHeadersFromMetadata(builder, envelope.metadata());
+            final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
-        traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, POST, target.getUri().toString(), envelope));
+            final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
+            populateHeadersFromMetadata(builder, envelope.metadata());
 
-        final JsonObject requestBody = stripParamsFromPayload(definition, envelope);
-        final Response response = builder.post(entity(requestBody.toString(), format(MEDIA_TYPE_PATTERN, envelope.metadata().name())));
+            traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, POST, target.getUri().toString(), envelope));
 
-        traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, POST, envelope.metadata().id().toString(), toResponseTrace(response)));
+            final JsonObject requestBody = stripParamsFromPayload(definition, envelope);
+            final Response response = builder.post(entity(requestBody.toString(), format(MEDIA_TYPE_PATTERN, envelope.metadata().name())));
 
-        checkForAcceptedResponse(response, envelope, POST);
+            traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, POST, envelope.metadata().id().toString(), toResponseTrace(response)));
+
+            checkForAcceptedResponse(response, envelope, POST);
+        }
+
     }
 
     /**
@@ -133,19 +141,21 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public JsonEnvelope synchronousPost(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
+        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+            final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
-        final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
-        populateHeadersFromMetadata(builder, envelope.metadata());
+            final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
+            populateHeadersFromMetadata(builder, envelope.metadata());
 
-        traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, POST, target.getUri().toString(), envelope));
+            traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, POST, target.getUri().toString(), envelope));
 
-        final JsonObject requestBody = stripParamsFromPayload(definition, envelope);
-        final Response response = builder.post(entity(requestBody.toString(), format(MEDIA_TYPE_PATTERN, envelope.metadata().name())));
+            final JsonObject requestBody = stripParamsFromPayload(definition, envelope);
+            final Response response = builder.post(entity(requestBody.toString(), format(MEDIA_TYPE_PATTERN, envelope.metadata().name())));
 
-        traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, POST, envelope.metadata().id().toString(), toResponseTrace(response)));
+            traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, POST, envelope.metadata().id().toString(), toResponseTrace(response)));
 
-        return processedResponse(envelope, response);
+            return processedResponse(envelope, response);
+        }
     }
 
     /**
@@ -157,19 +167,21 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public void put(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
+        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+            final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
-        final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
-        populateHeadersFromMetadata(builder, envelope.metadata());
+            final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
+            populateHeadersFromMetadata(builder, envelope.metadata());
 
-        traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, PUT, target.getUri().toString(), envelope));
+            traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, PUT, target.getUri().toString(), envelope));
 
-        final JsonObject requestBody = stripParamsFromPayload(definition, envelope);
-        final Response response = builder.put(entity(requestBody.toString(), format(MEDIA_TYPE_PATTERN, envelope.metadata().name())));
+            final JsonObject requestBody = stripParamsFromPayload(definition, envelope);
+            final Response response = builder.put(entity(requestBody.toString(), format(MEDIA_TYPE_PATTERN, envelope.metadata().name())));
 
-        traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, PUT, envelope.metadata().id().toString(), toResponseTrace(response)));
+            traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, PUT, envelope.metadata().id().toString(), toResponseTrace(response)));
 
-        checkForAcceptedResponse(response, envelope, PUT);
+            checkForAcceptedResponse(response, envelope, PUT);
+        }
     }
 
     /**
@@ -182,19 +194,21 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public JsonEnvelope synchronousPut(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
+        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+            final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
-        final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
-        populateHeadersFromMetadata(builder, envelope.metadata());
+            final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
+            populateHeadersFromMetadata(builder, envelope.metadata());
 
-        traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, PUT, target.getUri().toString(), envelope));
+            traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, PUT, target.getUri().toString(), envelope));
 
-        final JsonObject requestBody = stripParamsFromPayload(definition, envelope);
-        final Response response = builder.put(entity(requestBody.toString(), format(MEDIA_TYPE_PATTERN, envelope.metadata().name())));
+            final JsonObject requestBody = stripParamsFromPayload(definition, envelope);
+            final Response response = builder.put(entity(requestBody.toString(), format(MEDIA_TYPE_PATTERN, envelope.metadata().name())));
 
-        traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, PUT, envelope.metadata().id().toString(), toResponseTrace(response)));
+            traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, PUT, envelope.metadata().id().toString(), toResponseTrace(response)));
 
-        return processedResponse(envelope, response);
+            return processedResponse(envelope, response);
+        }
     }
 
     /**
@@ -206,21 +220,23 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public void patch(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
+        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+            final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
-        final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
-        populateHeadersFromMetadata(builder, envelope.metadata());
+            final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
+            populateHeadersFromMetadata(builder, envelope.metadata());
 
-        traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, PATCH, target.getUri().toString(), envelope));
+            traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, PATCH, target.getUri().toString(), envelope));
 
-        final JsonObject requestBody = stripParamsFromPayload(definition, envelope);
-        final Response response = builder
-                .build(PATCH, entity(requestBody.toString(), format(MEDIA_TYPE_PATTERN, envelope.metadata().name())))
-                .invoke();
+            final JsonObject requestBody = stripParamsFromPayload(definition, envelope);
+            final Response response = builder
+                    .build(PATCH, entity(requestBody.toString(), format(MEDIA_TYPE_PATTERN, envelope.metadata().name())))
+                    .invoke();
 
-        traceLogger.trace(LOGGER, () -> format(SENT_REQUEST_MESSAGE, PATCH, envelope.metadata().id().toString(), toResponseTrace(response)));
+            traceLogger.trace(LOGGER, () -> format(SENT_REQUEST_MESSAGE, PATCH, envelope.metadata().id().toString(), toResponseTrace(response)));
 
-        checkForAcceptedResponse(response, envelope, PATCH);
+            checkForAcceptedResponse(response, envelope, PATCH);
+        }
     }
 
     /**
@@ -233,21 +249,23 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public JsonEnvelope synchronousPatch(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
+        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+            final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
-        final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
-        populateHeadersFromMetadata(builder, envelope.metadata());
+            final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
+            populateHeadersFromMetadata(builder, envelope.metadata());
 
-        traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, PATCH, target.getUri().toString(), envelope));
+            traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, PATCH, target.getUri().toString(), envelope));
 
-        final JsonObject requestBody = stripParamsFromPayload(definition, envelope);
-        final Response response = builder
-                .build(PATCH, entity(requestBody.toString(), format(MEDIA_TYPE_PATTERN, envelope.metadata().name())))
-                .invoke();
+            final JsonObject requestBody = stripParamsFromPayload(definition, envelope);
+            final Response response = builder
+                    .build(PATCH, entity(requestBody.toString(), format(MEDIA_TYPE_PATTERN, envelope.metadata().name())))
+                    .invoke();
 
-        traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, PATCH, envelope.metadata().id().toString(), toResponseTrace(response)));
+            traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, PATCH, envelope.metadata().id().toString(), toResponseTrace(response)));
 
-        return processedResponse(envelope, response);
+            return processedResponse(envelope, response);
+        }
     }
 
     /**
@@ -259,19 +277,21 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public void delete(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
+        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+            final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
-        final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
-        populateHeadersFromMetadata(builder, envelope.metadata());
-        setHeaderIfPresent(builder, CONTENT_TYPE_HEADER, Optional.of(format(MEDIA_TYPE_PATTERN, envelope.metadata().name())));
+            final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
+            populateHeadersFromMetadata(builder, envelope.metadata());
+            setHeaderIfPresent(builder, CONTENT_TYPE_HEADER, Optional.of(format(MEDIA_TYPE_PATTERN, envelope.metadata().name())));
 
-        traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, DELETE, target.getUri().toString(), envelope));
+            traceLogger.trace(LOGGER, () -> String.format(SENDING_REQUEST_MESSAGE, DELETE, target.getUri().toString(), envelope));
 
-        final Response response = builder.delete();
+            final Response response = builder.delete();
 
-        traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, DELETE, envelope.metadata().id().toString(), toResponseTrace(response)));
+            traceLogger.trace(LOGGER, () -> String.format(SENT_REQUEST_MESSAGE, DELETE, envelope.metadata().id().toString(), toResponseTrace(response)));
 
-        checkForAcceptedResponse(response, envelope, DELETE);
+            checkForAcceptedResponse(response, envelope, DELETE);
+        }
     }
 
     private void checkForAcceptedResponse(final Response response, final JsonEnvelope envelope, final String httpMethod) {

@@ -12,14 +12,19 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
-public class WebTargetFactory {
+public class WebTargetFactory implements AutoCloseable {
 
-    @Inject
-    public BaseUriFactory baseUriFactory;
+    public final BaseUriFactory baseUriFactory;
+
+    private final Client client;
+
+    public WebTargetFactory(BaseUriFactory baseUriFactory) {
+        this.baseUriFactory = baseUriFactory;
+        this.client = ClientBuilder.newClient();
+    }
 
     public WebTarget createWebTarget(final EndpointDefinition definition, final JsonEnvelope envelope) {
         final JsonObject payload = envelope.payloadAsJsonObject();
-        final Client client = ClientBuilder.newClient();
 
         WebTarget target = client
                 .target(baseUriFactory.createBaseUri(definition))
@@ -48,5 +53,10 @@ public class WebTargetFactory {
             }
         }
         return target;
+    }
+
+    @Override
+    public void close() {
+        this.client.close();
     }
 }
