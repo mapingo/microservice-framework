@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file, which follo
 on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
+## [11.0.0-M24] - 2022-11-30
+### Changed
+- Close the client in DefaultRestClientProcessor
+
 ## [11.0.0-M23] - 2022-11-10
 ### Added
 - Add messaging-jms dependency to framework-bom
