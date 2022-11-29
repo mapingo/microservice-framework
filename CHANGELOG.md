@@ -3,9 +3,29 @@ All notable changes to this project will be documented in this file, which follo
 on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
-## [11.0.0-M24] - 2022-11-30
+## [11.0.0-M29] - 2022-11-30
 ### Changed
 - Close the client in DefaultRestClientProcessor
+
+## [11.0.0-M28] - 2022-11-23
+### Changed
+- Removed log4j-over-slf4j as it is now replaced by slf4j-reload4j
+
+## [11.0.0-M27] - 2022-11-22
+### Security
+- Update common bom to 11.0.0-M20 in order to:
+    - Update hibernate version to 5.4.24.Final
+    - Update jackson.databind version to 2.12.7.1
+
+## [11.0.0-M26] - 2022-11-18
+### Changed
+- Update common bom to 11.0.0-M19 in order to:
+    - Update jackson libraries to 2.12.7
+
+## [11.0.0-M24] - 2022-11-16
+### Changed
+- Update common bom to 11.0.0-M18 in order to:
+    - Update jboss-logging version to 3.5.0.Final
 
 ## [11.0.0-M23] - 2022-11-10
 ### Added
@@ -131,11 +151,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ### Added
 - New JNDI variable `feature-control.enabled` for enabling/disabling of remote fetching of Features
 - Moved in EmptyFeatureFetcher from framework-api
- 
+
 ## [7.2.1] - 2020-11-18
 ### Added
-- New JNDI variable `feature-control-cache.enabled` to control whether the results 
-of the fetch of Features are cached 
+- New JNDI variable `feature-control-cache.enabled` to control whether the results
+  of the fetch of Features are cached
 ### Changed
 - The caching of features is now disabled by default
 - Updated framework-libraries to version 7.2.1
@@ -143,7 +163,7 @@ of the fetch of Features are cached
 ## [7.2.0] - 2020-11-13
 ### Added
 - Support for FeatureControl toggling by annotating service component
-handler methods with @FeatureControl
+  handler methods with @FeatureControl
 - New timer bean for fetching and storing of feature control Features
 - New SystemCommand `REFRESH_FEATURE_CACHE` to force a refresh of the Feature Control cache
 ### Changed
@@ -152,8 +172,8 @@ handler methods with @FeatureControl
 ## [7.1.4] - 2020-10-16
 ### Changed
 - Updated framework-libraries to version 7.1.5
-    - Builders of generated pojos now have a `withValuesFrom(...)` method 
-to allow the builder to be initialised with the values of another pojo instance  
+    - Builders of generated pojos now have a `withValuesFrom(...)` method
+      to allow the builder to be initialised with the values of another pojo instance
 
 ## [7.1.3] - 2020-10-14
 ### Changed
@@ -164,7 +184,7 @@ to allow the builder to be initialised with the values of another pojo instance
 ## [7.1.2] - 2020-10-09
 ### Changed
 - Raml-lint-checker will now allow handler methods whose names are not specified in the
-raml file if the handler name starts with 'administration'
+  raml file if the handler name starts with 'administration'
 - Updated framework-libraries to version 7.1.2
 
 ## [7.1.1] - 2020-09-25
@@ -185,21 +205,21 @@ raml file if the handler name starts with 'administration'
 ## [7.0.10] - 2020-08-14
 ### Changed
 - Fix of hanging deployment in wildfly caused by using @Singleton annotation
-on a class that is called by wildfly Observer/Observable event architecture   
+  on a class that is called by wildfly Observer/Observable event architecture
 
 ## [7.0.9] - 2020-08-13
 ### Added
 - Added a separate Jms sender for Audit
 - The Audit JMS Connection Factory will now only be used
-if the Correct JNDI property `jms.connection.audit.message.broker.enabled' 
-is set to true
+  if the Correct JNDI property `jms.connection.audit.message.broker.enabled'
+  is set to true
 
 
 ## [7.0.8] - 2020-07-24
 ### Added
-- New JNDI property `rest.dispatcher.response.json.validation.enabled` to 
-enable/disable rest json response validation in the query pillar. Disabled
-by default
+- New JNDI property `rest.dispatcher.response.json.validation.enabled` to
+  enable/disable rest json response validation in the query pillar. Disabled
+  by default
 
 ## [7.0.7] - 2020-07-07
 ### Changed
@@ -231,11 +251,11 @@ by default
 - Update framework-utilities version to 7.0.1
 - Update framework-libraries version to 7.0.1
 - Combined the following repos into microservice-framework
-    microservice_framework_version_6
-    framework-generators
-    framework-jmx-command-client
-    mertrics
-    
+  microservice_framework_version_6
+  framework-generators
+  framework-jmx-command-client
+  mertrics
+
 ### Added
 - microservice_framework_version_6 6.4.2: now set to version 7.0.0
 - framework-generators 2.4.4: now set to version 7.0.0
@@ -259,7 +279,7 @@ by default
 ### Changed
 - JMX client is now called using the command name as a String rather than the SystemCommand itself.
 - SystemCommands moved out to the projects that contain their CommandHandlers rather than centralised in
-framework.
+  framework.
 
 ## [6.2.5] - 2019-11-04
 ### Changed
@@ -282,13 +302,13 @@ framework.
 
 ## [6.2.1] - 2019-10-17
 ### Changed
-- Renamed SystemCommandFailedException to SystemCommandInvocationFailedException 
-for better exception handling in the JMX client
+- Renamed SystemCommandFailedException to SystemCommandInvocationFailedException
+  for better exception handling in the JMX client
 
 ## [6.2.0] - 2019-10-15
 
 ### Added
-- JMX bean can now be pinged to get command status: 
+- JMX bean can now be pinged to get command status:
     - COMMAND_RECEIVED
     - COMMAND_IN_PROGRESS
     - COMMAND_COMPLETE
@@ -305,12 +325,12 @@ for better exception handling in the JMX client
 
 ## [6.1.2] - 2019-10-04
 ### Changed
-- Storing of Commands whilst shuttered is now idempotent 
+- Storing of Commands whilst shuttered is now idempotent
 - Do not shutter the JmsEnvelopeSender when called from the Command-Controller component
 
 ## [6.1.1] - 2019-10-01
 ### Added
-- Injectable debug logger that logs only if debug logging is set. 
+- Injectable debug logger that logs only if debug logging is set.
 
 ## [6.1.0] - 2019-09-28
 ### Changed
@@ -340,7 +360,7 @@ for better exception handling in the JMX client
 ### Changed
 - All JMX SystemCommands are now run asynchronously. i.e the call to the JMX bean will return immediately
 - The JMX SystemCommandBean now only throws 2 Exceptions
-    1. UnsupportedSystemCommandException. If the command is unrecognised by the context. 
+    1. UnsupportedSystemCommandException. If the command is unrecognised by the context.
     2. SystemCommandFailedException. On any other failure. NB. this Exception also contains the stacktrace of the server side exception
 
 ## [6.0.11] - 2019-08-30
@@ -368,10 +388,10 @@ for better exception handling in the JMX client
 ### Changed
 - Name SystemCommand classes have consistent name. i.e. from ShutterSystemCommand to ShutterCommand
 - The the context name in JmxParameters is now parsed so that everything after the first dash is excluded
-i.e. a war with name 'customer-service' would now become just 'customer'
+  i.e. a war with name 'customer-service' would now become just 'customer'
 ### Fixed
-- All server side Exceptions thrown by the JMX bean are now included in the api classes to fix 
-ClassNotFoundExceptions in the JMX client
+- All server side Exceptions thrown by the JMX bean are now included in the api classes to fix
+  ClassNotFoundExceptions in the JMX client
 
 ## [6.0.6] - 2019-08-19
 ### Removed
@@ -427,13 +447,13 @@ ClassNotFoundExceptions in the JMX client
 - JmsEnvelopeSenderProducer provides shuttering JmsEnvelopeSender by default to components, non component injection point will be provided with a non shuttering JmsEnvelopeSender
 - Jmx client classes now use proper dependency injection
 - The context name is now used in the registration name of the SystemCommander MBeans
-- Moved InvalidHandlerMethodException to jmx-api to allow it to be caught 
-in the command line jmx client
+- Moved InvalidHandlerMethodException to jmx-api to allow it to be caught
+  in the command line jmx client
 - Shuttering of a context is idempotent
 - Extracted SystemCommands into their own module jmx-api
 - rest_uri in event-sources.yaml is now optional to support JMS only sources
 - If authentication fails when connecting to JMX then a specific exception 'JmxAuthenticationException' is thrown
-- Update common-bom to 2.4.0 
+- Update common-bom to 2.4.0
 - Update framework-api 4.0.0
 - Update utilities to 1.20.1
 - Update json-schema-catalog to 1.7.4
@@ -451,7 +471,7 @@ in the command line jmx client
 ### Added
 - Add pojo implementation for Sender, Requester to DispatcherDelegate class
 ### Changed
-- Updated HandlerMethodMatcher class to support pojo envelope 
+- Updated HandlerMethodMatcher class to support pojo envelope
 
 ## [5.1.1] - 2019-02-04
 ### Changed
@@ -502,10 +522,10 @@ in the command line jmx client
 
 ## [5.0.0] - 2018-11-07
 ### Removed
-- Aggregate to its own repository: https://github.com/CJSCommonPlatform/framework-domain 
+- Aggregate to its own repository: https://github.com/CJSCommonPlatform/framework-domain
 - Event Store to its own repository: https://github.com/CJSCommonPlatform/event-store
 - Generators to their own repository: https://github.com/CJSCommonPlatform/framework-generators
-- Cake Shop example app to its own repository: https://github.com/CJSCommonPlatform/cake-shop   
+- Cake Shop example app to its own repository: https://github.com/CJSCommonPlatform/cake-shop
 - AbstractJdbcRepositoryIT from test utils, deprecated in previous version
 - Moved CDI producers to [Utilities](https://github.com/CJSCommonPlatform/utilities)
 
@@ -582,18 +602,18 @@ in the command line jmx client
 
 ## [4.0.6] - 2018-05-21
 ### Fixed
-- Schema Validation Exception not caught error 
+- Schema Validation Exception not caught error
 
 ## [4.0.5] - 2018-05-18
 ### Fixed
-- Upgrade parent pom to fix upgrade of Jackson 2.8.11 
+- Upgrade parent pom to fix upgrade of Jackson 2.8.11
 
 ### Changed
 - Reduce the logging level for not using schema catalog
 
 ## [4.0.4] - 2018-05-17
 ### Changed
-- Upgrade Jackson to 2.8.11 to fix Jackson security issues 
+- Upgrade Jackson to 2.8.11 to fix Jackson security issues
 
 ## [4.0.3] - 2018-05-10
 ### Changed
@@ -617,12 +637,12 @@ in the command line jmx client
 - Schema catalog generation plugin to example service
 
 ### Changed
- - Randomise JMS and HTTP ports for integration tests
- - Move LoggerUtils to utilities as part of rest-adapter dependency update
- - Remove dependencies on core in messaging-adapter-core and partly in rest-adapter-core
- - Move DefaultJsonValidationLoggerHelper to core
- - Use JsonSchemaValidatonException instead of org.everit.json.schema.ValidationException
- - SPI for InterceptorContext.interceptorContextWithInput()
+- Randomise JMS and HTTP ports for integration tests
+- Move LoggerUtils to utilities as part of rest-adapter dependency update
+- Remove dependencies on core in messaging-adapter-core and partly in rest-adapter-core
+- Move DefaultJsonValidationLoggerHelper to core
+- Use JsonSchemaValidatonException instead of org.everit.json.schema.ValidationException
+- SPI for InterceptorContext.interceptorContextWithInput()
 
 ## [3.1.0] - 2018-01-23
 
@@ -645,8 +665,8 @@ in the command line jmx client
 - Upgraded example application to deploy as a Single war
 - Updated example application schemas to avoid conflicts when deployed as a single war
 - Convenience methods to JsonEnvelope for providing JsonEnvelopes and JsonObjectMetadataBuilders
-- MetadataBuilderFactory in test-utils-core which contains convenience methods for creating 
-JsonObjectMetadataBuilders in tests
+- MetadataBuilderFactory in test-utils-core which contains convenience methods for creating
+  JsonObjectMetadataBuilders in tests
 - InterceptorChainEntryProvider to be used instead of InterceptorChainProvider
 
 ### Removed
@@ -669,7 +689,7 @@ JsonObjectMetadataBuilders in tests
 
 
 ## [2.5.0] - 2017-12-15
-### Added 
+### Added
 - Catalog generation for all json schema files. Add an id into a json schema to use.
 
 ## [2.4.3] - 2017-12-11
@@ -703,7 +723,7 @@ Replaced the JsonObjectObfuscator with the version from utilities that is based 
 - Utilities library upgraded to 1.8.1 and file service to 1.11.1 to pick up JSON logging fix
 - Deprecate InterceptorChainProvider
 
-### Removed 
+### Removed
 - org.apache.commons commons-lang3 dependency from core
 
 ## [2.2.1] - 2017-09-01
@@ -730,28 +750,28 @@ Replaced the JsonObjectObfuscator with the version from utilities that is based 
 
 ### Fixed
 - Aggregate snapshot repository did not use aggregate class when retrieving snapshots, so services that use multiple aggregate classes
-on the same stream could get class cast exceptions
+  on the same stream could get class cast exceptions
 
 ## [2.0.0] - 2017-06-23
 
 ### Changed
 - Refactor all framework components that are not internal so that they are provided as interfaces
-via new Framework API modules
+  via new Framework API modules
 - Rework interceptor chain so that it is specific to a service component, by allowing each component
-to provide an interceptor chain definition rather than using annotation scanning
+  to provide an interceptor chain definition rather than using annotation scanning
 - Upgrade to use framework parent POM [1.5.0](https://github.com/CJSCommonPlatform/maven-framework-parent-pom/releases/tag/release-1.5.0)
 - Upgrade to use common BOM [1.16.0](https://github.com/CJSCommonPlatform/maven-common-bom/releases/tag/release-1.16.0)
 - Interceptor chain now adds the component name to the context so it can be used by the access control interceptor or anything else that needs it
 - Logging dependencies tidied up - all logging implementations excluded from dependencies and tests use new test utils modules for logging
 - Generated class names made more unique, including adding the base URI in class name for generated JMS listeners. **Any project that overrides the generated
-class will need to change the class name of their override to match**
+  class will need to change the class name of their override to match**
 - Improved logging for annotation scanning
 - Add component to audit interceptor so that audit messages can distinguish between components even
-when they are deployed in a single WAR.
+  when they are deployed in a single WAR.
 
 ### Removed
 - Support for default sender destinations removed; senders now always require messaging clients to
-be provided, typically by generating one from the destination RAML.
+  be provided, typically by generating one from the destination RAML.
 - Access control Provider annotation and annotation scanning; this functionality has moved to the access control library
 - Precondition class marked as deprecated - will be removed in 3.0.0 unless a different use case is found for it
 
@@ -763,8 +783,8 @@ be provided, typically by generating one from the destination RAML.
 
 ### Added
 - Script for building dependencies locally
-- Support for generating and discovering direct adapters, if a message destination exists locally 
-a service component in the same application
+- Support for generating and discovering direct adapters, if a message destination exists locally
+  a service component in the same application
 
 ## [2.0.0-rc8] - 2017-06-23
 
@@ -780,13 +800,13 @@ a service component in the same application
 ### Changed
 - Improved logging for annotation scanning
 - Add component to audit interceptor so that audit messages can distinguish between components even
-when they are deployed in a single WAR.
+  when they are deployed in a single WAR.
 
 ## [2.0.0-rc5] - 2017-06-20
 
 ### Changed
 - Include base URI in class name for generated JMS listeners. This ensures they are unique, but any project that overrides the generated
-class will need to change the class name of their override to match.
+  class will need to change the class name of their override to match.
 
 ## [2.0.0-rc4] - 2017-06-19
 
@@ -813,14 +833,14 @@ class will need to change the class name of their override to match.
 
 ### Changed
 - Refactor all framework components that are not internal so that they are provided as interfaces
-via new Framework API modules
+  via new Framework API modules
 - Rework interceptor chain so that it is specific to a service component, by allowing each component
-to provide an interceptor chain definition rather than using annotation scanning
+  to provide an interceptor chain definition rather than using annotation scanning
 - Upgrade to use framework parent POM [1.3.0](https://github.com/CJSCommonPlatform/maven-framework-parent-pom/releases/tag/release-1.3.0)
 
 ### Removed
 - Support for default sender destinations removed; senders now always require messaging clients to
-be provided, typically by generating one from the destination RAML.
+  be provided, typically by generating one from the destination RAML.
 
 ### Fixed
 - Test cases for random ZonedDateTime generators and added logging to show more info when they fail
@@ -828,8 +848,8 @@ be provided, typically by generating one from the destination RAML.
 
 ### Added
 - Script for building dependencies locally
-- Support for generating and discovering direct adapters, if a message destination exists locally 
-a service component in the same application
+- Support for generating and discovering direct adapters, if a message destination exists locally
+  a service component in the same application
 
 ## [1.7.1] - 2017-05-16
 
@@ -876,7 +896,7 @@ a service component in the same application
 ### Updated
 - Use File Service version 1.8.0
 - Use Utilities version 1.6.0
-- JsonEnvelopePayloadMatcher to support matching of JsonValue NULL payloads 
+- JsonEnvelopePayloadMatcher to support matching of JsonValue NULL payloads
 
 ## [1.4.3] - 2017-03-30
 
@@ -932,12 +952,12 @@ a service component in the same application
 
 ### Added
 - Immediate retries to RetryInterceptor, defaults to 3 before applying wait period between retries
-- Support for Http Methods DELETE, PATCH, POST and PUT.  REST Adaptor and REST Client generators now 
-support RAML that contains asynchronous DELETE, PATCH and PUT, and synchronous PATCH, POST and PUT.
+- Support for Http Methods DELETE, PATCH, POST and PUT.  REST Adaptor and REST Client generators now
+  support RAML that contains asynchronous DELETE, PATCH and PUT, and synchronous PATCH, POST and PUT.
 - Support for matchers in TypeCheck class.
 
 ### Changed
-- Optimistic lock log message changed from warn to debug. 
+- Optimistic lock log message changed from warn to debug.
 - Move default port provider to common module
 - Add ConflictedResourceException for 409 responses
 - Common-bom version to 1.6.0
@@ -946,25 +966,25 @@ support RAML that contains asynchronous DELETE, PATCH and PUT, and synchronous P
 
 ### Fixed
 - Logging filter was breaking if a message payload contained the string __metadata_ to avoid having
-to parse the JSON; fixed so that it only looks for top level a top level _metadata field.
+  to parse the JSON; fixed so that it only looks for top level a top level _metadata field.
 
 ## [1.0.0] - 2016-12-16
 
 ### Added
 - Logging request data is set in the SLF4J mapped diagnostic context (MDC) and can be added to the
-log output by setting %X{requestData} in the logger pattern
+  log output by setting %X{requestData} in the logger pattern
 - Support for managing optimistic lock retry for event log, when using the PostgreSQL database.
-Default is to retry forever.
+  Default is to retry forever.
 - ZonedDateTimeGenerator to generate random future or past ZonedDateTimes
 
 ### Changed
 - Improve ResponsePayloadMatcher to support string matchers on response payload
 - Upgraded ObjectMapper to allow single arg constructors in Object serialization
 - Aggregate snapshot repository enabled by default. This requires the `aggregate-snapshot-repository-liquibase`
-schema to have been applied to the event store database, which makes this release backwards incompatible
+  schema to have been applied to the event store database, which makes this release backwards incompatible
 - Event timestamps now added to private events automatically and stored in the event store as part
-of the metadata and in a separate field. This requires the latest `event-repository-liquibase`
-schema to be applied to the event store database, which makes this release backwards incompatible
+  of the metadata and in a separate field. This requires the latest `event-repository-liquibase`
+  schema to be applied to the event store database, which makes this release backwards incompatible
 
 ### Removed
 - DateTimeProvider after two months deprecation. Use Clock/UtcClock instead.
@@ -972,17 +992,17 @@ schema to be applied to the event store database, which makes this release backw
 ### Fixed
 - JsonSchemaValidationMatcher to look for json schema in correct location
 - JSON schema validation of date-time format fixed by using a forked version of the JSON schema
-validator library
+  validator library
 - JsonSchemaValidationMatcher to fallback to raml maven dependency if not on json classpath
 
 ## [0.35.0] - 2016-11-24
 ### Added
- - File, file-api and file-alfresco modules
- - File service interface
- - Alfresco file service implementation
+- File, file-api and file-alfresco modules
+- File service interface
+- Alfresco file service implementation
 
 ### Fixed
- - Refactor random generators for string, uri and email
+- Refactor random generators for string, uri and email
 
 ## [0.34.0] - 2016-11-16
 
@@ -1020,8 +1040,8 @@ validator library
 - EventStreamMatcher to match stream of JsonEnvelopes appended
 - RestPoller. A polling REST client utility for integration tests
 - Mechanism for taking snapshots of aggregates, disabled by default. To enable, add a dependency on
-the `aggregate-snapshot-service` module. Requires the `aggregate-snapshot-repository-liquibase`
-schema to be applied to the event store.
+  the `aggregate-snapshot-service` module. Requires the `aggregate-snapshot-repository-liquibase`
+  schema to be applied to the event store.
 - JSON schema matching support in the JsonEnvelopeMatcher
 - Added new module 'rest-core'
 - Added 'rest-client-core' as a standard dependency for event-processor'
@@ -1033,7 +1053,7 @@ schema to be applied to the event store.
 
 ### Fixed
 - RestProcessor now allows metadata from payload to be merged with headers instead of being
-overwritten
+  overwritten
 - Removed unwanted dependency on the RAML parser within the REST adapter so that adding the REST client to event processors does not break the application
 
 ## 0.31.0 - 2016-10-24
@@ -1046,7 +1066,7 @@ overwritten
 - Event buffer connection held open after exception in event listener
 - RestClientProcessor tests clashing using common 8080 port
 - JMS listeners for event topics did not use shared subscriptions. Fixing this allows multiple
-instances to run. Each message will be consumed only once across a cluster.
+  instances to run. Each message will be consumed only once across a cluster.
 
 ### Added
 - Hamcrest Matchers for asserting JsonEnvelopes contained within either Streams or Lists
@@ -1070,15 +1090,15 @@ instances to run. Each message will be consumed only once across a cluster.
 - ZonedDateTimes methods to convert between ZDT and SQL timestamps
 - LocalDate conversion functions
 - EnveloperFactory method to create a Enveloper with a list of Event classes registered
-- EventStreamMockHelper that provides a method to verify and return the Stream argument from a call 
-to the EventStream append method
+- EventStreamMockHelper that provides a method to verify and return the Stream argument from a call
+  to the EventStream append method
 - DateProvider to allow easy mocking of date creating for testing
 - Random generators and TypeCheck class for type-based testing
 - Metrics per action name
 
 ### Changed
 - Event Store to include a 'date_created' timestamp field - added to the DB schema but not yet
-enabled in code
+  enabled in code
 
 ## [0.28.0] - 2016-09-21
 
@@ -1116,7 +1136,7 @@ enabled in code
 - Configurable JNDI Auditing blacklist regex of action names in AuditingService
 - Expose component metrics via Rest and JMX
 - TestJdbcConnectionProvider: for getting hard out of container connections
-to the event and view stores
+  to the event and view stores
 - DatabaseCleaner: allows easy clearing of database tables for integration tests
 
 
@@ -1146,10 +1166,10 @@ to the event and view stores
 ## [0.19.0] - 2016-08-26
 
 ### Added
-- Dispatcher interceptor integration. Interceptors are chained between the adapter and the dispatcher 
-according to a priority setting.  Interceptors implement the Interceptor interface and are registered 
-at startup.  
-Implemented interceptors: Event Buffer Interceptor, Access Control Interceptor
+- Dispatcher interceptor integration. Interceptors are chained between the adapter and the dispatcher
+  according to a priority setting.  Interceptors implement the Interceptor interface and are registered
+  at startup.  
+  Implemented interceptors: Event Buffer Interceptor, Access Control Interceptor
 - Event Listener Filter
 - Additional features to the HttpResponsePoller utility
 
@@ -1205,7 +1225,7 @@ Implemented interceptors: Event Buffer Interceptor, Access Control Interceptor
 
 ### Added
 - Add a match all and do nothing EventMatcher to the EventSwitcher. This will ignore all other events.
-Example:
+  Example:
 ```
 match(event).with(
     when(SomethingAdded.class).apply(x -> id = x.getId()),
@@ -1228,7 +1248,7 @@ application/vnd.people.link-user+json: !!null
 
 ### Added
 - Service component passthrough test utility; test Command API, Command Controller, Query API and
-Query Controller as passthrough services
+  Query Controller as passthrough services
 - Support for listening to all events on a topic or queue
 
 ### Fixed
@@ -1255,7 +1275,7 @@ Query Controller as passthrough services
 
 ### Removed
 - Action mapper annotation now always required in REST RAML; it is no longer possible to disable the
-action mapper system
+  action mapper system
 
 ## [0.11.0] - 2016-07-08
 
@@ -1310,7 +1330,7 @@ action mapper system
 
 - Support for [types](https://github.com/raml-org/raml-spec/blob/master/versions/raml-08/raml-08.md#type) on query parameters in the REST adapter generator
 - Initial [action mapping](https://github.com/CJSCommonPlatform/microservice_framework/wiki/User-Guide#rest-adapter-generator) support for the REST adapter generator,
-turned off by default
+  turned off by default
 
 ### Fixed
 
