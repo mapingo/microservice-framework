@@ -22,8 +22,7 @@ import static uk.gov.justice.services.messaging.logging.ResponseLoggerHelper.toR
 
 import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
 import uk.gov.justice.services.clients.core.exception.InvalidResponseException;
-import uk.gov.justice.services.clients.core.webclient.BaseUriFactory;
-import uk.gov.justice.services.clients.core.webclient.WebTargetFactory;
+import uk.gov.justice.services.clients.core.webclient.WebTargetFactoryFactory;
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
 import uk.gov.justice.services.core.accesscontrol.AccessControlViolationException;
 import uk.gov.justice.services.core.enveloper.Enveloper;
@@ -70,7 +69,7 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
     Enveloper enveloper;
 
     @Inject
-    BaseUriFactory baseUriFactory;
+    WebTargetFactoryFactory webTargetFactoryFactory;
 
     @Inject
     TraceLogger traceLogger;
@@ -85,7 +84,7 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public JsonEnvelope get(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+        try(final var webTargetFactory = webTargetFactoryFactory.create()) {
 
             final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
@@ -112,7 +111,7 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public void post(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+        try(final var webTargetFactory = webTargetFactoryFactory.create()) {
 
             final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
@@ -141,7 +140,7 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public JsonEnvelope synchronousPost(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+        try(final var webTargetFactory = webTargetFactoryFactory.create()) {
             final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
             final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
@@ -167,7 +166,7 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public void put(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+        try(final var webTargetFactory = webTargetFactoryFactory.create()) {
             final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
             final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
@@ -194,7 +193,7 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public JsonEnvelope synchronousPut(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+        try(final var webTargetFactory = webTargetFactoryFactory.create()) {
             final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
             final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
@@ -220,7 +219,7 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public void patch(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+        try(final var webTargetFactory = webTargetFactoryFactory.create()) {
             final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
             final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
@@ -249,7 +248,7 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public JsonEnvelope synchronousPatch(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+        try(final var webTargetFactory = webTargetFactoryFactory.create()) {
             final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
             final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));
@@ -277,7 +276,7 @@ public class DefaultRestClientProcessor implements RestClientProcessor {
      */
     @Override
     public void delete(final EndpointDefinition definition, final JsonEnvelope envelope) {
-        try(final var webTargetFactory = new WebTargetFactory(baseUriFactory)) {
+        try(final var webTargetFactory = webTargetFactoryFactory.create()) {
             final WebTarget target = webTargetFactory.createWebTarget(definition, envelope);
 
             final Builder builder = target.request(format(MEDIA_TYPE_PATTERN, definition.getResponseMediaType()));

@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file, which follo
 on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
+## [11.0.0-M30] - 2023-01-10
+### Changed
+- Improve testability of DefaultRestClientProcessor by extracting WebTargetFactory creation to separate class 
+
 ## [11.0.0-M29] - 2022-11-30
 ### Changed
 - Close the client in DefaultRestClientProcessor

@@ -25,10 +25,7 @@ import uk.gov.justice.schema.service.SchemaCatalogService;
 import uk.gov.justice.services.cdi.LoggerProducer;
 import uk.gov.justice.services.clients.core.DefaultRestClientHelper;
 import uk.gov.justice.services.clients.core.DefaultRestClientProcessor;
-import uk.gov.justice.services.clients.core.webclient.BaseUriFactory;
-import uk.gov.justice.services.clients.core.webclient.ContextMatcher;
-import uk.gov.justice.services.clients.core.webclient.MockServerPortProvider;
-import uk.gov.justice.services.clients.core.webclient.WebTargetFactory;
+import uk.gov.justice.services.clients.core.webclient.*;
 import uk.gov.justice.services.common.annotation.ComponentNameExtractor;
 import uk.gov.justice.services.common.configuration.GlobalValueProducer;
 import uk.gov.justice.services.common.configuration.JndiBasedServiceContextNameProvider;
@@ -177,7 +174,7 @@ public class RemoteExampleQueryApiIT {
             SystemUserUtil.class,
             TestSystemUserProvider.class,
             RemoteComponentAbc2ExampleQueryController.class,
-            WebTargetFactory.class,
+            WebTargetFactoryFactory.class,
             UtcClock.class,
 
             EmptySystemUserProvider.class,
