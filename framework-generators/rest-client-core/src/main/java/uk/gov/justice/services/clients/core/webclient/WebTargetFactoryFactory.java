@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 @ApplicationScoped
 @Default
-public class WebTargetFactoryCreator {
+public class WebTargetFactoryFactory {
 
     @Inject
     BaseUriFactory baseUriFactory;

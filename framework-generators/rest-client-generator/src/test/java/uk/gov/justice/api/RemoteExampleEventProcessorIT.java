@@ -188,7 +188,7 @@ public class RemoteExampleEventProcessorIT {
             ServiceComponentObserver.class,
             StringToJsonObjectConverter.class,
             SystemUserUtil.class,
-            WebTargetFactoryCreator.class,
+            WebTargetFactoryFactory.class,
             UtcClock.class,
             SenderProducer.class,
             FileBasedJsonSchemaValidator.class,

@@ -174,7 +174,7 @@ public class RemoteExampleQueryApiIT {
             SystemUserUtil.class,
             TestSystemUserProvider.class,
             RemoteComponentAbc2ExampleQueryController.class,
-            WebTargetFactoryCreator.class,
+            WebTargetFactoryFactory.class,
             UtcClock.class,
 
             EmptySystemUserProvider.class,

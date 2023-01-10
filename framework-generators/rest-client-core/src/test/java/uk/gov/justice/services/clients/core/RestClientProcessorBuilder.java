@@ -5,7 +5,7 @@ import uk.gov.justice.services.messaging.DefaultJsonObjectEnvelopeConverter;
 import uk.gov.justice.services.messaging.logging.TraceLogger;
 
 import static org.mockito.Mockito.mock;
-import static uk.gov.justice.services.clients.core.webclient.WebTargetFactoryCreatorBuilder.aWebTargetFactoryCreator;
+import static uk.gov.justice.services.clients.core.webclient.WebTargetFactoryFactoryBuilder.aWebTargetFactoryFactory;
 import static uk.gov.justice.services.test.utils.core.enveloper.EnveloperFactory.createEnveloper;
 
 public class RestClientProcessorBuilder {
@@ -27,7 +27,7 @@ public class RestClientProcessorBuilder {
         restClientProcessor.jsonObjectEnvelopeConverter = new DefaultJsonObjectEnvelopeConverter();
         restClientProcessor.traceLogger = mock(TraceLogger.class);
         restClientProcessor.enveloper = createEnveloper();
-        restClientProcessor.webTargetFactoryCreator = aWebTargetFactoryCreator(appName);
+        restClientProcessor.webTargetFactoryFactory = aWebTargetFactoryFactory(appName);
 
         return restClientProcessor;
     }
