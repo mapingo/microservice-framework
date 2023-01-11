@@ -1,21 +1,23 @@
 package uk.gov.justice.services.core.dispatcher;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import uk.gov.justice.services.core.envelope.RequestResponseEnvelopeValidator;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
+import javax.json.Json;
 import javax.json.JsonValue;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -37,236 +39,147 @@ public class DispatcherDelegateTest {
     @Mock
     private RequestResponseEnvelopeValidator requestResponseEnvelopeValidator;
 
-    @Mock
-    private DispatcherConfiguration dispatcherConfiguration;
-    
+    @InjectMocks
     private DispatcherDelegate dispatcherDelegate;
 
-    @Before
-    public void setUp() throws Exception {
-        dispatcherDelegate = new DispatcherDelegate(dispatcher, systemUserUtil, requestResponseEnvelopeValidator, envelopePayloadTypeConverter, jsonEnvelopeRepacker, dispatcherConfiguration);
+    @Test
+    public void shouldDispatchRequestAndValidateResponse() throws Exception {
+
+        final JsonEnvelope requestEnvelope = mock(JsonEnvelope.class);
+        final JsonEnvelope convertedEnvelope = mock(JsonEnvelope.class);
+        final JsonEnvelope repackedEnvelope = mock(JsonEnvelope.class);
+        final JsonEnvelope responseEnvelope = mock(JsonEnvelope.class);
+
+        when(envelopePayloadTypeConverter.convert(
+                requestEnvelope,
+                JsonValue.class)).thenReturn(convertedEnvelope);
+        when(jsonEnvelopeRepacker.repack(convertedEnvelope)).thenReturn(repackedEnvelope);
+        when(dispatcher.dispatch(repackedEnvelope)).thenReturn(responseEnvelope);
+
+        assertThat(dispatcherDelegate.request(requestEnvelope), is(responseEnvelope));
+
+        verify(requestResponseEnvelopeValidator).validateResponse(responseEnvelope);
     }
 
     @Test
-    public void shouldDelegateToDispatcherWithRequestMethod() throws Exception {
+    public void shouldDispatchTypedRequestAndValidateResponse() throws Exception {
+
+        final Class<JsonValue> type = JsonValue.class;
+
+        final JsonEnvelope requestEnvelope = mock(JsonEnvelope.class);
+        final JsonEnvelope convertedEnvelope = mock(JsonEnvelope.class);
+        final JsonEnvelope repackedEnvelope = mock(JsonEnvelope.class);
+        final JsonEnvelope responseEnvelope = mock(JsonEnvelope.class);
+        final Envelope<JsonValue> typedResponseEnvelope = mock(JsonEnvelope.class);
+
+        when(envelopePayloadTypeConverter.convert(
+                requestEnvelope,
+                type)).thenReturn(convertedEnvelope);
+        when(jsonEnvelopeRepacker.repack(convertedEnvelope)).thenReturn(repackedEnvelope);
+        when(dispatcher.dispatch(repackedEnvelope)).thenReturn(responseEnvelope);
+        when(envelopePayloadTypeConverter.convert(responseEnvelope, type)).thenReturn(typedResponseEnvelope);
+
+        assertThat(dispatcherDelegate.request(requestEnvelope, type), is(typedResponseEnvelope));
+
+        verify(requestResponseEnvelopeValidator).validateResponse(responseEnvelope);
+    }
+
+    @Test
+    public void shouldSendRequestAsAdmin() throws Exception {
+
         final JsonEnvelope envelope = mock(JsonEnvelope.class);
+        final JsonEnvelope adminEnvelope = mock(JsonEnvelope.class);
+        final JsonEnvelope responseEnvelope = mock(JsonEnvelope.class);
 
-        when(envelopePayloadTypeConverter.convert(any(Envelope.class), eq(JsonValue.class)))
-                .thenReturn(envelope);
-        when(jsonEnvelopeRepacker.repack(envelope)).thenReturn(envelope);
+        when(systemUserUtil.asEnvelopeWithSystemUserId(envelope)).thenReturn(adminEnvelope);
+        when(dispatcher.dispatch(adminEnvelope)).thenReturn(responseEnvelope);
 
+        assertThat(dispatcherDelegate.requestAsAdmin(envelope), is(responseEnvelope));
 
-        dispatcherDelegate.request(envelope);
-
-        verify(dispatcher).dispatch(envelope);
+        verify(requestResponseEnvelopeValidator).validateResponse(responseEnvelope);
     }
 
-    @SuppressWarnings("unchecked")
     @Test
-    public void shouldDispatchEnvelopeWithPojoPayload() {
+    public void shouldSendTypedRequestAsAdmin() throws Exception {
 
-        final Envelope<JsonValue> jsonValueEnvelope = mock(Envelope.class);
+        final Class<JsonValue> type = JsonValue.class;
 
-        when(envelopePayloadTypeConverter.convert(any(Envelope.class), eq(JsonValue.class)))
-                .thenReturn(jsonValueEnvelope);
-        when(jsonEnvelopeRepacker.repack(jsonValueEnvelope)).thenReturn(mock(JsonEnvelope.class));
+        final JsonEnvelope envelope = mock(JsonEnvelope.class);
+        final Envelope<JsonValue> convertedEnvelope = mock(JsonEnvelope.class);
+        final JsonEnvelope repackedEnvelope = mock(JsonEnvelope.class);
+        final JsonEnvelope adminEnvelope = mock(JsonEnvelope.class);
+        final JsonEnvelope responseEnvelope = mock(JsonEnvelope.class);
+        final Envelope<JsonValue> typedResponseEnvelope = mock(JsonEnvelope.class);
 
-        final Envelope<Object> envelope = mock(Envelope.class);
+
+        when(envelopePayloadTypeConverter.convert(
+                envelope,
+                type)).thenReturn(convertedEnvelope);
+        when(jsonEnvelopeRepacker.repack(convertedEnvelope)).thenReturn(repackedEnvelope);
+        when(systemUserUtil.asEnvelopeWithSystemUserId(repackedEnvelope)).thenReturn(adminEnvelope);
+        when(dispatcher.dispatch(adminEnvelope)).thenReturn(responseEnvelope);
+        when(envelopePayloadTypeConverter.convert(responseEnvelope, type)).thenReturn(typedResponseEnvelope);
+
+        assertThat(dispatcherDelegate.requestAsAdmin(envelope, type), is(typedResponseEnvelope));
+
+        verify(requestResponseEnvelopeValidator).validateResponse(responseEnvelope);
+    }
+
+    @Test
+    public void shouldSendUntypedEnvelopeAsJsonValueType() throws Exception {
+
+        final Envelope<?> envelope = mock(Envelope.class);
+        final Envelope<JsonValue> convertedEnvelope = mock(JsonEnvelope.class);
+        final JsonEnvelope repackedEnvelope = mock(JsonEnvelope.class);
+
+        when(envelopePayloadTypeConverter.convert(
+                envelope,
+                JsonValue.class)).thenReturn(convertedEnvelope);
+
+        when(jsonEnvelopeRepacker.repack(convertedEnvelope)).thenReturn(repackedEnvelope);
 
         dispatcherDelegate.send(envelope);
 
-        verify(dispatcher).dispatch(any(JsonEnvelope.class));
+        final InOrder inOrder = inOrder(requestResponseEnvelopeValidator, dispatcher);
+
+        inOrder.verify(requestResponseEnvelopeValidator).validateRequest(repackedEnvelope);
+        inOrder.verify(dispatcher).dispatch(repackedEnvelope);
     }
 
-    @SuppressWarnings("unchecked")
     @Test
-    public void shouldDispatchAdminEnvelopeWithPojoPayload() {
+    public void shouldSendJsonEnvelopeAsAdmin() throws Exception {
 
-        final Envelope<JsonValue> jsonValueEnvelope = mock(Envelope.class);
+        final JsonEnvelope envelope = mock(JsonEnvelope.class);
+        final JsonEnvelope adminEnvelope = mock(JsonEnvelope.class);
 
-        when(envelopePayloadTypeConverter.convert(any(Envelope.class), eq(JsonValue.class)))
-                .thenReturn(jsonValueEnvelope);
-        when(jsonEnvelopeRepacker.repack(jsonValueEnvelope)).thenReturn(mock(JsonEnvelope.class));
-
-        final Envelope<Object> envelope = mock(Envelope.class);
+        when(systemUserUtil.asEnvelopeWithSystemUserId(envelope)).thenReturn(adminEnvelope);
 
         dispatcherDelegate.sendAsAdmin(envelope);
 
-        verify(dispatcher).dispatch(any(JsonEnvelope.class));
+        final InOrder inOrder = inOrder(requestResponseEnvelopeValidator, dispatcher);
+
+        inOrder.verify(requestResponseEnvelopeValidator).validateRequest(envelope);
+        inOrder.verify(dispatcher).dispatch(adminEnvelope);
     }
 
     @Test
-    public void shouldNotValidateResponseIfValidationDisabled() throws Exception {
-        final JsonEnvelope envelope = mock(JsonEnvelope.class);
-        final JsonEnvelope response = mock(JsonEnvelope.class);
+    public void shouldSendUntypedEnvelopeAsAdminWithTypeOfJsonEnvelope() throws Exception {
 
-        when(envelopePayloadTypeConverter.convert(any(Envelope.class), eq(JsonValue.class)))
-                .thenReturn(envelope);
-        when(jsonEnvelopeRepacker.repack(envelope)).thenReturn(envelope);
+        final Envelope<?> envelope = mock(Envelope.class);
+        final JsonEnvelope adminEnvelope = mock(JsonEnvelope.class);
+        final Envelope<JsonValue> convertedEnvelope = mock(JsonEnvelope.class);
+        final JsonEnvelope repackedEnvelope = mock(JsonEnvelope.class);
 
-        when(dispatcher.dispatch(envelope)).thenReturn(response);
-        when(dispatcherConfiguration.shouldValidateRestResponseJson()).thenReturn(false);
-
-        dispatcherDelegate.request(envelope);
-
-        verifyZeroInteractions(requestResponseEnvelopeValidator);
-    }
-
-    @Test
-    public void shouldValidatePojoEnvelopeWithRequestMethod() throws Exception {
-
-        final JsonEnvelope jsonEnvelope = mock(JsonEnvelope.class);
-        final JsonEnvelope response = mock(JsonEnvelope.class);
-        final Envelope envelope = mock(Envelope.class);
-
-        when(envelopePayloadTypeConverter.convert(any(Envelope.class), eq(JsonValue.class)))
-                .thenReturn(jsonEnvelope);
-        when(jsonEnvelopeRepacker.repack(jsonEnvelope)).thenReturn(jsonEnvelope);
-
-        when(dispatcher.dispatch(jsonEnvelope)).thenReturn(response);
-        when(dispatcherConfiguration.shouldValidateRestResponseJson()).thenReturn(true);
-
-        dispatcherDelegate.request(envelope, Object.class);
-
-        verify(requestResponseEnvelopeValidator).validateResponse(response);
-    }
-
-    @Test
-    public void shouldNotValidatePojoEnvelopeResponseIfValidationDisabled() throws Exception {
-
-        final JsonEnvelope jsonEnvelope = mock(JsonEnvelope.class);
-        final JsonEnvelope response = mock(JsonEnvelope.class);
-        final Envelope envelope = mock(Envelope.class);
-
-        when(envelopePayloadTypeConverter.convert(any(Envelope.class), eq(JsonValue.class)))
-                .thenReturn(jsonEnvelope);
-        when(jsonEnvelopeRepacker.repack(jsonEnvelope)).thenReturn(jsonEnvelope);
-
-        when(dispatcher.dispatch(jsonEnvelope)).thenReturn(response);
-        when(dispatcherConfiguration.shouldValidateRestResponseJson()).thenReturn(false);
-
-        dispatcherDelegate.request(envelope, Object.class);
-
-        verifyZeroInteractions(requestResponseEnvelopeValidator);
-    }
-
-    @Test
-    public void shouldDelegateToDispatcherWithSendMethod() throws Exception {
-
-        final JsonEnvelope envelope = mock(JsonEnvelope.class);
-
-        when(envelopePayloadTypeConverter.convert(any(Envelope.class), eq(JsonValue.class)))
-                .thenReturn(envelope);
-        when(jsonEnvelopeRepacker.repack(envelope)).thenReturn(envelope);
-
-        dispatcherDelegate.send(envelope);
-
-        verify(dispatcher).dispatch(envelope);
-    }
-
-    @Test
-    public void shouldValidateEnvelopeWithSendMethod() throws Exception {
-
-        final JsonEnvelope envelope = mock(JsonEnvelope.class);
-
-        when(envelopePayloadTypeConverter.convert(any(Envelope.class), eq(JsonValue.class)))
-                .thenReturn(envelope);
-        when(jsonEnvelopeRepacker.repack(envelope)).thenReturn(envelope);
-        when(dispatcherConfiguration.shouldValidateRestResponseJson()).thenReturn(true);
-
-        dispatcherDelegate.send(envelope);
-
-        verify(requestResponseEnvelopeValidator).validateRequest(envelope);
-    }
-
-    @Test
-    public void shouldDelegateEnvelopeReturnedBySystemUserUtilWithRequestAsAdminMethod() {
-        final JsonEnvelope envelope = mock(JsonEnvelope.class);
-        final JsonEnvelope envelopeWithSysUserId = mock(JsonEnvelope.class);
-        when(systemUserUtil.asEnvelopeWithSystemUserId(envelope)).thenReturn(envelopeWithSysUserId);
-
-        dispatcherDelegate.requestAsAdmin(envelope);
-
-        verify(dispatcher).dispatch(envelopeWithSysUserId);
-    }
-
-    @Test
-    public void shouldValidateResponseWithRequestAsAdminMethod() {
-        final JsonEnvelope response = mock(JsonEnvelope.class);
-        when(dispatcher.dispatch(any(JsonEnvelope.class))).thenReturn(response);
-        when(dispatcherConfiguration.shouldValidateRestResponseJson()).thenReturn(true);
-
-        dispatcherDelegate.requestAsAdmin(mock(JsonEnvelope.class));
-
-        verify(requestResponseEnvelopeValidator).validateResponse(response);
-    }
-
-    @Test
-    public void shouldNotValidateResponseWithRequestAsAdminMethodIfValidationDisabled() {
-        final JsonEnvelope response = mock(JsonEnvelope.class);
-        when(dispatcher.dispatch(any(JsonEnvelope.class))).thenReturn(response);
-        when(dispatcherConfiguration.shouldValidateRestResponseJson()).thenReturn(false);
-
-        dispatcherDelegate.requestAsAdmin(mock(JsonEnvelope.class));
-
-        verifyZeroInteractions(requestResponseEnvelopeValidator);
-    }
-
-    @Test
-    public void shouldDelegateEnvelopeReturnedBySystemUserUtilWithSendAsAdminMethod() {
-        final JsonEnvelope envelope = mock(JsonEnvelope.class);
-        final JsonEnvelope envelopeWithSysUserId = mock(JsonEnvelope.class);
-        when(systemUserUtil.asEnvelopeWithSystemUserId(envelope)).thenReturn(envelopeWithSysUserId);
+        when(envelopePayloadTypeConverter.convert(envelope, JsonValue.class)).thenReturn(convertedEnvelope);
+        when(jsonEnvelopeRepacker.repack(convertedEnvelope)).thenReturn(repackedEnvelope);
+        when(systemUserUtil.asEnvelopeWithSystemUserId(repackedEnvelope)).thenReturn(adminEnvelope);
 
         dispatcherDelegate.sendAsAdmin(envelope);
 
-        verify(dispatcher).dispatch(envelopeWithSysUserId);
-    }
+        final InOrder inOrder = inOrder(requestResponseEnvelopeValidator, dispatcher);
 
-    @Test
-    public void shouldValidateEnvelopeWithSendAsAdminMethod() {
-        final JsonEnvelope envelope = mock(JsonEnvelope.class);
+        inOrder.verify(requestResponseEnvelopeValidator).validateRequest(repackedEnvelope);
+        inOrder.verify(dispatcher).dispatch(adminEnvelope);
 
-        dispatcherDelegate.sendAsAdmin(envelope);
-
-        verify(requestResponseEnvelopeValidator).validateRequest(envelope);
-    }
-
-    @Test
-    public void shouldValidateResponseWithPojoRequestAsAdminMethod() {
-        final Envelope<JsonValue> jsonValueEnvelope = mock(Envelope.class);
-        final JsonEnvelope response = mock(JsonEnvelope.class);
-
-        when(envelopePayloadTypeConverter.convert(any(Envelope.class), eq(JsonValue.class)))
-                .thenReturn(jsonValueEnvelope);
-        when(jsonEnvelopeRepacker.repack(jsonValueEnvelope)).thenReturn(mock(JsonEnvelope.class));
-
-        when(dispatcher.dispatch(any(JsonEnvelope.class))).thenReturn(response);
-        when(dispatcherConfiguration.shouldValidateRestResponseJson()).thenReturn(true);
-
-        final Envelope<Object> envelope = mock(Envelope.class);
-
-        dispatcherDelegate.requestAsAdmin(envelope, Object.class);
-
-        verify(requestResponseEnvelopeValidator).validateResponse(response);
-    }
-
-    @Test
-    public void shouldNotValidateResponseWithPojoRequestAsAdminMethodOfValidationDisabled() {
-        final Envelope<JsonValue> jsonValueEnvelope = mock(Envelope.class);
-        final JsonEnvelope response = mock(JsonEnvelope.class);
-
-        when(envelopePayloadTypeConverter.convert(any(Envelope.class), eq(JsonValue.class)))
-                .thenReturn(jsonValueEnvelope);
-        when(jsonEnvelopeRepacker.repack(jsonValueEnvelope)).thenReturn(mock(JsonEnvelope.class));
-
-        when(dispatcher.dispatch(any(JsonEnvelope.class))).thenReturn(response);
-        when(dispatcherConfiguration.shouldValidateRestResponseJson()).thenReturn(false);
-
-        final Envelope<Object> envelope = mock(Envelope.class);
-
-        dispatcherDelegate.requestAsAdmin(envelope, Object.class);
-
-        verifyZeroInteractions(requestResponseEnvelopeValidator);
     }
 }

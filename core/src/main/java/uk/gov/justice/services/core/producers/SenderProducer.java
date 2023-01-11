@@ -62,7 +62,6 @@ public class SenderProducer {
                 systemUserUtil,
                 requestResponseEnvelopeValidator,
                 envelopePayloadTypeConverter,
-                jsonEnvelopeRepacker,
-                dispatcherConfiguration);
+                jsonEnvelopeRepacker);
     }
 }

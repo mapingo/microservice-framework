@@ -41,9 +41,6 @@ public class RequesterProducerTest {
     private JsonEnvelopeRepacker jsonEnvelopeRepacker;
 
     @Mock
-    private DispatcherConfiguration dispatcherConfiguration;
-
-    @Mock
     private RequestResponseEnvelopeValidatorFactory requestResponseEnvelopeValidatorFactory;
 
     @InjectMocks
@@ -68,6 +65,5 @@ public class RequesterProducerTest {
         assertThat(getValueOfField(requester, "requestResponseEnvelopeValidator", RequestResponseEnvelopeValidator.class), is(requestResponseEnvelopeValidator));
         assertThat(getValueOfField(requester, "envelopePayloadTypeConverter", EnvelopePayloadTypeConverter.class), is(envelopePayloadTypeConverter));
         assertThat(getValueOfField(requester, "jsonEnvelopeRepacker", JsonEnvelopeRepacker.class), is(jsonEnvelopeRepacker));
-        assertThat(getValueOfField(requester, "dispatcherConfiguration", DispatcherConfiguration.class), is(dispatcherConfiguration));
     }
 }
