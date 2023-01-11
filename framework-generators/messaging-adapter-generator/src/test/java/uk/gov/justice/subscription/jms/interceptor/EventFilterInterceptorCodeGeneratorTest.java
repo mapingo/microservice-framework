@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EventFilterInterceptorCodeGeneratorTest {
@@ -109,7 +109,6 @@ public class EventFilterInterceptorCodeGeneratorTest {
         when(interceptorContext_1.inputEnvelope()).thenReturn(jsonEnvelope);
         when(jsonEnvelope.metadata()).thenReturn(metadata);
         when(metadata.name()).thenReturn(aDifferentventName);
-        when(interceptorChain.processNext(interceptorContext_1)).thenReturn(interceptorContext_2);
 
         assertThat(interceptor.process(interceptorContext_1, interceptorChain), is(interceptorContext_1));
     }

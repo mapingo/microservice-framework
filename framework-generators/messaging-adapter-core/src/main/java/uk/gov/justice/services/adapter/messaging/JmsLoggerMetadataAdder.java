@@ -29,19 +29,22 @@ public class JmsLoggerMetadataAdder {
     private static final String SERVICE_COMPONENT = "serviceComponent";
 
     @Inject
-    Logger logger;
+    private Logger logger;
 
     @Inject
-    JmsParameterChecker parameterChecker;
+    private JmsParameterChecker parameterChecker;
 
     @Inject
-    ServiceContextNameProvider serviceContextNameProvider;
+    private ServiceContextNameProvider serviceContextNameProvider;
 
     @Inject
-    JmsMessageLoggerHelper jmsMessageLoggerHelper;
+    private JmsMessageLoggerHelper jmsMessageLoggerHelper;
 
     @Inject
-    TraceLogger traceLogger;
+    private TraceLogger traceLogger;
+
+    @Inject
+    private MdcWrapper mdcWrapper;
 
     public Object addRequestDataToMdc(final InvocationContext invocationContext, final String componentName) throws Exception {
         traceLogger.trace(logger, () -> "Adding Request data to MDC");
@@ -58,7 +61,7 @@ public class JmsLoggerMetadataAdder {
 
         addMetaDataToBuilder(message, builder);
 
-        MDC.put(REQUEST_DATA, builder.build().toString());
+        mdcWrapper.put(REQUEST_DATA, builder.build().toString());
 
         traceLogger.trace(logger, () -> "Request data added to MDC");
 
@@ -66,7 +69,7 @@ public class JmsLoggerMetadataAdder {
 
         traceLogger.trace(logger, () -> "Clearing MDC");
 
-        MDC.clear();
+        mdcWrapper.clear();
 
         return result;
     }

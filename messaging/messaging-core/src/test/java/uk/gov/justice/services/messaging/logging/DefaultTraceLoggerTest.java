@@ -4,7 +4,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.function.Supplier;
@@ -44,7 +44,7 @@ public class DefaultTraceLoggerTest {
         defaultTraceLogger.trace(logger, stringSupplier);
 
         verify(logger, never()).trace(any(String.class));
-        verifyZeroInteractions(stringSupplier);
+        verifyNoInteractions(stringSupplier);
     }
 
 

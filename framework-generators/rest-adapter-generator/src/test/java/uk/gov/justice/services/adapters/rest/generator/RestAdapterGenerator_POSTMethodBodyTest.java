@@ -12,9 +12,10 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,7 +39,9 @@ import uk.gov.justice.services.core.interceptor.InterceptorContext;
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
+import java.io.File;
 import java.lang.reflect.Method;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -81,10 +84,20 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
         final Object resourceObject = getInstanceOf(resourceClass);
 
         final Response processorResponse = Response.ok().build();
-        when(restProcessor.process(anyString(), any(Function.class), anyString(), any(Optional.class), any(HttpHeaders.class),
+
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+        when(restProcessor.process(
+                any(String.class),
+                any(Function.class),
+                eq(action),
+                any(Optional.class),
+                any(HttpHeaders.class),
                 any(Collection.class))).thenReturn(processorResponse);
 
         final Method method = firstMethodOf(resourceClass).get();
+
+
 
         final Object result = method.invoke(resourceObject, NOT_USED_JSONOBJECT);
 
@@ -111,6 +124,9 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 "DefaultCommandApiPathResource");
 
         final Object resourceObject = getInstanceOf(resourceClass);
+
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Method method = firstMethodOf(resourceClass).get();
 
@@ -153,10 +169,13 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 "DefaultCommandApiPathResource");
 
         final Object resourceObject = getInstanceOf(resourceClass);
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Method method = firstMethodOf(resourceClass).get();
 
         method.invoke(resourceObject, NOT_USED_JSONOBJECT);
+
 
         final ArgumentCaptor<Function> functionCaptor = ArgumentCaptor.forClass(Function.class);
         verify(restProcessor).process(anyString(), functionCaptor.capture(), anyString(), any(Optional.class), any(HttpHeaders.class),
@@ -188,6 +207,8 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 "DefaultCommandApiPathResource");
 
         final Object resourceObject = getInstanceOf(resourceClass);
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Optional<JsonObject> jsonObject = Optional.of(createObjectBuilder().add("dummy", "abc").build());
 
@@ -215,8 +236,10 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 "DefaultCommandApiPathResource");
 
         final Object resourceObject = getInstanceOf(resourceClass);
-
         final HttpHeaders headers = new ThreadLocalHttpHeaders();
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(headers))).thenReturn(action);
+
         setField(resourceObject, "headers", headers);
 
         final Method method = firstMethodOf(resourceClass).get();
@@ -244,6 +267,8 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 "DefaultCommandApiSomePathParamAResource");
 
         final Object resourceObject = getInstanceOf(resourceClass);
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Method method = firstMethodOf(resourceClass).get();
         method.invoke(resourceObject, "paramValue1234", NOT_USED_JSONOBJECT);
@@ -289,6 +314,9 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 "DefaultCommandApiSomePathP1Resource");
 
         final Object resourceObject = getInstanceOf(resourceClass);
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+
 
         final List<Method> methods = methodsOf(resourceClass);
 
@@ -325,6 +353,8 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 "DefaultCommandApiSomePathParam1Param2Resource");
 
         final Object resourceObject = getInstanceOf(resourceClass);
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Method method = firstMethodOf(resourceClass).get();
         method.invoke(resourceObject, "paramValueABC", "paramValueDEF", NOT_USED_JSONOBJECT);

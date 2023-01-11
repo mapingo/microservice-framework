@@ -1,7 +1,7 @@
 package uk.gov.justice.services.test.utils.core.matchers;
 
 import static org.mockito.ArgumentCaptor.forClass;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static uk.gov.justice.services.test.utils.core.matchers.EmptyStreamMatcher.isEmptyStream;
 

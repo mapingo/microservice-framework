@@ -9,7 +9,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import uk.gov.justice.schema.service.SchemaCatalogService;
@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SchemaCatalogAwareJsonSchemaValidatorTest {
@@ -65,7 +65,7 @@ public class SchemaCatalogAwareJsonSchemaValidatorTest {
         schemaCatalogAwareJsonSchemaValidator.validate(envelopeJson, actionName, of(mediaType));
 
         verify(schema).validate(payload);
-        verifyZeroInteractions(fileBasedJsonSchemaValidator);
+        verifyNoInteractions(fileBasedJsonSchemaValidator);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class SchemaCatalogAwareJsonSchemaValidatorTest {
 
         verify(fileBasedJsonSchemaValidator).validateWithoutSchemaCatalog(envelopeJson, actionName);
 
-        verifyZeroInteractions(payloadExtractor);
+        verifyNoInteractions(payloadExtractor);
     }
 
     @Test

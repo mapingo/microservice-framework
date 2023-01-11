@@ -8,8 +8,11 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
+import static org.mockito.ArgumentCaptor.forClass;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.common.log.LoggerConstants.REQUEST_DATA;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
@@ -28,11 +31,12 @@ import javax.json.JsonObject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
-import org.slf4j.MDC;
 
 @RunWith(MockitoJUnitRunner.class)
 public class JmsLoggerMetadataAdderTest {
@@ -55,11 +59,13 @@ public class JmsLoggerMetadataAdderTest {
     @Mock
     private TraceLogger traceLogger;
 
+    @Mock
+    private MdcWrapper mdcWrapper;
+
     @InjectMocks
     private JmsLoggerMetadataAdder jmsLoggerMetadataAdder;
 
     @Test
-    @SuppressWarnings("deprecation")
     public void shouldAddMetadataFromEnvelopeToMappedDiagnosticContext() throws Exception {
         final UUID messageId = randomUUID();
         final String clientCorrelationId = randomUUID().toString();
@@ -77,23 +83,24 @@ public class JmsLoggerMetadataAdderTest {
                 .add("id", messageId.toString()).build();
 
         when(context.getParameters()).thenReturn(new Object[]{textMessage});
-        when(textMessage.getText()).thenReturn(jsonEnvelope.toDebugStringPrettyPrint());
-
         when(jmsMessageLoggerHelper.metadataAsJsonObject(textMessage)).thenReturn(jsonObject);
         when(serviceContextNameProvider.getServiceContextName()).thenReturn("exampleService");
 
-        when(context.proceed()).thenAnswer(invocationOnMock -> {
-            assertThat(MDC.get(REQUEST_DATA), isJson(allOf(
+        jmsLoggerMetadataAdder.addRequestDataToMdc(context, "EVENT_LISTENER");
+
+        final ArgumentCaptor<String> envelopeJsonArgumentCaptor = forClass(String.class);
+
+        final InOrder inOrder = inOrder(mdcWrapper);
+        inOrder.verify(mdcWrapper).put(eq(REQUEST_DATA), envelopeJsonArgumentCaptor.capture());
+        inOrder.verify(mdcWrapper).clear();
+
+        final String envelopeJson = envelopeJsonArgumentCaptor.getValue();
+
+        assertThat(envelopeJson, isJson(allOf(
                     withJsonPath("$.metadata.id", equalTo(messageId.toString())),
                     withJsonPath("$.serviceContext", equalTo("exampleService")),
                     withJsonPath("$.serviceComponent", equalTo("EVENT_LISTENER")))
             ));
-            return null;
-        });
-
-        jmsLoggerMetadataAdder.addRequestDataToMdc(context, "EVENT_LISTENER");
-
-        assertThat(MDC.get(REQUEST_DATA), nullValue());
     }
 
     @Test
@@ -110,7 +117,6 @@ public class JmsLoggerMetadataAdderTest {
         final TextMessage textMessage = mock(TextMessage.class);
 
         when(context.getParameters()).thenReturn(new Object[]{textMessage});
-        when(textMessage.getText()).thenReturn(jsonEnvelope.toDebugStringPrettyPrint());
         when(context.proceed()).thenReturn(expectedResult);
 
         final Object actualResult = jmsLoggerMetadataAdder.addRequestDataToMdc(context, "EVENT_LISTENER");
@@ -123,14 +129,17 @@ public class JmsLoggerMetadataAdderTest {
         final TextMessage textMessage = mock(TextMessage.class);
 
         when(context.getParameters()).thenReturn(new Object[]{textMessage});
-        when(textMessage.getText()).thenThrow(new RuntimeException());
-        when(context.proceed()).thenAnswer(invocationOnMock -> {
-            assertThat(MDC.get(REQUEST_DATA), isJson(
-                    withJsonPath("$.metadata", equalTo("Could not find: _metadata in message"))
-            ));
-            return null;
-        });
+        when(jmsMessageLoggerHelper.metadataAsJsonObject(textMessage)).thenThrow(new RuntimeException());
 
         jmsLoggerMetadataAdder.addRequestDataToMdc(context, "EVENT_LISTENER");
+
+        final ArgumentCaptor<String> envelopeJsonArgumentCaptor = forClass(String.class);
+
+        verify(mdcWrapper).put(eq(REQUEST_DATA), envelopeJsonArgumentCaptor.capture());
+        verify(mdcWrapper).clear();
+
+        final String envelopeJson = envelopeJsonArgumentCaptor.getValue();
+
+        assertThat(envelopeJson, isJson(withJsonPath("$.metadata", equalTo("Could not find: _metadata in message"))));
     }
 }

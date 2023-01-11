@@ -3,7 +3,7 @@ package uk.gov.justice.framework.command.client.jmx;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import uk.gov.justice.framework.command.client.io.ToConsolePrinter;
@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandPollerTest {
@@ -54,7 +54,7 @@ public class CommandPollerTest {
         commandPoller.runUntilComplete(systemCommanderMBean, commandId, commandName);
 
         verify(sleeper, times(2)).sleepFor(1_000);
-        verifyZeroInteractions(toConsolePrinter);
+        verifyNoInteractions(toConsolePrinter);
     }
 
     @Test

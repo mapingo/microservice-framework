@@ -14,7 +14,7 @@ import java.util.UUID;
 import com.google.common.io.Resources;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultJsonEnvelopeToStringTest {

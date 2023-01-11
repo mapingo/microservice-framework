@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandLineArgumentParserTest {
@@ -48,7 +48,6 @@ public class CommandLineArgumentParserTest {
         when(optionsFactory.createOptions()).thenReturn(options);
         when(basicParser.parse(options, args)).thenReturn(commandLine);
         when(commandLine.hasOption("command")).thenReturn(true);
-        when(commandLine.hasOption("list")).thenReturn(false);
 
         final Optional<CommandLine> commandLineOptional = commandLineArgumentParser.parse(args);
 

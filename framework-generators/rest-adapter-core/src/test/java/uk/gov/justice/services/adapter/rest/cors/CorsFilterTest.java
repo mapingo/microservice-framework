@@ -30,7 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Unit tests for the {@link CorsFilter} class.
@@ -92,7 +92,6 @@ public class CorsFilterTest {
 
     @Test
     public void shouldAllowPostIfOriginIsNull() throws Exception {
-        when(requestContext.getMethod()).thenReturn(POST);
         when(requestContext.getHeaderString(ORIGIN)).thenReturn(null);
         corsFilter.filter(requestContext);
     }
@@ -212,7 +211,6 @@ public class CorsFilterTest {
 
     @Test
     public void shouldDoNothingIfOriginIsNotSet() throws Exception {
-        when(requestContext.getMethod()).thenReturn(POST);
         when(requestContext.getHeaderString(ORIGIN)).thenReturn(null);
 
         corsFilter.filter(requestContext, responseContext);

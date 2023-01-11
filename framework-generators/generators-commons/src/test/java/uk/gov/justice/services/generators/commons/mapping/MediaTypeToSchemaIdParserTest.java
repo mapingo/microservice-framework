@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.raml.model.MimeType;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -126,13 +126,10 @@ public class MediaTypeToSchemaIdParserTest {
     }
 
     @Test
-    public void shouldNotProduceListOfMediaTypeForUnsuportedActionType() throws Exception {
+    public void shouldNotProduceListOfMediaTypeForUnsupportedActionType() throws Exception {
 
         final MimeType mimeType_1 = createMimeTypeWith(MEDIA_TYPE_1.toString());
         final MimeType mimeType_5 = createMimeTypeWith(MEDIA_TYPE_5.toString());
-
-        when(schemaIdParser.schemaIdFrom(mimeType_1)).thenReturn(Optional.of(SCHEMA_ID_1));
-        when(schemaIdParser.schemaIdFrom(mimeType_5)).thenReturn(Optional.of(SCHEMA_ID_5));
 
         final List<MediaTypeToSchemaId> mediaTypeToSchemaIds = mediaTypeToSchemaIdParser.parseFrom(restRamlWithQueryApiDefaults()
                 .with(resource("/user")

@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NonCachingFeatureProviderTest {
@@ -30,8 +30,7 @@ public class NonCachingFeatureProviderTest {
 
         final String featureName_1 = "feature 1";
         final String featureName_2 = "feature 2";
-        final String featureName_3 = "feature 3";
-
+        
         final Feature feature_1 = mock(Feature.class);
         final Feature feature_2 = mock(Feature.class);
         final Feature feature_3 = mock(Feature.class);
@@ -39,7 +38,6 @@ public class NonCachingFeatureProviderTest {
         when(featureFetcherFacade.fetchFeatures()).thenReturn(asList(feature_1, feature_2, feature_3));
         when(feature_1.getFeatureName()).thenReturn(featureName_1);
         when(feature_2.getFeatureName()).thenReturn(featureName_2);
-        when(feature_3.getFeatureName()).thenReturn(featureName_3);
 
         assertThat(nonCachingFeatureProvider.lookup(featureName_2), is(of(feature_2)));
     }

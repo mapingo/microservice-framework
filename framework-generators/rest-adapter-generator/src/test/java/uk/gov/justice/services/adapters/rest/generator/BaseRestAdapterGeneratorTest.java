@@ -18,12 +18,14 @@ import uk.gov.justice.services.messaging.logging.HttpTraceLoggerHelper;
 import uk.gov.justice.services.messaging.logging.TraceLogger;
 import uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility;
 
+import javax.ws.rs.core.HttpHeaders;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -39,6 +41,7 @@ public abstract class BaseRestAdapterGeneratorTest {
     private static final String TRACE_LOGGER_FIELD = "traceLogger";
     private static final String HTTP_TRACE_LOGGER_HELPER_FIELD = "httpTraceLoggerHelper";
     private static final String LOGGER_FIELD = "logger";
+    private static final String HTTP_HEADERS_FIELD = "headers";
 
     @Mock
     protected InterceptorChainProcessor interceptorChainProcessor;
@@ -73,6 +76,9 @@ public abstract class BaseRestAdapterGeneratorTest {
     @Mock
     protected HttpTraceLoggerHelper httpTraceLoggerHelper;
 
+    @Mock
+    protected HttpHeaders httpHeaders;
+
     @Rule
     public TemporaryFolder outputFolder = new TemporaryFolder();
 
@@ -95,6 +101,8 @@ public abstract class BaseRestAdapterGeneratorTest {
         setField(resourceObject, VALID_PARAMETER_COLLECTION_BUILDER_FACTORY_FIELD, validParameterCollectionBuilderFactory);
         setField(resourceObject, TRACE_LOGGER_FIELD, traceLogger);
         setField(resourceObject, HTTP_TRACE_LOGGER_HELPER_FIELD, httpTraceLoggerHelper);
+        setField(resourceObject, HTTP_HEADERS_FIELD, httpHeaders);
+
 
         when(validParameterCollectionBuilderFactory.create()).thenReturn(new ValidParameterCollectionBuilder());
 

@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import uk.gov.justice.services.core.featurecontrol.FeatureFetcher;
@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -63,6 +63,6 @@ public class FeatureFetcherFacadeTest {
         verify(logger).info("Fetched control disabled. No Features fetched from remote feature store");
 
         verifyNoMoreInteractions(logger);
-        verifyZeroInteractions(featureFetcher);
+        verifyNoInteractions(featureFetcher);
     }
 }

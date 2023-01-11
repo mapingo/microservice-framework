@@ -50,7 +50,7 @@ import com.google.common.collect.ImmutableMap;
 import org.jboss.resteasy.specimpl.ResteasyHttpHeaders;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Unit tests for the {@link RestEnvelopeBuilder} class.

@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.framework.command.client.ReturnCode.AUTHENTICATION_FAILED;
 import static uk.gov.justice.framework.command.client.ReturnCode.SUCCESS;
@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -77,7 +77,7 @@ public class MainApplicationTest {
         assertThat(mainApplication.run(args), is(SUCCESS));
 
         verify(commandExecutor).executeCommand(commandLine, jmxParameters, systemCommands);
-        verifyZeroInteractions(formatter);
+        verifyNoInteractions(formatter);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class MainApplicationTest {
 
         verify(formatter).printHelp("java -jar catchup-shuttering-manager.jar", options);
 
-        verifyZeroInteractions(commandExecutor);
+        verifyNoInteractions(commandExecutor);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class MainApplicationTest {
 
         assertThat(mainApplication.run(args), is(AUTHENTICATION_FAILED));
 
-        verifyZeroInteractions(commandExecutor);
-        verifyZeroInteractions(formatter);
+        verifyNoInteractions(commandExecutor);
+        verifyNoInteractions(formatter);
     }
 }

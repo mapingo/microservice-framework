@@ -7,7 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import uk.gov.justice.services.core.json.JsonSchemaValidationException;
@@ -30,7 +30,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EnvelopeValidatorTest {
@@ -84,8 +84,8 @@ public class EnvelopeValidatorTest {
 
         envelopeValidator.validate(jsonEnvelope, actionName, mediaType);
 
-        verifyZeroInteractions(objectMapper);
-        verifyZeroInteractions(jsonSchemaValidator);
+        verifyNoInteractions(objectMapper);
+        verifyNoInteractions(jsonSchemaValidator);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class EnvelopeValidatorTest {
         assertThat(envelopeValidationException.getMessage(), is("Error serialising json."));
         assertThat(envelopeValidationException.getCause(), is(jsonProcessingException));
 
-        verifyZeroInteractions(jsonSchemaValidator);
+        verifyNoInteractions(jsonSchemaValidator);
     }
 
     @Test
@@ -191,7 +191,6 @@ public class EnvelopeValidatorTest {
 
         when(jsonEnvelope.payload()).thenReturn(payload);
         when(objectMapper.writeValueAsString(payload)).thenReturn(payloadJson);
-        when(jsonEnvelope.toObfuscatedDebugString()).thenReturn("debug-json");
 
         doThrow(envelopeValidationException).when(jsonSchemaValidator).validate(
                 payloadJson,

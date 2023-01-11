@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RequestResponseEnvelopeValidatorTest {
@@ -82,8 +82,6 @@ public class RequestResponseEnvelopeValidatorTest {
         final JsonEnvelope jsonEnvelope = mock(JsonEnvelope.class);
         final Optional<MediaType> mediaType = of(mock(MediaType.class));
 
-        when(envelopeInspector.getActionNameFor(jsonEnvelope)).thenReturn(actionName);
-        when(mediaTypeProvider.getResponseMediaType(actionName)).thenReturn(mediaType);
         when(dispatcherConfiguration.shouldValidateRestResponseJson()).thenReturn(false);
 
         requestResponseEnvelopeValidator.validateResponse(jsonEnvelope);
