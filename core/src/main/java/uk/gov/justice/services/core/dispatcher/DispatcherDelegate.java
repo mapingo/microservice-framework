@@ -7,8 +7,6 @@ import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
-import java.util.function.Function;
-
 import javax.json.JsonValue;
 
 public class DispatcherDelegate implements Requester, Sender {
@@ -48,7 +46,9 @@ public class DispatcherDelegate implements Requester, Sender {
 
     @Override
     public JsonEnvelope requestAsAdmin(final JsonEnvelope envelope) {
-        final JsonEnvelope response = dispatchAsAdmin().apply(envelope);
+
+        final JsonEnvelope adminEnvelope = systemUserUtil.asEnvelopeWithSystemUserId(envelope);
+        final JsonEnvelope response = dispatcher.dispatch(adminEnvelope);
 
         if (dispatcherConfiguration.shouldValidateRestResponseJson()) {
             requestResponseEnvelopeValidator.validateResponse(response);
@@ -59,58 +59,70 @@ public class DispatcherDelegate implements Requester, Sender {
 
     @Override
     public <T> Envelope<T> requestAsAdmin(final Envelope<?> envelope, final Class<T> clazz) {
-        final JsonEnvelope response = dispatchAsAdmin().compose(convertAndRepackEnvelope()).apply(envelope);
+
+        final Envelope<JsonValue> convertedEnvelope = envelopePayloadTypeConverter.convert(
+                envelope,
+                JsonValue.class);
+        final JsonEnvelope repackedEnvelope = jsonEnvelopeRepacker.repack(convertedEnvelope);
+        final JsonEnvelope adminEnvelope = systemUserUtil.asEnvelopeWithSystemUserId(repackedEnvelope);
+        final JsonEnvelope responseEnvelope = dispatcher.dispatch(adminEnvelope);
 
         if (dispatcherConfiguration.shouldValidateRestResponseJson()) {
-            requestResponseEnvelopeValidator.validateResponse(response);
+            requestResponseEnvelopeValidator.validateResponse(responseEnvelope);
         }
 
-        return envelopePayloadTypeConverter.convert(response, clazz);
+        return envelopePayloadTypeConverter.convert(responseEnvelope, clazz);
     }
 
     @Override
     public void send(final Envelope<?> envelope) {
-        final JsonEnvelope jsonEnvelope = convertAndRepackEnvelope().apply(envelope);
 
-        requestResponseEnvelopeValidator.validateRequest(jsonEnvelope);
-        dispatch().apply(jsonEnvelope);
+        final Envelope<JsonValue> convertedEnvelope = envelopePayloadTypeConverter.convert(
+                envelope,
+                JsonValue.class);
+
+        final JsonEnvelope repackedEnvelope = jsonEnvelopeRepacker.repack(convertedEnvelope);
+
+        requestResponseEnvelopeValidator.validateRequest(repackedEnvelope);
+        dispatcher.dispatch(repackedEnvelope);
     }
 
     @Override
     public void sendAsAdmin(final JsonEnvelope envelope) {
+
         requestResponseEnvelopeValidator.validateRequest(envelope);
-        dispatchAsAdmin().apply(envelope);
+
+        final JsonEnvelope adminEnvelope = systemUserUtil.asEnvelopeWithSystemUserId(envelope);
+
+        dispatcher.dispatch(adminEnvelope);
     }
 
     @Override
     public void sendAsAdmin(final Envelope<?> envelope) {
-        final JsonEnvelope jsonEnvelope = convertAndRepackEnvelope().apply(envelope);
 
-        requestResponseEnvelopeValidator.validateRequest(jsonEnvelope);
+        final Envelope<JsonValue> convertedEnvelope = envelopePayloadTypeConverter.convert(envelope, JsonValue.class);
+        final JsonEnvelope repackedEnvelope = jsonEnvelopeRepacker.repack(convertedEnvelope);
 
-        dispatchAsAdmin().apply(jsonEnvelope);
+        requestResponseEnvelopeValidator.validateRequest(repackedEnvelope);
+
+        final JsonEnvelope adminEnvelope = systemUserUtil.asEnvelopeWithSystemUserId(repackedEnvelope);
+        dispatcher.dispatch(adminEnvelope);
     }
 
     private JsonEnvelope dispatchAndValidateResponse(final Envelope<?> envelope) {
-        final JsonEnvelope response = dispatch().compose(convertAndRepackEnvelope()).apply(envelope);
+
+        final Envelope<JsonValue> convertedEnvelope = envelopePayloadTypeConverter.convert(
+                envelope,
+                JsonValue.class);
+        
+        final JsonEnvelope repackedEnvelope = jsonEnvelopeRepacker.repack(convertedEnvelope);
+
+        final JsonEnvelope response = dispatcher.dispatch(repackedEnvelope);
 
         if (dispatcherConfiguration.shouldValidateRestResponseJson()) {
             requestResponseEnvelopeValidator.validateResponse(response);
         }
 
         return response;
-    }
-
-    private Function<Envelope<?>, JsonEnvelope> convertAndRepackEnvelope() {
-        return (jsonEnvelope) -> jsonEnvelopeRepacker.repack(
-                envelopePayloadTypeConverter.convert(jsonEnvelope, JsonValue.class));
-    }
-
-    private Function<JsonEnvelope, JsonEnvelope> dispatch() {
-        return (jsonEnvelope) -> dispatcher.dispatch(jsonEnvelope);
-    }
-
-    private Function<JsonEnvelope, JsonEnvelope> dispatchAsAdmin() {
-        return (jsonEnvelope) -> dispatcher.dispatch(systemUserUtil.asEnvelopeWithSystemUserId(jsonEnvelope));
     }
 }
