@@ -49,8 +49,10 @@ import uk.gov.justice.services.core.interceptor.InterceptorChainProcessorProduce
 import uk.gov.justice.services.core.json.JsonSchemaLoader;
 import uk.gov.justice.services.core.json.MediaTypesMappingCacheMock;
 import uk.gov.justice.services.core.mapping.DefaultNameToMediaTypeConverter;
-import uk.gov.justice.services.core.requester.RequesterProducer;
-import uk.gov.justice.services.core.sender.SenderProducer;
+import uk.gov.justice.services.core.producers.EnvelopeValidatorFactory;
+import uk.gov.justice.services.core.producers.RequestResponseEnvelopeValidatorFactory;
+import uk.gov.justice.services.core.producers.RequesterProducer;
+import uk.gov.justice.services.core.producers.SenderProducer;
 import uk.gov.justice.services.messaging.DefaultJsonObjectEnvelopeConverter;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.jms.DefaultEnvelopeConverter;
@@ -147,7 +149,10 @@ public class MetricsIT {
 
             DispatcherConfiguration.class,
             FeatureControlAnnotationFinder.class,
-            TestHandlerRegistryCacheProducer.class
+            TestHandlerRegistryCacheProducer.class,
+
+            RequestResponseEnvelopeValidatorFactory.class,
+            EnvelopeValidatorFactory.class
     })
     public WebApp war() {
         return new WebApp()

@@ -64,8 +64,10 @@ import uk.gov.justice.services.core.mapping.MediaType;
 import uk.gov.justice.services.core.mapping.MediaTypesMappingCacheInitialiser;
 import uk.gov.justice.services.core.mapping.SchemaIdMappingCacheInitialiser;
 import uk.gov.justice.services.core.mapping.SchemaIdMappingObserver;
-import uk.gov.justice.services.core.requester.RequesterProducer;
-import uk.gov.justice.services.core.sender.SenderProducer;
+import uk.gov.justice.services.core.producers.EnvelopeValidatorFactory;
+import uk.gov.justice.services.core.producers.RequestResponseEnvelopeValidatorFactory;
+import uk.gov.justice.services.core.producers.RequesterProducer;
+import uk.gov.justice.services.core.producers.SenderProducer;
 import uk.gov.justice.services.event.buffer.api.AllowAllEventFilter;
 import uk.gov.justice.services.generators.test.utils.interceptor.EnvelopeRecorder;
 import uk.gov.justice.services.jdbc.persistence.JndiAppNameProvider;
@@ -192,7 +194,10 @@ public class JmsEndpointGenerationCustomIT extends AbstractJmsAdapterGenerationI
 
             DispatcherConfiguration.class,
             FeatureControlAnnotationFinder.class,
-            TestHandlerRegistryCacheProducer.class
+            TestHandlerRegistryCacheProducer.class,
+
+            RequestResponseEnvelopeValidatorFactory.class,
+            EnvelopeValidatorFactory.class
     })
     public WebApp war() {
         return new WebApp()
