@@ -25,7 +25,10 @@ import uk.gov.justice.schema.service.SchemaCatalogService;
 import uk.gov.justice.services.cdi.LoggerProducer;
 import uk.gov.justice.services.clients.core.DefaultRestClientHelper;
 import uk.gov.justice.services.clients.core.DefaultRestClientProcessor;
-import uk.gov.justice.services.clients.core.webclient.*;
+import uk.gov.justice.services.clients.core.webclient.BaseUriFactory;
+import uk.gov.justice.services.clients.core.webclient.ContextMatcher;
+import uk.gov.justice.services.clients.core.webclient.MockServerPortProvider;
+import uk.gov.justice.services.clients.core.webclient.WebTargetFactoryFactory;
 import uk.gov.justice.services.common.annotation.ComponentNameExtractor;
 import uk.gov.justice.services.common.configuration.GlobalValueProducer;
 import uk.gov.justice.services.common.configuration.JndiBasedServiceContextNameProvider;
@@ -71,8 +74,10 @@ import uk.gov.justice.services.core.mapping.DefaultSchemaIdMappingCache;
 import uk.gov.justice.services.core.mapping.MediaTypesMappingCacheInitialiser;
 import uk.gov.justice.services.core.mapping.SchemaIdMappingCacheInitialiser;
 import uk.gov.justice.services.core.mapping.SchemaIdMappingObserver;
+import uk.gov.justice.services.core.producers.EnvelopeValidatorFactory;
+import uk.gov.justice.services.core.producers.RequestResponseEnvelopeValidatorFactory;
+import uk.gov.justice.services.core.producers.RequesterProducer;
 import uk.gov.justice.services.core.requester.Requester;
-import uk.gov.justice.services.core.requester.RequesterProducer;
 import uk.gov.justice.services.jdbc.persistence.JndiAppNameProvider;
 import uk.gov.justice.services.messaging.DefaultJsonObjectEnvelopeConverter;
 import uk.gov.justice.services.messaging.JsonEnvelope;
@@ -215,7 +220,10 @@ public class RemoteExampleQueryApiIT {
             DispatcherConfiguration.class,
             JsonObjectConvertersProducer.class,
             FeatureControlAnnotationFinder.class,
-            TestHandlerRegistryCacheProducer.class
+            TestHandlerRegistryCacheProducer.class,
+
+            RequestResponseEnvelopeValidatorFactory.class,
+            EnvelopeValidatorFactory.class
     })
     public WebApp war() {
         return new WebApp()
