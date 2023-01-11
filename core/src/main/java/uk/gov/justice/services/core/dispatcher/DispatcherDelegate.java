@@ -16,45 +16,56 @@ public class DispatcherDelegate implements Requester, Sender {
     private final RequestResponseEnvelopeValidator requestResponseEnvelopeValidator;
     private final EnvelopePayloadTypeConverter envelopePayloadTypeConverter;
     private final JsonEnvelopeRepacker jsonEnvelopeRepacker;
-    private final DispatcherConfiguration dispatcherConfiguration;
 
     public DispatcherDelegate(final Dispatcher dispatcher,
                               final SystemUserUtil systemUserUtil,
                               final RequestResponseEnvelopeValidator requestResponseEnvelopeValidator,
                               final EnvelopePayloadTypeConverter envelopePayloadTypeConverter,
-                              final JsonEnvelopeRepacker jsonEnvelopeRepacker,
-                              final DispatcherConfiguration dispatcherConfiguration) {
+                              final JsonEnvelopeRepacker jsonEnvelopeRepacker) {
         this.dispatcher = dispatcher;
         this.systemUserUtil = systemUserUtil;
         this.requestResponseEnvelopeValidator = requestResponseEnvelopeValidator;
         this.envelopePayloadTypeConverter = envelopePayloadTypeConverter;
         this.jsonEnvelopeRepacker = jsonEnvelopeRepacker;
-        this.dispatcherConfiguration = dispatcherConfiguration;
     }
 
     @Override
     public JsonEnvelope request(final Envelope<?> envelope) {
-        return dispatchAndValidateResponse(envelope);
+
+        final Envelope<JsonValue> convertedEnvelope = envelopePayloadTypeConverter.convert(
+                envelope,
+                JsonValue.class);
+        final JsonEnvelope repackedEnvelope = jsonEnvelopeRepacker.repack(convertedEnvelope);
+        final JsonEnvelope response = dispatcher.dispatch(repackedEnvelope);
+
+        requestResponseEnvelopeValidator.validateResponse(response);
+
+        return response;
     }
 
     @Override
-    public <T> Envelope<T> request(final Envelope<?> envelope, final Class<T> clazz) {
-        final JsonEnvelope response = dispatchAndValidateResponse(envelope);
+    public <T> Envelope<T> request(final Envelope<?> requestEnvelope, final Class<T> clazz) {
 
-        return envelopePayloadTypeConverter.convert(response, clazz);
+        final Envelope<JsonValue> convertedEnvelope = envelopePayloadTypeConverter.convert(
+                requestEnvelope,
+                JsonValue.class);
+        final JsonEnvelope repackedEnvelope = jsonEnvelopeRepacker.repack(convertedEnvelope);
+        final JsonEnvelope responseEnvelope = dispatcher.dispatch(repackedEnvelope);
+
+        requestResponseEnvelopeValidator.validateResponse(responseEnvelope);
+
+        return envelopePayloadTypeConverter.convert(responseEnvelope, clazz);
     }
 
     @Override
     public JsonEnvelope requestAsAdmin(final JsonEnvelope envelope) {
 
         final JsonEnvelope adminEnvelope = systemUserUtil.asEnvelopeWithSystemUserId(envelope);
-        final JsonEnvelope response = dispatcher.dispatch(adminEnvelope);
+        final JsonEnvelope responseEnvelope = dispatcher.dispatch(adminEnvelope);
 
-        if (dispatcherConfiguration.shouldValidateRestResponseJson()) {
-            requestResponseEnvelopeValidator.validateResponse(response);
-        }
+        requestResponseEnvelopeValidator.validateResponse(responseEnvelope);
 
-        return response;
+        return responseEnvelope;
     }
 
     @Override
@@ -67,9 +78,7 @@ public class DispatcherDelegate implements Requester, Sender {
         final JsonEnvelope adminEnvelope = systemUserUtil.asEnvelopeWithSystemUserId(repackedEnvelope);
         final JsonEnvelope responseEnvelope = dispatcher.dispatch(adminEnvelope);
 
-        if (dispatcherConfiguration.shouldValidateRestResponseJson()) {
-            requestResponseEnvelopeValidator.validateResponse(responseEnvelope);
-        }
+        requestResponseEnvelopeValidator.validateResponse(responseEnvelope);
 
         return envelopePayloadTypeConverter.convert(responseEnvelope, clazz);
     }
@@ -109,20 +118,4 @@ public class DispatcherDelegate implements Requester, Sender {
         dispatcher.dispatch(adminEnvelope);
     }
 
-    private JsonEnvelope dispatchAndValidateResponse(final Envelope<?> envelope) {
-
-        final Envelope<JsonValue> convertedEnvelope = envelopePayloadTypeConverter.convert(
-                envelope,
-                JsonValue.class);
-        
-        final JsonEnvelope repackedEnvelope = jsonEnvelopeRepacker.repack(convertedEnvelope);
-
-        final JsonEnvelope response = dispatcher.dispatch(repackedEnvelope);
-
-        if (dispatcherConfiguration.shouldValidateRestResponseJson()) {
-            requestResponseEnvelopeValidator.validateResponse(response);
-        }
-
-        return response;
-    }
 }

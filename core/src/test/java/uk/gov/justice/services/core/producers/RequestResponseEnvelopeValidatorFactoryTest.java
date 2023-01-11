@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.getValueOfField;
 
+import uk.gov.justice.services.core.dispatcher.DispatcherConfiguration;
 import uk.gov.justice.services.core.envelope.EnvelopeInspector;
 import uk.gov.justice.services.core.envelope.EnvelopeValidator;
 import uk.gov.justice.services.core.envelope.MediaTypeProvider;
@@ -33,6 +34,9 @@ public class RequestResponseEnvelopeValidatorFactoryTest {
     @Mock
     private EnvelopeValidatorFactory envelopeValidatorFactory;
 
+    @Mock
+    private DispatcherConfiguration dispatcherConfiguration;
+
     @InjectMocks
     private RequestResponseEnvelopeValidatorFactory requestResponseEnvelopeValidatorFactory;
 
@@ -49,5 +53,6 @@ public class RequestResponseEnvelopeValidatorFactoryTest {
         assertThat(getValueOfField(requestResponseEnvelopeValidator, "nameToMediaTypeConverter", NameToMediaTypeConverter.class), is(nameToMediaTypeConverter));
         assertThat(getValueOfField(requestResponseEnvelopeValidator, "mediaTypeProvider", MediaTypeProvider.class), is(mediaTypeProvider));
         assertThat(getValueOfField(requestResponseEnvelopeValidator, "envelopeInspector", EnvelopeInspector.class), is(envelopeInspector));
+        assertThat(getValueOfField(requestResponseEnvelopeValidator, "dispatcherConfiguration", DispatcherConfiguration.class), is(dispatcherConfiguration));
     }
 }

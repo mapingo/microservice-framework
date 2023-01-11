@@ -3,6 +3,7 @@ package uk.gov.justice.services.test.utils.core.mock;
 import static java.util.Optional.empty;
 
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
+import uk.gov.justice.services.core.dispatcher.DispatcherConfiguration;
 import uk.gov.justice.services.core.envelope.EnvelopeInspector;
 import uk.gov.justice.services.core.envelope.EnvelopeValidationExceptionHandler;
 import uk.gov.justice.services.core.envelope.EnvelopeValidator;
@@ -50,7 +51,8 @@ public class JsonSchemaValidatingMockMaker implements MockMaker {
             envelopeValidator,
             new DefaultNameToMediaTypeConverter(),
             new MediaTypeProvider(mediaTypesMappingCache),
-            new EnvelopeInspector());
+            new EnvelopeInspector(),
+            new DispatcherConfiguration());
 
 
     @Override

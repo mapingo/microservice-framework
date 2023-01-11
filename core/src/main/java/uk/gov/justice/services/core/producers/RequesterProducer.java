@@ -32,9 +32,6 @@ public class RequesterProducer {
     private JsonEnvelopeRepacker jsonEnvelopeRepacker;
 
     @Inject
-    private DispatcherConfiguration dispatcherConfiguration;
-
-    @Inject
     private RequestResponseEnvelopeValidatorFactory requestResponseEnvelopeValidatorFactory;
 
     /**
@@ -57,7 +54,6 @@ public class RequesterProducer {
                 systemUserUtil,
                 requestResponseEnvelopeValidator,
                 envelopePayloadTypeConverter,
-                jsonEnvelopeRepacker,
-                dispatcherConfiguration);
+                jsonEnvelopeRepacker);
     }
 }

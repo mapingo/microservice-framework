@@ -3,9 +3,11 @@ package uk.gov.justice.services.core.envelope;
 
 import static java.util.Optional.of;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import uk.gov.justice.services.core.dispatcher.DispatcherConfiguration;
 import uk.gov.justice.services.core.mapping.MediaType;
 import uk.gov.justice.services.core.mapping.NameToMediaTypeConverter;
 import uk.gov.justice.services.messaging.JsonEnvelope;
@@ -33,11 +35,14 @@ public class RequestResponseEnvelopeValidatorTest {
     @Mock
     private EnvelopeInspector envelopeInspector;
 
+    @Mock
+    private DispatcherConfiguration dispatcherConfiguration;
+
     @InjectMocks
     private RequestResponseEnvelopeValidator requestResponseEnvelopeValidator;
 
     @Test
-    public void shouldValidateARequestEnvelope() throws Exception {
+    public void shouldValidateRequestEnvelope() throws Exception {
 
         final String actionName = "example.action-name";
 
@@ -53,7 +58,7 @@ public class RequestResponseEnvelopeValidatorTest {
     }
 
     @Test
-    public void shouldValidateAResponsetEnvelope() throws Exception {
+    public void shouldValidateResponseEnvelope() throws Exception {
 
         final String actionName = "example.action-name";
 
@@ -62,9 +67,27 @@ public class RequestResponseEnvelopeValidatorTest {
 
         when(envelopeInspector.getActionNameFor(jsonEnvelope)).thenReturn(actionName);
         when(mediaTypeProvider.getResponseMediaType(actionName)).thenReturn(mediaType);
+        when(dispatcherConfiguration.shouldValidateRestResponseJson()).thenReturn(true);
 
         requestResponseEnvelopeValidator.validateResponse(jsonEnvelope);
 
         verify(envelopeValidator).validate(jsonEnvelope, actionName, mediaType);
+    }
+
+    @Test
+    public void shouldNoValidateResponseEnvelopeIfValidationDisabled() throws Exception {
+
+        final String actionName = "example.action-name";
+
+        final JsonEnvelope jsonEnvelope = mock(JsonEnvelope.class);
+        final Optional<MediaType> mediaType = of(mock(MediaType.class));
+
+        when(envelopeInspector.getActionNameFor(jsonEnvelope)).thenReturn(actionName);
+        when(mediaTypeProvider.getResponseMediaType(actionName)).thenReturn(mediaType);
+        when(dispatcherConfiguration.shouldValidateRestResponseJson()).thenReturn(false);
+
+        requestResponseEnvelopeValidator.validateResponse(jsonEnvelope);
+
+        verify(envelopeValidator, never()).validate(jsonEnvelope, actionName, mediaType);
     }
 }

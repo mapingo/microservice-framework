@@ -1,5 +1,6 @@
 package uk.gov.justice.services.core.producers;
 
+import uk.gov.justice.services.core.dispatcher.DispatcherConfiguration;
 import uk.gov.justice.services.core.envelope.EnvelopeInspector;
 import uk.gov.justice.services.core.envelope.EnvelopeValidator;
 import uk.gov.justice.services.core.envelope.MediaTypeProvider;
@@ -22,6 +23,9 @@ public class RequestResponseEnvelopeValidatorFactory {
     @Inject
     private EnvelopeValidatorFactory envelopeValidatorFactory;
 
+    @Inject
+    private DispatcherConfiguration dispatcherConfiguration;
+
     public RequestResponseEnvelopeValidator createNew() {
 
         final EnvelopeValidator envelopeValidator = envelopeValidatorFactory.createNew();
@@ -30,6 +34,7 @@ public class RequestResponseEnvelopeValidatorFactory {
                 envelopeValidator,
                 nameToMediaTypeConverter,
                 mediaTypeProvider,
-                envelopeInspector);
+                envelopeInspector,
+                dispatcherConfiguration);
     }
 }
