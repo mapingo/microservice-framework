@@ -3,7 +3,7 @@ package uk.gov.justice.services.core.json;
 import static java.util.Optional.empty;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import uk.gov.justice.services.core.mapping.MediaType;
 
@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BackwardsCompatibleJsonSchemaValidatorTest {
@@ -69,7 +69,7 @@ public class BackwardsCompatibleJsonSchemaValidatorTest {
 
         backwardsCompatibleJsonSchemaValidator.validate(envelopeJson, actionName, mediaType);
 
-        verifyZeroInteractions(schemaCatalogAwareJsonSchemaValidator);
+        verifyNoInteractions(schemaCatalogAwareJsonSchemaValidator);
     }
 
     @Test
@@ -84,10 +84,10 @@ public class BackwardsCompatibleJsonSchemaValidatorTest {
         final Optional<MediaType> mediaType = Optional.of(mock(MediaType.class));
 
         backwardsCompatibleJsonSchemaValidator.validate(envelopeJson, actionName1, mediaType);
-        verifyZeroInteractions(schemaCatalogAwareJsonSchemaValidator);
+        verifyNoInteractions(schemaCatalogAwareJsonSchemaValidator);
 
         backwardsCompatibleJsonSchemaValidator.validate(envelopeJson, actionName2, mediaType);
-        verifyZeroInteractions(schemaCatalogAwareJsonSchemaValidator);
+        verifyNoInteractions(schemaCatalogAwareJsonSchemaValidator);
 
         backwardsCompatibleJsonSchemaValidator.validate(envelopeJson, actionName3, mediaType);
         verify(schemaCatalogAwareJsonSchemaValidator).validate(envelopeJson, actionName3, mediaType);

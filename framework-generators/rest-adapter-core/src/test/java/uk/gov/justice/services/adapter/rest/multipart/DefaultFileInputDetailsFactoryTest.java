@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultFileInputDetailsFactoryTest {
@@ -119,7 +119,6 @@ public class DefaultFileInputDetailsFactoryTest {
 
         when(multipartFormDataInput.getFormDataMap()).thenReturn(formDataMap);
         when(inputPartFileNameExtractor.extractFileName(inputPart)).thenReturn(fileName);
-        when(inputPart.getMediaType()).thenReturn(TEXT_XML_TYPE);
         when(inputPart.getBody(InputStream.class, null)).thenThrow(ioException);
 
         try {
@@ -146,8 +145,6 @@ public class DefaultFileInputDetailsFactoryTest {
         final Map<String, List<InputPart>> formDataMap = new HashMap<>();
 
         when(multipartFormDataInput.getFormDataMap()).thenReturn(formDataMap);
-        when(inputPartFileNameExtractor.extractFileName(inputPart)).thenReturn(fileName);
-        when(inputPart.getBody(InputStream.class, null)).thenReturn(inputStream);
 
         try {
             fileInputDetailsFactory.createFileInputDetailsFrom(
@@ -172,8 +169,6 @@ public class DefaultFileInputDetailsFactoryTest {
         final Map<String, List<InputPart>> formDataMap = ImmutableMap.of(fieldName, emptyList());
 
         when(multipartFormDataInput.getFormDataMap()).thenReturn(formDataMap);
-        when(inputPartFileNameExtractor.extractFileName(inputPart)).thenReturn(fileName);
-        when(inputPart.getBody(InputStream.class, null)).thenReturn(inputStream);
 
         try {
             fileInputDetailsFactory.createFileInputDetailsFrom(

@@ -36,7 +36,6 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
-import org.slf4j.MDC;
 
 /**
  * Adds request information to the Logger Mapped Diagnostic Context.  This can be added to the log
@@ -47,16 +46,19 @@ public class LoggerRequestDataAdder {
     private static final String SERVICE_COMPONENT = "serviceComponent";
 
     @Inject
-    Logger logger;
+    private Logger logger;
 
     @Inject
-    ServiceContextNameProvider serviceContextNameProvider;
+    private ServiceContextNameProvider serviceContextNameProvider;
 
     @Inject
-    StringToJsonObjectConverter stringToJsonObjectConverter;
+    private StringToJsonObjectConverter stringToJsonObjectConverter;
 
     @Inject
-    JsonObjectEnvelopeConverter jsonObjectEnvelopeConverter;
+    private JsonObjectEnvelopeConverter jsonObjectEnvelopeConverter;
+
+    @Inject
+    private MdcWrapper mdcWrapper;
 
     public void addToMdc(final ContainerRequestContext requestContext, final String componentName) throws IOException {
         trace(logger, () -> "Adding request data to MDC");
@@ -74,14 +76,14 @@ public class LoggerRequestDataAdder {
         mergeHeadersWithPayloadMetadataIfPresent(requestContext, headers)
                 .ifPresent(metadataBuilder -> builder.add(METADATA, metadataBuilder));
 
-        MDC.put(REQUEST_DATA, builder.build().toString());
+        mdcWrapper.put(REQUEST_DATA, builder.build().toString());
 
         trace(logger, () -> "Request data added to MDC");
     }
 
     public void clearMdc() {
         trace(logger, () -> "Clearing MDC");
-        MDC.clear();
+        mdcWrapper.clear();
     }
 
     private void addContentTypeAndAcceptIfPresent(final JsonObjectBuilder builder, final MultivaluedMap<String, String> headers) {

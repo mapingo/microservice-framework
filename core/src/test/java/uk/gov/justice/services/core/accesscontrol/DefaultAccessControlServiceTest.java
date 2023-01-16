@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.core.accesscontrol.DefaultAccessControlService.ACCESS_CONTROL_DISABLED_PROPERTY;
 
@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -80,7 +80,7 @@ public class DefaultAccessControlServiceTest {
 
         assertThat(accessControlViolation.isPresent(), is(false));
 
-        verifyZeroInteractions(policyEvaluator);
+        verifyNoInteractions(policyEvaluator);
 
         verify(logger).trace("Skipping access control due to configuration");
     }

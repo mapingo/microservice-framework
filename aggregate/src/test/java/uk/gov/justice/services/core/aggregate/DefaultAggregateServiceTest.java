@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
 /**
@@ -170,8 +170,6 @@ public class DefaultAggregateServiceTest {
         when(eventStream.getId()).thenReturn(STREAM_ID);
 
         JsonObject eventPayloadA = mock(JsonObject.class);
-        EventA eventA = mock(EventA.class);
-        when(jsonObjectToObjectConverter.convert(eventPayloadA, EventA.class)).thenReturn(eventA);
         when(eventStream.read()).thenReturn(Stream.of(envelopeFrom(metadataBuilder()
                 .withStreamId(STREAM_ID)
                 .withId(randomUUID())
@@ -182,13 +180,6 @@ public class DefaultAggregateServiceTest {
 
     @Test(expected = RuntimeException.class)
     public void shouldThrowExceptionForNonInstantiatableEvent() {
-        JsonObject eventPayloadA = mock(JsonObject.class);
-        EventA eventA = mock(EventA.class);
-        when(jsonObjectToObjectConverter.convert(eventPayloadA, EventA.class)).thenReturn(eventA);
-        when(eventStream.read()).thenReturn(Stream.of(envelopeFrom(metadataBuilder()
-                .withStreamId(STREAM_ID)
-                .withId(randomUUID())
-                .withName("eventA"), eventPayloadA)));
 
         registerEvent(EventA.class, "eventA");
 

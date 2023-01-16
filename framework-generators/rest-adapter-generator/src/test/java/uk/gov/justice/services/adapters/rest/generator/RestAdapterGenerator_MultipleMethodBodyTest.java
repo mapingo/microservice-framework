@@ -3,8 +3,9 @@ package uk.gov.justice.services.adapters.rest.generator;
 import static javax.json.Json.createObjectBuilder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.POST;
@@ -53,6 +54,9 @@ public class RestAdapterGenerator_MultipleMethodBodyTest extends BaseRestAdapter
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiPathResource");
+
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Object resourceObject = getInstanceOf(resourceClass);
 

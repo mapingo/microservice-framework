@@ -138,7 +138,7 @@ public class HandlerMethodMatcher extends TypeSafeDiagnosingMatcher<Class<?>> {
         final Sender sender = mock(Sender.class, withSettings()
                 .name(format("%s.sender.send", method.getName()))
                 .invocationListeners(SKIP_JSON_VALIDATION_LISTENER)
-                .defaultAnswer(RETURNS_DEFAULTS.get()));
+                .defaultAnswer(RETURNS_DEFAULTS));
 
         final JsonEnvelope command = envelope().with(metadataWithDefaults()).build();
         final Object handlerInstance = handlerClass.newInstance();
@@ -158,7 +158,7 @@ public class HandlerMethodMatcher extends TypeSafeDiagnosingMatcher<Class<?>> {
                 withSettings()
                         .name(format("%s.requester.request", method.getName()))
                         .invocationListeners(SKIP_JSON_VALIDATION_LISTENER)
-                        .defaultAnswer(RETURNS_DEFAULTS.get()));
+                        .defaultAnswer(RETURNS_DEFAULTS));
         final Envelope query = envelope().with(metadataWithDefaults()).build();
 
         final Object handlerInstance = handlerClass.newInstance();

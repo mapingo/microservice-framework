@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.mockito.internal.creation.cglib.CglibMockMaker;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
@@ -29,13 +28,15 @@ import org.mockito.listeners.MethodInvocationReport;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockMaker;
 
+import org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker;
+
 /**
  * Mockito extension to test if payloads passed to {@link Sender} and returned by {@link Requester},
  * conform to respective json schemas.
  */
 public class JsonSchemaValidatingMockMaker implements MockMaker {
 
-    private final MockMaker mockMakerDelegate = new CglibMockMaker();
+    private final MockMaker mockMakerDelegate = new SubclassByteBuddyMockMaker();
 
     private final EnvelopeValidationExceptionHandler envelopeValidationExceptionHandler = new RethrowingValidationExceptionHandler();
     private final ObjectMapper objectMapper = new ObjectMapperProducer().objectMapper();
@@ -63,6 +64,11 @@ public class JsonSchemaValidatingMockMaker implements MockMaker {
         }
 
         return mockMakerDelegate.createMock(settings, handler);
+    }
+
+    @Override
+    public TypeMockability isTypeMockable(final Class<?> aClass) {
+        return mockMakerDelegate.isTypeMockable(aClass);
     }
 
     private boolean shouldSkipValidation(final List<InvocationListener> invocationListeners) {

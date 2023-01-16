@@ -6,12 +6,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.not;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 import static uk.gov.justice.services.common.http.HeaderConstants.ID;
 import static uk.gov.justice.services.common.http.HeaderConstants.USER_ID;
 
@@ -43,7 +43,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
 /**
@@ -119,7 +119,6 @@ public class JsonSchemaValidationInterceptorTest {
 
         final String actionName = "example.action-name";
 
-        when(nameToMediaTypeConverter.convert(CONVERTED_MEDIA_TYPE)).thenReturn(actionName);
         when(context.getMediaType()).thenReturn(new MediaType(MEDIA_TYPE_TYPE, NON_JSON_MEDIA_SUBTYPE));
 
         jsonSchemaValidationInterceptor.aroundReadFrom(context);
@@ -169,13 +168,11 @@ public class JsonSchemaValidationInterceptorTest {
     @Test(expected = BadRequestException.class)
     @SuppressWarnings("unchecked")
     public void shouldThrowBadRequestExceptionIfValidatorFailsWithInvalidMediaTypeException() throws Exception {
-        final MultivaluedMap<String, String> headers = new MultivaluedHashMap();
         final String actionName = "example.action-name";
 
         when(nameToMediaTypeConverter.convert(CONVERTED_MEDIA_TYPE)).thenReturn(actionName);
 
         doThrow(new InvalidMediaTypeException("", mock(Exception.class))).when(jsonSchemaValidator).validate(PAYLOAD, actionName, of(CONVERTED_MEDIA_TYPE));
-        when(context.getHeaders()).thenReturn(headers);
 
         jsonSchemaValidationInterceptor.aroundReadFrom(context);
     }

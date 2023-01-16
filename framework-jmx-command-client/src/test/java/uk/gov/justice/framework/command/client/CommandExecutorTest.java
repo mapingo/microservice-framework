@@ -3,7 +3,7 @@ package uk.gov.justice.framework.command.client;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import uk.gov.justice.framework.command.client.io.CommandPrinter;
@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -72,6 +72,6 @@ public class CommandExecutorTest {
         commandExecutor.executeCommand(commandLine, jmxParameters, systemCommands);
 
         verify(commandPrinter).printSystemCommands(systemCommands);
-        verifyZeroInteractions(systemCommandInvoker);
+        verifyNoInteractions(systemCommandInvoker);
     }
 }

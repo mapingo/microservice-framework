@@ -10,9 +10,9 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThrows;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -76,6 +76,9 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 "resource",
                 "DefaultQueryApiPathResource");
 
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+
         final Object resourceObject = getInstanceOf(resourceClass);
 
         final Response processorResponse = Response.ok().build();
@@ -106,6 +109,9 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 "resource",
                 "DefaultQueryApiPathResource");
 
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+
         final Object resourceObject = getInstanceOf(resourceClass);
 
         final Method method = firstMethodOf(resourceClass).get();
@@ -133,6 +139,9 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                                         .with(httpActionWithDefaultMapping(GET).withDefaultResponseType())
                         ).build(),
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
                 outputFolder.getRoot(),
@@ -166,6 +175,9 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 "resource",
                 "DefaultQueryControllerPathResource");
 
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+
         firstMethodOf(resourceClass).get().invoke(getInstanceOf(resourceClass));
 
         verify(restProcessor).process(eq("OkStatusEnvelopeEntityResponseStrategy"), any(Function.class), anyString(), any(HttpHeaders.class), any(Collection.class));
@@ -188,6 +200,9 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                                 )
                         ).build(),
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
                 outputFolder.getRoot(),
@@ -213,6 +228,7 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 ).build(),
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
+        final HttpHeaders headers = new ThreadLocalHttpHeaders();
         final Class<?> resourceClass = COMPILER.compiledClassOf(
                 outputFolder.getRoot(),
                 outputFolder.getRoot(),
@@ -220,9 +236,11 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 "resource",
                 "DefaultQueryApiPathResource");
 
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(headers))).thenReturn(action);
+
         final Object resourceObject = getInstanceOf(resourceClass);
 
-        final HttpHeaders headers = new ThreadLocalHttpHeaders();
 
         setField(resourceObject, "headers", headers);
 
@@ -339,6 +357,9 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 "resource",
                 "DefaultQueryApiSomePathParamAResource");
 
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+
         final Object resourceObject = getInstanceOf(resourceClass);
 
         final Method method = firstMethodOf(resourceClass).get();
@@ -374,6 +395,9 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 "resource",
                 "DefaultQueryApiSomePathParam1Param2Resource");
 
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+
         final Object resourceObject = getInstanceOf(resourceClass);
 
         final Method method = firstMethodOf(resourceClass).get();
@@ -404,6 +428,9 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                                         .withDefaultResponseType())
                 ).build(),
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
+
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
                 outputFolder.getRoot(),
@@ -445,6 +472,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 ).build(),
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
         final Class<?> resourceClass = COMPILER.compiledClassOf(
                 outputFolder.getRoot(),
                 outputFolder.getRoot(),
@@ -499,6 +528,9 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 "resource",
                 "DefaultQueryApiSomePathResource");
 
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+
         final Object resourceObject = getInstanceOf(resourceClass);
 
         final Method method = firstMethodOf(resourceClass).get();
@@ -540,6 +572,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 "DefaultQueryApiSomePathParamResource");
 
         final Object resourceObject = getInstanceOf(resourceClass);
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Method method = firstMethodOf(resourceClass).get();
         method.invoke(resourceObject, "paramValueABC", "paramValueDEF");
@@ -578,6 +612,9 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiSomePathResource");
+
+        final String action = "theAction";
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Object resourceObject = getInstanceOf(resourceClass);
 

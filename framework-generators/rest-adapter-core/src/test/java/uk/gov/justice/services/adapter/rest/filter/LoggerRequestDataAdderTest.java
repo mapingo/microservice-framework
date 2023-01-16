@@ -13,7 +13,9 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentCaptor.forClass;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -46,10 +48,11 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
 
@@ -75,6 +78,9 @@ public class LoggerRequestDataAdderTest {
 
     @Mock
     private ServiceContextNameProvider serviceContextNameProvider;
+
+    @Mock
+    private MdcWrapper mdcWrapper;
 
     @Spy
     private JsonObjectEnvelopeConverter jsonObjectEnvelopeConverter = new DefaultJsonObjectEnvelopeConverter();
@@ -103,7 +109,14 @@ public class LoggerRequestDataAdderTest {
 
         loggerRequestDataAdder.addToMdc(context, COMPONENT_NAME);
 
-        assertThat(MDC.get(REQUEST_DATA), isJson(
+
+        final ArgumentCaptor<String> envelopeJsonArgumentCaptor = forClass(String.class);
+
+        verify(mdcWrapper).put(eq(REQUEST_DATA), envelopeJsonArgumentCaptor.capture());
+
+        final String envelopeJson = envelopeJsonArgumentCaptor.getValue();
+
+        assertThat(envelopeJson, isJson(
                 allOf(
                         withJsonPath("$." + METADATA + ".id", equalTo(MESSAGE_ID_VALUE)),
                         withJsonPath("$." + METADATA + ".correlation.client", equalTo(CLIENT_CORRELATION_ID_VALUE)),
@@ -131,7 +144,13 @@ public class LoggerRequestDataAdderTest {
         when(context.getHeaders()).thenReturn(headers);
 
         loggerRequestDataAdder.addToMdc(context, COMPONENT_NAME);
-        assertThat(MDC.get(REQUEST_DATA), isJson(
+
+        final ArgumentCaptor<String> envelopeJsonArgumentCaptor = forClass(String.class);
+
+        verify(mdcWrapper).put(eq(REQUEST_DATA), envelopeJsonArgumentCaptor.capture());
+
+        final String envelopeJson = envelopeJsonArgumentCaptor.getValue();
+        assertThat(envelopeJson, isJson(
                 allOf(
                         withJsonPath("$." + METADATA + ".id", equalTo(messageId)),
                         withJsonPath("$." + METADATA + ".name", equalTo(name))
@@ -161,7 +180,13 @@ public class LoggerRequestDataAdderTest {
 
         loggerRequestDataAdder.addToMdc(context, COMPONENT_NAME);
 
-        assertThat(MDC.get(REQUEST_DATA), isJson(
+        final ArgumentCaptor<String> envelopeJsonArgumentCaptor = forClass(String.class);
+
+        verify(mdcWrapper).put(eq(REQUEST_DATA), envelopeJsonArgumentCaptor.capture());
+
+        final String envelopeJson = envelopeJsonArgumentCaptor.getValue();
+
+        assertThat(envelopeJson, isJson(
                 allOf(
                         withJsonPath("$." + METADATA + ".id", equalTo(MESSAGE_ID_VALUE)),
                         withJsonPath("$." + METADATA + ".correlation.client", equalTo(CLIENT_CORRELATION_ID_VALUE)),
@@ -197,7 +222,13 @@ public class LoggerRequestDataAdderTest {
 
         loggerRequestDataAdder.addToMdc(context, COMPONENT_NAME);
 
-        assertThat(MDC.get(REQUEST_DATA), isJson(
+        final ArgumentCaptor<String> envelopeJsonArgumentCaptor = forClass(String.class);
+
+        verify(mdcWrapper).put(eq(REQUEST_DATA), envelopeJsonArgumentCaptor.capture());
+
+        final String envelopeJson = envelopeJsonArgumentCaptor.getValue();
+
+        assertThat(envelopeJson, isJson(
                 allOf(
                         withJsonPath("$." + METADATA + ".id", equalTo(MESSAGE_ID_VALUE)),
                         withJsonPath("$." + METADATA + ".correlation.client", equalTo(CLIENT_CORRELATION_ID_VALUE)),
@@ -231,7 +262,13 @@ public class LoggerRequestDataAdderTest {
 
         loggerRequestDataAdder.addToMdc(context, COMPONENT_NAME);
 
-        assertThat(MDC.get(REQUEST_DATA), isJson(
+        final ArgumentCaptor<String> envelopeJsonArgumentCaptor = forClass(String.class);
+
+        verify(mdcWrapper).put(eq(REQUEST_DATA), envelopeJsonArgumentCaptor.capture());
+
+        final String envelopeJson = envelopeJsonArgumentCaptor.getValue();
+
+        assertThat(envelopeJson, isJson(
                 allOf(
                         withJsonPath("$." + METADATA + ".id", equalTo(MESSAGE_ID_VALUE)),
                         withJsonPath("$." + METADATA + ".correlation.client", equalTo(CLIENT_CORRELATION_ID_VALUE)),
@@ -255,7 +292,12 @@ public class LoggerRequestDataAdderTest {
 
         loggerRequestDataAdder.addToMdc(context, COMPONENT_NAME);
 
-        assertThat(MDC.get(REQUEST_DATA), isJson(allOf(
+        final ArgumentCaptor<String> envelopeJsonArgumentCaptor = forClass(String.class);
+
+        verify(mdcWrapper).put(eq(REQUEST_DATA), envelopeJsonArgumentCaptor.capture());
+
+        final String envelopeJson = envelopeJsonArgumentCaptor.getValue();
+        assertThat(envelopeJson, isJson(allOf(
                 withJsonPath("$." + SERVICE_COMPONENT, equalTo(COMPONENT_NAME)),
                 hasNoJsonPath("$." + CONTENT_TYPE),
                 hasNoJsonPath("$." + ACCEPT),
@@ -275,7 +317,13 @@ public class LoggerRequestDataAdderTest {
 
         loggerRequestDataAdder.addToMdc(context, COMPONENT_NAME);
 
-        assertThat(MDC.get(REQUEST_DATA), isJson(allOf(
+        final ArgumentCaptor<String> envelopeJsonArgumentCaptor = forClass(String.class);
+
+        verify(mdcWrapper).put(eq(REQUEST_DATA), envelopeJsonArgumentCaptor.capture());
+
+        final String envelopeJson = envelopeJsonArgumentCaptor.getValue();
+
+        assertThat(envelopeJson, isJson(allOf(
                 withJsonPath("$." + SERVICE_COMPONENT, equalTo(COMPONENT_NAME)),
                 hasNoJsonPath("$." + CONTENT_TYPE),
                 hasNoJsonPath("$." + ACCEPT),
@@ -300,7 +348,12 @@ public class LoggerRequestDataAdderTest {
 
         loggerRequestDataAdder.addToMdc(context, COMPONENT_NAME);
 
-        assertThat(MDC.get(REQUEST_DATA), isJson(allOf(
+        final ArgumentCaptor<String> envelopeJsonArgumentCaptor = forClass(String.class);
+
+        verify(mdcWrapper).put(eq(REQUEST_DATA), envelopeJsonArgumentCaptor.capture());
+
+        final String envelopeJson = envelopeJsonArgumentCaptor.getValue();
+        assertThat(envelopeJson, isJson(allOf(
                 withJsonPath("$." + SERVICE_COMPONENT, equalTo(COMPONENT_NAME)),
                 hasNoJsonPath("$." + CONTENT_TYPE),
                 hasNoJsonPath("$." + ACCEPT),
@@ -321,7 +374,13 @@ public class LoggerRequestDataAdderTest {
 
         loggerRequestDataAdder.addToMdc(context, COMPONENT_NAME);
 
-        assertThat(MDC.get(REQUEST_DATA), isJson(allOf(
+        final ArgumentCaptor<String> envelopeJsonArgumentCaptor = forClass(String.class);
+
+        verify(mdcWrapper).put(eq(REQUEST_DATA), envelopeJsonArgumentCaptor.capture());
+
+        final String envelopeJson = envelopeJsonArgumentCaptor.getValue();
+
+        assertThat(envelopeJson, isJson(allOf(
                 withJsonPath("$." + SERVICE_COMPONENT, equalTo(COMPONENT_NAME)),
                 hasNoJsonPath("$." + CONTENT_TYPE),
                 hasNoJsonPath("$." + ACCEPT),

@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SystemCommandLocatorTest {
@@ -34,7 +34,6 @@ public class SystemCommandLocatorTest {
 
         when(systemCommand_1.getName()).thenReturn("command_1");
         when(systemCommand_2.getName()).thenReturn("command_2");
-        when(systemCommand_3.getName()).thenReturn("command_3");
 
         when(systemCommandScanner.findCommands()).thenReturn(asList(
                 systemCommand_1,

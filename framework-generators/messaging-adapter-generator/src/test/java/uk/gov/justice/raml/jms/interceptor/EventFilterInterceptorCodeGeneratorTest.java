@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EventFilterInterceptorCodeGeneratorTest {
@@ -94,12 +94,11 @@ public class EventFilterInterceptorCodeGeneratorTest {
     private void nowTestTheFailureCase(final Class<?> generatedClass) throws Exception {
 
         final String eventName = "an.event.name";
-        final String aDifferentventName = "a.different.event.name";
+        final String aDifferentEventName = "a.different.event.name";
 
         final Interceptor interceptor = buildTheClassForTest(generatedClass, new MyCustomEventFilter(eventName));
 
         final InterceptorContext interceptorContext_1 = mock(InterceptorContext.class, "interceptorContext_1");
-        final InterceptorContext interceptorContext_2 = mock(InterceptorContext.class, "interceptorContext_2");
 
         final InterceptorChain interceptorChain = mock(InterceptorChain.class);
         final JsonEnvelope jsonEnvelope = mock(JsonEnvelope.class);
@@ -108,8 +107,7 @@ public class EventFilterInterceptorCodeGeneratorTest {
 
         when(interceptorContext_1.inputEnvelope()).thenReturn(jsonEnvelope);
         when(jsonEnvelope.metadata()).thenReturn(metadata);
-        when(metadata.name()).thenReturn(aDifferentventName);
-        when(interceptorChain.processNext(interceptorContext_1)).thenReturn(interceptorContext_2);
+        when(metadata.name()).thenReturn(aDifferentEventName);
 
         assertThat(interceptor.process(interceptorContext_1, interceptorChain), is(interceptorContext_1));
     }

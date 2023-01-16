@@ -6,7 +6,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -36,7 +36,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -152,11 +152,9 @@ public class JsonValidatorRequestFilterTest {
 
     @Test
     public void shouldAcceptNoneJsonMediaType() throws Exception {
-        final String payload = "NOT JSON DATA";
 
         final ContainerRequestContext context = mock(ContainerRequestContext.class);
         when(context.getMediaType()).thenReturn(MediaType.APPLICATION_XML_TYPE);
-        when(context.getEntityStream()).thenReturn(new ByteArrayInputStream(payload.getBytes()));
 
         filterUnderTest.filter(context);
 

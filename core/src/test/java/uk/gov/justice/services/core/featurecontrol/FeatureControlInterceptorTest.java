@@ -7,7 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.core.annotation.ServiceComponentLocation.LOCAL;
 
@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
 
@@ -117,6 +117,6 @@ public class FeatureControlInterceptorTest {
         verify(logger).info("'feature-2' feature is enabled 'true' for action 'action-name' in COMMAND_API");
         verify(logger).info("'feature-3' feature is enabled 'false' for action 'action-name' in COMMAND_API");
 
-        verifyZeroInteractions(interceptorChain);
+        verifyNoInteractions(interceptorChain);
     }
 }

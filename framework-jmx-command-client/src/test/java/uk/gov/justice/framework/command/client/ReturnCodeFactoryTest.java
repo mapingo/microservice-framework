@@ -3,7 +3,7 @@ package uk.gov.justice.framework.command.client;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static uk.gov.justice.framework.command.client.ReturnCode.AUTHENTICATION_FAILED;
 import static uk.gov.justice.framework.command.client.ReturnCode.COMMAND_FAILED;
 import static uk.gov.justice.framework.command.client.ReturnCode.CONNECTION_FAILED;
@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReturnCodeFactoryTest {
@@ -51,7 +51,7 @@ public class ReturnCodeFactoryTest {
 
         assertThat(returnCodeFactory.createFor(new SystemCommandFailedException("Test")), is(COMMAND_FAILED));
 
-        verifyZeroInteractions(toConsolePrinter);
+        verifyNoInteractions(toConsolePrinter);
     }
 
     @Test

@@ -1,8 +1,9 @@
 package uk.gov.justice.services.adapters.rest.generator;
 
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,7 +41,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RestAdaptorGenerator_MultipartAdditionalPropertiesTest {
@@ -58,7 +59,7 @@ public class RestAdaptorGenerator_MultipartAdditionalPropertiesTest {
     @Mock
     private InterceptorChainProcessor interceptorChainProcessor;
 
-    @Context
+    @Mock
     private HttpHeaders headers;
 
     @Mock
@@ -91,6 +92,7 @@ public class RestAdaptorGenerator_MultipartAdditionalPropertiesTest {
     @Test
     public void shouldPropagateAdditionalPropertiesAsParameters() throws IOException {
 
+        final String action = "theAction";
         final Map<String, List<InputPart>> inputParts = new HashMap<>();
         final List<InputPart> inputPartList = new ArrayList<>();
         inputPartList.add(additionalProperty);
@@ -101,6 +103,8 @@ public class RestAdaptorGenerator_MultipartAdditionalPropertiesTest {
         when(additionalProperty.getMediaType()).thenReturn(mediaType);
         when(mediaType.getType()).thenReturn("text");
         when(additionalProperty.getBodyAsString()).thenReturn(BODY);
+        when(actionMapper.actionOf(any(String.class), any(String.class), eq(headers))).thenReturn(action);
+
 
         defaultCommandApiPhotographsUseridResource.postPeopleUploadPhotographPhotographsByUserid(UUID.randomUUID().toString(), multipartFormDataInput);
         verify(restProcessor).process(anyString(), any(Function.class), anyString(), any(HttpHeaders.class),

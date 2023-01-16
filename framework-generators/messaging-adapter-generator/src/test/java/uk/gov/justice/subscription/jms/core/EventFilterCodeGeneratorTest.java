@@ -19,7 +19,7 @@ import com.squareup.javapoet.TypeSpec;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.raml.model.Action;
 import org.raml.model.ActionType;
 import org.raml.model.MimeType;
@@ -60,7 +60,7 @@ public class EventFilterCodeGeneratorTest {
         final Resource resource = new Resource();
         resource.setActions(actions);
 
-        final Action action = mock(Action.class, RETURNS_DEEP_STUBS.get());
+        final Action action = mock(Action.class, RETURNS_DEEP_STUBS);
         actions.put(POST, action);
 
         final MimeType mimeType_1 = new MimeType("application/vnd.my-context.events.something-happened+json");

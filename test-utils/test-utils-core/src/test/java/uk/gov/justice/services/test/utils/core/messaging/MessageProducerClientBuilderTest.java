@@ -6,7 +6,7 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static uk.gov.justice.services.test.utils.core.messaging.MessageProducerClientBuilder.aMessageProducerClient;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.getValueOfField;
 
@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MessageProducerClientBuilderTest {
@@ -37,7 +37,7 @@ public class MessageProducerClientBuilderTest {
         final MessageProducerClient messageProducerClient = messageProducerClientBuilder.build();
         assertThat(messageProducerClient, is(notNullValue()));
 
-        verifyZeroInteractions(activeMQConnectionFactory);
+        verifyNoInteractions(activeMQConnectionFactory);
 
         final ActiveMQConnectionFactory theActiveMQConnectionFactory = getValueOfField(messageProducerClient, "activeMQConnectionFactory", ActiveMQConnectionFactory.class);
 

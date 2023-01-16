@@ -22,6 +22,7 @@ import uk.gov.justice.services.adapter.messaging.DefaultJmsProcessor;
 import uk.gov.justice.services.adapter.messaging.DefaultSubscriptionJmsProcessor;
 import uk.gov.justice.services.adapter.messaging.JmsLoggerMetadataAdder;
 import uk.gov.justice.services.adapter.messaging.JsonSchemaValidationInterceptor;
+import uk.gov.justice.services.adapter.messaging.MdcWrapper;
 import uk.gov.justice.services.cdi.LoggerProducer;
 import uk.gov.justice.services.common.annotation.ComponentNameExtractor;
 import uk.gov.justice.services.common.configuration.GlobalValueProducer;
@@ -197,7 +198,9 @@ public class JmsEndpointGenerationCustomIT extends AbstractJmsAdapterGenerationI
             TestHandlerRegistryCacheProducer.class,
 
             RequestResponseEnvelopeValidatorFactory.class,
-            EnvelopeValidatorFactory.class
+            EnvelopeValidatorFactory.class,
+
+            MdcWrapper.class
     })
     public WebApp war() {
         return new WebApp()

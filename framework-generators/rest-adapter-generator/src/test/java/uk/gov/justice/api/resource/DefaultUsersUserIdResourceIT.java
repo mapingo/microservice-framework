@@ -24,6 +24,7 @@ import uk.gov.justice.services.adapter.rest.application.DefaultCommonProviders;
 import uk.gov.justice.services.adapter.rest.envelope.RestEnvelopeBuilderFactory;
 import uk.gov.justice.services.adapter.rest.filter.JsonValidatorRequestFilter;
 import uk.gov.justice.services.adapter.rest.filter.LoggerRequestDataAdder;
+import uk.gov.justice.services.adapter.rest.filter.MdcWrapper;
 import uk.gov.justice.services.adapter.rest.interceptor.JsonSchemaValidationInterceptor;
 import uk.gov.justice.services.adapter.rest.mapper.BadRequestExceptionMapper;
 import uk.gov.justice.services.adapter.rest.mapping.BasicActionMapperHelper;
@@ -207,7 +208,9 @@ public class DefaultUsersUserIdResourceIT {
             DefaultEventSourceDefinitionFactory.class,
             JndiAppNameProvider.class,
 
-            SchemaValidationErrorMessageGenerator.class
+            SchemaValidationErrorMessageGenerator.class,
+
+            MdcWrapper.class
     })
     public WebApp war() {
         return new WebApp()

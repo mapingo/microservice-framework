@@ -7,7 +7,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import uk.gov.justice.services.jmx.api.mbean.SystemCommander;
@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -76,7 +76,7 @@ public class MBeanInstantiatorTest {
         mBeanInstantiator.registerSystemCommanderMBean();
 
         verify(mbeanServer, never()).registerMBean(systemCommander, objectName);
-        verifyZeroInteractions(logger);
+        verifyNoInteractions(logger);
     }
 
     @Test
@@ -129,7 +129,7 @@ public class MBeanInstantiatorTest {
         mBeanInstantiator.unregisterMBeans();
 
         verify(mbeanServer, never()).unregisterMBean(objectName);
-        verifyZeroInteractions(logger);
+        verifyNoInteractions(logger);
     }
 
     @Test

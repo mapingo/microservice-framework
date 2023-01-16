@@ -5,7 +5,7 @@ import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.adapter.rest.multipart.FileInputDetails.FILE_INPUT_DETAILS_LIST;
 import static uk.gov.justice.services.core.interceptor.InterceptorContext.interceptorContextWithInput;
@@ -30,7 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InputStreamFileInterceptorTest {
@@ -99,7 +99,7 @@ public class InputStreamFileInterceptorTest {
 
         assertThat(resultJsonEnvelope, is(inputEnvelope));
 
-        verifyZeroInteractions(multipleFileInputDetailsService);
+        verifyNoInteractions(multipleFileInputDetailsService);
     }
 
     private InterceptorContext createInterceptorContext(final List<FileInputDetails> fileInputDetails) {
