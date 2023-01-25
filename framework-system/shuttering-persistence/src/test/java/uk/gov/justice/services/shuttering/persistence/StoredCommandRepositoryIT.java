@@ -1,5 +1,6 @@
 package uk.gov.justice.services.shuttering.persistence;
 
+import static java.time.temporal.ChronoUnit.MILLIS;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
@@ -17,6 +18,7 @@ import uk.gov.justice.services.shuttering.domain.StoredCommand;
 import uk.gov.justice.services.test.utils.persistence.TestJdbcDataSourceProvider;
 
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -59,7 +61,7 @@ public class StoredCommandRepositoryIT {
 
         storedCommandRepository.deleteAll();
 
-        final ZonedDateTime now = new UtcClock().now();
+        final ZonedDateTime now = new UtcClock().now().truncatedTo(MILLIS);
 
         final StoredCommand storedCommand_1 = new StoredCommand(randomUUID(), "command envelope 1", "destination 1", now.plusSeconds(1));
         final StoredCommand storedCommand_2 = new StoredCommand(randomUUID(), "command envelope 2", "destination 2", now.plusSeconds(2));
@@ -91,7 +93,7 @@ public class StoredCommandRepositoryIT {
 
         storedCommandRepository.deleteAll();
 
-        final ZonedDateTime now = new UtcClock().now();
+        final ZonedDateTime now = new UtcClock().now().truncatedTo(MILLIS);
 
         final StoredCommand storedCommand_1 = new StoredCommand(randomUUID(), "command envelope 1", "destination 1", now.plusSeconds(1));
         final StoredCommand storedCommand_2 = new StoredCommand(randomUUID(), "command envelope 2", "destination 2", now.plusSeconds(2));
@@ -128,7 +130,7 @@ public class StoredCommandRepositoryIT {
         storedCommandRepository.deleteAll();
 
         final UUID envelopeId = fromString("0b305815-f251-481d-9a69-2ff60c3a88ca");
-        final StoredCommand storedCommand = new StoredCommand(envelopeId, "command envelope 1", "destination 1", new UtcClock().now());
+        final StoredCommand storedCommand = new StoredCommand(envelopeId, "command envelope 1", "destination 1", new UtcClock().now().truncatedTo(MILLIS));
 
         storedCommandRepository.save(storedCommand);
 

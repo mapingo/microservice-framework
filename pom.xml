@@ -7,12 +7,12 @@
     <parent>
         <groupId>uk.gov.justice</groupId>
         <artifactId>maven-framework-parent-pom</artifactId>
-        <version>11.0.1</version>
+        <version>17.0.0-M1</version>
     </parent>
 
     <groupId>uk.gov.justice.services</groupId>
     <artifactId>microservice-framework</artifactId>
-    <version>11.0.2-SNAPSHOT</version>
+    <version>17.0.0-M1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Microservice Framework</name>
@@ -48,7 +48,7 @@
 
     <properties>
         <cpp.repo.name>microservice_framework</cpp.repo.name>
-        <framework-libraries.version>11.0.1</framework-libraries.version>
+        <framework-libraries.version>17.0.0-M1</framework-libraries.version>
     </properties>
 
     <dependencyManagement>
