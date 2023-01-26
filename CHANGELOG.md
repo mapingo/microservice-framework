@@ -5,160 +5,39 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 [Unreleased]
 
-## [11.0.0-M31] - 2023-01-16
+## [11.0.0] - 2023-01-26
 ### Changed
-- Update common-bom in order to:
-  - Update mockito version to 4.11.0
-  - Update slf4j version to 2.0.6
-  - Update hamcrest version to 2.2
-  - Update slf4j version to 2.0.6
-### Removed
-- Removed all old hamcrest libraries
-
-## [11.0.0-M30] - 2023-01-10
-### Changed
+- Update to OpenJDK 11
+- Update to JEE 8
 - Improve testability of DefaultRestClientProcessor by extracting WebTargetFactory creation to separate class 
-
-## [11.0.0-M29] - 2022-11-30
-### Changed
 - Close the client in DefaultRestClientProcessor
-
-## [11.0.0-M28] - 2022-11-23
-### Changed
-- Removed log4j-over-slf4j as it is now replaced by slf4j-reload4j
-
-## [11.0.0-M27] - 2022-11-22
-### Security
-- Update common bom to 11.0.0-M20 in order to:
-    - Update hibernate version to 5.4.24.Final
-    - Update jackson.databind version to 2.12.7.1
-
-## [11.0.0-M26] - 2022-11-18
-### Changed
-- Update common bom to 11.0.0-M19 in order to:
-    - Update jackson libraries to 2.12.7
-
-## [11.0.0-M24] - 2022-11-16
-### Changed
-- Update common bom to 11.0.0-M18 in order to:
-    - Update jboss-logging version to 3.5.0.Final
-
-## [11.0.0-M23] - 2022-11-10
+- Updated slf4j/log4j bridge jar from slf4j-log4j12 to slf4j-reload4j
+- MessageProducerClient is now idempotent when calling `startProducer(...)`
+- Update framework-libraries to 11.0.0 for:
+    - A default name of `jms.queue.DLQ` rather than the original name of `DLQ`
+    - A new constructor to pass the name in if you don't want the default name
+    - New builder `MessageConsumerClientBuilder` that allows ActiveMQ connection parameters to be specified
+- Update liquibase to 4.10.0
+- Removed strict checking of liquibase.properties files
+- Jmx Command Client now runs with Wildfly 26.1.2.Final
+- Update to log4j 2
+- Update log4j2 to 2.17.1 to fix critical security violation
 ### Added
+- Added mechanism for running better healthchecks
+- Added a utility in healthchecks for checking the names of tables in a postgres database
 - Add messaging-jms dependency to framework-bom
-
-## [11.0.0-M22] - 2022-11-03
+- Added MessageProducerClientBuilder for creating configurable message producer clients
+### Removed
+- Removed log4j-over-slf4j as it is now replaced by slf4j-reload4j
+- Removed all old hamcrest libraries
+### Fixed
+- Fixed all tests affected by the update to OpenEjb 8.0.6
 ### Security
 - Updates to various libraries to address security alerts:
     - wildfly to version 26.1.2.Final
     - artemis to version 2.20.0
     - resteasy-client to version 4.7.7.Final
-
-## [11.0.0-M21] - 2022-10-18
-### Changed
-- Updated slf4j/log4j bridge jar from slf4j-log4j12 to slf4j-reload4j
-
-## [11.0.0-M20] - 2022-09-05
-### Changed
-- MessageProducerClient is now idempotent when calling `startProducer(...)`
-
-## [11.0.0-M19] - 2022-08-31
-### Added
-- Added MessageProducerClientBuilder for creating configurable message producer clients
-### Changed
-- Update framework-libraries to 11.0.0-M20 for:
-    - A default name of `jms.queue.DLQ` rather than the original name of `DLQ`
-    - A new constructor to pass the name in if you don't want the default name
-    - New builder `MessageConsumerClientBuilder` that allows ActiveMQ connection parameters to be specified
-
-## [11.0.0-M18] - 2022-08-12
-### Changed
-- Update common bom to 11.0.0-M15 in order to:
-    - Update artemis-jms-client to 2.10.1
-
-## [11.0.0-M17] - 2022-06-16
-### Added
-- Added a utility in healthchecks for checking the names of tables in a postgres database
-
-## [11.0.0-M16] - 2022-06-08
-### Changed
-- Update framework-libraries to version 11.0.0-M18
-
-## [11.0.0-M15] - 2022-05-30
-### Changed
-- Removed strict checking of liquibase.properties files
-
-## [11.0.0-M14] - 2022-05-23
-### Changed
-- Update maven-framework-parent-pom to 11.0.0-M6
-
-## [11.0.0-M13] - 2022-05-20
-### Changed
-- Update liquibase to 4.10.0
-
-## [11.0.0-M11] - 2022-03-25
-### Fixed
-- Healthchecks how return json with correct UTF-8 charset
-
-## [11.0.0-M10] - 2022-03-23
-### Changed
-- Update framework-libraries to version 11.0.0-M13
-
-### Changed
-## [11.0.0-M9] - 2022-03-22
-- Added mechanism for running better healthchecks
-
-## [11.0.0-M8] - 2022-03-16
-- Fix Jmx Command Client to run with Wildfly 20.0.1
-- Update to log4j 2
-
-## [11.0.0-M7] - 2022-02-25
-### Changed
-- Update framework-libraries to allow
-    - Update log4j2 to 2.17.1 to fix critical security violation
-
-## [11.0.0-M6] - 2021-06-15
-### Changed
-- Update framework-libraries to 11.0.0-M7
-
-## [11.0.0-M5] - 2021-05-28
-### Changed
-- Update framework-libraries to 11.0.0-M6
-
-## [11.0.0-M4] - 2021-05-18
-### Changed
-- Update framework-libraries to 11.0.0-M5
-
-## [11.0.0-M3] - 2021-05-07
-### Changed
-- Update framework-libraries to 11.0.0-M4
-- Update maven-framework-parent-pom to 11.0.0-M3
-- Fixed all tests affected by the update to OpenEjb 8.0.6
-
-## [11.0.0-M2] - 2021-02-04
-### Changed
-- Update to JEE 8
-- Update framework-libraries to 11.0.0-M2
-
-## [11.0.0-M1] - 2021-01-26
-### Changed
-- Update framework-parent-pom to 11.0.0-M1
-- Update framework-libraries to 11.0.0-M1
-
-## [8.0.0-M3] - 2021-01-06
-### Changed
-- Update framework-libraries to 8.0.0-M3
-
-## [8.0.0-M2] - 2021-01-06
-### Changed
-- Update framework-libraries to 8.0.0-M2
-
-## [8.0.0-M1] - 2021-01-04
-### Changed
-- Update to OpenJDK 11
-- Update framework-libraries to 8.0.0-M1
-- Update framework-parent-pom to 8.0.0-M2
-
+    
 ## [7.2.23] - 2021-03-29
 ### Changed
 - RestClientProcessor now handles bad request (400) responses by throwing a BadRequestException
