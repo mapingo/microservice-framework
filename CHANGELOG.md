@@ -4,6 +4,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+### Changed
+- Add cover all token to travis settings
 
 ## [11.0.0] - 2023-01-26
 ### Changed
