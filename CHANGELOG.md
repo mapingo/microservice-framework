@@ -4,8 +4,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+
+## [11.0.1] - 2023-02-01
 ### Changed
-- Add cover all token to travis settings
+- Downgraded maven minimum version to 3.3.9 until the pipeline maven version is updated
+- Add coveralls token to travis settings
 
 ## [11.0.0] - 2023-01-26
 ### Changed
