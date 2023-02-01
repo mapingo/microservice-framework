@@ -2,37 +2,30 @@ dist: xenial
 language: java
 os: linux
 jdk:
-  - openjdk11
+- openjdk11
 git:
   depth: 3
 cache:
   directories:
-    - "$HOME/.m2"
+  - "$HOME/.m2"
 services:
-  - postgresql
+- postgresql
 before_script:
-  - psql -c 'create database frameworkeventstore;' -U postgres
-  - psql -c 'create database frameworkviewstore;' -U postgres
-  - psql -c 'create database frameworkfilestore;' -U postgres
-  - psql -c 'create database frameworksystem;' -U postgres
-  - psql -c 'create database fileservice;' -U postgres
-  - psql -c "CREATE USER framework WITH PASSWORD 'framework';" -U postgres
-  - psql -c "CREATE USER fileservice WITH PASSWORD 'fileservice';" -U postgres
+- psql -c 'create database frameworkeventstore;' -U postgres
+- psql -c 'create database frameworkviewstore;' -U postgres
+- psql -c 'create database frameworkfilestore;' -U postgres
+- psql -c 'create database frameworksystem;' -U postgres
+- psql -c 'create database fileservice;' -U postgres
+- psql -c "CREATE USER framework WITH PASSWORD 'framework';" -U postgres
+- psql -c "CREATE USER fileservice WITH PASSWORD 'fileservice';" -U postgres
 addons:
   postgresql: '9.5'
-# Sonar no longer works with java 8 - commenting out until the upgrade to 11 is complete
-#  sonarcloud:
-#    organization: cjscommonplatform
-#    token:
-#      secure: FAGcFnJBPKyUQLCNA1ZjAQ0eLUZ+HQIDtJh10o9aML8bO+3GE8z8B+pIvAVYwepekXG1YfMvBT3+CmLiLVLO1G+oiI8Ov3tZnIUxWAjGmbyElcXp/FYlc/gemIx9yteZWd6Qi4KXpTARSJuFvSlHU1KoOduNSOPAzi1h4rVIEv27XlmKft3y/X5xWPFLTFnTMD8GP+NSF1JwiHzlbpiKFFgd2iIt5zufsQgdQOLiU3CdxGbKeejbUH7uau8X0xvVFTCa3cnv7YeWakSjSV2fO1WQMONRkr4zZ2vhI1GIREMfiiBhJYqAAs/mErJ7p6BVno2pIr4Si9Vml/xbPPuY6xWYzAd1KG/NdMzFgCNIwRW0MSPHaK5R9DrNqsagJqaa3TGGsFkOK9cQgaPz5BASPCryJG2oBHcwHyexLo5gR3KPLK5g+kedFn4F7olkeiDYtsDeVi1xtiGqUviG/PQR3VcUcRN/KmIcx/nr63k6LYKL7sD0wH9okz6ltLPqOe1baOsvBwzJeAibR+Y8yCFffNL790g9bTXpnWB8VCOUdyDiaXi1g9ZYBfi/zeiytSDpsGElLL4emyf/amZh5i/QBn0glJ5GOmRbaaCHhrhs3ZrQZ7Xqc0wPBjcB0NTdycmlFweP+jeRWsgd5vqzICOrH+kxRJlhGW4v+r+pUeFtXyI=
 before_install:
-  - git clone https://github.com/CJSCommonPlatform/travis-settings.git target/travis-settings
-  - ln -sfT ${PWD}/target/travis-settings/settings.xml ${HOME}/.m2/settings.xml
-  - ln -sfT ${PWD}/target/travis-settings/mvnw mvnw
-  - ln -sft ${PWD} ${PWD}/target/travis-settings/.mvn
+- git clone https://github.com/CJSCommonPlatform/travis-settings.git target/travis-settings
+- ln -sfT ${PWD}/target/travis-settings/settings.xml ${HOME}/.m2/settings.xml
+- ln -sfT ${PWD}/target/travis-settings/mvnw mvnw
+- ln -sft ${PWD} ${PWD}/target/travis-settings/.mvn
 install: "${PWD}/target/travis-settings/java/install.sh -e -DexcludeGroupIds=uk.gov.justice.service,uk.gov.justice.services"
-# original command before removing sonar:
-# script: "${PWD}/target/travis-settings/java/script-install.sh coveralls:report sonar:sonar"
 script: "${PWD}/target/travis-settings/java/script-install.sh coveralls:report"
 after_success: "${PWD}/target/travis-settings/java/after_success.sh"
 notifications:
@@ -40,7 +33,8 @@ notifications:
     secure: fPlaMvrczZ2riJ4tjMOAqxSGj4JfxGlH/K08knLgG4T/n6EL4LN4+184Npz9XueNbV3m26WUrPkbXEiWXpqkKsbwcZXqqnFxGacGiyxv7LeBeQLYp7NFeARAyB5qDwUpjHlCPAEoAeyeGsZNrpui/wceY4j1tB7ObfdwbxLzAO0tekdbwitSaK1cc7V2sVHkBYr7ChuC+dVO1pshPw0EVTmzPioS8nfFKPaxWoMgyRAuYe7MD0U7DxNQ4Wzsb7tpfd5Oom1wLXyZ7M3wwSMMamIAAxHVG389Az6YvN7hXQggTGDawf/YwVOaoMR2bh7uHBCOiNZO1GbRTOA7IuTPwT7GsK94THRtfvqNm7RFBPkoD4657FATnk2o5c7QNTY3dAlYLsxLnS6mVTL/vAbqC7BbDHo/UGsxmOusQtKt8sRoL8pOCEInHaS3b88Osl7u7oYO/E4YTptdnkEe8tNyWWdx34nEUT0j1Mu/VAN38YcgTMUuiBU6chkMJ5BjIHisJlAAnBJ9VGgF9liqnigNwAGhbrHZPyAlKUX8HLejpD+t4aR0UaEvvauh6aHh4pYm0mZra4zOBC/lBDOXqsu5ajHL8LpHc6j+5FrmNwciiTVoxdud2S4c0U2ymr3L07ivX+UyhoraS9oSH3v7L73Q4NyvuAmD8Zc0xw/cR4Pff9c=
 env:
   global:
-    - JAVA_TOOL_OPTIONS=-Dhttps.protocols=TLSv1.2,TLSv1,TLSv1.1
-    - PGPORT=5432
-    - secure: lcrjU4FFEm3ryzo6EoRlAY+cYyyO8xgabV6SqnVYm7JCOu9zcuJwhAt4yN6EeGV22xAMY50Q5pXPg8HA54hZW/frOCcgsi4AhEIhxjmb0Ea6GigQdKFm6zVC4hR/6NH2zrosLJ2agE1tQEV5JHrxAE2dq8eQrWdr8fQxB/eSwNycFQ6X/djjpT7ZuGKV3rT0hHSjmxOISFu82XKKlhOAgvDhqjj5IEWb8slR6VPMIDuJycG43o+wMws5WDbt2eE2OnBtD/VRyAVpIP8fFrskfCqF9Z/YT0P7/nGtDkWcFhQTWo06p2dpF9yFDnPbsB4AQedRsPXj/o2M5Vx6MKjWabRINCsfbSPGv/jYaMTNWdrPTLLrdbDE+1UI9XHUgZmTYsoMhJRZq9QS8kgDINhU25sYBHQUXXapZSsK27dimLk5HiPAacxi+ShSR2h4UFRG2fBOFus9X8lgHjtxg9ycq656/FGkzpufRqWXokXifSz1Glv7WB/xquKl8yS4oSllccxfzRRxKGmQfqdry8LDE/p5UdP7EtNJ/sKKC6TGGZMzv+Wmq6HPMUfq3oVy6B/Uilsfc53WgCZCdxodDW2KVeQ4YGb/Mljtzx0brcSqV3qcUHywBPbLvVtQd0STnFsPbMxDxbQRV5J1y7StwKqrZFHfuotw0U3Tua7g4KxmzRw=
-    - secure: UHNnRLM7vMhHix7ZyMobgQGqBOzfMhl6SZ14jLlRTDhg7i/pET5Ji4CslforcGYdcuvPmb6Fs19nBsqJX1AgbmIQR8EnQO0PbR7JMcBDw0o1oTRCYs8cOvsBwZh7TIDGB5Wy8SgWrE23ZFsain5eVjvaggeWEJNraVNQCJ5M59UHnqjtzhy8/QYtUZLis8ofEYzbhd1XGz9zbHb/PdXQgN0YdSBP1z0VKbj8bA5aIAy28oTWgOu0TygP45sMOyqpXJFuAcBuDx/4kJzMhUibeIdqyBCbcLr82F3Ao4ria8HMau2n1cyGI/9QdPtu1xbzg9doqR6wp/4aF4N8mWAKRgJW1nm14SSMW5/REIPVn2Fur+NwChaL5Ns8hY11o0HQTucwbxxlWgabDwxrLnesldphoebMnqKe1loBjtOrb2F2RLYQfQortwRPn29pMXpKVPTmw+hAhZ7qFG3P7EXytcObb3xPwONP+9Ge5jpQIvGrQwrlxTg8bQGBzJcBlDZefb8q01AcZTt1mgC62olaSQ9758M9PYafW3jxGKtGjbkEHD9V1X43QN+Pz04yZr9L7zxlo9kXOL+QoUqVmqjCVjkjfsc7g3OKWwi3fBNXGnJ6j4mNsHAdglqfoWzg9cltizrT+/X/DYsUSMFnVaVCXcpzKV7L+x1Ae9XQiGOhhhg=
+  - JAVA_TOOL_OPTIONS=-Dhttps.protocols=TLSv1.2,TLSv1,TLSv1.1
+  - PGPORT=5432
+  - secure: lcrjU4FFEm3ryzo6EoRlAY+cYyyO8xgabV6SqnVYm7JCOu9zcuJwhAt4yN6EeGV22xAMY50Q5pXPg8HA54hZW/frOCcgsi4AhEIhxjmb0Ea6GigQdKFm6zVC4hR/6NH2zrosLJ2agE1tQEV5JHrxAE2dq8eQrWdr8fQxB/eSwNycFQ6X/djjpT7ZuGKV3rT0hHSjmxOISFu82XKKlhOAgvDhqjj5IEWb8slR6VPMIDuJycG43o+wMws5WDbt2eE2OnBtD/VRyAVpIP8fFrskfCqF9Z/YT0P7/nGtDkWcFhQTWo06p2dpF9yFDnPbsB4AQedRsPXj/o2M5Vx6MKjWabRINCsfbSPGv/jYaMTNWdrPTLLrdbDE+1UI9XHUgZmTYsoMhJRZq9QS8kgDINhU25sYBHQUXXapZSsK27dimLk5HiPAacxi+ShSR2h4UFRG2fBOFus9X8lgHjtxg9ycq656/FGkzpufRqWXokXifSz1Glv7WB/xquKl8yS4oSllccxfzRRxKGmQfqdry8LDE/p5UdP7EtNJ/sKKC6TGGZMzv+Wmq6HPMUfq3oVy6B/Uilsfc53WgCZCdxodDW2KVeQ4YGb/Mljtzx0brcSqV3qcUHywBPbLvVtQd0STnFsPbMxDxbQRV5J1y7StwKqrZFHfuotw0U3Tua7g4KxmzRw=
+  - secure: UHNnRLM7vMhHix7ZyMobgQGqBOzfMhl6SZ14jLlRTDhg7i/pET5Ji4CslforcGYdcuvPmb6Fs19nBsqJX1AgbmIQR8EnQO0PbR7JMcBDw0o1oTRCYs8cOvsBwZh7TIDGB5Wy8SgWrE23ZFsain5eVjvaggeWEJNraVNQCJ5M59UHnqjtzhy8/QYtUZLis8ofEYzbhd1XGz9zbHb/PdXQgN0YdSBP1z0VKbj8bA5aIAy28oTWgOu0TygP45sMOyqpXJFuAcBuDx/4kJzMhUibeIdqyBCbcLr82F3Ao4ria8HMau2n1cyGI/9QdPtu1xbzg9doqR6wp/4aF4N8mWAKRgJW1nm14SSMW5/REIPVn2Fur+NwChaL5Ns8hY11o0HQTucwbxxlWgabDwxrLnesldphoebMnqKe1loBjtOrb2F2RLYQfQortwRPn29pMXpKVPTmw+hAhZ7qFG3P7EXytcObb3xPwONP+9Ge5jpQIvGrQwrlxTg8bQGBzJcBlDZefb8q01AcZTt1mgC62olaSQ9758M9PYafW3jxGKtGjbkEHD9V1X43QN+Pz04yZr9L7zxlo9kXOL+QoUqVmqjCVjkjfsc7g3OKWwi3fBNXGnJ6j4mNsHAdglqfoWzg9cltizrT+/X/DYsUSMFnVaVCXcpzKV7L+x1Ae9XQiGOhhhg=
+  - secure: Y4yHPTeyhmA5rF0JVVsloLpJSaN+GWnUh4Itjrvo5xK+kDKAsSwq63nM4FmH+H71HAavFdd4DBbdfUiPede7P8ce1yv4/irkXzn8yL+x2JS9RUrKR35IF6olQ69FzfnTsDVUXg9i4Wb5Q6DJy8oGQETB0CVYJz3UT/fJPdEa0nnQBSJ0H+/6gNufsgwcFTL66K9ebPKKkKGve5WBlLUTrerR3puCTIOiAHv+Km+vfRhg7wbRyCEYOG91kyZBGSDvfubzECxwbuzee55RxSxnd19YC0QjHcUvhJLvsxRB6KV+xF7S6IQHQToXafaTxX2bKa2gADCqr649LJhlML2uKD48td5dBAKxZBL7Myep1kWxHOBrmBOc1cVikXp2yeIIyeIFQraJCbcCZhVibGiFxXdhfvhwcuGhLHOejVYYTOyFK91BCvIpOvQjwbpL3X6/HzqvFFLDfaAZtp62ZCNREUsKzaYbZnXxEs/5sKypKyTqFWorTIg3uuEDsyp5REMjNNeoICNKnhhM1XjeB9gSS+BlDoOcshPkimK8Lncp4KgBNhCVI54I8rkfFX8Dl3apW6a8xEWISzHwI6LHfyRgWAsmCEPwdk1HZ7PZsfVCBoDQP2gEi9MzLGAiNSfbtP4X6HtI8h01C6AqNm8SawUkNkJ6if78ICsLdF8Ob9ILhlc=
