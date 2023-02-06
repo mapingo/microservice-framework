@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 [Unreleased]
 
+## [17.0.0-M2] - 2023-02-03
+### Changed
+- Update framework-libraries to 17.0.0-M2
+
 ## [17.0.0-M1] - 2023-02-03
 ### Changed
 - Update to Java 17
