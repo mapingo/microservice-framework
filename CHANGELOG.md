@@ -5,6 +5,18 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 [Unreleased]
 
+## [17.0.0-M3] - 2023-02-15
+### Changed
+- Update framework-libraries to 17.0.0-M3
+
+## [17.0.0-M2] - 2023-02-03
+### Changed
+- Update framework-libraries to 17.0.0-M2
+
+## [17.0.0-M1] - 2023-02-03
+### Changed
+- Update to Java 17
+
 ## [11.0.1] - 2023-02-01
 ### Changed
 - Downgraded maven minimum version to 3.3.9 until the pipeline maven version is updated

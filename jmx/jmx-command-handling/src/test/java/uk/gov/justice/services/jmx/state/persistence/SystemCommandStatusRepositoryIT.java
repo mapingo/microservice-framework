@@ -1,5 +1,6 @@
 package uk.gov.justice.services.jmx.state.persistence;
 
+import static java.time.temporal.ChronoUnit.MILLIS;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
@@ -20,6 +21,7 @@ import uk.gov.justice.services.test.utils.persistence.TestJdbcDataSourceProvider
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -62,7 +64,7 @@ public class SystemCommandStatusRepositoryIT {
     @Test
     public void shouldSaveAndFindAll() throws Exception {
 
-        final ZonedDateTime now = new UtcClock().now();
+        final ZonedDateTime now = new UtcClock().now().truncatedTo(MILLIS);;
         final UUID catchupCommandId = randomUUID();
         final SystemCommandStatus catchupCommandStatus_1 = new SystemCommandStatus(
                 catchupCommandId,
@@ -101,7 +103,7 @@ public class SystemCommandStatusRepositoryIT {
 
     @Test
     public void shouldFindAllStatusesOfACommand() throws Exception {
-        final ZonedDateTime now = new UtcClock().now();
+        final ZonedDateTime now = new UtcClock().now().truncatedTo(MILLIS);
         final UUID catchupCommandId = randomUUID();
         final SystemCommandStatus catchupCommandStatus_1 = new SystemCommandStatus(
                 catchupCommandId,
@@ -140,7 +142,7 @@ public class SystemCommandStatusRepositoryIT {
     @Test
     public void shouldGetTheLatestStatusOfACommandById() throws Exception {
 
-        final ZonedDateTime now = new UtcClock().now();
+        final ZonedDateTime now = new UtcClock().now().truncatedTo(MILLIS);;
         final UUID catchupCommandId = randomUUID();
         final SystemCommandStatus catchupCommandStatus_1 = new SystemCommandStatus(
                 catchupCommandId,
@@ -186,7 +188,7 @@ public class SystemCommandStatusRepositoryIT {
     @Test
     public void shouldGetTheLatestStatusOfACommand() throws Exception {
 
-        final ZonedDateTime now = new UtcClock().now();
+        final ZonedDateTime now = new UtcClock().now().truncatedTo(MILLIS);;
         final UUID catchupCommandId = randomUUID();
         final SystemCommandStatus indexerCommandStatus_1 = new SystemCommandStatus(
                 catchupCommandId,
