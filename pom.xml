@@ -45,10 +45,9 @@
         <module>test-utils</module>
     </modules>
     
-
     <properties>
         <cpp.repo.name>microservice_framework</cpp.repo.name>
-        <framework-libraries.version>17.0.1</framework-libraries.version>
+        <framework-libraries.version>17.0.2</framework-libraries.version>
     </properties>
 
     <dependencyManagement>
