@@ -2,12 +2,13 @@ package uk.gov.justice.services.generators.commons.helper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.annotation.Component.QUERY_API;
 
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RestResourceBaseUriTest {
 
@@ -17,9 +18,9 @@ public class RestResourceBaseUriTest {
                 .pathWithoutWebContext(), is("/command/api/rest/service"));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldThrowExceptionForMalformedUri() throws Exception {
-        new RestResourceBaseUri("blah").pathWithoutWebContext();
+        assertThrows(IllegalStateException.class, () -> new RestResourceBaseUri("blah").pathWithoutWebContext());
     }
 
 

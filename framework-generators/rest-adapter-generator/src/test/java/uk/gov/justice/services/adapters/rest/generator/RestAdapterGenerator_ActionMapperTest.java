@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
 import javax.inject.Named;
 
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RestAdapterGenerator_ActionMapperTest extends BaseRestAdapterGeneratorTest {
 
@@ -58,8 +58,8 @@ public class RestAdapterGenerator_ActionMapperTest extends BaseRestAdapterGenera
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> mapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "DefaultQueryApiUserResourceActionMapper");
@@ -98,8 +98,8 @@ public class RestAdapterGenerator_ActionMapperTest extends BaseRestAdapterGenera
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> mapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "DefaultQueryApiStatusResourceActionMapper");
@@ -132,8 +132,8 @@ public class RestAdapterGenerator_ActionMapperTest extends BaseRestAdapterGenera
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> mapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "DefaultCommandApiCaseResourceActionMapper");
@@ -171,8 +171,8 @@ public class RestAdapterGenerator_ActionMapperTest extends BaseRestAdapterGenera
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> mapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "DefaultCommandApiCaseResourceActionMapper");
@@ -210,8 +210,8 @@ public class RestAdapterGenerator_ActionMapperTest extends BaseRestAdapterGenera
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> mapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "DefaultCommandApiCaseResourceActionMapper");
@@ -249,8 +249,8 @@ public class RestAdapterGenerator_ActionMapperTest extends BaseRestAdapterGenera
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> mapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "DefaultCommandApiCaseResourceActionMapper");
@@ -288,8 +288,8 @@ public class RestAdapterGenerator_ActionMapperTest extends BaseRestAdapterGenera
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> mapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "DefaultCommandApiCaseResourceActionMapper");
@@ -329,8 +329,8 @@ public class RestAdapterGenerator_ActionMapperTest extends BaseRestAdapterGenera
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> mapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "DefaultCommandApiCaseResourceActionMapper");
@@ -359,8 +359,8 @@ public class RestAdapterGenerator_ActionMapperTest extends BaseRestAdapterGenera
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> mapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "DefaultQueryApiStatusResourceActionMapper");

@@ -3,7 +3,7 @@ package uk.gov.justice.raml.jms.core;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_CONTROLLER;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_HANDLER;
@@ -18,8 +18,8 @@ import static uk.gov.justice.services.core.annotation.Component.QUERY_VIEW;
 import javax.jms.Queue;
 import javax.jms.Topic;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ComponentDestinationTypeTest {
 
@@ -27,7 +27,7 @@ public class ComponentDestinationTypeTest {
 
     private ComponentDestinationType componentDestinationType;
 
-    @Before
+    @BeforeEach
     public void setup() {
         componentDestinationType = new ComponentDestinationType();
     }

@@ -3,10 +3,11 @@ package uk.gov.justice.services.adapter.rest.parameter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DefaultParameterTest {
 
@@ -46,14 +47,14 @@ public class DefaultParameterTest {
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowIllegalArgumentExceptionIfInvalidNumericParamValuePassed() throws Exception {
-        DefaultParameter.valueOf("paramName3", "aaa", ParameterType.NUMERIC);
+        assertThrows(IllegalArgumentException.class, () -> DefaultParameter.valueOf("paramName3", "aaa", ParameterType.NUMERIC));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowIllegalArgumentExceptionIfInvalidBooleanParamValuePassed() throws Exception {
-        DefaultParameter.valueOf("paramName3", "aaa", ParameterType.BOOLEAN);
+        assertThrows(IllegalArgumentException.class, () -> DefaultParameter.valueOf("paramName3", "aaa", ParameterType.BOOLEAN));
     }
 
 }

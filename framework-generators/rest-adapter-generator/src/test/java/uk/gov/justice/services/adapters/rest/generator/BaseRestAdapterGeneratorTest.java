@@ -18,17 +18,18 @@ import uk.gov.justice.services.messaging.logging.HttpTraceLoggerHelper;
 import uk.gov.justice.services.messaging.logging.TraceLogger;
 import uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility;
 
+import java.io.File;
+
 import javax.ws.rs.core.HttpHeaders;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public abstract class BaseRestAdapterGeneratorTest {
 
     public static final JavaCompilerUtility COMPILER = javaCompilerUtil();
@@ -79,15 +80,15 @@ public abstract class BaseRestAdapterGeneratorTest {
     @Mock
     protected HttpHeaders httpHeaders;
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     protected final RestAdapterGenerator generator = new RestAdapterGenerator();
 
     protected static final String BASE_PACKAGE = "org.raml.test";
 
 
-    @Before
+    @BeforeEach
     public void before() {
         setField(generator, LOGGER_FIELD, logger);
     }

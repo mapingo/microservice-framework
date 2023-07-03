@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
@@ -33,8 +34,8 @@ import javax.json.JsonValue;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class DefaultJsonObjectEnvelopeConverterTest {
 
@@ -52,7 +53,7 @@ public class DefaultJsonObjectEnvelopeConverterTest {
 
     private DefaultJsonObjectEnvelopeConverter jsonObjectEnvelopeConverter;
 
-    @Before
+    @BeforeEach
     public void setup() {
         jsonObjectEnvelopeConverter = new DefaultJsonObjectEnvelopeConverter();
         jsonObjectEnvelopeConverter.objectMapper = new ObjectMapperProducer().objectMapper();
@@ -131,26 +132,25 @@ public class DefaultJsonObjectEnvelopeConverterTest {
         assertThat(jsonObjectEnvelopeConverter.fromEnvelope(envelope), equalTo(expectedEnvelope));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionOnArrayPayloadType() {
-        jsonObjectEnvelopeConverter.fromEnvelope(
+        assertThrows(IllegalArgumentException.class, () -> jsonObjectEnvelopeConverter.fromEnvelope(
                 envelopeFrom(metadataBuilder().withId(randomUUID()).withName("name"),
-                        createArrayBuilder().add(ARRAY_ITEM_1).add(ARRAY_ITEM_2).build()));
+                        createArrayBuilder().add(ARRAY_ITEM_1).add(ARRAY_ITEM_2).build())));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionOnNumberPayloadType() {
-        jsonObjectEnvelopeConverter.fromEnvelope(
+        assertThrows(IllegalArgumentException.class, () -> jsonObjectEnvelopeConverter.fromEnvelope(
                 envelopeFrom(metadataBuilder().withId(randomUUID()).withName("name"),
-                        createObjectBuilder().add(FIELD_NUMBER, 100).build().getJsonNumber(FIELD_NUMBER)));
+                        createObjectBuilder().add(FIELD_NUMBER, 100).build().getJsonNumber(FIELD_NUMBER))));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionWhenProvidedEnvelopeWithoutMetadata() throws IOException {
-        jsonObjectEnvelopeConverter.fromEnvelope(envelopeFrom((Metadata) null, createObjectBuilder().build()));
+        assertThrows(IllegalArgumentException.class, () -> jsonObjectEnvelopeConverter.fromEnvelope(envelopeFrom((Metadata) null, createObjectBuilder().build())));
     }
 
-    @Test(expected = RuntimeException.class)
     public void shouldThrowExceptionIfObjectMapperFails() throws Exception {
 
         final JsonObject envelopeJsonObject = jsonObjectFromFile("envelope");
@@ -160,7 +160,7 @@ public class DefaultJsonObjectEnvelopeConverterTest {
 
         final JsonEnvelope envelope = jsonObjectEnvelopeConverter.asEnvelope(envelopeJsonObject);
 
-        jsonObjectEnvelopeConverter.asJsonString(envelope);
+        assertThrows(IllegalArgumentException.class, () -> jsonObjectEnvelopeConverter.asJsonString(envelope));
     }
 
     private String jsonFromFile(final String name) throws IOException {

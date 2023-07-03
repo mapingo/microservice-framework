@@ -6,7 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import uk.gov.justice.services.core.mapping.MediaType;
 
 import com.google.common.testing.EqualsTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MediaTypeToSchemaIdTest {
 

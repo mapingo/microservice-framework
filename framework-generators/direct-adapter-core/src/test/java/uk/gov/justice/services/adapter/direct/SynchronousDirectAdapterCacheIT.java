@@ -2,6 +2,7 @@ package uk.gov.justice.services.adapter.direct;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import uk.gov.justice.services.core.annotation.DirectAdapter;
 import uk.gov.justice.services.messaging.JsonEnvelope;
@@ -10,13 +11,13 @@ import javax.inject.Inject;
 
 import org.apache.openejb.jee.Application;
 import org.apache.openejb.jee.WebApp;
-import org.apache.openejb.junit.ApplicationComposer;
+import org.apache.openejb.junit5.RunWithApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Module;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-@RunWith(ApplicationComposer.class)
+@RunWithApplicationComposer
 public class SynchronousDirectAdapterCacheIT {
 
     @Inject
@@ -39,12 +40,11 @@ public class SynchronousDirectAdapterCacheIT {
     public void shouldProduceAdapterBasingOnServiceComponentAnnotation() {
         assertThat(adapterCache.directAdapterForComponent("COMPONENT_ABC"), instanceOf(DirectAdapterAbc.class));
         assertThat(adapterCache.directAdapterForComponent("COMPONENT_BCD"), instanceOf(DirectAdapterBcd.class));
-
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionIfBeanNotFound() {
-        adapterCache.directAdapterForComponent("UNKNOWN");
+        assertThrows(IllegalArgumentException.class, () -> adapterCache.directAdapterForComponent("UNKNOWN"));
     }
 
     @DirectAdapter("COMPONENT_ABC")

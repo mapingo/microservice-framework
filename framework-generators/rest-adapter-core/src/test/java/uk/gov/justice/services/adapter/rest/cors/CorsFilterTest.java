@@ -6,6 +6,7 @@ import static javax.ws.rs.HttpMethod.POST;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.adapter.rest.cors.CorsHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS;
@@ -25,17 +26,17 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Unit tests for the {@link CorsFilter} class.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CorsFilterTest {
 
     private static final String CORS_FAILURE_PROPERTY_NAME = "cors.failure";
@@ -52,26 +53,25 @@ public class CorsFilterTest {
 
     private CorsFilter corsFilter;
 
-    @Before
+    @BeforeEach
     public void setup() {
-        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
-
         headers = new MultivaluedHashMap<>();
-        when(responseContext.getHeaders()).thenReturn(headers);
 
         corsFilter = new CorsFilter();
         corsFilter.getAllowedOrigins().add(TEST_ORIGIN);
     }
 
-    @Test(expected = ForbiddenException.class)
+    @Test
     public void shouldThrowExceptionIfOriginCheckForPostFailed() throws Exception {
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         when(requestContext.getMethod()).thenReturn(POST);
         when(requestContext.getHeaderString(ORIGIN)).thenReturn("some-other-origin");
-        corsFilter.filter(requestContext);
+        assertThrows(ForbiddenException.class, () -> corsFilter.filter(requestContext));
     }
 
     @Test
     public void shouldSetCorsFailurePropertyIfOriginCheckForPostFailed() throws Exception {
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         when(requestContext.getMethod()).thenReturn(POST);
         when(requestContext.getHeaderString(ORIGIN)).thenReturn("some-other-origin");
 
@@ -86,18 +86,21 @@ public class CorsFilterTest {
 
     @Test
     public void shouldAllowPostIfOriginCheckSucceeds() throws Exception {
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         when(requestContext.getMethod()).thenReturn(POST);
         corsFilter.filter(requestContext);
     }
 
     @Test
     public void shouldAllowPostIfOriginIsNull() throws Exception {
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         when(requestContext.getHeaderString(ORIGIN)).thenReturn(null);
         corsFilter.filter(requestContext);
     }
 
     @Test
     public void shouldSetAllowedOriginsHeader() throws Exception {
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         when(requestContext.getMethod()).thenReturn(OPTIONS);
 
         corsFilter.filter(requestContext);
@@ -109,6 +112,7 @@ public class CorsFilterTest {
 
     @Test
     public void shouldSetAllowCredentialsIfEnabled() throws Exception {
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         when(requestContext.getMethod()).thenReturn(OPTIONS);
 
         corsFilter.setAllowCredentials(true);
@@ -121,6 +125,7 @@ public class CorsFilterTest {
 
     @Test
     public void shouldNotSetAllowCredentialsIfDisabled() throws Exception {
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         when(requestContext.getMethod()).thenReturn(OPTIONS);
 
         corsFilter.setAllowCredentials(false);
@@ -133,6 +138,7 @@ public class CorsFilterTest {
 
     @Test
     public void shouldSetAllowMethodsHeaderFromRequest() throws Exception {
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         when(requestContext.getMethod()).thenReturn(OPTIONS);
         when(requestContext.getHeaderString(ACCESS_CONTROL_REQUEST_METHOD)).thenReturn(POST);
 
@@ -145,6 +151,7 @@ public class CorsFilterTest {
 
     @Test
     public void shouldSetAllowMethodsHeaderFromConfiguration() throws Exception {
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         when(requestContext.getMethod()).thenReturn(OPTIONS);
         when(requestContext.getHeaderString(ACCESS_CONTROL_REQUEST_METHOD)).thenReturn(POST);
 
@@ -161,7 +168,9 @@ public class CorsFilterTest {
     public void shouldSetAllowHeadersHeaderFromRequest() throws Exception {
         final String allowHeader = "some-header-name";
         when(requestContext.getMethod()).thenReturn(OPTIONS);
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         when(requestContext.getHeaderString(ACCESS_CONTROL_REQUEST_HEADERS)).thenReturn(allowHeader);
+        when(requestContext.getHeaderString(ACCESS_CONTROL_REQUEST_METHOD)).thenReturn(null);
 
         corsFilter.filter(requestContext);
 
@@ -175,7 +184,9 @@ public class CorsFilterTest {
         final String allowHeader = "some-header-name";
         final String configuredAllowedHeader = "some-other-header-name";
         when(requestContext.getMethod()).thenReturn(OPTIONS);
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         when(requestContext.getHeaderString(ACCESS_CONTROL_REQUEST_HEADERS)).thenReturn(allowHeader);
+        when(requestContext.getHeaderString(ACCESS_CONTROL_REQUEST_METHOD)).thenReturn(null);
 
         corsFilter.setAllowedHeaders(configuredAllowedHeader);
         corsFilter.filter(requestContext);
@@ -188,6 +199,7 @@ public class CorsFilterTest {
     @Test
     public void shouldSetMaxAgeIfEnabled() throws Exception {
         when(requestContext.getMethod()).thenReturn(OPTIONS);
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
 
         final int corsMaxAge = 9999;
         corsFilter.setCorsMaxAge(corsMaxAge);
@@ -201,6 +213,7 @@ public class CorsFilterTest {
     @Test
     public void shouldNotSetMaxAgeIfDisabled() throws Exception {
         when(requestContext.getMethod()).thenReturn(OPTIONS);
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
 
         corsFilter.filter(requestContext);
 
@@ -222,8 +235,6 @@ public class CorsFilterTest {
 
     @Test
     public void shouldDoNothingForOptionsRequest() throws Exception {
-        when(requestContext.getMethod()).thenReturn(OPTIONS);
-
         corsFilter.filter(requestContext, responseContext);
 
         assertThat(headers.getFirst(ACCESS_CONTROL_ALLOW_ORIGIN), nullValue());
@@ -235,6 +246,7 @@ public class CorsFilterTest {
     public void shouldDoNothingIfCorsFailureAlreadyOccurred() throws Exception {
         when(requestContext.getMethod()).thenReturn(POST);
         when(requestContext.getProperty(CORS_FAILURE_PROPERTY_NAME)).thenReturn(true);
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
 
         corsFilter.filter(requestContext, responseContext);
 
@@ -246,6 +258,8 @@ public class CorsFilterTest {
     @Test
     public void shouldSetAllowedOriginHeaderIfOriginSet() throws Exception {
         when(requestContext.getMethod()).thenReturn(POST);
+        when(responseContext.getHeaders()).thenReturn(headers);
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
 
         corsFilter.filter(requestContext, responseContext);
 
@@ -255,6 +269,8 @@ public class CorsFilterTest {
     @Test
     public void shouldSetAllowCredentialsHeaderIfEnabled() throws Exception {
         when(requestContext.getMethod()).thenReturn(POST);
+        when(responseContext.getHeaders()).thenReturn(headers);
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         corsFilter.setAllowCredentials(true);
 
         corsFilter.filter(requestContext, responseContext);
@@ -265,6 +281,8 @@ public class CorsFilterTest {
     @Test
     public void shouldNotSetAllowCredentialsHeaderIfDisabled() throws Exception {
         when(requestContext.getMethod()).thenReturn(POST);
+        when(responseContext.getHeaders()).thenReturn(headers);
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         corsFilter.setAllowCredentials(false);
 
         corsFilter.filter(requestContext, responseContext);
@@ -276,6 +294,8 @@ public class CorsFilterTest {
     public void shouldSetExposeHeadersIfPresent() throws Exception {
         final String exposedHeaders = "some-header";
         when(requestContext.getMethod()).thenReturn(POST);
+        when(responseContext.getHeaders()).thenReturn(headers);
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
         corsFilter.setExposedHeaders(exposedHeaders);
 
         corsFilter.filter(requestContext, responseContext);
@@ -286,6 +306,8 @@ public class CorsFilterTest {
     @Test
     public void shouldNotSetExposeHeadersIfAbsent() throws Exception {
         when(requestContext.getMethod()).thenReturn(POST);
+        when(responseContext.getHeaders()).thenReturn(headers);
+        when(requestContext.getHeaderString(ORIGIN)).thenReturn(TEST_ORIGIN);
 
         corsFilter.filter(requestContext, responseContext);
 

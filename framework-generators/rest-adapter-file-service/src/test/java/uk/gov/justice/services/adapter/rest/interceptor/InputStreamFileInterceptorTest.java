@@ -25,14 +25,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.google.common.collect.ImmutableMap;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class InputStreamFileInterceptorTest {
 
     @Mock
@@ -54,7 +54,7 @@ public class InputStreamFileInterceptorTest {
 
     private JsonEnvelope resultJsonEnvelope;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         final Deque<Interceptor> interceptors = new LinkedList<>();
         interceptors.add(inputStreamFileInterceptor);

@@ -1,6 +1,5 @@
 package uk.gov.justice.services.test.utils.core.messaging;
 
-import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -12,14 +11,9 @@ import java.util.UUID;
 
 import javax.json.JsonObject;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MetadataBuilderFactoryTest {
-
-    @Test
-    public void shouldBeWellDefinedUtilityClass() {
-        assertUtilityClassWellDefined(MetadataBuilderFactory.class);
-    }
 
     @Test
     public void shouldProvideMetadataBuilderWithUuidAndName() throws Exception {

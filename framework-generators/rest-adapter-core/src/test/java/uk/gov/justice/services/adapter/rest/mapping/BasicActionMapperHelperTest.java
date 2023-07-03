@@ -3,19 +3,19 @@ package uk.gov.justice.services.adapter.rest.mapping;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.generators.test.utils.builder.HeadersBuilder.headersWith;
 
 import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class BasicActionMapperHelperTest {
 
     private BasicActionMapperHelper mapping;
 
-    @Before
+    @BeforeEach
     public void setup() {
         mapping = new BasicActionMapperHelper();
         mapping.add("methodA", "application/vnd.blah+json", "actionNameA");

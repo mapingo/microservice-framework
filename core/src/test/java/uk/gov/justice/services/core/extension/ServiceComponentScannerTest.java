@@ -6,17 +6,22 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_CONTROLLER;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_HANDLER;
 import static uk.gov.justice.services.core.annotation.Component.QUERY_API;
 import static uk.gov.justice.services.core.annotation.Component.QUERY_VIEW;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import uk.gov.justice.domain.annotation.Event;
 import uk.gov.justice.services.adapter.direct.SynchronousDirectAdapter;
+import uk.gov.justice.services.core.annotation.AnyLiteral;
 import uk.gov.justice.services.core.annotation.CustomServiceComponent;
 import uk.gov.justice.services.core.annotation.Direct;
 import uk.gov.justice.services.core.annotation.DirectAdapter;
@@ -35,14 +40,14 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ServiceComponentScannerTest {
 
     private static final String TEST_EVENT_NAME = "Test-Event";
@@ -60,7 +65,7 @@ public class ServiceComponentScannerTest {
 
     private ServiceComponentScanner serviceComponentScanner;
 
-    @Before
+    @BeforeEach
     public void setup() {
         serviceComponentScanner = new ServiceComponentScanner();
     }
@@ -147,7 +152,8 @@ public class ServiceComponentScannerTest {
 
     @SuppressWarnings("serial")
     private void mockBeanManagerGetBeansWith(final Bean<Object>... handlers) {
-        doReturn(new HashSet<>(asList(handlers))).when(beanManager).getBeans(any(), any());
+        doReturn(new HashSet<>(asList(handlers))).when(beanManager).getBeans(any(Type.class));
+        doReturn(new HashSet<>(asList(handlers))).when(beanManager).getBeans(any(Type.class), any(Annotation.class));
     }
 
     private void mockProcessAnnotatedType() {

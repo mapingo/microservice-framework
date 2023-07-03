@@ -8,7 +8,7 @@ import static uk.gov.justice.services.test.utils.common.MemberInjectionPoint.inj
 
 import javax.inject.Inject;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MemberInjectionPointTest {
 

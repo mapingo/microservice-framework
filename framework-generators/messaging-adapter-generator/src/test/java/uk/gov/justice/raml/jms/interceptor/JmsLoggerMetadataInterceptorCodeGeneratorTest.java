@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import static uk.gov.justice.raml.jms.core.ClassNameFactory.JMS_LOGGER_METADATA_INTERCEPTOR;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 
+import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.raml.jms.core.ClassNameFactory;
 import uk.gov.justice.services.adapter.messaging.JmsLoggerMetadataAdder;
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
@@ -22,20 +23,18 @@ import javax.interceptor.InvocationContext;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class JmsLoggerMetadataInterceptorCodeGeneratorTest {
 
     private static final String SERVICE_COMPONENT_NAME = "CUSTOM";
 
-    @Rule
-    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    public File temporaryFolder;
 
     @InjectMocks
     private JmsLoggerMetadataInterceptorCodeGenerator jmsLoggerMetadataInterceptorCodeGenerator;
@@ -57,14 +56,17 @@ public class JmsLoggerMetadataInterceptorCodeGeneratorTest {
                 commonGeneratorProperties,
                 classNameFactory);
 
-        final File outputDirectory = temporaryFolder.newFolder("test-generation");
+        final File outputDirectory = new File(temporaryFolder, "test-generation");
+        outputDirectory.mkdirs();
         builder(packageName, typeSpec)
                 .build()
                 .writeTo(outputDirectory);
 
+        File outputDir = new File(temporaryFolder, getClass().getSimpleName());
+        outputDir.mkdirs();
         final Class<?> compiledClass = javaCompilerUtil().compiledClassOf(
                 outputDirectory,
-                temporaryFolder.newFolder(getClass().getSimpleName()),
+                outputDir,
                 packageName,
                 simpleName);
 

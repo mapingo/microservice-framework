@@ -10,6 +10,8 @@ import static uk.gov.justice.raml.jms.core.ClassNameFactory.JMS_HANDLER_DESTINAT
 import static uk.gov.justice.services.generators.test.utils.builder.ResourceBuilder.resource;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 
+import java.lang.reflect.Field;
+import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.raml.jms.core.ClassNameFactory;
 import uk.gov.justice.services.messaging.jms.JmsCommandHandlerDestinationNameProvider;
 
@@ -17,19 +19,17 @@ import java.io.File;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.raml.model.Resource;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class JmsCommandHandlerDestinationNameProviderCodeGeneratorTest {
 
-    @Rule
-    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    public File temporaryFolder;
 
     @InjectMocks
     private JmsCommandHandlerDestinationNameProviderCodeGenerator jmsCommandHandlerDestinationNameProviderCodeGenerator;
@@ -50,14 +50,17 @@ public class JmsCommandHandlerDestinationNameProviderCodeGeneratorTest {
         final Resource resource = resource().withRelativeUri("/" + destination).build();
         final TypeSpec typeSpec = jmsCommandHandlerDestinationNameProviderCodeGenerator.generate(resource, classNameFactory);
 
-        final File outputDirectory = temporaryFolder.newFolder("test-generation");
+        final File outputDirectory = new File(temporaryFolder, "test-generation");
+        outputDirectory.mkdirs();
         builder(packageName, typeSpec)
                 .build()
                 .writeTo(outputDirectory);
 
+        File compilationOutputDir = new File(temporaryFolder, getClass().getSimpleName());
+        compilationOutputDir.mkdirs();
         final Class<?> compiledClass = javaCompilerUtil().compiledClassOf(
                 outputDirectory,
-                temporaryFolder.newFolder(getClass().getSimpleName()),
+                compilationOutputDir,
                 packageName,
                 simpleName);
 

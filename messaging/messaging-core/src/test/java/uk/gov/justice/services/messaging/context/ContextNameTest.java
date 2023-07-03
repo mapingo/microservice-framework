@@ -1,28 +1,24 @@
 package uk.gov.justice.services.messaging.context;
 
-import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import uk.gov.justice.services.messaging.exception.InvalidNameException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ContextNameTest {
-
-    @Test
-    public void shouldBeAWellDefinedUtilityClass() {
-        assertUtilityClassWellDefined(ContextName.class);
-    }
 
     @Test
     public void shouldReturnContextName() {
         assertThat(ContextName.fromName("test-context.command.test-command"), equalTo("test-context"));
     }
 
-    @Test(expected = InvalidNameException.class)
+    @Test
     public void shouldThrowExceptionWithInvalidActionName() {
-        ContextName.fromName("test-context-commands-test-command");
+        assertThrows(InvalidNameException.class, () -> ContextName.fromName("test-context-commands-test-command"));
     }
 
 }

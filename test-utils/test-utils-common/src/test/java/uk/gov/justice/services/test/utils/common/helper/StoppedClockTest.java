@@ -7,7 +7,7 @@ import uk.gov.justice.services.common.util.Clock;
 
 import java.time.ZonedDateTime;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for the {@link StoppedClock} class.

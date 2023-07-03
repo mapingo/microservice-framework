@@ -1,7 +1,7 @@
 package uk.gov.justice.subscription.jms.it;
 
 import static javax.json.Json.createObjectBuilder;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataOf;
 
@@ -23,8 +23,8 @@ import org.apache.openejb.OpenEjbContainer;
 import org.apache.openejb.testing.Configuration;
 import org.apache.openejb.testng.PropertiesBuilder;
 import org.apache.openejb.util.NetworkUtil;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +36,7 @@ public abstract class AbstractJmsAdapterGenerationIT {
     private final static ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(
             "tcp://localhost:" + RANDOM_JMS_PORT + "?broker.persistent=false&jms.useAsyncSend=false");
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         port = NetworkUtil.getNextAvailablePort();
         try {
@@ -47,7 +47,7 @@ public abstract class AbstractJmsAdapterGenerationIT {
         }
     }
 
-    @AfterClass
+    @AfterAll
     public static void afterClass() {
         try {
             EmbeddedArtemisServer.stopServer();

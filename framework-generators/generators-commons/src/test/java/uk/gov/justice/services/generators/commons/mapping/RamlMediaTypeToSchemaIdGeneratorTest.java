@@ -17,11 +17,11 @@ import uk.gov.justice.services.core.mapping.MediaTypeToSchemaIdMapper;
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
 import uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility;
 
+import java.io.File;
 import java.util.Map;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.raml.model.MimeType;
 
 public class RamlMediaTypeToSchemaIdGeneratorTest {
@@ -30,8 +30,8 @@ public class RamlMediaTypeToSchemaIdGeneratorTest {
     private static final String BASE_PACKAGE = "org.raml.test";
     private static final JavaCompilerUtility COMPILER = javaCompilerUtil();
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     @Test
     public void shouldCreateMediaTypeToSchemaIdMapperForGivenRamlWithPost() throws Exception {
@@ -48,8 +48,8 @@ public class RamlMediaTypeToSchemaIdGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> schemaIdMapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "WarnameMediaTypeToSchemaIdMapper");
@@ -77,8 +77,8 @@ public class RamlMediaTypeToSchemaIdGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> schemaIdMapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "WarnameMediaTypeToSchemaIdMapper");

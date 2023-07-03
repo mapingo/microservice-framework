@@ -12,7 +12,7 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import javax.json.Json;
 import javax.json.JsonObject;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class EnvelopeFactoryTest {
 

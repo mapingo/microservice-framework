@@ -7,17 +7,17 @@ import static org.mockito.Mockito.verify;
 
 import javax.ws.rs.core.FeatureContext;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Unit tests for the {@link CorsFeature} class.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CorsFeatureTest {
 
     private static final String ALLOWED_ORIGIN = "TEST-ORIGIN";
@@ -29,7 +29,7 @@ public class CorsFeatureTest {
 
     private CorsFeature corsFeature;
 
-    @Before
+    @BeforeEach
     public void setup() {
         corsFeature = new CorsFeature();
         corsFeature.allowedOrigin = ALLOWED_ORIGIN;

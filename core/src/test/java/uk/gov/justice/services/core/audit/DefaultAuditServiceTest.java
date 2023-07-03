@@ -8,15 +8,15 @@ import static org.mockito.Mockito.when;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DefaultAuditServiceTest {
 
     private static final String ACTION_NAME = "test.action";
@@ -37,7 +37,7 @@ public class DefaultAuditServiceTest {
     @InjectMocks
     private DefaultAuditService auditService;
 
-    @Before
+    @BeforeEach
     public void setup() {
         when(jsonEnvelope.metadata()).thenReturn(metadata);
         when(metadata.name()).thenReturn(ACTION_NAME);

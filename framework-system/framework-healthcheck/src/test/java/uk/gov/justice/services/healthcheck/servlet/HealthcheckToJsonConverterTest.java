@@ -11,13 +11,13 @@ import uk.gov.justice.services.healthcheck.run.HealthcheckRunDetails;
 import uk.gov.justice.services.healthcheck.run.HealthcheckRunResults;
 import uk.gov.justice.services.test.utils.framework.api.JsonObjectConvertersFactory;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class HealthcheckToJsonConverterTest {
 
     @Spy

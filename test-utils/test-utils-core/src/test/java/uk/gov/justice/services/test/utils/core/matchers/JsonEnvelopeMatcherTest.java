@@ -5,6 +5,7 @@ import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonEnvelopeMetadataMatcher.metadata;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonEnvelopePayloadMatcher.payload;
@@ -19,7 +20,7 @@ import java.util.UUID;
 
 import javax.json.JsonValue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JsonEnvelopeMatcherTest {
 
@@ -53,40 +54,40 @@ public class JsonEnvelopeMatcherTest {
                 .withPayloadOf(payload(isJsonValueNull())));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchJsonEnvelopeWithJsonObject() throws Exception {
-        assertThat(jsonEnvelope(), JsonEnvelopeMatcher.jsonEnvelope()
-                .withPayloadOf(payload(isJsonValueNull())));
+        assertThrows(AssertionError.class, () -> assertThat(jsonEnvelope(), JsonEnvelopeMatcher.jsonEnvelope()
+                .withPayloadOf(payload(isJsonValueNull()))));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchJsonEnvelopeWithSchema() throws Exception {
         final JsonEnvelope invalidJsonEnvelope = envelope()
                 .with(metadataWithRandomUUID("event.action"))
                 .withPayloadOf(ID.toString(), "someId")
                 .build();
 
-        assertThat(invalidJsonEnvelope, JsonEnvelopeMatcher.jsonEnvelope().thatMatchesSchema());
+        assertThrows(AssertionError.class, () -> assertThat(invalidJsonEnvelope, JsonEnvelopeMatcher.jsonEnvelope().thatMatchesSchema()));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldFailToMatchDifferentMetadata() throws Exception {
-        assertThat(jsonEnvelope(), JsonEnvelopeMatcher.jsonEnvelope(
+        assertThrows(AssertionError.class, () -> assertThat(jsonEnvelope(), JsonEnvelopeMatcher.jsonEnvelope(
                 metadata().withName("event.not.match"),
                 payloadIsJson(allOf(
                         withJsonPath("$.someId", equalTo(ID.toString())),
                         withJsonPath("$.name", equalTo(NAME)))
-                )));
+                ))));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldFailToMatchDifferentPayload() throws Exception {
-        assertThat(jsonEnvelope(), JsonEnvelopeMatcher.jsonEnvelope(
+        assertThrows(AssertionError.class, () -> assertThat(jsonEnvelope(), JsonEnvelopeMatcher.jsonEnvelope(
                 metadata().withName("event.action"),
                 payloadIsJson(allOf(
                         withJsonPath("$.someId", equalTo(randomUUID().toString())),
                         withJsonPath("$.name", equalTo(NAME)))
-                )));
+                ))));
     }
 
     private JsonEnvelope jsonEnvelope() {

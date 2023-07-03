@@ -18,20 +18,20 @@ import uk.gov.justice.services.core.mapping.MediaTypes;
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
 import uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Optional;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class ActionNameToMediaTypesGeneratorTest {
 
     private static final String BASE_PACKAGE = "org.raml.test";
     private static final JavaCompilerUtility COMPILER = javaCompilerUtil();
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     @Test
     public void shouldCreateMediaTypeToSchemaIdMapperForGivenRamlWithPost() throws Exception {
@@ -59,8 +59,8 @@ public class ActionNameToMediaTypesGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> mediaTypesMapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "WarnameActionNameToMediaTypesMapper");
@@ -100,8 +100,8 @@ public class ActionNameToMediaTypesGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> mediaTypesMapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "WarnameActionNameToMediaTypesMapper");

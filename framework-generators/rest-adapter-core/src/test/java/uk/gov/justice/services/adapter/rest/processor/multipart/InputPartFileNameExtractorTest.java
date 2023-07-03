@@ -14,12 +14,12 @@ import java.util.Map;
 import javax.ws.rs.core.MultivaluedHashMap;
 
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class InputPartFileNameExtractorTest {
 
     @InjectMocks

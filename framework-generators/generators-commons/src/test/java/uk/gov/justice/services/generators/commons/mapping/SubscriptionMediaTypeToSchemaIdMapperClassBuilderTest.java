@@ -7,6 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 
+import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.services.core.annotation.SchemaIdMapper;
 import uk.gov.justice.services.core.mapping.MediaType;
 import uk.gov.justice.services.core.mapping.MediaTypeToSchemaIdMapper;
@@ -21,19 +22,17 @@ import java.util.Map;
 
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SubscriptionMediaTypeToSchemaIdMapperClassBuilderTest {
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     @Mock
     private SubscriptionSchemaMappingClassNameGenerator subscriptionSchemaMappingClassNameGenerator;
@@ -107,7 +106,7 @@ public class SubscriptionMediaTypeToSchemaIdMapperClassBuilderTest {
     @SuppressWarnings("ConstantConditions")
     private Class<?> writeSourceFileAndCompile(final String packageName, final TypeSpec typeSpec) throws IOException {
 
-        final File outputFolderRoot = outputFolder.getRoot();
+        final File outputFolderRoot = outputFolder.getParentFile();
 
         JavaFile.builder(packageName, typeSpec)
                 .build()

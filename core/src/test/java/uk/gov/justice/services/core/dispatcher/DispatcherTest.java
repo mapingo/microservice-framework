@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.annotation.Component.QUERY_API;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
@@ -29,14 +30,14 @@ import java.util.List;
 
 import javax.json.JsonValue;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DispatcherTest {
 
     private static final String ACTION_NAME = "test.some-action";
@@ -55,7 +56,7 @@ public class DispatcherTest {
 
     private HandlerRegistry handlerRegistry;
 
-    @Before
+    @BeforeEach
     public void setup() {
         handlerRegistry = new HandlerRegistry(logger, featureControlAnnotationFinder);
         dispatcher = new Dispatcher(handlerRegistry, new EnvelopePayloadTypeConverter(new ObjectMapperProducer().objectMapper()), new JsonEnvelopeRepacker());
@@ -93,13 +94,13 @@ public class DispatcherTest {
         assertThat(synchronousTestHandler.envelope, equalTo(envelope));
     }
 
-    @Test(expected = NullEnvelopeException.class)
+    @Test
     public void shouldHandleANullEnvelope() throws Exception {
         final SynchronousTestHandler synchronousTestHandler = new SynchronousTestHandler();
         final JsonEnvelope envelope = null;
 
         dispatcher.register(synchronousTestHandler);
-        dispatcher.dispatch(envelope);
+        assertThrows(NullEnvelopeException.class, () -> dispatcher.dispatch(envelope));
 
         assertThat(synchronousTestHandler.envelope, equalTo(envelope));
     }
@@ -151,7 +152,7 @@ public class DispatcherTest {
                     .build();
     }
 
-    @Test(expected = MissingHandlerException.class)
+    @Test
     public void shouldThrowExceptionIfNoHandlerExists() throws Exception {
 
         final String payloadId = "3f47ab7e-aecc-4cec-9246-c32066ef5ba1";
@@ -163,7 +164,7 @@ public class DispatcherTest {
         final JsonEnvelope envelope = envelopeFrom(metadata, payload);
 
 
-        dispatcher.dispatch(envelope);
+        assertThrows(MissingHandlerException.class, () -> dispatcher.dispatch(envelope));
     }
 
     @ServiceComponent(COMMAND_API)

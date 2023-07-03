@@ -9,7 +9,7 @@ import uk.gov.justice.services.generators.commons.helper.MessagingAdapterBaseUri
 import uk.gov.justice.services.generators.commons.helper.MessagingResourceUri;
 
 import com.squareup.javapoet.ClassName;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ClassNameFactoryTest {
 

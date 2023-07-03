@@ -11,6 +11,7 @@ import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtili
 import static uk.gov.justice.subscription.jms.core.ClassNameFactory.EVENT_FILTER;
 import static uk.gov.justice.subscription.jms.core.ClassNameFactory.EVENT_VALIDATION_INTERCEPTOR;
 
+import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.services.adapter.messaging.JsonSchemaValidationInterceptor;
 import uk.gov.justice.services.messaging.jms.HeaderConstants;
 import uk.gov.justice.subscription.jms.core.ClassNameFactory;
@@ -22,20 +23,18 @@ import javax.jms.TextMessage;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EventValidationInterceptorCodeGeneratorTest {
 
     private static final File CODE_GENERATION_OUTPUT_DIRECTORY = new File("./target/test-generation");
 
-    @Rule
-    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    public File temporaryFolder;
 
     @InjectMocks
     private EventValidationInterceptorCodeGenerator eventValidationInterceptorCodeGenerator;
@@ -56,8 +55,10 @@ public class EventValidationInterceptorCodeGeneratorTest {
         final TypeSpec typeSpec = eventValidationInterceptorCodeGenerator.generate(
                 classNameFactory);
 
-        final File codeGenerationOutputDirectory = temporaryFolder.newFolder("test-generation");
-        final File compilationOutputDirectory = temporaryFolder.newFolder("generated-test-classes");
+        final File codeGenerationOutputDirectory = new File(temporaryFolder, "test-generation");
+        final File compilationOutputDirectory = new File(temporaryFolder, "generated-test-classes");
+        codeGenerationOutputDirectory.mkdirs();
+        compilationOutputDirectory.mkdirs();
 
         builder(packageName, typeSpec)
                 .addStaticImport(get(HeaderConstants.class), "JMS_HEADER_CPPNAME")

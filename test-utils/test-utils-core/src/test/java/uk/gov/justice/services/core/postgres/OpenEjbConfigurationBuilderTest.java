@@ -3,11 +3,11 @@ package uk.gov.justice.services.core.postgres;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasEntry;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Properties;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class OpenEjbConfigurationBuilderTest {
 
@@ -15,7 +15,7 @@ public class OpenEjbConfigurationBuilderTest {
     @Test
     public void shouldReturnAnEmptyProperties() {
         final Properties properties = OpenEjbConfigurationBuilder.createOpenEjbConfigurationBuilder().build();
-        Assert.assertNotNull(properties);
+        assertNotNull(properties);
     }
 
     @SuppressWarnings("unchecked")

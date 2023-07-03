@@ -3,6 +3,7 @@ package uk.gov.justice.framework.command.client.jmx;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -19,14 +20,14 @@ import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameter
 
 import java.util.UUID;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SystemCommandInvokerTest {
 
     @Mock
@@ -125,7 +126,7 @@ public class SystemCommandInvokerTest {
         inOrder.verify(commandPoller).runUntilComplete(systemCommanderMBean, commandId, commandName);
     }
 
-    @Test(expected = UnrunnableSystemCommandException.class)
+    @Test
     public void shouldLogIfTheCommandIsUnsupported() throws Exception {
 
         final String contextName = "secret";
@@ -150,7 +151,7 @@ public class SystemCommandInvokerTest {
         when(systemCommanderClient.getRemote(contextName)).thenReturn(systemCommanderMBean);
         doThrow(unrunnableSystemCommandException).when(systemCommanderMBean).call(commandName);
 
-        systemCommandInvoker.runSystemCommand(commandName, jmxParameters);
+        assertThrows(UnrunnableSystemCommandException.class, () -> systemCommandInvoker.runSystemCommand(commandName, jmxParameters));
 
         final InOrder inOrder = inOrder(
                 toConsolePrinter,
@@ -164,7 +165,7 @@ public class SystemCommandInvokerTest {
         inOrder.verify(toConsolePrinter).printf("The command '%s' is not supported on this %s context", commandName, contextName);
     }
 
-    @Test(expected = SystemCommandInvocationFailedException.class)
+    @Test
     public void shouldLogAndPrintTheServerStackTraceIfTheCommandFails() throws Exception {
 
         final String contextName = "secret";
@@ -191,7 +192,7 @@ public class SystemCommandInvokerTest {
         when(systemCommanderClient.getRemote(contextName)).thenReturn(systemCommanderMBean);
         doThrow(systemCommandInvocationFailedException).when(systemCommanderMBean).call(commandName);
 
-        systemCommandInvoker.runSystemCommand(commandName, jmxParameters);
+        assertThrows(SystemCommandInvocationFailedException.class, () -> systemCommandInvoker.runSystemCommand(commandName, jmxParameters));
 
         final InOrder inOrder = inOrder(
                 toConsolePrinter,

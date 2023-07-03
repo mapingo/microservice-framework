@@ -17,7 +17,7 @@ import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperti
 import java.util.Map;
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RestAdapterGenerator_ActionNameToMediaTypesMapperTest extends BaseRestAdapterGeneratorTest {
 
@@ -40,8 +40,8 @@ public class RestAdapterGenerator_ActionNameToMediaTypesMapperTest extends BaseR
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> mediaTypesMapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "WarnameActionNameToMediaTypesMapper");

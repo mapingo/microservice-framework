@@ -10,6 +10,7 @@ import static uk.gov.justice.raml.jms.core.ClassNameFactory.EVENT_FILTER;
 import static uk.gov.justice.raml.jms.core.ClassNameFactory.EVENT_FILTER_INTERCEPTOR;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 
+import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.raml.jms.core.ClassNameFactory;
 import uk.gov.justice.services.core.interceptor.Interceptor;
 import uk.gov.justice.services.core.interceptor.InterceptorChain;
@@ -22,18 +23,16 @@ import java.lang.reflect.Field;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EventFilterInterceptorCodeGeneratorTest {
 
-    @Rule
-    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    public File temporaryFolder;
 
     @InjectMocks
     private EventFilterInterceptorCodeGenerator eventFilterInterceptorCodeGenerator;
@@ -54,14 +53,16 @@ public class EventFilterInterceptorCodeGeneratorTest {
         final TypeSpec typeSpec = eventFilterInterceptorCodeGenerator.generate(
                 classNameFactory);
 
-        final File outputDirectory = temporaryFolder.newFolder("test-generation");
+        final File outputDirectory = new File(temporaryFolder, "test-generation");
         builder(packageName, typeSpec)
                 .build()
                 .writeTo(outputDirectory);
 
+        File dir = new File(temporaryFolder, getClass().getSimpleName());
+        dir.mkdirs();
         final Class<?> compiledClass = javaCompilerUtil().compiledClassOf(
                 outputDirectory,
-                temporaryFolder.newFolder(getClass().getSimpleName()),
+                dir,
                 packageName,
                 simpleName);
 

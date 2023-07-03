@@ -8,7 +8,7 @@ import static uk.gov.justice.subscription.domain.builders.EventSourceDefinitionB
 import uk.gov.justice.subscription.domain.eventsource.EventSourceDefinition;
 import uk.gov.justice.subscription.domain.eventsource.Location;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class EventSourceDefinitionBuilderTest {
 

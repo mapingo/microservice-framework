@@ -12,13 +12,13 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DatabaseTableListerIT {
 
     private static final String LIQUIBASE_CHANGELOG_XML = "liquibase/framework-system-changelog.xml";
@@ -31,7 +31,7 @@ public class DatabaseTableListerIT {
     private final LiquibaseDatabaseBootstrapper liquibaseDatabaseBootstrapper = new LiquibaseDatabaseBootstrapper();
 
 
-    @Before
+    @BeforeEach
     public void setupEventstoreDatabase() throws Exception {
 
         try (final Connection connection = testJdbcDataSourceProvider.getSystemDataSource("framework").getConnection()) {

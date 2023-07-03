@@ -3,15 +3,15 @@ package uk.gov.justice.services.core.extension;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Unit tests for the {@link EventFoundEvent} class.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EventFoundEventTest {
 
     private final static String EVENT_NAME = "test";
@@ -20,7 +20,7 @@ public class EventFoundEventTest {
 
     private EventFoundEvent event;
 
-    @Before
+    @BeforeEach
     public void setup() {
         event = new EventFoundEvent(CLASS, EVENT_NAME);
     }

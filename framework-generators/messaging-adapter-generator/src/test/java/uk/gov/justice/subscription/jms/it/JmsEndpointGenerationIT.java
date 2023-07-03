@@ -3,7 +3,7 @@ package uk.gov.justice.subscription.jms.it;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import uk.gov.justice.api.subscription.Service2EventListenerAnotherPeopleEventEventFilter;
 import uk.gov.justice.api.subscription.Service2EventListenerAnotherPeopleEventEventValidationInterceptor;
@@ -88,17 +88,17 @@ import javax.jms.JMSException;
 import javax.jms.Topic;
 
 import org.apache.openejb.jee.WebApp;
-import org.apache.openejb.junit.ApplicationComposer;
+import org.apache.openejb.junit5.RunWithApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Module;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
  * Integration tests for the generated JAX-RS classes.
  */
-@RunWith(ApplicationComposer.class)
+@RunWithApplicationComposer
 public class JmsEndpointGenerationIT extends AbstractJmsAdapterGenerationIT {
 
     @Inject
@@ -202,7 +202,7 @@ public class JmsEndpointGenerationIT extends AbstractJmsAdapterGenerationIT {
                 .contextRoot("subscription.JmsEndpointGenerationIT");
     }
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         cleanQueue(peopleEventsDestination);
         cleanQueue(structureEventsDestination);

@@ -2,8 +2,9 @@ package uk.gov.justice.services.generators.commons.helper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit test for the {@link MessagingClientBaseUri} class.
@@ -15,8 +16,8 @@ public class MessagingClientBaseUriTest {
         assertThat(new MessagingClientBaseUri("message://event/listener/message/system").toClassName(), is("EventListenerMessageSystem"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionForInvalidUri() {
-        new MessagingClientBaseUri("blah").toClassName();
+        assertThrows(IllegalArgumentException.class, () -> new MessagingClientBaseUri("blah").toClassName());
     }
 }

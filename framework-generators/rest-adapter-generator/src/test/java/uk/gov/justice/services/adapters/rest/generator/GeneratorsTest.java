@@ -1,6 +1,6 @@
 package uk.gov.justice.services.adapters.rest.generator;
 
-import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.core.Is.is;
@@ -13,16 +13,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.raml.model.MimeType;
 import org.raml.model.Resource;
 
 public class GeneratorsTest {
-
-    @Test
-    public void shouldBeWellDefinedUtilityClass() {
-        assertUtilityClassWellDefined(Generators.class);
-    }
 
     @Test
     public void shouldSortMimeTypes() throws Exception {

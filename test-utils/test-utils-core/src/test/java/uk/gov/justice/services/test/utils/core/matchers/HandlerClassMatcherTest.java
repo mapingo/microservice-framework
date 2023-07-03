@@ -1,6 +1,7 @@
 package uk.gov.justice.services.test.utils.core.matchers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.annotation.Component.QUERY_API;
 import static uk.gov.justice.services.test.utils.core.matchers.HandlerClassMatcher.isCustomHandlerClass;
@@ -14,7 +15,7 @@ import uk.gov.justice.services.test.utils.core.matchers.ServiceComponentTestClas
 import uk.gov.justice.services.test.utils.core.matchers.ServiceComponentTestClasses.ValidCommandApi;
 import uk.gov.justice.services.test.utils.core.matchers.ServiceComponentTestClasses.ValidCustomServiceComponent;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class HandlerClassMatcherTest {
 
@@ -28,24 +29,24 @@ public class HandlerClassMatcherTest {
         assertThat(ValidCustomServiceComponent.class, isCustomHandlerClass(CUSTOM_API));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchIfNoServiceComponentAnnotation() throws Exception {
-        assertThat(NoServiceComponentAnnotation.class, isHandlerClass(COMMAND_API));
+        assertThrows(AssertionError.class, () -> assertThat(NoServiceComponentAnnotation.class, isHandlerClass(COMMAND_API)));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchWhenNoAnnotationGiven() throws Exception {
-        assertThat(ValidCustomServiceComponent.class, isCustomHandlerClass(null));
+        assertThrows(AssertionError.class, () -> assertThat(ValidCustomServiceComponent.class, isCustomHandlerClass(null)));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchIfNoCustomServiceComponentAnnotation() throws Exception {
-        assertThat(NoServiceComponentAnnotation.class, isCustomHandlerClass(CUSTOM_API));
+        assertThrows(AssertionError.class, () -> assertThat(NoServiceComponentAnnotation.class, isCustomHandlerClass(CUSTOM_API)));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchInstanceOfAHandlerWithTheWrongAnnotation() throws Exception {
-        assertThat(ValidCommandApi.class, isHandler(QUERY_API));
+        assertThrows(AssertionError.class, () -> assertThat(ValidCommandApi.class, isHandler(QUERY_API)));
     }
 
     @Test
@@ -53,8 +54,8 @@ public class HandlerClassMatcherTest {
         assertThat(ValidCommandApi.class, isHandlerClass(COMMAND_API).with(method("testA").thatHandles("context.commandA")));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchWhenNoHandlerMethod() throws Exception {
-        assertThat(NoHandlerMethod.class, isHandlerClass(COMMAND_API).with(method("testA").thatHandles("context.commandA")));
+        assertThrows(AssertionError.class, () -> assertThat(NoHandlerMethod.class, isHandlerClass(COMMAND_API).with(method("testA").thatHandles("context.commandA"))));
     }
 }

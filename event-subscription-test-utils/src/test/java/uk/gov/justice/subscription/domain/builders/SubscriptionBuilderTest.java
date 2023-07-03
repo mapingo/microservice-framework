@@ -10,7 +10,7 @@ import static uk.gov.justice.subscription.domain.builders.SubscriptionBuilder.su
 import uk.gov.justice.subscription.domain.subscriptiondescriptor.Event;
 import uk.gov.justice.subscription.domain.subscriptiondescriptor.Subscription;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SubscriptionBuilderTest {
 

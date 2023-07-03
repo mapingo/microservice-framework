@@ -2,6 +2,7 @@ package uk.gov.justice.services.adapter.messaging;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -13,13 +14,13 @@ import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DefaultJmsProcessorTest {
 
     @Mock
@@ -47,18 +48,16 @@ public class DefaultJmsProcessorTest {
         jmsProcessor.process(interceptorContext -> assertThat(interceptorContext.inputEnvelope(), is(expectedEnvelope)), textMessage);
     }
 
-    @Test(expected = InvalildJmsMessageTypeException.class)
+    @Test
     public void shouldThrowExceptionWithWrongMessageType() throws Exception {
-        jmsProcessor.process(envelope -> {
-        }, objectMessage);
+        assertThrows(InvalildJmsMessageTypeException.class, () -> jmsProcessor.process(envelope -> {}, objectMessage));
     }
 
-    @Test(expected = InvalildJmsMessageTypeException.class)
+    @Test
     public void shouldThrowExceptionWhenFailToRetrieveMessageId() throws Exception {
         doThrow(JMSException.class).when(objectMessage).getJMSMessageID();
 
-        jmsProcessor.process(envelope -> {
-        }, objectMessage);
+        assertThrows(InvalildJmsMessageTypeException.class, () -> jmsProcessor.process(envelope -> {}, objectMessage));
     }
 
 }

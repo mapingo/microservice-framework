@@ -71,7 +71,8 @@ public class DefaultJsonMetadata extends JsonMetadata {
                 .orElseThrow(() -> new IllegalArgumentException("Missing id field"));
         UUID.fromString(id.getString());
 
-        JsonString name = getJsonString(jsonObject, NAME)
+        final Optional<JsonString> jsonString = getJsonString(jsonObject, NAME);
+        JsonString name = jsonString
                 .orElseThrow(() -> new IllegalArgumentException("Missing name field"));
         if (name.getString().isEmpty()) {
             throw new IllegalArgumentException("Name field cannot be empty");

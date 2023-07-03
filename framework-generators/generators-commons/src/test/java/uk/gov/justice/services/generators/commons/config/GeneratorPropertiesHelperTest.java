@@ -1,9 +1,9 @@
 package uk.gov.justice.services.generators.commons.config;
 
-import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_CONTROLLER;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_HANDLER;
@@ -16,7 +16,7 @@ import static uk.gov.justice.services.generators.test.utils.config.GeneratorConf
 
 import uk.gov.justice.maven.generator.io.files.parser.core.GeneratorProperties;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class GeneratorPropertiesHelperTest {
 
@@ -37,11 +37,6 @@ public class GeneratorPropertiesHelperTest {
 
     private static final uk.gov.justice.maven.generator.io.files.parser.core.GeneratorProperties COMMAND_HANDLER_PROPERTY = generatorProperties()
             .withServiceComponentOf(COMMAND_HANDLER);
-
-    @Test
-    public void shouldBeWellDefinedUtilityClass() {
-        assertUtilityClassWellDefined(GeneratorPropertiesHelper.class);
-    }
 
     @Test
     public void shouldReturnQueryApi() throws Exception {

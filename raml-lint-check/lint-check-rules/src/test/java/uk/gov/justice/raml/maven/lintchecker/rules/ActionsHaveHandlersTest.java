@@ -1,6 +1,7 @@
 package uk.gov.justice.raml.maven.lintchecker.rules;
 
 import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import uk.gov.justice.raml.maven.lintchecker.LintCheckConfiguration;
@@ -10,13 +11,13 @@ import uk.gov.justice.raml.maven.lintchecker.rules.configuration.TestConfigurati
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ActionsHaveHandlersTest {
 
     @Mock
@@ -28,7 +29,7 @@ public class ActionsHaveHandlersTest {
     @Mock
     private Log log;
 
-    @Before
+    @BeforeEach
     public void setUp() throws DependencyResolutionRequiredException {
         when(lintCheckConfiguration.getMavenProject()).thenReturn(mavenProject);
         when(lintCheckConfiguration.getLog()).thenReturn(log);
@@ -42,10 +43,11 @@ public class ActionsHaveHandlersTest {
 
     }
 
-    @Test(expected = LintCheckerException.class)
+    @Test
     public void shouldThrowLintCheckerException() throws LintCheckerException {
         final ActionsHaveHandlers actionsHaveHandlers = new ActionsHaveHandlers();
-        actionsHaveHandlers.execute(TestConfiguration.testConfig().ramlGETmissing(), lintCheckConfiguration);
+
+        assertThrows(LintCheckerException.class, () -> actionsHaveHandlers.execute(TestConfiguration.testConfig().ramlGETmissing(), lintCheckConfiguration));
     }
 
 }

@@ -30,7 +30,7 @@ import javax.json.JsonObject;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 public class RestAdapterGenerator_PATCHMethodBodyTest extends BaseRestAdapterGeneratorTest {
@@ -50,8 +50,8 @@ public class RestAdapterGenerator_PATCHMethodBodyTest extends BaseRestAdapterGen
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiPathResource");
@@ -85,8 +85,8 @@ public class RestAdapterGenerator_PATCHMethodBodyTest extends BaseRestAdapterGen
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiPathResource");

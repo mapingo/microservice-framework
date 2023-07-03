@@ -5,6 +5,7 @@ import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataOf;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
@@ -15,7 +16,7 @@ import uk.gov.justice.services.messaging.MetadataBuilder;
 
 import java.util.UUID;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JsonEnvelopeMetadataMatcherTest {
 
@@ -161,80 +162,80 @@ public class JsonEnvelopeMetadataMatcherTest {
         ));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldFailIfIdDoesNotMatch() throws Exception {
         final Metadata metadata = metadataWithRandomUUID(EVENT_NAME).build();
 
-        assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
-                .withId(randomUUID()));
+        assertThrows(AssertionError.class, () -> assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
+                .withId(randomUUID())));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldFailIfNameDoesNotMatch() throws Exception {
         final Metadata metadata = metadataWithRandomUUID(EVENT_NAME).build();
 
-        assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
-                .withName("event.not.match"));
+        assertThrows(AssertionError.class, () -> assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
+                .withName("event.not.match")));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldFailIfCausationIdDoesNotMatch() throws Exception {
         final Metadata metadata = metadataWithRandomUUID(EVENT_NAME)
                 .withCausation(randomUUID())
                 .build();
 
-        assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
-                .withCausationIds(randomUUID()));
+        assertThrows(AssertionError.class, () -> assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
+                .withCausationIds(randomUUID())));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldFailIfUserIdDoesNotMatch() throws Exception {
         final Metadata metadata = metadataWithRandomUUID(EVENT_NAME)
                 .withUserId(USER_ID)
                 .build();
 
-        assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
-                .withUserId("does not match"));
+        assertThrows(AssertionError.class, () -> assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
+                .withUserId("does not match")));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldFailIfSessionIdDoesNotMatch() throws Exception {
         final Metadata metadata = metadataWithRandomUUID(EVENT_NAME)
                 .withSessionId(SESSION_ID)
                 .build();
 
-        assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
-                .withSessionId("does not match"));
+        assertThrows(AssertionError.class, () -> assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
+                .withSessionId("does not match")));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldFailIfStreamIdDoesNotMatch() throws Exception {
         final Metadata metadata = metadataWithRandomUUID(EVENT_NAME)
                 .withStreamId(randomUUID())
                 .build();
 
-        assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
-                .withStreamId(randomUUID()));
+        assertThrows(AssertionError.class, () -> assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
+                .withStreamId(randomUUID())));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldFailIfClientCorrelationIdDoesNotMatch() throws Exception {
         final Metadata metadata = metadataWithRandomUUID(EVENT_NAME)
                 .withClientCorrelationId(CLIENT_CORRELATION_ID)
                 .build();
 
-        assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
-                .withClientCorrelationId("does not match"));
+        assertThrows(AssertionError.class, () -> assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata()
+                .withClientCorrelationId("does not match")));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchAsJson() throws Exception {
         final Metadata metadata = defaultMetadataWithName(EVENT_NAME).build();
 
-        assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata().isJson(allOf(
+        assertThrows(AssertionError.class, () -> assertThat(metadata, JsonEnvelopeMetadataMatcher.metadata().isJson(allOf(
                 withJsonPath("$.id", equalTo(ID.toString())),
                 withJsonPath("$.name", equalTo("does not match")))
-        ));
+        )));
     }
 
     private MetadataBuilder defaultMetadataWithName(final String name) {

@@ -16,11 +16,11 @@ import uk.gov.justice.raml.jms.config.GeneratorPropertiesFactory;
 import uk.gov.justice.services.core.mapping.MediaType;
 import uk.gov.justice.services.core.mapping.MediaTypeToSchemaIdMapper;
 
+import java.io.File;
 import java.util.Map;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.raml.model.Raml;
 
 public class JmsEndpointGenerator_MediaTypeToSchemaIdMapperTest {
@@ -28,8 +28,8 @@ public class JmsEndpointGenerator_MediaTypeToSchemaIdMapperTest {
     private static final MediaType MEDIA_TYPE_1 = new MediaType("application/vnd.ctx.command.command1+json");
     private static final String BASE_PACKAGE = "uk.test";
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     private Generator<Raml> generator = new JmsEndpointGenerator();
 
@@ -44,8 +44,8 @@ public class JmsEndpointGenerator_MediaTypeToSchemaIdMapperTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new GeneratorPropertiesFactory().withServiceComponentOf(COMMAND_CONTROLLER)));
 
         final Class<?> schemaIdMapperClass = javaCompilerUtil().compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "ProcessorMediaTypeToSchemaIdMapper");

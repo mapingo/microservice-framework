@@ -17,7 +17,7 @@ import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperti
 
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.raml.model.MimeType;
 
 public class RestAdapterGenerator_MediaTypeToSchemaIdMapperTest extends BaseRestAdapterGeneratorTest {
@@ -42,8 +42,8 @@ public class RestAdapterGenerator_MediaTypeToSchemaIdMapperTest extends BaseRest
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> schemaIdMapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "WarnameMediaTypeToSchemaIdMapper");

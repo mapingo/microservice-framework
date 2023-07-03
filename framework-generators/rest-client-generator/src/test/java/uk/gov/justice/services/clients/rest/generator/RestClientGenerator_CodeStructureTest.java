@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.raml.model.ActionType.DELETE;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.PATCH;
@@ -35,6 +35,7 @@ import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperti
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -44,14 +45,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RestClientGenerator_CodeStructureTest {
 
     private static final String GET_MAPPING_ANNOTATION = mappingDescriptionWith(
@@ -90,8 +90,8 @@ public class RestClientGenerator_CodeStructureTest {
     private static final String BASE_URI_WITH_HYPHENATED_SERVICE_NAME = "http://localhost:8080/warname/command/api/rest/service-with-hyphens";
     private static final JavaCompilerUtility COMPILER = javaCompilerUtil();
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     private final RestClientGenerator generator = new RestClientGenerator();
 
@@ -108,8 +108,8 @@ public class RestClientGenerator_CodeStructureTest {
 
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteCustomComponent2ServiceQueryApi");
 
@@ -133,8 +133,8 @@ public class RestClientGenerator_CodeStructureTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("QUERY_CONTROLLER")));
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteQueryController2ServiceQueryApi");
 
@@ -151,8 +151,8 @@ public class RestClientGenerator_CodeStructureTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("CUSTOM_COMPONENT")));
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteCustomComponent2ServiceQueryApi");
 
@@ -176,8 +176,8 @@ public class RestClientGenerator_CodeStructureTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("CUSTOM_COMPONENT")));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteCustomComponent2ServiceCommandApi");
 
@@ -203,8 +203,8 @@ public class RestClientGenerator_CodeStructureTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("CUSTOM_COMPONENT")));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteCustomComponent2ServiceCommandApi");
 
@@ -230,8 +230,8 @@ public class RestClientGenerator_CodeStructureTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("CUSTOM_COMPONENT")));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteCustomComponent2ServiceCommandApi");
 
@@ -257,8 +257,8 @@ public class RestClientGenerator_CodeStructureTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("CUSTOM_COMPONENT")));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteCustomComponent2ServiceCommandApi");
 
@@ -284,8 +284,8 @@ public class RestClientGenerator_CodeStructureTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("CUSTOM_COMPONENT")));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE, "RemoteCustomComponent2ServiceCommandApi");
 
         final List<Method> methods = methodsOf(clazz);
@@ -310,8 +310,8 @@ public class RestClientGenerator_CodeStructureTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("CUSTOM_COMPONENT")));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteCustomComponent2ServiceCommandApi");
 
@@ -369,8 +369,8 @@ public class RestClientGenerator_CodeStructureTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("EVENT_PROCESSOR")));
 
         COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteEventProcessor2ServiceWithHyphensCommandApi");
     }
@@ -401,8 +401,8 @@ public class RestClientGenerator_CodeStructureTest {
 
 
         assertThat(methodsOf(COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteSomeComponent2ServiceQueryApi")), hasSize(0));
     }

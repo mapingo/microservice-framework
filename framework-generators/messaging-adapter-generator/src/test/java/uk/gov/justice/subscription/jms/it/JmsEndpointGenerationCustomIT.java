@@ -93,17 +93,17 @@ import javax.inject.Inject;
 import javax.jms.Topic;
 
 import org.apache.openejb.jee.WebApp;
-import org.apache.openejb.junit.ApplicationComposer;
+import org.apache.openejb.junit5.RunWithApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Module;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
  * Integration tests for the generated JAX-RS classes.
  */
-@RunWith(ApplicationComposer.class)
+@RunWithApplicationComposer
 public class JmsEndpointGenerationCustomIT extends AbstractJmsAdapterGenerationIT {
     @Module
     @Classes(cdi = true, value = {
@@ -216,7 +216,7 @@ public class JmsEndpointGenerationCustomIT extends AbstractJmsAdapterGenerationI
     @Resource(name = "example.event")
     private Topic exampleEventDestination;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         cleanQueue(peopleEventsDestination);
         cleanQueue(exampleEventDestination);

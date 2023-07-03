@@ -24,6 +24,7 @@ import uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility;
 import uk.gov.justice.services.unifiedsearch.UnifiedSearchIndexer;
 import uk.gov.justice.services.unifiedsearch.UnifiedSearchName;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -32,10 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.Logger;
 
 public class UnifiedSearchClientGeneratorTest {
@@ -49,14 +49,14 @@ public class UnifiedSearchClientGeneratorTest {
 
     private  List<Class<?>> classList;
 
-    @Before
+    @BeforeEach
     public void setUp() throws MalformedURLException {
         final UnifiedSearchDescriptor unifiedSearchDescriptor = unifiedSearchDescriptor();
          classList = compiledGeneratedClass(unifiedSearchDescriptor ,asList(FIRST_EVENT_INDEXER, SECOND_EVENT_INDEXER));
     }
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     @Test
     public void shouldGenerateClassesWithServiceComponentAnnotations() throws Exception {
@@ -158,7 +158,7 @@ public class UnifiedSearchClientGeneratorTest {
 
         generator.run(unifiedSearchDescriptor, configurationWithBasePackage(BASE_PACKAGE, outputFolder, EVENT_INDEXER));
 
-        classNames.forEach(className -> classes.add(COMPILER.compiledClassOf(outputFolder.getRoot(), outputFolder.getRoot(), BASE_PACKAGE, className)));
+        classNames.forEach(className -> classes.add(COMPILER.compiledClassOf(outputFolder, outputFolder, BASE_PACKAGE, className)));
         return classes;
     }
 

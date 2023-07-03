@@ -5,8 +5,8 @@ import static org.hamcrest.core.IsNull.notNullValue;
 
 import javax.servlet.annotation.WebListener;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for the{@link HealthCheckServletContextListener} class.
@@ -15,7 +15,7 @@ public class HealthCheckServletContextListenerTest {
 
     private HealthCheckServletContextListener listener;
 
-    @Before
+    @BeforeEach
     public void setup() {
         listener = new HealthCheckServletContextListener();
     }

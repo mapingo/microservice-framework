@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 
+import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.maven.generator.io.files.parser.core.GeneratorConfig;
 import uk.gov.justice.services.adapter.rest.filter.LoggerRequestDataAdder;
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
@@ -19,21 +20,19 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 
 import com.squareup.javapoet.TypeSpec;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.raml.model.Raml;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class LoggerRequestDataFilterGeneratorTest {
 
     private static final String SERVICE_COMPONENT_NAME = "CUSTOM_API";
 
-    @Rule
-    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    public File temporaryFolder;
 
     @InjectMocks
     private LoggerRequestDataFilterGenerator loggerRequestDataFilterGenerator;
@@ -58,14 +57,17 @@ public class LoggerRequestDataFilterGeneratorTest {
                 raml,
                 generatorConfig);
 
-        final File outputDirectory = temporaryFolder.newFolder("test-generation");
+        final File outputDirectory = new File(temporaryFolder, "test-generation");
+        outputDirectory.mkdirs();
         builder(packageName, typeSpec.get(0))
                 .build()
                 .writeTo(outputDirectory);
 
+        File compilationOutputDir = new File(temporaryFolder, getClass().getSimpleName());
+        compilationOutputDir.mkdirs();
         final Class<?> compiledClass = javaCompilerUtil().compiledClassOf(
                 outputDirectory,
-                temporaryFolder.newFolder(getClass().getSimpleName()),
+                compilationOutputDir,
                 packageName,
                 simpleName);
 

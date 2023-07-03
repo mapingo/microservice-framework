@@ -18,14 +18,14 @@ import java.net.URL;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SubscriptionsDescriptorParserTest {
 
     private SubscriptionsDescriptorParser subscriptionsDescriptorParser;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         final YamlParser yamlParser = new YamlParser();
         final YamlSchemaLoader yamlSchemaLoader = new YamlSchemaLoader();

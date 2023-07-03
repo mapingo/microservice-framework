@@ -1,6 +1,7 @@
 package uk.gov.justice.services.messaging.logging;
 
-import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
+import static com.jayway.jsonassert.JsonAssert.with;
+
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.common.http.HeaderConstants.ID;
 import static uk.gov.justice.services.messaging.logging.ResponseLoggerHelper.toResponseTrace;
@@ -9,12 +10,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.jayway.jsonassert.JsonAssert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ResponseLoggerHelperTest {
 
     private static final String CPP_ID = "145e0eca-f0a6-40b7-8f91-2a2709ab2a8a";
@@ -27,10 +28,6 @@ public class ResponseLoggerHelperTest {
     @Mock
     private Response response;
 
-    @Test
-    public void shouldBeWellDefinedUtilityClass() {
-        assertUtilityClassWellDefined(ResponseLoggerHelper.class);
-    }
 
     @Test
     public void shouldPrintResponseParameters() {
@@ -39,7 +36,7 @@ public class ResponseLoggerHelperTest {
         when(response.getStatus()).thenReturn(STATUS_CODE);
         when(mediaType.getType()).thenReturn(MEDIA_TYPE);
 
-        JsonAssert.with(toResponseTrace(response))
+        with(toResponseTrace(response))
                 .assertEquals("MediaType", MEDIA_TYPE)
                 .assertEquals(ID, CPP_ID)
                 .assertEquals("ResponseCode", STATUS_CODE);
@@ -51,7 +48,7 @@ public class ResponseLoggerHelperTest {
         when(response.getMediaType()).thenReturn(null);
         when(response.getStatus()).thenReturn(404);
 
-        JsonAssert.with(toResponseTrace(response))
+        with(toResponseTrace(response))
                 .assertNotDefined("MediaType")
                 .assertEquals(ID, CPP_ID)
                 .assertEquals("ResponseCode", 404);

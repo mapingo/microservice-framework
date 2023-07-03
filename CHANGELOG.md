@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 [Unreleased]
 
+## [17.1.0] - 2023-07-11
+### Changed
+- Update junit to 5, surefire and failsafe plugins
+
 ## [17.0.2] - 2023-06-15
 ### Security
 - Update org.json to version 20230227 to fix **security vulnerability CVE-2022-45688**

@@ -3,14 +3,14 @@ package uk.gov.justice.services.generators.commons.validator;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.raml.model.Raml;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CompositeRamlValidatorTest {
 
     @Mock
@@ -21,7 +21,7 @@ public class CompositeRamlValidatorTest {
     private RamlValidator validator;
     private Raml raml;
 
-    @Before
+    @BeforeEach
     public void setup() {
         validator = new CompositeRamlValidator(element1, element2);
         raml = new Raml();

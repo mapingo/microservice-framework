@@ -1,6 +1,7 @@
 package uk.gov.justice.services.test.utils.core.matchers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.test.utils.core.matchers.HandlerMethodMatcher.method;
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
@@ -17,7 +18,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class HandlerMethodMatcherTest {
 
@@ -26,9 +27,9 @@ public class HandlerMethodMatcherTest {
         assertThat(TestServiceComponent.class, method("testA"));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchMissingMethod() throws Exception {
-        assertThat(TestServiceComponent.class, method("missingMethodName"));
+        assertThrows(AssertionError.class, () -> assertThat(TestServiceComponent.class, method("missingMethodName")));
     }
 
     @Test
@@ -36,9 +37,9 @@ public class HandlerMethodMatcherTest {
         assertThat(TestServiceComponent.class, method("testA").thatHandles("testA"));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchMethodWithWrongHandlesAnnotation() throws Exception {
-        assertThat(TestServiceComponent.class, method("testA").thatHandles("wrongActionName"));
+        assertThrows(AssertionError.class, () -> assertThat(TestServiceComponent.class, method("testA").thatHandles("wrongActionName")));
     }
 
     @Test
@@ -46,29 +47,29 @@ public class HandlerMethodMatcherTest {
         assertThat(TestServiceComponent.class, method("testA").thatHandles("testA").withSenderPassThrough());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchIfMethodDoesNotCallSender() throws Exception {
-        assertThat(TestServiceComponent.class, method("testB").thatHandles("testB").withSenderPassThrough());
+        assertThrows(AssertionError.class, () -> assertThat(TestServiceComponent.class, method("testB").thatHandles("testB").withSenderPassThrough()));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchIfMethodCallsSenderMoreThanOnce() throws Exception {
-        assertThat(TestServiceComponent.class, method("testC").thatHandles("testC").withSenderPassThrough());
+        assertThrows(AssertionError.class, () -> assertThat(TestServiceComponent.class, method("testC").thatHandles("testC").withSenderPassThrough()));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchIfMethodDoesNotHaveJsonEnvelopeArgument() throws Exception {
-        assertThat(TestServiceComponent.class, method("testD"));
+        assertThrows(AssertionError.class, () -> assertThat(TestServiceComponent.class, method("testD")));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchIfMethodDoesNotSendCommand() throws Exception {
-        assertThat(TestServiceComponent.class, method("testE").thatHandles("testE").withSenderPassThrough());
+        assertThrows(AssertionError.class, () -> assertThat(TestServiceComponent.class, method("testE").thatHandles("testE").withSenderPassThrough()));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchAPassThroughCommandMethodThatDoesNotHaveHandlesAnnotation() throws Exception {
-        assertThat(TestServiceComponent.class, method("testG").thatHandles("testG"));
+        assertThrows(AssertionError.class, () -> assertThat(TestServiceComponent.class, method("testG").thatHandles("testG")));
     }
 
     @Test
@@ -81,24 +82,24 @@ public class HandlerMethodMatcherTest {
         assertThat(TestServiceComponent.class, method("testK").thatHandles("testK").withRequesterPassThrough());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchAPassThroughCommandMethodThatDoesNotExist() throws Exception {
-        assertThat(TestServiceComponent.class, method("notExist"));
+        assertThrows(AssertionError.class, () -> assertThat(TestServiceComponent.class, method("notExist")));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchAPassThroughCommandMethodIfIncorrectArgumentType() throws Exception {
-        assertThat(TestServiceComponent.class, method("testH"));
+        assertThrows(AssertionError.class, () -> assertThat(TestServiceComponent.class, method("testH")));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchAPassThroughCommandMethodIfSenderButExpectedRequester() throws Exception {
-        assertThat(TestServiceComponent.class, method("testI").withRequesterPassThrough());
+        assertThrows(AssertionError.class, () -> assertThat(TestServiceComponent.class, method("testI").withRequesterPassThrough()));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchAPassThroughCommandMethodIfRequesterButExpectedSender() throws Exception {
-        assertThat(TestServiceComponent.class, method("testJ").withSenderPassThrough());
+        assertThrows(AssertionError.class, () -> assertThat(TestServiceComponent.class, method("testJ").withSenderPassThrough()));
     }
 
     @ServiceComponent(COMMAND_API)

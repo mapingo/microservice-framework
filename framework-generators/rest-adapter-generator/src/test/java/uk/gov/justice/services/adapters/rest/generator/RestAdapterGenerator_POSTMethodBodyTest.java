@@ -39,9 +39,7 @@ import uk.gov.justice.services.core.interceptor.InterceptorContext;
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
-import java.io.File;
 import java.lang.reflect.Method;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +52,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.impl.tl.ThreadLocalHttpHeaders;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGeneratorTest {
@@ -75,8 +73,8 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiPathResource");
@@ -117,8 +115,8 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiPathResource");
@@ -162,8 +160,8 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiPathResource");
@@ -200,8 +198,8 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiPathResource");
@@ -229,14 +227,14 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiPathResource");
 
         final Object resourceObject = getInstanceOf(resourceClass);
-        final HttpHeaders headers = new ThreadLocalHttpHeaders();
+        final HttpHeaders headers = mock(HttpHeaders.class);
         final String action = "theAction";
         when(actionMapper.actionOf(any(String.class), any(String.class), eq(headers))).thenReturn(action);
 
@@ -260,8 +258,8 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathParamAResource");
@@ -307,8 +305,8 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathP1Resource");
@@ -346,8 +344,8 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathParam1Param2Resource");
@@ -393,8 +391,8 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiUserResource");
@@ -402,8 +400,8 @@ public class RestAdapterGenerator_POSTMethodBodyTest extends BaseRestAdapterGene
         final Object resourceObject = getInstanceOf(resourceClass);
 
         final Class<?> actionMapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "DefaultCommandApiUserResourceActionMapper");

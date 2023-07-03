@@ -6,6 +6,7 @@ import static javax.json.Json.createObjectBuilder;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 import javax.json.JsonValue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JsonValueIsJsonMatcherTest {
 
@@ -28,20 +29,20 @@ public class JsonValueIsJsonMatcherTest {
         );
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchJsonValueAsJsonIfJsonDoesNotMatch() throws Exception {
-        assertThat(payload(), JsonValueIsJsonMatcher.isJson(allOf(
+        assertThrows(AssertionError.class, () ->assertThat(payload(), JsonValueIsJsonMatcher.isJson(allOf(
                 withJsonPath("$.someId", equalTo(ID.toString())),
                 withJsonPath("$.name", equalTo("will not match"))))
-        );
+        ));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchJsonValueAsJsonIfJsonValueIsNotJsonObject() throws Exception {
-        assertThat(jsonEnvelopeWithJsonValueNullPayload(), JsonValueIsJsonMatcher.isJson(allOf(
+        assertThrows(AssertionError.class, () ->assertThat(jsonEnvelopeWithJsonValueNullPayload(), JsonValueIsJsonMatcher.isJson(allOf(
                 withJsonPath("$.someId", equalTo(ID.toString())),
                 withJsonPath("$.name", equalTo(NAME))))
-        );
+        ));
     }
 
     private JsonValue payload() {

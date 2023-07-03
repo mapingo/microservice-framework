@@ -6,6 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -37,19 +38,19 @@ import com.google.common.io.CharStreams;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
 /**
  * Unit tests for the {@link JsonSchemaValidationInterceptor} class.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class JsonSchemaValidationInterceptorTest {
 
     private static final String PAYLOAD = "test payload";
@@ -84,20 +85,24 @@ public class JsonSchemaValidationInterceptorTest {
     @InjectMocks
     private JsonSchemaValidationInterceptor jsonSchemaValidationInterceptor;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
-        when(context.getInputStream()).thenReturn(inputStream(PAYLOAD));
         when(context.getMediaType()).thenReturn(MEDIA_TYPE);
-        when(context.proceed()).thenReturn(proceed);
     }
 
     @Test
     public void shouldReturnResultOfContextProceed() throws Exception {
+        when(context.getInputStream()).thenReturn(inputStream(PAYLOAD));
+        when(context.proceed()).thenReturn(proceed);
+
         assertThat(jsonSchemaValidationInterceptor.aroundReadFrom(context), equalTo(proceed));
     }
 
     @Test
     public void shouldSetInputStreamToOriginalPayload() throws Exception {
+        when(context.getInputStream()).thenReturn(inputStream(PAYLOAD));
+        when(context.proceed()).thenReturn(proceed);
+
         jsonSchemaValidationInterceptor.aroundReadFrom(context);
         verify(context).setInputStream(argThat(inputStreamEqualTo(PAYLOAD)));
     }
@@ -108,6 +113,9 @@ public class JsonSchemaValidationInterceptorTest {
         final String actionName = "example.action-name";
 
         when(nameToMediaTypeConverter.convert(CONVERTED_MEDIA_TYPE)).thenReturn(actionName);
+        when(context.getInputStream()).thenReturn(inputStream(PAYLOAD));
+        when(context.proceed()).thenReturn(proceed);
+
 
         jsonSchemaValidationInterceptor.aroundReadFrom(context);
 
@@ -125,21 +133,22 @@ public class JsonSchemaValidationInterceptorTest {
         verify(jsonSchemaValidator, never()).validate(PAYLOAD, actionName, of(CONVERTED_MEDIA_TYPE));
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     @SuppressWarnings("unchecked")
     public void shouldThrowBadRequestExceptionIfValidatorFailsWithValidationException() throws Exception {
         final MultivaluedMap<String, String> headers = new MultivaluedHashMap();
         final String actionName = "example.action-name";
 
         when(nameToMediaTypeConverter.convert(CONVERTED_MEDIA_TYPE)).thenReturn(actionName);
+        when(context.getInputStream()).thenReturn(inputStream(PAYLOAD));
 
         doThrow(new JsonSchemaValidationException("")).when(jsonSchemaValidator).validate(PAYLOAD, actionName, of(CONVERTED_MEDIA_TYPE));
         when(context.getHeaders()).thenReturn(headers);
 
-        jsonSchemaValidationInterceptor.aroundReadFrom(context);
+        assertThrows(BadRequestException.class, () -> jsonSchemaValidationInterceptor.aroundReadFrom(context));
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     @SuppressWarnings("unchecked")
     public void shouldRemoveUserIdHeaderParamFromBadRequestExceptionIfValidatorFailsWithValidationException() throws Exception {
         final MultivaluedMap<String, String> headers = new MultivaluedHashMap();
@@ -148,13 +157,14 @@ public class JsonSchemaValidationInterceptorTest {
         final String actionName = "example.action-name";
 
         when(nameToMediaTypeConverter.convert(CONVERTED_MEDIA_TYPE)).thenReturn(actionName);
+        when(context.getInputStream()).thenReturn(inputStream(PAYLOAD));
 
         doThrow(new JsonSchemaValidationException("")).when(jsonSchemaValidator).validate(PAYLOAD, actionName, of(CONVERTED_MEDIA_TYPE));
         when(context.getHeaders()).thenReturn(headers);
 
         final ArgumentCaptor<MultivaluedHashMap> captor = ArgumentCaptor.forClass(MultivaluedHashMap.class);
 
-        jsonSchemaValidationInterceptor.aroundReadFrom(context);
+        assertThrows(BadRequestException.class, () -> jsonSchemaValidationInterceptor.aroundReadFrom(context));
 
         verify(httpTraceLoggerHelper).toHttpHeaderTrace(captor.capture());
 
@@ -165,16 +175,17 @@ public class JsonSchemaValidationInterceptorTest {
     }
 
 
-    @Test(expected = BadRequestException.class)
+    @Test
     @SuppressWarnings("unchecked")
     public void shouldThrowBadRequestExceptionIfValidatorFailsWithInvalidMediaTypeException() throws Exception {
         final String actionName = "example.action-name";
 
         when(nameToMediaTypeConverter.convert(CONVERTED_MEDIA_TYPE)).thenReturn(actionName);
+        when(context.getInputStream()).thenReturn(inputStream(PAYLOAD));
 
         doThrow(new InvalidMediaTypeException("", mock(Exception.class))).when(jsonSchemaValidator).validate(PAYLOAD, actionName, of(CONVERTED_MEDIA_TYPE));
 
-        jsonSchemaValidationInterceptor.aroundReadFrom(context);
+        assertThrows(BadRequestException.class, () -> jsonSchemaValidationInterceptor.aroundReadFrom(context));
     }
 
 

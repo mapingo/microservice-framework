@@ -3,6 +3,7 @@ package uk.gov.justice.services.adapter.rest.processor;
 import static java.util.Optional.empty;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import uk.gov.justice.services.adapter.rest.processor.response.ResponseStrategy;
 import uk.gov.justice.services.messaging.JsonEnvelope;
@@ -16,14 +17,13 @@ import javax.ws.rs.core.Response;
 
 import org.apache.openejb.jee.Application;
 import org.apache.openejb.jee.WebApp;
-import org.apache.openejb.junit.ApplicationComposer;
+import org.apache.openejb.junit5.RunWithApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Module;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 
 
-@RunWith(ApplicationComposer.class)
+@RunWithApplicationComposer
 public class ResponseStrategyCacheIT {
 
     @Inject
@@ -55,10 +55,9 @@ public class ResponseStrategyCacheIT {
                 .responseFor("", empty()).getEntity(), is("Response from Strategy ABC"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionIfBeanNotFound() {
-        responseStrategyCache.responseStrategyOf("unknown");
-
+        assertThrows(IllegalArgumentException.class, () -> responseStrategyCache.responseStrategyOf("unknown"));
     }
 
     @ApplicationScoped

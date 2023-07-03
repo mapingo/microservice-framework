@@ -11,16 +11,16 @@ import uk.gov.justice.services.clients.core.EndpointDefinition;
 
 import java.util.Optional;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class MockServerPortProviderTest {
 
     @Mock
@@ -29,7 +29,8 @@ public class MockServerPortProviderTest {
     @InjectMocks
     private MockServerPortProvider mockServerPortProvider;
 
-    @Before @After
+    @BeforeEach
+    @AfterEach
     public void clearSystemProperty() {
         System.clearProperty(MOCK_SERVER_PORT);
     }

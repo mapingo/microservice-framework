@@ -10,6 +10,7 @@ import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtili
 import static uk.gov.justice.subscription.jms.core.ClassNameFactory.EVENT_FILTER_INTERCEPTOR;
 import static uk.gov.justice.subscription.jms.core.ClassNameFactory.EVENT_INTERCEPTOR_CHAIN_PROVIDER;
 
+import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.services.core.interceptor.InterceptorChainEntry;
 import uk.gov.justice.services.core.interceptor.InterceptorChainEntryProvider;
 import uk.gov.justice.subscription.jms.core.ClassNameFactory;
@@ -19,18 +20,16 @@ import java.util.List;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EventInterceptorChainProviderCodeGeneratorTest {
 
-    @Rule
-    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    public File temporaryFolder;
 
     @InjectMocks
     private EventInterceptorChainProviderCodeGenerator eventInterceptorChainProviderCodeGenerator;
@@ -54,8 +53,10 @@ public class EventInterceptorChainProviderCodeGeneratorTest {
                 componentName,
                 classNameFactory);
 
-        final File codeGenerationOutputDirectory = temporaryFolder.newFolder("test-generation");
-        final File compilationOutputDirectory = temporaryFolder.newFolder("interceptorChainProvider-generation");
+        final File codeGenerationOutputDirectory = new File(temporaryFolder, "test-generation");
+        final File compilationOutputDirectory = new File(temporaryFolder, "interceptorChainProvider-generation");
+        codeGenerationOutputDirectory.mkdirs();
+        compilationOutputDirectory.mkdirs();
 
         builder(packageName, typeSpec)
                 .build()

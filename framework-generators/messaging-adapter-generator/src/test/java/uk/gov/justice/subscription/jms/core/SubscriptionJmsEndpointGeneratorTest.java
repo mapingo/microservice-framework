@@ -72,17 +72,16 @@ import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.jboss.ejb3.annotation.Pool;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SubscriptionJmsEndpointGeneratorTest {
 
     private static final String BASE_PACKAGE = "uk.test";
@@ -90,8 +89,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
     private static final String SUBSCRIPTION_MANAGER = "subscriptionManager";
     private static final JavaCompilerUtility COMPILER = javaCompilerUtil();
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     @Mock
     private SubscriptionJmsProcessor subscriptionJmsProcessor;
@@ -104,7 +103,7 @@ public class SubscriptionJmsEndpointGeneratorTest {
     private final String serviceName = "context";
     private final String componentName = "EVENT_PROCESSOR";
 
-    @Before
+    @BeforeEach
     public void setup() {
         generator = new JmsEndpointGenerationObjects().subscriptionJmsEndpointGenerator();
         generatorProperties = new GeneratorPropertiesFactory().withDefaultServiceComponent();
@@ -116,7 +115,7 @@ public class SubscriptionJmsEndpointGeneratorTest {
         generator.run(subscriptionWrapper,
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
-        final File packageDir = new File(outputFolder.getRoot().getAbsolutePath() + BASE_PACKAGE_FOLDER);
+        final File packageDir = new File(outputFolder.getAbsolutePath() + BASE_PACKAGE_FOLDER);
         assertThat(asList(packageDir.listFiles()),
                 hasItem(hasProperty("name", equalTo("ContextEventProcessorStructureControllerCommandJmsListener.java"))));
     }
@@ -129,8 +128,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage("uk.somepackage", outputFolder, generatorProperties));
 
         final Class<?> compiledClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 "uk.somepackage",
                 "ContextWithHyphensEventProcessorStructureEventJmsListener");
 
@@ -189,7 +188,7 @@ public class SubscriptionJmsEndpointGeneratorTest {
         generator.run(subscriptionWrapper,
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
-        final File packageDir = new File(outputFolder.getRoot().getAbsolutePath() + BASE_PACKAGE_FOLDER);
+        final File packageDir = new File(outputFolder.getAbsolutePath() + BASE_PACKAGE_FOLDER);
         final File[] a = packageDir.listFiles();
         assertThat(asList(a),
                 hasItems(hasProperty("name", equalTo("ContextEventProcessorPeopleControllerCommandJmsListener.java")),
@@ -199,7 +198,7 @@ public class SubscriptionJmsEndpointGeneratorTest {
 
     @Test
     public void shouldOverwriteJmsClass() throws Exception {
-        final String path = outputFolder.getRoot().getAbsolutePath() + BASE_PACKAGE_FOLDER;
+        final String path = outputFolder.getAbsolutePath() + BASE_PACKAGE_FOLDER;
         final File packageDir = new File(path);
         packageDir.mkdirs();
         write(Paths.get(path + "/StructureControllerCommandJmsListener.java"),
@@ -221,8 +220,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage("uk.somepackage", outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 "uk.somepackage",
                 "ContextEventProcessorStructureControllerCommandJmsListener");
 
@@ -237,8 +236,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage("uk.somepackage", outputFolder, generatorProperties));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 "uk.somepackage",
                 "ContextEventProcessorStructureControllerCommandJmsListener");
 
@@ -258,8 +257,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage("uk.package2", outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 "uk.package2",
                 "ContextEventProcessorStructureControllerCommandJmsListener");
 
@@ -275,8 +274,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage("uk.somepackage", outputFolder, generatorProperties));
 
         final Class<?> compiledClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 "uk.somepackage",
                 "ContextEventProcessorStructureEventJmsListener");
 
@@ -291,8 +290,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new GeneratorPropertiesFactory().withServiceComponentOf(COMMAND_HANDLER)));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "AbcCommandHandlerPeopleSomeQueueJmsListener");
 
@@ -309,8 +308,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new GeneratorPropertiesFactory().withServiceComponentOf(COMMAND_CONTROLLER)));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "AbcCommandControllerPeopleSomeQueryJmsListener");
 
@@ -328,8 +327,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new GeneratorPropertiesFactory().withServiceComponentOf(EVENT_LISTENER)));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "PeopleEventListenerPeopleEventJmsListener");
 
@@ -348,8 +347,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new GeneratorPropertiesFactory().withServiceComponentOf("CUSTOM_EVENT_LISTENER")));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "CustomCustomEventListenerPeopleEventJmsListener");
 
@@ -359,8 +358,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
         assertThat(adapterAnnotation.value(), is("CUSTOM_EVENT_LISTENER"));
 
         final Class<?> customEventFilterInterceptor = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "CustomCustomEventListenerPeopleEventEventFilterInterceptor");
 
@@ -379,8 +378,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new GeneratorPropertiesFactory().withServiceComponentOf(EVENT_PROCESSOR)));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "PeopleEventProcessorPeopleEventJmsListener");
 
@@ -399,14 +398,14 @@ public class SubscriptionJmsEndpointGeneratorTest {
         generator.run(subscriptionDescriptor,
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorPeopleHandlerCommandJmsListener");
 
         final Class<?> interceptorClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorPeopleHandlerCommandJmsLoggerMetadataInterceptor");
 
@@ -426,8 +425,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
         generator.run(subscriptionDescriptor, configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorSomecontextControllerCommandJmsListener");
 
@@ -443,8 +442,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
         generator.run(subscriptionDescriptor, configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorSomecontextControllerCommandJmsListener");
 
@@ -464,8 +463,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
         generator.run(subscriptionDescriptor, configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorSomecontextControllerCommandJmsListener");
 
@@ -486,8 +485,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorPeopleControllerCommandJmsListener");
 
@@ -505,8 +504,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorStructureControllerCommandJmsListener");
 
@@ -526,8 +525,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorStructureHandlerCommandJmsListener");
 
@@ -546,8 +545,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorStructureEventJmsListener");
 
@@ -566,8 +565,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "PeopleCommandControllerStructureSomethingJmsListener");
 
@@ -586,8 +585,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "AaaCommandHandlerLifecycleBlahJmsListener");
 
@@ -605,8 +604,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new GeneratorPropertiesFactory().withServiceComponentOf(EVENT_LISTENER)));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorPeopleEventJmsListener");
 
@@ -625,8 +624,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorStructureControllerCommandJmsListener");
 
@@ -644,8 +643,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorStructureControllerCommandJmsListener");
 
@@ -663,8 +662,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventListenerStructureEventJmsListener");
 
@@ -681,8 +680,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorStructureEventJmsListener");
 
@@ -701,8 +700,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorStructureControllerCommandJmsListener");
 
@@ -754,8 +753,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorPeopleControllerCommandJmsListener");
 
@@ -773,8 +772,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
         generator.run(subscriptionDescriptor, configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorSomecontextControllerCommandJmsListener");
 
@@ -797,8 +796,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
         generator.run(subscriptionDescriptor, configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorSomecontextControllerCommandJmsListener");
 
@@ -827,8 +826,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new GeneratorPropertiesFactory().withServiceComponentOf(EVENT_LISTENER)));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "PeopleEventListenerPeopleEventJmsListener");
 
@@ -853,8 +852,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "PeopleCommandControllerPeopleControllerCommandJmsListener");
 
@@ -877,8 +876,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "ContextEventProcessorStructureEventJmsListener");
 
@@ -896,8 +895,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
         generator.run(subscriptionDescriptor,
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new GeneratorPropertiesFactory().withCustomMDBPool()));
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "PeopleEventListenerPeoplePersonAddedJmsListener");
 
@@ -914,8 +913,8 @@ public class SubscriptionJmsEndpointGeneratorTest {
         generator.run(subscriptionDescriptor,
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "PeopleEventListenerPeoplePersonAddedJmsListener");
 
@@ -931,7 +930,7 @@ public class SubscriptionJmsEndpointGeneratorTest {
         generator.run(subscriptionWrapper,
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
-        final File packageDir = new File(outputFolder.getRoot().getAbsolutePath() + BASE_PACKAGE_FOLDER);
+        final File packageDir = new File(outputFolder.getAbsolutePath() + BASE_PACKAGE_FOLDER);
         final File[] files = packageDir.listFiles();
         assertThat(files.length, is(4));
         assertThat(asList(files), hasItem(hasProperty("name", containsString("ContextCommandHandlerStructureHandlerCommandJmsHandlerDestinationNameProvider"))));
@@ -944,7 +943,7 @@ public class SubscriptionJmsEndpointGeneratorTest {
         generator.run(subscriptionWrapper,
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
-        final File packageDir = new File(outputFolder.getRoot().getAbsolutePath() + BASE_PACKAGE_FOLDER);
+        final File packageDir = new File(outputFolder.getAbsolutePath() + BASE_PACKAGE_FOLDER);
         final File[] files = packageDir.listFiles();
 
         assertThat(files.length, is(3));

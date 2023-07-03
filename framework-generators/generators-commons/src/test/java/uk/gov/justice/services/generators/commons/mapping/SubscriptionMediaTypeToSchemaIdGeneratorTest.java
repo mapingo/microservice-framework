@@ -11,19 +11,19 @@ import uk.gov.justice.services.core.mapping.MediaTypeToSchemaIdMapper;
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
 import uk.gov.justice.subscription.domain.subscriptiondescriptor.Event;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class SubscriptionMediaTypeToSchemaIdGeneratorTest {
 
     private static final String BASE_PACKAGE = "org.raml.test";
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     @Test
     public void shouldCreateMediaTypeToSchemaIdMapper() throws Exception {
@@ -51,8 +51,8 @@ public class SubscriptionMediaTypeToSchemaIdGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> schemaIdMapperClass = javaCompilerUtil().compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 generatedClassName);

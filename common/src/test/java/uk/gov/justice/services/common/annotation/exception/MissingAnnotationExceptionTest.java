@@ -6,7 +6,7 @@ import static org.hamcrest.core.Is.is;
 
 import uk.gov.justice.services.core.annotation.exception.MissingAnnotationException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MissingAnnotationExceptionTest {
 

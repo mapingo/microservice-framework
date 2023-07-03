@@ -11,6 +11,7 @@ import static uk.gov.justice.raml.jms.core.ClassNameFactory.EVENT_VALIDATION_INT
 import static uk.gov.justice.services.messaging.jms.HeaderConstants.JMS_HEADER_CPPNAME;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 
+import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.raml.jms.core.ClassNameFactory;
 import uk.gov.justice.services.adapter.messaging.JsonSchemaValidationInterceptor;
 import uk.gov.justice.services.messaging.jms.HeaderConstants;
@@ -22,18 +23,16 @@ import javax.jms.TextMessage;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EventValidationInterceptorCodeGeneratorTest {
 
-    @Rule
-    public final TemporaryFolder temporaryFolder = new TemporaryFolder();
+    @TempDir
+    public File temporaryFolder;
 
     @InjectMocks
     private EventValidationInterceptorCodeGenerator eventValidationInterceptorCodeGenerator;
@@ -54,8 +53,10 @@ public class EventValidationInterceptorCodeGeneratorTest {
         final TypeSpec typeSpec = eventValidationInterceptorCodeGenerator.generate(
                 classNameFactory);
 
-        final File codeGenerationOutputDirectory = temporaryFolder.newFolder("test-generation");
-        final File compilationOutputDirectory = temporaryFolder.newFolder("java-test-classes");
+        final File codeGenerationOutputDirectory = new File(temporaryFolder, "test-generation");
+        final File compilationOutputDirectory = new File(temporaryFolder, "java-test-classes");
+        codeGenerationOutputDirectory.mkdirs();
+        compilationOutputDirectory.mkdirs();
 
         builder(packageName, typeSpec)
                 .addStaticImport(get(HeaderConstants.class), "JMS_HEADER_CPPNAME")

@@ -4,8 +4,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for the {@link RestEnvelopeBuilderFactory} class.
@@ -14,7 +14,7 @@ public class RestEnvelopeBuilderFactoryTest {
 
     private RestEnvelopeBuilderFactory factory;
 
-    @Before
+    @BeforeEach
     public void setup() {
         factory = new RestEnvelopeBuilderFactory();
     }
