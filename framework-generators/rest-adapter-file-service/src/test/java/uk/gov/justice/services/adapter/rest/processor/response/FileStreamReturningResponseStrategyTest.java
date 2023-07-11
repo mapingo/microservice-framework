@@ -8,6 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithDefaults;
@@ -15,6 +16,7 @@ import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderF
 import uk.gov.justice.services.fileservice.api.FileRetriever;
 import uk.gov.justice.services.fileservice.api.FileServiceException;
 import uk.gov.justice.services.fileservice.domain.FileReference;
+import uk.gov.justice.services.messaging.JsonEnvelope;
 
 import java.io.InputStream;
 import java.util.Optional;
@@ -24,16 +26,16 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FileStreamReturningResponseStrategyTest {
 
     @Mock
@@ -47,7 +49,7 @@ public class FileStreamReturningResponseStrategyTest {
     @InjectMocks
     private FileStreamReturningResponseStrategy strategy;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         responseStrategyHelper = new ResponseStrategyHelper();
         responseStrategyHelper.logger = logger;
@@ -68,40 +70,44 @@ public class FileStreamReturningResponseStrategyTest {
     }
 
 
-    @Test(expected = InternalServerErrorException.class)
+    @Test
     public void shouldThrowExceptionIfFileServiceThrowsException() throws FileServiceException {
 
         final UUID fileId = randomUUID();
         when(fileRetriever.retrieve(fileId)).thenThrow(new FileServiceException(""));
 
-        strategy.responseFor("someAction", Optional.of(envelope().with(metadataWithDefaults()).withPayloadOf(fileId, "fileId").build()));
+        final Optional<JsonEnvelope> jsonEnvelope = Optional.of(envelope().with(metadataWithDefaults()).withPayloadOf(fileId, "fileId").build());
 
+        assertThrows(InternalServerErrorException.class, () -> strategy.responseFor("someAction", jsonEnvelope));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowExceptionIfFileNotFound() throws Exception {
 
         final UUID fileId = randomUUID();
         when(fileRetriever.retrieve(fileId)).thenReturn(empty());
 
-        strategy.responseFor("someAction", Optional.of(envelope().with(metadataWithDefaults()).withPayloadOf(fileId, "fileId").build()));
+        final Optional<JsonEnvelope> jsonEnvelope = Optional.of(envelope().with(metadataWithDefaults()).withPayloadOf(fileId, "fileId").build());
 
+        assertThrows(NotFoundException.class, () -> strategy.responseFor("someAction", jsonEnvelope));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void shouldThrowExceptionIfPayloadNull() throws Exception {
-        strategy.responseFor("someAction", Optional.of(envelope().with(metadataWithDefaults()).withNullPayload().build()));
+        final Optional<JsonEnvelope> jsonEnvelope = Optional.of(envelope().with(metadataWithDefaults()).withNullPayload().build());
 
+        assertThrows(NotFoundException.class, () -> strategy.responseFor("someAction", jsonEnvelope));
     }
 
-    @Test(expected = InternalServerErrorException.class)
+    @Test
     public void shouldThrowExceptionIfFileIdNotPresentInPayload() throws Exception {
-        strategy.responseFor("someAction", Optional.of(envelope().with(metadataWithDefaults()).withPayloadOf("", "someOtherField").build()));
+        final Optional<JsonEnvelope> jsonEnvelope = Optional.of(envelope().with(metadataWithDefaults()).withPayloadOf("", "someOtherField").build());
 
+        assertThrows(InternalServerErrorException.class, () -> strategy.responseFor("someAction", jsonEnvelope));
     }
 
-    @Test(expected = InternalServerErrorException.class)
+    @Test
     public void shouldThrowExceptionIfResultEmpty() throws Exception {
-        strategy.responseFor("someAction", Optional.empty());
+        assertThrows(InternalServerErrorException.class, () -> strategy.responseFor("someAction", Optional.empty()));
     }
 }

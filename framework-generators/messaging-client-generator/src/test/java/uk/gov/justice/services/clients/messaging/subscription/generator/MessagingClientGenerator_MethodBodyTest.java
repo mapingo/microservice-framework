@@ -16,23 +16,23 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.jms.JmsEnvelopeSender;
 import uk.gov.justice.services.messaging.logging.TraceLogger;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class MessagingClientGenerator_MethodBodyTest {
 
     private static final String BASE_PACKAGE = "org.raml.test";
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     @Mock
     private JmsEnvelopeSender sender;
@@ -50,8 +50,8 @@ public class MessagingClientGenerator_MethodBodyTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("COMMAND_CONTROLLER")));
 
         final Class<?> generatedClass = javaCompilerUtil().compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteCommandController2CakeshopControllerCommandCakeshopMessagingClient");
 

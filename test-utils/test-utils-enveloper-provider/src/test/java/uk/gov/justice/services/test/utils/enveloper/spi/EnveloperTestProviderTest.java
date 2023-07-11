@@ -19,7 +19,7 @@ import uk.gov.justice.services.messaging.spi.DefaultEnvelope;
 import java.util.UUID;
 import java.util.function.Function;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class EnveloperTestProviderTest {
 

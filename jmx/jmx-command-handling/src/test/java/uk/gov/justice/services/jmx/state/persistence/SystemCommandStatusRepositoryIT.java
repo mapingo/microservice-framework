@@ -6,7 +6,7 @@ import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_IN_PROGRESS;
@@ -21,22 +21,21 @@ import uk.gov.justice.services.test.utils.persistence.TestJdbcDataSourceProvider
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import javax.sql.DataSource;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SystemCommandStatusRepositoryIT {
 
     private final DataSource systemDataSource = new TestJdbcDataSourceProvider().getSystemDataSource("framework");
@@ -47,12 +46,12 @@ public class SystemCommandStatusRepositoryIT {
     @InjectMocks
     private SystemCommandStatusRepository systemCommandStatusRepository;
 
-    @Before
+    @BeforeEach
     public void stubGetDataSource() {
         when(systemJdbcDataSourceProvider.getDataSource()).thenReturn(systemDataSource);
     }
 
-    @Before
+    @BeforeEach
     public void cleanTable() throws Exception {
 
         try (final Connection connection = systemDataSource.getConnection();

@@ -3,13 +3,13 @@ package uk.gov.justice.services.clients.unifiedsearch.core;
 import static com.jayway.jsonassert.JsonAssert.with;
 import static org.hamcrest.CoreMatchers.is;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UnifiedSearchTransformerCacheTest {
 
     @Spy

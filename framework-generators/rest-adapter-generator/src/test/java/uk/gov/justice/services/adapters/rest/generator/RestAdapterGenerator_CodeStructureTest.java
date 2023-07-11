@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.emptyArray;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.raml.model.ActionType.DELETE;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.PATCH;
@@ -71,7 +71,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 
 public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGeneratorTest {
@@ -89,8 +89,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         assertThat(interfaceClass.isInterface(), is(true));
@@ -102,7 +102,7 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
     public void shouldGenerateInterfaceInSpecifiedPackage() throws Exception {
         final String basePackageName = "uk.gov.test1";
 
-        java.nio.file.Path outputPath = get(outputFolder.getRoot().getAbsolutePath());
+        java.nio.file.Path outputPath = get(outputFolder.getAbsolutePath());
         final GeneratorConfig config = new GeneratorConfig(outputPath, outputPath, basePackageName, new CommonGeneratorProperties(), singletonList(outputPath.getParent()));
         generator.run(
                 restRamlWithDefaults()
@@ -111,8 +111,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 config);
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 basePackageName + ".resource");
 
         assertThat(interfaceClass.getPackage().getName(), is(basePackageName + ".resource"));
@@ -132,8 +132,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -159,8 +159,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -195,8 +195,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -222,8 +222,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -249,8 +249,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -278,8 +278,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -310,8 +310,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -342,8 +342,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -371,8 +371,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -406,8 +406,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -432,8 +432,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -455,8 +455,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         assertThat(interfaceClass.isInterface(), is(true));
@@ -489,8 +489,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -526,13 +526,13 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceInterface = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -553,8 +553,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -573,8 +573,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -595,8 +595,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiSomePathResource");
@@ -618,8 +618,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("CUSTOM_API")));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCustomApiRestServiceSomePathResource");
@@ -655,8 +655,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -688,8 +688,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathP1Resource");
@@ -710,8 +710,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathParamAResource");
@@ -744,8 +744,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathParamAParamBParamCResource");
@@ -778,7 +778,7 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
     public void shouldGenerateClassInSpecifiedPackage() throws Exception {
         final String basePackageName = "uk.gov.test2";
 
-        java.nio.file.Path outputPath = get(outputFolder.getRoot().getAbsolutePath());
+        java.nio.file.Path outputPath = get(outputFolder.getAbsolutePath());
         generator.run(
                 restRamlWithCommandApiDefaults()
                         .with(defaultPostResource()
@@ -787,8 +787,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 new GeneratorConfig(outputPath, outputPath, basePackageName, new CommonGeneratorProperties(), singletonList(outputPath.getParent())));
 
         final Class<?> resourceImplementation = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 basePackageName,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -807,8 +807,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> class1 = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -836,8 +836,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> class1 = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -860,8 +860,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> class1 = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -889,8 +889,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> class1 = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -913,8 +913,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> class1 = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -942,8 +942,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> class1 = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -966,8 +966,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> class1 = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -990,8 +990,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -1013,8 +1013,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -1037,8 +1037,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -1058,8 +1058,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiUserResource");
@@ -1083,8 +1083,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -1106,8 +1106,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -1135,8 +1135,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
         );
 
         final Class<?> implementation = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiUsersResource");
@@ -1150,8 +1150,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
         assertThat(param.getAnnotations(), emptyArray());
 
         final Class<?> iface = COMPILER.compiledInterfaceClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "QueryApiUsersResource");
@@ -1183,8 +1183,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
         );
 
         final Class<?> implementation = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiUsersResource");
@@ -1200,8 +1200,8 @@ public class RestAdapterGenerator_CodeStructureTest extends BaseRestAdapterGener
         });
 
         final Class<?> iface = COMPILER.compiledInterfaceClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "QueryApiUsersResource");

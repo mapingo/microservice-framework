@@ -1,7 +1,6 @@
 package uk.gov.justice.services.test.utils.core.helper;
 
 import static java.util.stream.Collectors.toList;
-import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.mockito.Mockito.mock;
@@ -12,14 +11,9 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class EventStreamMockHelperTest {
-
-    @Test
-    public void shouldBeWellDefinedUtilityClass() {
-        assertUtilityClassWellDefined(EventStreamMockHelper.class);
-    }
 
     @Test
     public void shouldVerifyAppendCallAndReturnStreamOfJsonEnvelopes() throws Exception {

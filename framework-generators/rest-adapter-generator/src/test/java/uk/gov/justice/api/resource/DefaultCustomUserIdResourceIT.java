@@ -74,24 +74,24 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.openejb.jee.Application;
 import org.apache.openejb.jee.WebApp;
-import org.apache.openejb.junit.ApplicationComposer;
+import org.apache.openejb.junit5.RunWithApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Configuration;
 import org.apache.openejb.testing.EnableServices;
 import org.apache.openejb.testing.Module;
 import org.apache.openejb.testng.PropertiesBuilder;
 import org.apache.openejb.util.NetworkUtil;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
  * Integration tests for the generated JAX-RS classes.
  */
 @EnableServices("jaxrs")
-@RunWith(ApplicationComposer.class)
+@RunWithApplicationComposer
 public class DefaultCustomUserIdResourceIT {
 
     private static final String USER_MEDIA_TYPE = "application/vnd.people.user+json";
@@ -108,13 +108,13 @@ public class DefaultCustomUserIdResourceIT {
     @Inject
     CommonProviders commonProviders;
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         port = NetworkUtil.getNextAvailablePort();
         BASE_URI = String.format(BASE_URI_PATTERN, port);
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         httpClient = HttpClients.createDefault();
     }
@@ -213,7 +213,7 @@ public class DefaultCustomUserIdResourceIT {
         assertThat(jsonEnvelope.payloadAsJsonObject().getString("userUrn"), is("1234"));
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void shouldReturn400ForJsonNotAdheringToSchema() throws Exception {
         final HttpResponse response = httpClient.execute(postRequestFor("/custom/1234", "{\"blah\" : \"1234\"}", USER_MEDIA_TYPE));

@@ -2,13 +2,13 @@ package uk.gov.justice.raml.jms.validator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.generators.test.utils.builder.RamlBuilder.raml;
 
 import uk.gov.justice.services.generators.commons.validator.RamlValidationException;
 import uk.gov.justice.services.generators.commons.validator.RamlValidator;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class BaseUriRamlValidatorTest {
 

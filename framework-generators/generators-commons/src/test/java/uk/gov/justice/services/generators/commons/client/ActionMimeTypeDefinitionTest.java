@@ -3,13 +3,13 @@ package uk.gov.justice.services.generators.commons.client;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static uk.gov.justice.services.generators.commons.client.ActionMimeTypeDefinition.definitionWithRequest;
 import static uk.gov.justice.services.generators.commons.client.ActionMimeTypeDefinition.definitionWithRequestAndResponse;
 import static uk.gov.justice.services.generators.commons.client.ActionMimeTypeDefinition.definitionWithResponse;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.raml.model.MimeType;
 
 public class ActionMimeTypeDefinitionTest {

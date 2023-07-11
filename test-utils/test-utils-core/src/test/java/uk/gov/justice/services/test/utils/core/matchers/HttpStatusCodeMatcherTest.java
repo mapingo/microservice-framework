@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 import static uk.gov.justice.services.test.utils.core.matchers.HttpStatusCodeMatcher.isStatus;
 
 import org.hamcrest.Description;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class HttpStatusCodeMatcherTest {
 

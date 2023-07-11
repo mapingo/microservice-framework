@@ -7,7 +7,7 @@ import static uk.gov.justice.subscription.domain.builders.LocationBuilder.locati
 
 import uk.gov.justice.subscription.domain.eventsource.Location;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class LocationBuilderTest {
 

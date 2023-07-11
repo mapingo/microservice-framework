@@ -8,7 +8,7 @@ import uk.gov.justice.services.jmx.api.command.SystemCommand;
 
 import java.util.UUID;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RunSystemCommandTaskTest {
 

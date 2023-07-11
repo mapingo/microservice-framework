@@ -2,6 +2,7 @@ package uk.gov.justice.services.core.interceptor;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static uk.gov.justice.services.core.interceptor.InterceptorContext.interceptorContextWithInput;
 
@@ -9,12 +10,12 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 
 import java.util.Optional;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DefaultInterceptorContextTest {
 
     @Mock
@@ -75,9 +76,9 @@ public class DefaultInterceptorContextTest {
         assertThat(interceptorContext.getOutputParameter("test"), is(Optional.of(parameter)));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldThrowExceptionIfInputNotSet() throws Exception {
-        interceptorContextWithInput(null).inputEnvelope();
+        assertThrows(IllegalStateException.class, () -> interceptorContextWithInput(null).inputEnvelope());
     }
 
     @Test

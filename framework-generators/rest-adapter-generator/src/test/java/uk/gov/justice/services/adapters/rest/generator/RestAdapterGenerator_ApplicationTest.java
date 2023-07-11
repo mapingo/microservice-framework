@@ -27,6 +27,7 @@ import static uk.gov.justice.services.generators.test.utils.builder.ResourceBuil
 import static uk.gov.justice.services.generators.test.utils.config.GeneratorConfigUtil.configurationWithBasePackage;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
+import java.io.File;
 import uk.gov.justice.maven.generator.io.files.parser.core.GeneratorConfig;
 import uk.gov.justice.services.adapter.rest.application.CommonProviders;
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
@@ -41,7 +42,7 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
 import com.google.common.reflect.TypeToken;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.raml.model.Raml;
 
 public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGeneratorTest {
@@ -57,8 +58,8 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> applicationClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "CommandApiRestServiceApplication");
 
@@ -74,8 +75,8 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> applicationClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "CommandApiRestServiceWithHyphensApplication");
 
@@ -91,8 +92,8 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> applicationClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "CommandApiRestServiceApplication");
 
@@ -110,8 +111,8 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> applicationClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "CommandApiRestServiceApplication");
 
@@ -128,8 +129,8 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> applicationClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "CommandApiRestServiceApplication");
 
@@ -147,8 +148,8 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> applicationClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "CommandApiRestServiceApplication");
 
@@ -174,8 +175,8 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Set<Class<?>> compiledClasses = COMPILER.compiledClassesOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE);
 
         final Class<?> applicationClass = COMPILER.classOf(
@@ -210,8 +211,8 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Set<Class<?>> compiledClasses = COMPILER.compiledClassesOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE);
 
         final Class<?> applicationClass = COMPILER.classOf(
@@ -244,7 +245,8 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
                         .build(),
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties(), singletonList(sourcePath)));
 
-        final Path outputPath = Paths.get(outputFolder.newFile().getAbsolutePath(), EXISTING_FILE_PATH);
+        //TODO SAN Revise the fix
+        final Path outputPath = Paths.get(File.createTempFile("junit", null, outputFolder).getAbsolutePath(), EXISTING_FILE_PATH);
 
         assertThat(outputPath.toFile().exists(), equalTo(FALSE));
     }
@@ -270,7 +272,7 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
     }
 
     private Path existingFilePath() {
-        return Paths.get(outputFolder.getRoot().getAbsolutePath());
+        return Paths.get(outputFolder.getAbsolutePath());
     }
 
     private static class JaxRsProviderA {

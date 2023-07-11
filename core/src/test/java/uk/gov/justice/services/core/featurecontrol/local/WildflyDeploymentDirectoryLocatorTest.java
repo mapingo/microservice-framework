@@ -3,21 +3,21 @@ package uk.gov.justice.services.core.featurecontrol.local;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.core.featurecontrol.local.WildflyDeploymentDirectoryLocator.JBOSS_SERVER_BASE_DIR;
 
-import org.junit.AfterClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class WildflyDeploymentDirectoryLocatorTest {
 
     private static final String SOME_PATH_TO_WILDFLY = "/some/path/to/wildfly";
 
-    @AfterClass
+    @AfterAll
     public static void removeJbossBaseDirSystemProperty() {
         System.clearProperty(JBOSS_SERVER_BASE_DIR);
         assertThat(System.getProperty(JBOSS_SERVER_BASE_DIR), is(nullValue()));

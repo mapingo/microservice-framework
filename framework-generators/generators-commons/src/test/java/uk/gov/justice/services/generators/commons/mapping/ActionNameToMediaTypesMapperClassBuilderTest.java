@@ -8,6 +8,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 
+import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.services.core.annotation.MediaTypesMapper;
 import uk.gov.justice.services.core.mapping.ActionNameToMediaTypesMapper;
 import uk.gov.justice.services.core.mapping.MediaType;
@@ -19,17 +20,15 @@ import java.util.Map;
 
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("ConstantConditions")
 public class ActionNameToMediaTypesMapperClassBuilderTest {
 
     private static final String PACKAGE_NAME = "uk.gov.justice.services.generators.test.mappers";
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     private final RamlSchemaMappingClassNameGenerator ramlSchemaMappingClassNameGenerator = new RamlSchemaMappingClassNameGenerator();
     private final ActionNameToMediaTypesMapperClassBuilder actionNameToMediaTypesMapperClassBuilder = new ActionNameToMediaTypesMapperClassBuilder(ramlSchemaMappingClassNameGenerator);
@@ -78,7 +77,7 @@ public class ActionNameToMediaTypesMapperClassBuilderTest {
 
     private Class<?> writeSourceFileAndCompile(final String packageName, final TypeSpec typeSpec) throws IOException {
 
-        final File outputFolderRoot = outputFolder.getRoot();
+        final File outputFolderRoot = outputFolder.getParentFile();
 
         JavaFile.builder(packageName, typeSpec)
                 .build()

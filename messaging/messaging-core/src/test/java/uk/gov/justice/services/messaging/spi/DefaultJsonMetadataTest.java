@@ -6,6 +6,7 @@ import static javax.json.JsonValue.NULL;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.messaging.JsonEnvelope.METADATA;
 import static uk.gov.justice.services.messaging.JsonMetadata.CAUSATION;
 import static uk.gov.justice.services.messaging.JsonMetadata.CLIENT_ID;
@@ -22,6 +23,7 @@ import static uk.gov.justice.services.messaging.JsonMetadata.STREAM;
 import static uk.gov.justice.services.messaging.JsonMetadata.STREAM_ID;
 import static uk.gov.justice.services.messaging.JsonMetadata.USER_ID;
 import static uk.gov.justice.services.messaging.JsonMetadata.VERSION;
+import static uk.gov.justice.services.messaging.JsonObjects.getJsonString;
 import static uk.gov.justice.services.messaging.spi.DefaultJsonMetadata.metadataBuilder;
 import static uk.gov.justice.services.messaging.spi.DefaultJsonMetadata.metadataBuilderFrom;
 
@@ -30,16 +32,18 @@ import uk.gov.justice.services.messaging.Metadata;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonString;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 import com.google.common.testing.EqualsTester;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for the {@link DefaultJsonMetadata} class.
@@ -58,11 +62,9 @@ public class DefaultJsonMetadataTest {
     private static final long EVENT_NUMBER_VALUE = 10L;
     private static final long PREVIOUS_EVENT_NUMBER_VALUE = 9L;
 
-    private Metadata metadata;
 
-    @Before
-    public void setup() {
-        metadata = metadataBuilder()
+    private Metadata createSomeMetadata() {
+        return metadataBuilder()
                 .withId(UUID.fromString(UUID_ID))
                 .withName(MESSAGE_NAME)
                 .withSource(SOURCE_NAME)
@@ -77,59 +79,71 @@ public class DefaultJsonMetadataTest {
                 .build();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionOnMissingId() throws Exception {
-        final JsonObject joEnvelope = new StringToJsonObjectConverter().convert(jsonFromFile("json/envelope-missing-id.json"));
-        metadataBuilderFrom(joEnvelope.getJsonObject(METADATA));
+        assertThrows(IllegalArgumentException.class, () -> {
+                    final JsonObject joEnvelope = new StringToJsonObjectConverter()
+                            .convert(jsonFromFile("json/envelope-missing-id.json"));
+                    metadataBuilderFrom(joEnvelope.getJsonObject(METADATA));
+                }
+        );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionOnMissingName() throws Exception {
-        final JsonObject joEnvelope = new StringToJsonObjectConverter().convert(jsonFromFile("json/envelope-missing-name"));
-        metadataBuilderFrom(joEnvelope.getJsonObject(METADATA));
+        assertThrows(IllegalArgumentException.class, () -> metadataBuilderFrom(new StringToJsonObjectConverter()
+                .convert(jsonFromFile("json/envelope-missing-name")).getJsonObject(METADATA)));
     }
 
     @Test
     public void shouldReturnId() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         assertThat(metadata.id(), equalTo(UUID.fromString(UUID_ID)));
     }
 
     @Test
     public void shouldReturnName() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         assertThat(metadata.name(), equalTo(MESSAGE_NAME));
     }
 
     @Test
     public void shouldReturnClientCorrelationId() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         assertThat(metadata.clientCorrelationId().isPresent(), is(true));
         assertThat(metadata.clientCorrelationId().get(), equalTo(UUID_CLIENT_CORRELATION));
     }
 
     @Test
     public void shouldReturnCausation() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         assertThat(metadata.causation(), equalTo(ImmutableList.of(UUID.fromString(UUID_CAUSATION))));
     }
 
     @Test
     public void shouldReturnUserId() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         assertThat(metadata.userId().isPresent(), is(true));
         assertThat(metadata.userId().get(), equalTo(UUID_USER_ID));
     }
 
     @Test
     public void shouldReturnSource() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         assertThat(metadata.source().isPresent(), is(true));
         assertThat(metadata.source().get(), equalTo(SOURCE_NAME));
     }
 
     @Test
     public void shouldReturnSessionId() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         assertThat(metadata.sessionId().isPresent(), is(true));
         assertThat(metadata.sessionId().get(), equalTo(UUID_SESSION_ID));
     }
 
     @Test
     public void shouldReturnStreamId() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         assertThat(metadata.streamId().isPresent(), is(true));
         assertThat(metadata.streamId().get(), equalTo(UUID.fromString(UUID_STREAM_ID)));
     }
@@ -137,18 +151,21 @@ public class DefaultJsonMetadataTest {
     @Deprecated // renamed to position.
     @Test
     public void shouldReturnStreamVersion() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         assertThat(metadata.version().isPresent(), is(true));
         assertThat(metadata.version().get(), equalTo(STREAM_VERSION));
     }
 
     @Test
     public void shouldReturnStreamPosition() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         assertThat(metadata.position().isPresent(), is(true));
         assertThat(metadata.position().get(), equalTo(STREAM_VERSION));
     }
 
     @Test
     public void shouldReturnJsonObject() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         final JsonObject jsonObject = metadata.asJsonObject();
 
         with(jsonObject.toString())
@@ -167,63 +184,54 @@ public class DefaultJsonMetadataTest {
 
     @Test
     public void shouldReturnEventNumber() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         assertThat(metadata.eventNumber().isPresent(), is(true));
         assertThat(metadata.eventNumber().get(), equalTo(EVENT_NUMBER_VALUE));
     }
 
     @Test
     public void shouldReturnPreviousEventNumber() throws Exception {
+        final Metadata metadata = createSomeMetadata();
         assertThat(metadata.previousEventNumber().isPresent(), is(true));
         assertThat(metadata.previousEventNumber().get(), equalTo(PREVIOUS_EVENT_NUMBER_VALUE));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionIfIdIsMissing() throws Exception {
-        metadataBuilderFrom(createObjectBuilder()
-                .build()
-        ).build();
+
+        assertThrows(IllegalArgumentException.class, () -> metadataBuilderFrom(createObjectBuilder().build()).build());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionIfIdIsNotUUID() throws Exception {
-        metadataBuilderFrom(createObjectBuilder()
-                .add(ID, "blah")
-                .build()
-        ).build();
+        assertThrows(IllegalArgumentException.class, () -> metadataBuilderFrom(createObjectBuilder().add(ID, "blah").build()).build());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionIfIdIsNull() throws Exception {
-        metadataBuilderFrom(createObjectBuilder()
-                .add(ID, NULL)
-                .build()
-        ).build();
+        assertThrows(IllegalArgumentException.class, () -> metadataBuilderFrom(createObjectBuilder().add(ID, NULL).build()).build());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionIfNameIsMissing() throws Exception {
-        metadataBuilderFrom(createObjectBuilder()
-                .add(ID, UUID_ID)
-                .build()
-        ).build();
+        assertThrows(IllegalArgumentException.class, () -> metadataBuilderFrom(createObjectBuilder().add(ID, UUID_ID).build()).build());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionIfNameIsEmpty() throws Exception {
-        metadataBuilderFrom(createObjectBuilder()
+        assertThrows(IllegalArgumentException.class, () -> metadataBuilderFrom(createObjectBuilder()
                 .add(ID, UUID_ID)
                 .add(NAME, "")
-                .build()
-        ).build();
+                .build()).build());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionIfNameIsNull() throws Exception {
-        metadataBuilderFrom(createObjectBuilder()
+        assertThrows(IllegalArgumentException.class, () -> metadataBuilderFrom(createObjectBuilder()
                 .add(ID, UUID_ID)
                 .add(NAME, NULL)
                 .build()
-        ).build();
+        ).build());
     }
 
     @SuppressWarnings({"squid:MethodCyclomaticComplexity", "squid:S1067", "squid:S00122"})

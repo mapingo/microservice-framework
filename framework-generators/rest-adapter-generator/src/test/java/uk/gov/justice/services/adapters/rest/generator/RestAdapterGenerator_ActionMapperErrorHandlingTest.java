@@ -3,7 +3,7 @@ package uk.gov.justice.services.adapters.rest.generator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.HEAD;
 import static org.raml.model.ActionType.OPTIONS;
@@ -24,7 +24,7 @@ import static uk.gov.justice.services.generators.test.utils.config.GeneratorConf
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
 import uk.gov.justice.services.generators.commons.validator.RamlValidationException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.raml.model.Raml;
 
 public class RestAdapterGenerator_ActionMapperErrorHandlingTest extends BaseRestAdapterGeneratorTest {

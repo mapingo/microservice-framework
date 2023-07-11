@@ -5,6 +5,7 @@ import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonEnvelopeMatcher.jsonEnvelope;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonEnvelopeMetadataMatcher.metadata;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonEnvelopePayloadMatcher.payloadIsJson;
@@ -16,7 +17,7 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JsonEnvelopeStreamMatcherTest {
 
@@ -46,26 +47,26 @@ public class JsonEnvelopeStreamMatcherTest {
         ));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchJsonEnvelopesInAStreamIfThereAreTooMany() throws Exception {
         final JsonEnvelope event_1 = jsonEnvelopeWith(ID_1, NAME_1);
         final JsonEnvelope event_2 = jsonEnvelopeWith(ID_2, NAME_2);
 
-        assertThat(Stream.of(event_1, event_2), JsonEnvelopeStreamMatcher.streamContaining(
+        assertThrows(AssertionError.class, () -> assertThat(Stream.of(event_1, event_2), JsonEnvelopeStreamMatcher.streamContaining(
                 jsonEnvelope(
                         metadata().withName("event.action"),
                         payloadIsJson(allOf(
                                 withJsonPath("$.someId", equalTo(ID_1.toString())),
                                 withJsonPath("$.name", equalTo(NAME_1)))
                         ))
-        ));
+        )));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchJsonEnvelopesInAStreamIfOneIsMissing() throws Exception {
         final JsonEnvelope event_2 = jsonEnvelopeWith(ID_2, NAME_2);
 
-        assertThat(Stream.of(event_2), JsonEnvelopeStreamMatcher.streamContaining(
+        assertThrows(AssertionError.class, () -> assertThat(Stream.of(event_2), JsonEnvelopeStreamMatcher.streamContaining(
                 jsonEnvelope(
                         metadata().withName("event.action"),
                         payloadIsJson(allOf(
@@ -78,7 +79,7 @@ public class JsonEnvelopeStreamMatcherTest {
                                 withJsonPath("$.someId", equalTo(ID_2.toString())),
                                 withJsonPath("$.name", equalTo(NAME_2)))
                         ))
-        ));
+        )));
     }
 
     private JsonEnvelope jsonEnvelopeWith(final UUID id, final String name) {

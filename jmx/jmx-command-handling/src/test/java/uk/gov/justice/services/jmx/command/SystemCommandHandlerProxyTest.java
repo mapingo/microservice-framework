@@ -3,7 +3,7 @@ package uk.gov.justice.services.jmx.command;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static uk.gov.justice.services.jmx.command.TestCommand.TEST_COMMAND;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SystemCommandHandlerProxyTest {
 

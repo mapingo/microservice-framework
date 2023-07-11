@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.raml.model.ActionType.DELETE;
@@ -54,19 +54,18 @@ import com.google.common.collect.ImmutableList;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.TypeName;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.raml.model.Action;
 import org.raml.model.Raml;
 import org.raml.model.Resource;
 import org.slf4j.Logger;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AbstractClientGeneratorTest {
 
     private static final String EXISTING_FILE_PATH = "org/raml/test/resource/RemoteBCDController.java";
@@ -77,12 +76,12 @@ public class AbstractClientGeneratorTest {
     @Mock
     private Logger logger;
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     private final ABCClientGenerator generator = new ABCClientGenerator();
 
-    @Before
+    @BeforeEach
     public void before() {
         overrideLogger(generator, logger);
     }
@@ -99,8 +98,8 @@ public class AbstractClientGeneratorTest {
 
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteABCController");
 
@@ -123,8 +122,8 @@ public class AbstractClientGeneratorTest {
 
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteABCController");
 
@@ -147,8 +146,8 @@ public class AbstractClientGeneratorTest {
 
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteABCController");
 
@@ -171,8 +170,8 @@ public class AbstractClientGeneratorTest {
 
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteABCController");
 
@@ -197,8 +196,8 @@ public class AbstractClientGeneratorTest {
 
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteABCController");
 
@@ -217,8 +216,8 @@ public class AbstractClientGeneratorTest {
                         generatorProperties().withDefaultServiceComponent()));
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteABCController");
 
@@ -238,8 +237,8 @@ public class AbstractClientGeneratorTest {
                         generatorProperties().withDefaultServiceComponent()));
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteABCController");
 
@@ -257,8 +256,8 @@ public class AbstractClientGeneratorTest {
                         generatorProperties().withDefaultServiceComponent()));
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteABCController");
 
@@ -281,8 +280,8 @@ public class AbstractClientGeneratorTest {
                         generatorProperties().withDefaultServiceComponent()));
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "RemoteABCController");
 
@@ -338,7 +337,7 @@ public class AbstractClientGeneratorTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder,
                         generatorProperties().withServiceComponentOf("COMMAND_CONTROLLER"), singletonList(existingFilePath())));
 
-        final Path outputPath = Paths.get(outputFolder.newFile().getAbsolutePath(), EXISTING_FILE_PATH);
+        final Path outputPath = Paths.get(outputFolder.getAbsolutePath(), EXISTING_FILE_PATH);
 
         assertThat(outputPath.toFile().exists(), equalTo(FALSE));
     }

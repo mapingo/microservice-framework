@@ -2,6 +2,7 @@ package uk.gov.justice.services.messaging.jms;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -18,13 +19,13 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.json.JsonObject;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DefaultEnvelopeConverterTest {
 
     private static final String MESSAGE_TEXT = "Test Message";
@@ -78,26 +79,26 @@ public class DefaultEnvelopeConverterTest {
         verify(textMessage).setStringProperty(JMS_HEADER_CPPNAME, NAME);
     }
 
-    @Test(expected = JmsConverterException.class)
+    @Test
     public void shouldThrowExceptionWhenFailToRetrieveMessageContent() throws JMSException {
         doThrow(JMSException.class).when(textMessage).getText();
 
-        envelopeConverter.fromMessage(textMessage);
+        assertThrows(JmsConverterException.class, () -> envelopeConverter.fromMessage(textMessage));
     }
 
-    @Test(expected = JmsConverterException.class)
+    @Test
     public void shouldThrowExceptionWhenFailToRetrieveMessageId() throws JMSException {
         doThrow(JMSException.class).when(textMessage).getText();
         doThrow(JMSException.class).when(textMessage).getJMSMessageID();
 
-        envelopeConverter.fromMessage(textMessage);
+        assertThrows(JmsConverterException.class, () -> envelopeConverter.fromMessage(textMessage));
     }
 
-    @Test(expected = JmsConverterException.class)
+    @Test
     public void shouldThrowExceptionWhenFailToCreateTextMessage() throws JMSException {
         when(jsonObjectEnvelopeConverter.asJsonString(envelope)).thenReturn(MESSAGE_TEXT);
         doThrow(JMSException.class).when(session).createTextMessage(MESSAGE_TEXT);
 
-        envelopeConverter.toMessage(envelope, session);
+        assertThrows(JmsConverterException.class, () -> envelopeConverter.toMessage(envelope, session));
     }
 }

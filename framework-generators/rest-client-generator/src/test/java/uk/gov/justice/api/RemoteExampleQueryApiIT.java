@@ -12,6 +12,7 @@ import static java.lang.String.format;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonEnvelopeMatcher.jsonEnvelope;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonEnvelopeMetadataMatcher.metadata;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonEnvelopePayloadMatcher.payloadIsJson;
@@ -19,6 +20,7 @@ import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuil
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataOf;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import uk.gov.justice.schema.service.CatalogProducer;
 import uk.gov.justice.schema.service.SchemaCatalogResolverProducer;
 import uk.gov.justice.schema.service.SchemaCatalogService;
@@ -94,26 +96,25 @@ import javax.annotation.Priority;
 import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.apache.openejb.OpenEjbContainer;
 import org.apache.openejb.jee.Application;
 import org.apache.openejb.jee.WebApp;
-import org.apache.openejb.junit.ApplicationComposer;
+import org.apache.openejb.junit5.RunWithApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Configuration;
 import org.apache.openejb.testing.Module;
 import org.apache.openejb.testng.PropertiesBuilder;
 import org.apache.openejb.util.NetworkUtil;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-@RunWith(ApplicationComposer.class)
+@RunWithApplicationComposer
 @FrameworkComponent("COMPONENT_ABC")
+@WireMockTest(httpPort = 9090)
 public class RemoteExampleQueryApiIT {
 
+    private static final String PORT = "9090";
     private static int port = -1;
     private static final String PEOPLE_QUERY_USER1 = "people.query.user1";
     private static final String MIME_TYPE = format("application/vnd.%s+json", PEOPLE_QUERY_USER1);
@@ -129,14 +130,13 @@ public class RemoteExampleQueryApiIT {
             .withPayloadOf("SUCCESS", "result")
             .build();
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(9090);
+
     @Inject
     Requester requester;
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
-        System.setProperty(MOCK_SERVER_PORT, "9090");
+        System.setProperty(MOCK_SERVER_PORT, PORT);
         port = NetworkUtil.getNextAvailablePort();
     }
 
@@ -231,7 +231,7 @@ public class RemoteExampleQueryApiIT {
                 .addServlet("TestApp", Application.class.getName());
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         stubFor(get(urlEqualTo(BASE_PATH + format("/users/%s", USER_ID)))
@@ -296,7 +296,7 @@ public class RemoteExampleQueryApiIT {
         );
     }
 
-    @Test(expected = AccessControlViolationException.class)
+    @Test
     public void shouldThrowAccessControlExceptionInCaseOf403Response() {
 
         final JsonEnvelope query = envelope()
@@ -312,7 +312,7 @@ public class RemoteExampleQueryApiIT {
                 .willReturn(aResponse()
                         .withStatus(403)));
 
-        requester.request(query);
+        assertThrows(AccessControlViolationException.class, () -> requester.request(query));
     }
 
     @Alternative

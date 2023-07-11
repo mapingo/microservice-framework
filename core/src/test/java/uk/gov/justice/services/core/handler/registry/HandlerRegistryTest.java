@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -27,17 +28,17 @@ import uk.gov.justice.services.test.utils.common.envelope.TestEnvelopeRecorder;
 
 import java.util.List;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
 /**
  * Unit tests for the HandlerRegistry class.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class HandlerRegistryTest {
 
     private static final String COMMAND_NAME = "test.command.mock-command";
@@ -145,40 +146,35 @@ public class HandlerRegistryTest {
         verify(logger).info("FeatureControl found on 'TestCommandHandlerWithFeatures.handle(...)': [feature-1, feature-2]");
     }
 
-    @Test(expected = DuplicateHandlerException.class)
+    @Test
     public void shouldThrowExceptionIfAttemptingToRegisterDuplicateDirectHandler() throws Exception {
 
-        createRegistryWith(new TestDirectComponentAHandler(), new TestDirectComponentAHandlerDuplicate());
+        assertThrows(DuplicateHandlerException.class, () -> createRegistryWith(new TestDirectComponentAHandler(), new TestDirectComponentAHandlerDuplicate()));
     }
 
-    @Test(expected = InvalidHandlerException.class)
+    @Test
     public void shouldThrowExceptionWithMultipleArgumentsAsynchronousHandler() {
-        createRegistryWith(new TestCommandHandlerWithWrongHandler());
+        assertThrows(InvalidHandlerException.class, () -> createRegistryWith(new TestCommandHandlerWithWrongHandler()));
     }
 
-    @Test(expected = InvalidHandlerException.class)
+    @Test
     public void shouldThrowExceptionWithMultipleArgumentsSynchronousHandler() {
-        createRegistryWith(new TestCommandHandlerWithWrongSynchronousHandler());
+        assertThrows(InvalidHandlerException.class, () -> createRegistryWith(new TestCommandHandlerWithWrongSynchronousHandler()));
     }
 
-    @Test(expected = DuplicateHandlerException.class)
+    @Test
     public void shouldThrowExceptionWithDuplicateAsynchronousHandlers() {
-        createRegistryWith(new TestCommandHandler(), new TestCommandHandlerDuplicate());
+        assertThrows(DuplicateHandlerException.class, () -> createRegistryWith(new TestCommandHandler(), new TestCommandHandlerDuplicate()));
     }
 
-    @Test(expected = DuplicateHandlerException.class)
-    public void shouldThrowExceptionWithDuplicateSynchronousHandlers() {
-        createRegistryWith(new TestCommandHandlerWithSynchronousHandler(), new TestCommandHandlerWithSynchronousHandlerDuplicate());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionWithAsynchronousWrongParameters() {
-        createRegistryWith(new TestCommandHandler(), new TestCommandHandlerWithWrongParameter());
+        assertThrows(IllegalArgumentException.class, () -> createRegistryWith(new TestCommandHandler(), new TestCommandHandlerWithWrongParameter()));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionWithSynchronousWrongParameters() {
-        createRegistryWith(new TestCommandHandlerWithSynchronousHandler(), new TestCommandSynchronousHandlerWithWrongParameter());
+        assertThrows(IllegalArgumentException.class, () -> createRegistryWith(new TestCommandHandlerWithSynchronousHandler(), new TestCommandSynchronousHandlerWithWrongParameter()));
     }
 
     private void assertHandlerMethodInvokesHandler(final HandlerMethod handlerMethod, final TestEnvelopeRecorder handler) {

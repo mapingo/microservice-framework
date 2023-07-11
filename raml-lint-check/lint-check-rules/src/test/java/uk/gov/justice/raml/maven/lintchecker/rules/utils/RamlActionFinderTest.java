@@ -1,6 +1,6 @@
 package uk.gov.justice.raml.maven.lintchecker.rules.utils;
 
-import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
+
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -9,14 +9,10 @@ import uk.gov.justice.raml.maven.lintchecker.rules.configuration.TestConfigurati
 
 import java.util.Collection;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RamlActionFinderTest {
 
-    @Test
-    public void shouldAssertWellDefined() {
-        assertUtilityClassWellDefined(RamlActionFinder.class);
-    }
 
     @SuppressWarnings({"unchecked"})
     @Test

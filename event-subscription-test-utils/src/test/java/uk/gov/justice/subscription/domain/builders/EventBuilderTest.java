@@ -6,7 +6,7 @@ import static uk.gov.justice.subscription.domain.builders.EventBuilder.event;
 
 import uk.gov.justice.subscription.domain.subscriptiondescriptor.Event;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class EventBuilderTest {
 

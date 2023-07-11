@@ -10,22 +10,20 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.rules.TemporaryFolder;
-
 public class GeneratorConfigUtil {
 
     public static GeneratorConfig configurationWithBasePackage(final String basePackageName,
-                                                               final TemporaryFolder outputFolder,
+                                                               final File outputFolder,
                                                                final GeneratorProperties generatorProperties) {
-        final Path outputPath = Paths.get(outputFolder.getRoot().getAbsolutePath());
+        final Path outputPath = Paths.get(outputFolder.getAbsolutePath());
         return new GeneratorConfig(outputPath, outputPath, basePackageName, generatorProperties, Collections.singletonList(outputPath.getParent()));
     }
 
     public static GeneratorConfig configurationWithBasePackage(final String basePackageName,
-                                                               final TemporaryFolder outputFolder,
+                                                               final File outputFolder,
                                                                final GeneratorProperties generatorProperties,
                                                                final List<Path> sourcePaths) {
-        final Path outputPath = Paths.get(outputFolder.getRoot().getAbsolutePath());
+        final Path outputPath = Paths.get(outputFolder.getAbsolutePath());
         return new GeneratorConfig(outputPath, outputPath, basePackageName, generatorProperties, sourcePaths);
     }
 

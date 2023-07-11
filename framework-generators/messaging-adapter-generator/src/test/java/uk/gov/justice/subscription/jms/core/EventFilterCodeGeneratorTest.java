@@ -16,16 +16,16 @@ import uk.gov.justice.subscription.domain.subscriptiondescriptor.Subscription;
 import java.util.HashMap;
 
 import com.squareup.javapoet.TypeSpec;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.raml.model.Action;
 import org.raml.model.ActionType;
 import org.raml.model.MimeType;
 import org.raml.model.Resource;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EventFilterCodeGeneratorTest {
 
     @InjectMocks

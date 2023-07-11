@@ -2,7 +2,7 @@ package uk.gov.justice.services.generators.commons.helper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -12,7 +12,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PathToUrlResolverTest {
 

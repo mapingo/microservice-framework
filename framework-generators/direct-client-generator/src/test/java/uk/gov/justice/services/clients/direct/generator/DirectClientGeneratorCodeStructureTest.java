@@ -6,7 +6,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.raml.model.ActionType.GET;
 import static uk.gov.justice.config.GeneratorPropertiesFactory.generatorProperties;
 import static uk.gov.justice.services.generators.test.utils.builder.HttpActionBuilder.httpAction;
@@ -28,6 +28,7 @@ import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperti
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -35,9 +36,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class DirectClientGeneratorCodeStructureTest {
 
@@ -46,8 +46,8 @@ public class DirectClientGeneratorCodeStructureTest {
 
     private final DirectClientGenerator generator = new DirectClientGenerator();
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     @Test
     public void shouldGenerateClassWithAnnotations() throws Exception {
@@ -59,8 +59,8 @@ public class DirectClientGeneratorCodeStructureTest {
                 configurationWithBasePackage("uk.somepackage", outputFolder, generatorProperties().withServiceComponentOf("SOME_COMPONENT")));
 
         final Class<?> generatedClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 "uk.somepackage",
                 "DirectSomeComponent2QueryApiServiceClient");
 
@@ -81,8 +81,8 @@ public class DirectClientGeneratorCodeStructureTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("SOME_COMPONENT")));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "DirectSomeComponent2QueryApiServiceClient");
 
@@ -114,8 +114,8 @@ public class DirectClientGeneratorCodeStructureTest {
 
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "DirectSomeComponent2QueryApiServiceClient");
 
@@ -144,8 +144,8 @@ public class DirectClientGeneratorCodeStructureTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("SOME_COMPONENT")));
 
         final Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "DirectSomeComponent2QueryApiServiceClient");
 
@@ -194,7 +194,7 @@ public class DirectClientGeneratorCodeStructureTest {
                         .build(),
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("SOME_COMPONENT")));
 
-        final Class<?> compiledClass = COMPILER.compiledClassOf(outputFolder.getRoot(), outputFolder.getRoot(), BASE_PACKAGE, "DirectSomeComponent2QueryApiServiceClient");
+        final Class<?> compiledClass = COMPILER.compiledClassOf(outputFolder, outputFolder, BASE_PACKAGE, "DirectSomeComponent2QueryApiServiceClient");
         assertThat(methodsOf(compiledClass), hasSize(0));
     }
 }

@@ -2,13 +2,13 @@ package uk.gov.justice.services.generators.commons.helper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_INDEXER;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_LISTENER;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MessagingAdapterBaseUriTest {
     @Test

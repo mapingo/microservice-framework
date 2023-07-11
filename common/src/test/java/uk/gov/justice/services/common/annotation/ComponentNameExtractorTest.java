@@ -4,6 +4,7 @@ package uk.gov.justice.services.common.annotation;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.test.utils.common.MemberInjectionPoint.injectionPointWith;
 
 import uk.gov.justice.services.core.annotation.Adapter;
@@ -16,12 +17,12 @@ import uk.gov.justice.services.core.annotation.ServiceComponent;
 
 import javax.inject.Inject;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ComponentNameExtractorTest {
 
     private static final String FIELD_NAME = "field";
@@ -99,9 +100,9 @@ public class ComponentNameExtractorTest {
                 equalTo("CUSTOM_SERVICE_NAME"));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldThrowExceptionOnMissingComponentAnnotation() throws NoSuchFieldException {
-        componentNameExtractor.componentFrom(injectionPointWith(NoAnnotation.class.getDeclaredField(FIELD_NAME)));
+        assertThrows(IllegalStateException.class, () -> componentNameExtractor.componentFrom(injectionPointWith(NoAnnotation.class.getDeclaredField(FIELD_NAME))));
     }
 
     @Test

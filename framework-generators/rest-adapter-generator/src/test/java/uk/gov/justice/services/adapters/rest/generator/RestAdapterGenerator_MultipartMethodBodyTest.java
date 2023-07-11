@@ -28,7 +28,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RestAdapterGenerator_MultipartMethodBodyTest extends BaseRestAdapterGeneratorTest {
 
@@ -48,8 +48,8 @@ public class RestAdapterGenerator_MultipartMethodBodyTest extends BaseRestAdapte
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");

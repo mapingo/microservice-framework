@@ -9,7 +9,6 @@ import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.
 
 import uk.gov.justice.services.core.dispatcher.Dispatcher;
 import uk.gov.justice.services.core.dispatcher.DispatcherCache;
-import uk.gov.justice.services.core.dispatcher.DispatcherConfiguration;
 import uk.gov.justice.services.core.dispatcher.DispatcherDelegate;
 import uk.gov.justice.services.core.dispatcher.EnvelopePayloadTypeConverter;
 import uk.gov.justice.services.core.dispatcher.JsonEnvelopeRepacker;
@@ -19,13 +18,13 @@ import uk.gov.justice.services.core.sender.Sender;
 
 import javax.enterprise.inject.spi.InjectionPoint;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SenderProducerTest {
 
     @Mock

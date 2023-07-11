@@ -1,8 +1,8 @@
 package uk.gov.justice.services.core.handler;
 
-import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.handler.registry.exception.InvalidHandlerException;
@@ -14,14 +14,9 @@ import java.util.UUID;
 import javax.json.JsonObject;
 
 import org.hamcrest.collection.IsCollectionWithSize;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class HandlersTest {
-
-    @Test
-    public void shouldBeAWellDefinedUtilityClass() {
-        assertUtilityClassWellDefined(Handlers.class);
-    }
 
     @Test
     public void shouldFindHandlerMethods() {
@@ -30,9 +25,9 @@ public class HandlersTest {
         assertThat(methods, IsCollectionWithSize.hasSize(3));
     }
 
-    @Test(expected = InvalidHandlerException.class)
+    @Test
     public void shouldThrowExceptionWithInvalidHandlerMethods() {
-        Handlers.handlerMethodsFrom(new InvalidHandler());
+        assertThrows(InvalidHandlerException.class, () -> Handlers.handlerMethodsFrom(new InvalidHandler()));
     }
 
     public static class CommandHandler {

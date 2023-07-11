@@ -10,7 +10,7 @@ import static javax.json.Json.createObjectBuilder;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.adapter.rest.parameter.ParameterType.BOOLEAN;
 import static uk.gov.justice.services.adapter.rest.parameter.ParameterType.NUMERIC;
 import static uk.gov.justice.services.adapter.rest.parameter.ParameterType.STRING;
@@ -48,14 +48,14 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.jboss.resteasy.specimpl.ResteasyHttpHeaders;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Unit tests for the {@link RestEnvelopeBuilder} class.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RestEnvelopeBuilderTest {
 
     private static final UUID UUID_ID = randomUUID();

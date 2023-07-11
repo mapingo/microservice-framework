@@ -1,11 +1,12 @@
 package uk.gov.justice.services.test.utils.core.matchers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.test.utils.core.matchers.MethodHandlesAnnotationMatcher.methodThatHandles;
 
 import uk.gov.justice.services.core.annotation.Handles;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MethodHandlesAnnotationMatcherTest {
 
@@ -14,14 +15,14 @@ public class MethodHandlesAnnotationMatcherTest {
         assertThat(TestClass.class.getMethod("testA"), methodThatHandles("context.commandA"));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchMethodWithNoHandlesAnnotation() throws Exception {
-        assertThat(TestClass.class.getMethod("testB"), methodThatHandles("context.commandB"));
+        assertThrows(AssertionError.class, () -> assertThat(TestClass.class.getMethod("testB"), methodThatHandles("context.commandB")));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldNotMatchMethodWithDifferentHandlesValue() throws Exception {
-        assertThat(TestClass.class.getMethod("testC"), methodThatHandles("context.commandC"));
+        assertThrows(AssertionError.class, () -> assertThat(TestClass.class.getMethod("testC"), methodThatHandles("context.commandC")));
     }
 
     public static class TestClass {

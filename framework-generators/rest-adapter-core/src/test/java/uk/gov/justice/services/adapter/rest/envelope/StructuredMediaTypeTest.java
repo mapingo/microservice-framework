@@ -1,27 +1,35 @@
 package uk.gov.justice.services.adapter.rest.envelope;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import javax.ws.rs.core.MediaType;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for the {@link StructuredMediaType} class.
  */
 public class StructuredMediaTypeTest {
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldThrowExceptionIfNoNameFound() throws Exception {
-        StructuredMediaType mediaType = new StructuredMediaType(MediaType.APPLICATION_JSON_TYPE);
-        mediaType.getName();
+        final StructuredMediaType mediaType = new StructuredMediaType(APPLICATION_JSON_TYPE);
+
+        assertThrows(IllegalStateException.class, mediaType::getName);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldThrowExceptionIfMoreThanOneNameFound() throws Exception {
-        StructuredMediaType mediaType = new StructuredMediaType(new MediaType("application", "json+vnd.blah+vnd.blah"));
-        mediaType.getName();
+        final StructuredMediaType mediaType = new StructuredMediaType(
+                new MediaType(
+                        "application",
+                        "json+vnd.blah+vnd.blah")
+        );
+
+        assertThrows(IllegalStateException.class, mediaType::getName);
     }
 
     @Test

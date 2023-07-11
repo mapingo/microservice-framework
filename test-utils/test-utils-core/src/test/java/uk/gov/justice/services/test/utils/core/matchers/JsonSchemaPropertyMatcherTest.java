@@ -2,10 +2,11 @@ package uk.gov.justice.services.test.utils.core.matchers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonSchemaPropertyMatcher.hasProperty;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonSchemaPropertyMatcher.hasRequiredProperty;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JsonSchemaPropertyMatcherTest {
 
@@ -51,14 +52,14 @@ public class JsonSchemaPropertyMatcherTest {
         assertThat(PATH_TO_SCHEMA, not(hasRequiredProperty("address.addressLine2")));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void invalidXpathShouldThrowIllegalArgument() {
-        assertThat(PATH_TO_SCHEMA, hasRequiredProperty("schemaArray.invalidProperty.subArrayId"));
+        assertThrows(IllegalArgumentException.class, () -> assertThat(PATH_TO_SCHEMA, hasRequiredProperty("schemaArray.invalidProperty.subArrayId")));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void invalidFileShouldThrowIllegalArgument() {
-        assertThat("json/schema/invalid.file.json", hasRequiredProperty("urn"));
+        assertThrows(IllegalArgumentException.class, () -> assertThat("json/schema/invalid.file.json", hasRequiredProperty("urn")));
     }
 
     @Test

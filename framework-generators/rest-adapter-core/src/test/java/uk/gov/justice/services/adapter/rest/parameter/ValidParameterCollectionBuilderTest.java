@@ -7,21 +7,21 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
 
 import java.math.BigDecimal;
 import java.util.Collection;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ValidParameterCollectionBuilderTest {
 
     private ValidParameterCollectionBuilder validParameterCollectionBuilder;
 
-    @Before
+    @BeforeEach
     public void setup() {
         validParameterCollectionBuilder = new ValidParameterCollectionBuilder();
     }

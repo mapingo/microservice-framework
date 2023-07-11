@@ -9,7 +9,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -51,7 +51,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.impl.tl.ThreadLocalHttpHeaders;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGeneratorTest {
@@ -70,8 +70,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiPathResource");
@@ -103,8 +103,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiPathResource");
@@ -144,8 +144,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
         when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiPath2Resource");
@@ -169,8 +169,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryControllerPathResource");
@@ -205,8 +205,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
         when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiSomePathResource");
@@ -228,10 +228,10 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 ).build(),
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
-        final HttpHeaders headers = new ThreadLocalHttpHeaders();
+        final HttpHeaders headers = mock(HttpHeaders.class);
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiPathResource");
@@ -274,8 +274,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiCakeResource");
@@ -283,8 +283,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
         final Object resourceObject = getInstanceOf(resourceClass);
 
         final Class<?> actionMapperClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "mapper",
                 "DefaultQueryApiCakeResourceActionMapper");
@@ -317,15 +317,15 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiRecipeResource");
 
         final Object resourceObject = getInstanceOf(resourceClass);
 
-        final Class<?> actionMapperClass = COMPILER.compiledClassOf(outputFolder.getRoot(), outputFolder.getRoot(), BASE_PACKAGE, "mapper", "DefaultQueryApiRecipeResourceActionMapper");
+        final Class<?> actionMapperClass = COMPILER.compiledClassOf(outputFolder, outputFolder, BASE_PACKAGE, "mapper", "DefaultQueryApiRecipeResourceActionMapper");
         final Object actionMapperObject = actionMapperClass.getConstructor(ActionMapperHelper.class).newInstance(new BasicActionMapperHelper());
         setField(resourceObject, "actionMapper", actionMapperObject);
 
@@ -351,8 +351,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiSomePathParamAResource");
@@ -389,8 +389,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiSomePathParam1Param2Resource");
@@ -433,8 +433,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
         when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiSomePathResource");
@@ -475,8 +475,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
         final String action = "theAction";
         when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiSomePathResource");
@@ -522,8 +522,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiSomePathResource");
@@ -565,8 +565,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiSomePathParamResource");
@@ -607,8 +607,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiSomePathResource");
@@ -655,8 +655,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultQueryApiSomePathResource");

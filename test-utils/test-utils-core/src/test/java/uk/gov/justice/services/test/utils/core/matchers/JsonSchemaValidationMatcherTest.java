@@ -2,7 +2,8 @@ package uk.gov.justice.services.test.utils.core.matchers;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonSchemaValidationMatcher.failsValidationForAnyMissingField;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonSchemaValidationMatcher.failsValidationWithMessage;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonSchemaValidationMatcher.isNotValidForSchema;
@@ -10,6 +11,7 @@ import static uk.gov.justice.services.test.utils.core.matchers.JsonSchemaValidat
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 
+import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
 import java.io.BufferedWriter;
@@ -18,14 +20,12 @@ import java.io.FileWriter;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
 
 public class JsonSchemaValidationMatcherTest {
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    @TempDir
+    public File tempFolder;
 
     @Test
     public void shouldValidateJsonContent() {
@@ -73,14 +73,14 @@ public class JsonSchemaValidationMatcherTest {
         assertThat(jsonEnvelope, JsonSchemaValidationMatcher.isValidJsonEnvelopeForSchema());
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void shouldFailToValidateJsonEnvelopeAgainstSchemaForActionNameOfEnvelope() throws Exception {
         final JsonEnvelope jsonEnvelope = envelope()
                 .with(metadataWithRandomUUID("event.action"))
                 .withPayloadOf("id", "someId")
                 .build();
 
-        assertThat(jsonEnvelope, JsonSchemaValidationMatcher.isValidJsonEnvelopeForSchema());
+        assertThrows(AssertionError.class, () -> assertThat(jsonEnvelope, JsonSchemaValidationMatcher.isValidJsonEnvelopeForSchema()));
     }
 
     @Test
@@ -119,7 +119,7 @@ public class JsonSchemaValidationMatcherTest {
     }
 
     private String getTemporaryPathTo(final String pathToJsonContent) throws Exception {
-        final File tempFileToJson = tempFolder.newFile();
+        final File tempFileToJson = new File(tempFolder, "tempFile.json");
         final BufferedWriter bw = new BufferedWriter(new FileWriter(tempFileToJson));
         bw.write(Resources.toString(Resources.getResource(pathToJsonContent), Charsets.UTF_8));
         bw.close();

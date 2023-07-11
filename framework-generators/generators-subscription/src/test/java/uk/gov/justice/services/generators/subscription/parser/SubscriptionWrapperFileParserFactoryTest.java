@@ -5,7 +5,7 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 import uk.gov.justice.maven.generator.io.files.parser.FileParser;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SubscriptionWrapperFileParserFactoryTest {
 

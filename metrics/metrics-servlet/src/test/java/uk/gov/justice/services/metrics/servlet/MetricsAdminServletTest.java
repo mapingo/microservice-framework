@@ -5,8 +5,8 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import javax.servlet.annotation.WebServlet;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for the {@link MetricsAdminServlet} class.
@@ -15,7 +15,7 @@ public class MetricsAdminServletTest {
 
     private MetricsAdminServlet listener;
 
-    @Before
+    @BeforeEach
     public void setup() {
         listener = new MetricsAdminServlet();
     }

@@ -8,7 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -34,14 +34,14 @@ import java.util.List;
 import java.util.UUID;
 
 import com.google.common.io.Resources;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class HandlerMethodTest {
 
     @Mock
@@ -62,7 +62,7 @@ public class HandlerMethodTest {
 
     private JsonEnvelope envelope;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         envelope = testEnvelope("envelope.json");
     }
@@ -154,46 +154,46 @@ public class HandlerMethodTest {
         assertThat(asyncHandlerInstance().toString(), notNullValue());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionWithNullHandlerInstance() {
         final List<String> features = new ArrayList<>();
-        new HandlerMethod(null, method(new AsynchronousCommandHandler(), "handles"), Void.TYPE, features);
+        assertThrows(IllegalArgumentException.class, () -> new HandlerMethod(null, method(new AsynchronousCommandHandler(), "handles"), Void.TYPE, features));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionWithNullMethod() {
         final List<String> features = new ArrayList<>();
-        new HandlerMethod(asynchronousCommandHandler, null, Void.TYPE, features);
+        assertThrows(IllegalArgumentException.class, () -> new HandlerMethod(asynchronousCommandHandler, null, Void.TYPE, features));
     }
 
-    @Test(expected = InvalidHandlerException.class)
+    @Test
     public void shouldThrowExceptionWithSynchronousMethod() {
         final List<String> features = new ArrayList<>();
-        new HandlerMethod(
+        assertThrows(InvalidHandlerException.class, () -> new HandlerMethod(
                 asynchronousCommandHandler,
                 method(new AsynchronousCommandHandler(), "handlesSync"),
                 Void.TYPE,
-                features);
+                features));
     }
 
-    @Test(expected = InvalidHandlerException.class)
+    @Test
     public void shouldThrowExceptionWithAsynchronousMethod() {
         final List<String> features = new ArrayList<>();
-        new HandlerMethod(
+        assertThrows(InvalidHandlerException.class, () -> new HandlerMethod(
                 synchronousCommandHandler,
                 method(new SynchronousCommandHandler(), "handlesAsync"),
                 JsonEnvelope.class,
-                features);
+                features));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldOnlyAcceptVoidOrEnvelopeReturnTypes() {
         final List<String> features = new ArrayList<>();
-        new HandlerMethod(
+        assertThrows(IllegalArgumentException.class, () -> new HandlerMethod(
                 synchronousCommandHandler,
                 method(new SynchronousCommandHandler(), "handles"),
                 Object.class,
-                features);
+                features));
     }
 
     @Test

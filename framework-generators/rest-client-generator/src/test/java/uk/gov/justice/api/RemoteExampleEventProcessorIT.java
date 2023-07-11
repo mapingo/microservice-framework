@@ -31,6 +31,7 @@ import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuil
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataOf;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import uk.gov.justice.schema.service.CatalogProducer;
 import uk.gov.justice.schema.service.SchemaCatalogResolverProducer;
 import uk.gov.justice.schema.service.SchemaCatalogService;
@@ -103,25 +104,24 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.apache.openejb.OpenEjbContainer;
 import org.apache.openejb.jee.Application;
 import org.apache.openejb.jee.WebApp;
-import org.apache.openejb.junit.ApplicationComposer;
+import org.apache.openejb.junit5.RunWithApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Configuration;
 import org.apache.openejb.testing.Module;
 import org.apache.openejb.testng.PropertiesBuilder;
 import org.apache.openejb.util.NetworkUtil;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-@RunWith(ApplicationComposer.class)
+@RunWithApplicationComposer
 @ServiceComponent(EVENT_PROCESSOR)
+@WireMockTest(httpPort = 9090)
 public class RemoteExampleEventProcessorIT {
 
+    private static final String PORT = "9090";
     private static int port = -1;
     private static final String BASE_PATH = "/rest-client-generator/command/api/rest/example";
     private static final String MOCK_SERVER_PORT = "mock.server.port";
@@ -138,19 +138,16 @@ public class RemoteExampleEventProcessorIT {
             .withPayloadOf(GROUP_NAME, "groupName")
             .build();
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(9090);
-
     @Inject
     Sender sender;
 
     @Inject
     Requester requester;
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() {
         port = NetworkUtil.getNextAvailablePort();
-        System.setProperty(MOCK_SERVER_PORT, "9090");
+        System.setProperty(MOCK_SERVER_PORT, PORT);
     }
 
     @Configuration

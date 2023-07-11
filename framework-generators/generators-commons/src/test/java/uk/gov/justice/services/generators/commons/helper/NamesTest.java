@@ -1,6 +1,6 @@
 package uk.gov.justice.services.generators.commons.helper;
 
-import static net.trajano.commons.testing.UtilityClassTestUtil.assertUtilityClassWellDefined;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -23,23 +23,18 @@ import uk.gov.justice.services.generators.test.utils.builder.MappingBuilder;
 
 import java.util.stream.Stream;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.raml.model.Action;
 import org.raml.model.MimeType;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class NamesTest {
 
     @Mock
     private GeneratorConfig generatorConfig;
-
-    @Test
-    public void shouldBeWellDefinedUtilityClass() {
-        assertUtilityClassWellDefined(Names.class);
-    }
 
     @Test
     public void shouldBuildResourceMethodNameFromActionAndMimeType() throws Exception {

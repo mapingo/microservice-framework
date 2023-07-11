@@ -18,7 +18,7 @@ import java.util.UUID;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DefaultJsonEnvelopeProviderTest {
 

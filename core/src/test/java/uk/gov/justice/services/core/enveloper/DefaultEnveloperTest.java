@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataBuilder;
 
@@ -24,12 +24,12 @@ import java.util.UUID;
 
 import javax.json.JsonValue;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DefaultEnveloperTest {
 
     private static final String TEST_EVENT_NAME = "test.event.something-happened";
@@ -40,7 +40,7 @@ public class DefaultEnveloperTest {
 
     private DefaultEnveloper enveloper;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         enveloper = new DefaultEnveloper(
                 new UtcClock(),
@@ -71,9 +71,9 @@ public class DefaultEnveloperTest {
         assertThat(event.payloadAsJsonObject().getString("somePayloadKey"), equalTo("somePayloadValue"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionOnNullEvent() throws Exception {
-        enveloper.withMetadataFrom(envelopeFrom(metadataBuilder().withId(randomUUID()).withName("name"), createObjectBuilder())).apply(null);
+        assertThrows(IllegalArgumentException.class, () -> enveloper.withMetadataFrom(envelopeFrom(metadataBuilder().withId(randomUUID()).withName("name"), createObjectBuilder())).apply(null));
     }
 
     @Test

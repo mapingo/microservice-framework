@@ -11,7 +11,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
 import uk.gov.justice.services.yaml.YamlFileValidator;
@@ -27,15 +27,16 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.everit.json.schema.ValidationException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 public class EventSourcesParserTest {
 
     private EventSourcesParser eventSourcesParser;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         final YamlParser yamlParser = new YamlParser();

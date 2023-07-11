@@ -3,7 +3,7 @@ package uk.gov.justice.services.adapters.rest.generator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.PATCH;
 import static org.raml.model.ActionType.POST;
@@ -16,14 +16,16 @@ import static uk.gov.justice.services.generators.test.utils.config.GeneratorConf
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
 import uk.gov.justice.services.generators.commons.validator.RamlValidationException;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import java.io.File;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class RestAdapterGeneratorErrorHandlingTest {
     private static final String BASE_PACKAGE = "uk.test";
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+
+    @TempDir
+    public File outputFolder;
 
     private RestAdapterGenerator generator = new RestAdapterGenerator();
 

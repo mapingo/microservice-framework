@@ -34,7 +34,7 @@ import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RestAdapterGenerator_MultipartCodeStructureTest extends BaseRestAdapterGeneratorTest {
 
@@ -55,8 +55,8 @@ public class RestAdapterGenerator_MultipartCodeStructureTest extends BaseRestAda
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -85,8 +85,8 @@ public class RestAdapterGenerator_MultipartCodeStructureTest extends BaseRestAda
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -116,8 +116,8 @@ public class RestAdapterGenerator_MultipartCodeStructureTest extends BaseRestAda
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> interfaceClass = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final List<Method> methods = methodsOf(interfaceClass);
@@ -157,13 +157,13 @@ public class RestAdapterGenerator_MultipartCodeStructureTest extends BaseRestAda
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceInterface = COMPILER.compiledInterfaceOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 RESOURCE_PACKAGE);
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");
@@ -188,8 +188,8 @@ public class RestAdapterGenerator_MultipartCodeStructureTest extends BaseRestAda
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties()));
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "resource",
                 "DefaultCommandApiSomePathResource");

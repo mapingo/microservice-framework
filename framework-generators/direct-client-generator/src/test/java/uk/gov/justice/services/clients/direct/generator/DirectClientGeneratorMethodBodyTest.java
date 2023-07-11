@@ -21,24 +21,24 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.logging.DefaultTraceLogger;
 import uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DirectClientGeneratorMethodBodyTest {
 
     private static final String BASE_PACKAGE = "org.raml.test";
     private static final JavaCompilerUtility COMPILER = javaCompilerUtil();
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     @Mock
     private SynchronousDirectAdapter adapter;
@@ -59,8 +59,8 @@ public class DirectClientGeneratorMethodBodyTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("QUERY_API")));
 
         final Class<?> generatedClientClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "DirectQueryApi2QueryViewServiceClient");
 
@@ -85,8 +85,8 @@ public class DirectClientGeneratorMethodBodyTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties().withServiceComponentOf("QUERY_API")));
 
         final Class<?> generatedClientClass = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "DirectQueryApi2QueryViewServiceClient");
 

@@ -2,6 +2,7 @@ package uk.gov.justice.services.adapter.direct;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,13 +15,13 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DefaultDirectAdapterProcessorTest {
 
     @Mock
@@ -55,13 +56,14 @@ public class DefaultDirectAdapterProcessorTest {
         assertThat(result, is(returnedEnvelope));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldThrowExceptionIfInterceptorChainReturnedEmptyEnvelope() throws Exception {
 
         when(interceptorChainFunction.apply(any(InterceptorContext.class))).thenReturn(Optional.empty());
 
-        directAdapterProcessor.process(envelope().with(metadataWithRandomUUID("action2")).build(), interceptorChainFunction);
+        final JsonEnvelope jsonEnvelope = envelope().with(metadataWithRandomUUID("action2")).build();
 
+        assertThrows(IllegalStateException.class, () -> directAdapterProcessor.process(jsonEnvelope, interceptorChainFunction));
     }
 
 }

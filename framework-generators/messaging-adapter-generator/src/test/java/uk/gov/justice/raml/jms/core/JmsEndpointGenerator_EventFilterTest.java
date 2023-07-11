@@ -28,10 +28,9 @@ import java.io.File;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.raml.model.Raml;
 
@@ -41,8 +40,8 @@ public class JmsEndpointGenerator_EventFilterTest {
     private static final String BASE_PACKAGE_FOLDER = "/uk/test";
     private static final JavaCompilerUtility COMPILER = javaCompilerUtil();
 
-    @Rule
-    public TemporaryFolder outputFolder = new TemporaryFolder();
+    @TempDir
+    public File outputFolder;
 
     @Mock
     private JmsProcessor jmsProcessor;
@@ -50,7 +49,7 @@ public class JmsEndpointGenerator_EventFilterTest {
     private GeneratorProperties generatorProperties;
     private Generator<Raml> generator;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         generator = new JmsEndpointGenerator();
         generatorProperties = new GeneratorPropertiesFactory().withServiceComponentOf(EVENT_LISTENER);
@@ -70,8 +69,8 @@ public class JmsEndpointGenerator_EventFilterTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "StructureEventListenerSomecontextControllerCommandEventFilter");
 
@@ -95,7 +94,7 @@ public class JmsEndpointGenerator_EventFilterTest {
                         .build(),
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
-        final File packageDir = new File(outputFolder.getRoot().getAbsolutePath() + BASE_PACKAGE_FOLDER);
+        final File packageDir = new File(outputFolder.getAbsolutePath() + BASE_PACKAGE_FOLDER);
         assertThat(asList(packageDir.listFiles()), not(hasItem(hasProperty("name", containsString("EventFilter")))));
     }
 
@@ -112,7 +111,7 @@ public class JmsEndpointGenerator_EventFilterTest {
                         .build(),
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
-        final File packageDir = new File(outputFolder.getRoot().getAbsolutePath() + BASE_PACKAGE_FOLDER);
+        final File packageDir = new File(outputFolder.getAbsolutePath() + BASE_PACKAGE_FOLDER);
         assertThat(asList(packageDir.listFiles()), not(hasItem(hasProperty("name", containsString("EventFilter")))));
     }
 
@@ -126,8 +125,8 @@ public class JmsEndpointGenerator_EventFilterTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "StructureEventListenerSomecontextControllerCommandEventFilter");
         assertThat(clazz.getAnnotation(ApplicationScoped.class), is(not(nullValue())));
@@ -146,8 +145,8 @@ public class JmsEndpointGenerator_EventFilterTest {
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, generatorProperties));
 
         Class<?> clazz = COMPILER.compiledClassOf(
-                outputFolder.getRoot(),
-                outputFolder.getRoot(),
+                outputFolder,
+                outputFolder,
                 BASE_PACKAGE,
                 "MyHyphenatedServiceEventListenerSomecontextControllerCommandEventFilter");
 

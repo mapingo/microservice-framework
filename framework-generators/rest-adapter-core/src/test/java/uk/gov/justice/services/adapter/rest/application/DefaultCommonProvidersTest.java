@@ -12,7 +12,7 @@ import uk.gov.justice.services.common.rest.ForbiddenRequestExceptionMapper;
 
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DefaultCommonProvidersTest {
 

@@ -10,6 +10,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.raml.model.ActionType.DELETE;
 import static org.raml.model.ActionType.GET;
 import static org.raml.model.ActionType.HEAD;
@@ -31,7 +32,7 @@ import uk.gov.justice.services.generators.commons.validator.RamlValidationExcept
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.raml.model.MimeType;
 
 public class ActionMappingParserTest {
@@ -121,7 +122,7 @@ public class ActionMappingParserTest {
         assertThat(mapping.mimeTypeFor(PUT), is("application/vnd.aaaa+json"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionForHeadAction() throws Exception {
 
         final List<ActionMapping> mappings = actionMappingParser.listOf(mappingDescriptionWith(
@@ -132,10 +133,10 @@ public class ActionMappingParserTest {
                 .build());
 
         final ActionMapping mapping = mappings.get(0);
-        assertThat(mapping.mimeTypeFor(HEAD), is("application/vnd.aaaa+json"));
+        assertThrows(IllegalArgumentException.class, () -> mapping.mimeTypeFor(HEAD));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionForTraceAction() throws Exception {
 
         final List<ActionMapping> mappings = actionMappingParser.listOf(mappingDescriptionWith(
@@ -146,10 +147,10 @@ public class ActionMappingParserTest {
                 .build());
 
         final ActionMapping mapping = mappings.get(0);
-        assertThat(mapping.mimeTypeFor(TRACE), is("application/vnd.aaaa+json"));
+        assertThrows(IllegalArgumentException.class, () -> mapping.mimeTypeFor(TRACE));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionForOptionsAction() throws Exception {
 
         final List<ActionMapping> mappings = actionMappingParser.listOf(mappingDescriptionWith(
@@ -160,7 +161,7 @@ public class ActionMappingParserTest {
                 .build());
 
         final ActionMapping mapping = mappings.get(0);
-        assertThat(mapping.mimeTypeFor(OPTIONS), is("application/vnd.aaaa+json"));
+        assertThrows(IllegalArgumentException.class, () -> mapping.mimeTypeFor(OPTIONS));
     }
 
     @Test
@@ -214,94 +215,94 @@ public class ActionMappingParserTest {
         assertThat(mapping.getName(), is("actionA"));
     }
 
-    @Test(expected = RamlValidationException.class)
+    @Test
     public void shouldFailWithNoMapping() throws Exception {
-        actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
-                MAPPING_BOUNDARY + "\n");
+        assertThrows(RamlValidationException.class, () -> actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
+                MAPPING_BOUNDARY + "\n"));
     }
 
-    @Test(expected = RamlValidationException.class)
+    @Test
     public void shouldFailWithNull() throws Exception {
-        actionMappingParser.listOf(null);
+        assertThrows(RamlValidationException.class, () -> actionMappingParser.listOf(null));
     }
 
-    @Test(expected = RamlValidationException.class)
+    @Test
     public void shouldFailWithMultipleRequests() throws Exception {
-        actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
+        assertThrows(RamlValidationException.class, () -> actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
                 MAPPING_SEPARATOR + "\n" +
                 REQUEST_TYPE_KEY + ": application/vnd.aaaa+json\n" +
                 REQUEST_TYPE_KEY + ": application/vnd.aaaa+json\n" +
                 NAME_KEY + ": actionA\n" +
-                MAPPING_BOUNDARY + "\n");
+                MAPPING_BOUNDARY + "\n"));
     }
 
-    @Test(expected = RamlValidationException.class)
+    @Test
     public void shouldFailWithStartMappingBoundaryMissing() throws Exception {
-        actionMappingParser.listOf(MAPPING_SEPARATOR + "\n" +
+        assertThrows(RamlValidationException.class, () -> actionMappingParser.listOf(MAPPING_SEPARATOR + "\n" +
                 REQUEST_TYPE_KEY + ": application/vnd.aaaa+json\n" +
                 NAME_KEY + ": actionA\n" +
-                MAPPING_BOUNDARY + "\n");
+                MAPPING_BOUNDARY + "\n"));
     }
 
-    @Test(expected = RamlValidationException.class)
+    @Test
     public void shouldFailWithEndMappingBoundaryMissing() throws Exception {
-        actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
+        assertThrows(RamlValidationException.class, () -> actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
                 MAPPING_SEPARATOR + "\n" +
                 REQUEST_TYPE_KEY + ": application/vnd.aaaa+json\n" +
-                NAME_KEY + ": actionA\n");
+                NAME_KEY + ": actionA\n"));
     }
 
-    @Test(expected = RamlValidationException.class)
+    @Test
     public void shouldFailWithExtraCharacterAfterName() throws Exception {
-        actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
+        assertThrows(RamlValidationException.class, () -> actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
                 MAPPING_SEPARATOR + "\n" +
                 REQUEST_TYPE_KEY + ": application/vnd.aaaa+json\n" +
                 NAME_KEY + ".: actionA\n" +
-                MAPPING_BOUNDARY + "\n");
+                MAPPING_BOUNDARY + "\n"));
     }
 
-    @Test(expected = RamlValidationException.class)
+    @Test
     public void shouldFailWithMultipleResponses() throws Exception {
-        actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
+        assertThrows(RamlValidationException.class, () -> actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
                 MAPPING_SEPARATOR + "\n" +
                 RESPONSE_TYPE_KEY + ": application/vnd.aaaa+json\n" +
                 RESPONSE_TYPE_KEY + ": application/vnd.aaaa+json\n" +
                 NAME_KEY + ": actionA\n" +
-                MAPPING_BOUNDARY + "\n");
+                MAPPING_BOUNDARY + "\n"));
     }
 
-    @Test(expected = RamlValidationException.class)
+    @Test
     public void shouldFailWithMissingRequestFieldSeparator() throws Exception {
-        actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
+        assertThrows(RamlValidationException.class, () -> actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
                 MAPPING_SEPARATOR + "\n" +
                 REQUEST_TYPE_KEY + " application/vnd.aaaa+json\n" +
                 NAME_KEY + ": actionA\n" +
-                MAPPING_BOUNDARY + "\n");
+                MAPPING_BOUNDARY + "\n"));
     }
 
-    @Test(expected = RamlValidationException.class)
+    @Test
     public void shouldFailWithMissingNameFieldSeparator() throws Exception {
-        actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
+        assertThrows(RamlValidationException.class, () -> actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
                 MAPPING_SEPARATOR + "\n" +
                 REQUEST_TYPE_KEY + ": application/vnd.aaaa+json\n" +
                 NAME_KEY + " actionA\n" +
-                MAPPING_BOUNDARY + "\n");
+                MAPPING_BOUNDARY + "\n"));
     }
 
-    @Test(expected = RamlValidationException.class)
+    @Test
     public void shouldFailWithMissingRequestOrResponse() throws Exception {
-        actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
+        assertThrows(RamlValidationException.class, () -> actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
                 MAPPING_SEPARATOR + "\n" +
                 NAME_KEY + ": actionA\n" +
-                MAPPING_BOUNDARY + "\n");
+                MAPPING_BOUNDARY + "\n"));
     }
 
-    @Test(expected = RamlValidationException.class)
+    @Test
     public void shouldFailWithMissingName() throws Exception {
-        actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
+        assertThrows(RamlValidationException.class, () -> actionMappingParser.listOf(MAPPING_BOUNDARY + "\n" +
                 MAPPING_SEPARATOR + "\n" +
                 REQUEST_TYPE_KEY + ": application/vnd.aaaa+json\n" +
-                MAPPING_BOUNDARY + "\n");
+                MAPPING_BOUNDARY + "\n"));
     }
 
 }

@@ -8,12 +8,12 @@ import java.util.Collection;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class OptionsFactoryTest {
 
     @InjectMocks

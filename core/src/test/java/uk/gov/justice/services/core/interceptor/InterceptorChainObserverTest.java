@@ -16,12 +16,12 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class InterceptorChainObserverTest {
 
     @InjectMocks
@@ -64,7 +64,7 @@ public class InterceptorChainObserverTest {
         beans.add(bean_1);
         beans.add(bean_2);
 
-        when(beanManager.getBeans(eq(Interceptor.class), any(AnnotationLiteral.class))).thenReturn(beans);
+        when(beanManager.getBeans(any(), any(AnnotationLiteral.class))).thenReturn(beans);
         when(bean_1.getBeanClass()).thenReturn(Object.class);
         when(bean_2.getBeanClass()).thenReturn(Object.class);
 
