@@ -67,7 +67,6 @@ class MessageListenerCodeGenerator {
     private static final String MESSAGE_SELECTOR = "messageSelector";
     private static final String SUBSCRIPTION_DURABILITY = "subscriptionDurability";
     private static final String DURABLE = "Durable";
-    private static final String CLIENT_ID = "clientId";
     private static final String SUBSCRIPTION_NAME = "subscriptionName";
     private static final String SHARE_SUBSCRIPTIONS = "shareSubscriptions";
 
@@ -226,8 +225,6 @@ class MessageListenerCodeGenerator {
             builder
                     .addMember(ACTIVATION_CONFIG_PARAMETER, "$L",
                             generateActivationConfigPropertyAnnotation(SUBSCRIPTION_DURABILITY, DURABLE))
-                    .addMember(ACTIVATION_CONFIG_PARAMETER, "$L",
-                            generateActivationConfigPropertyAnnotation(CLIENT_ID, clientId))
                     .addMember(ACTIVATION_CONFIG_PARAMETER, "$L",
                             generateActivationConfigPropertyAnnotation(SUBSCRIPTION_NAME, subscriptionNameOf(resourceUri, clientId)));
         }

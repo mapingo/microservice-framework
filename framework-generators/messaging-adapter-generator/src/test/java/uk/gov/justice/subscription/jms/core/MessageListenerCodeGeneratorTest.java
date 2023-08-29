@@ -86,38 +86,39 @@ public class MessageListenerCodeGeneratorTest {
 
         final TypeSpec typeSpec = messageListenerCodeGenerator.generate(subscriptionWrapper, subscription, (CommonGeneratorProperties) generatorProperties, classNameFactory);
 
-        assertThat(typeSpec.toString(), is("@uk.gov.justice.services.core.annotation.Adapter(\"EVENT_LISTENER\")\n" +
-                "@javax.ejb.MessageDriven(\n" +
-                "    activationConfig = {\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"destinationType\", propertyValue = \"javax.jms.Topic\"),\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"destinationLookup\", propertyValue = \"my-context.handler.command\"),\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"shareSubscriptions\", propertyValue = \"true\"),\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"subscriptionDurability\", propertyValue = \"Durable\"),\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"clientId\", propertyValue = \"my-context.event.listener\"),\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"subscriptionName\", propertyValue = \"my-context.event.listener.my-context.handler.command\")\n" +
-                "    }\n" +
-                ")\n" +
-                "@javax.interceptor.Interceptors({\n" +
-                "    uk.gov.moj.base.package.name.MyContextEventListenerMyContextHandlerCommandJmsLoggerMetadataInterceptor.class,\n" +
-                "    uk.gov.moj.base.package.name.MyContextEventListenerMyContextHandlerCommandEventValidationInterceptor.class\n" +
-                "})\n" +
-                "@org.jboss.ejb3.annotation.Pool(\"my-context-handler-command-event-listener-pool\")\n" +
-                "public class MyContextEventListenerMyContextHandlerCommandJmsListener implements javax.jms.MessageListener {\n" +
-                "  private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(uk.gov.moj.base.package.name.MyContextEventListenerMyContextHandlerCommandJmsListener.class);\n" +
-                "\n" +
-                "  @javax.inject.Inject\n" +
-                "  @uk.gov.justice.services.subscription.annotation.SubscriptionName(\"subscription\")\n" +
-                "  uk.gov.justice.services.subscription.SubscriptionManager subscriptionManager;\n" +
-                "\n" +
-                "  @javax.inject.Inject\n" +
-                "  uk.gov.justice.services.adapter.messaging.SubscriptionJmsProcessor subscriptionJmsProcessor;\n" +
-                "\n" +
-                "  @java.lang.Override\n" +
-                "  public void onMessage(javax.jms.Message message) {\n" +
-                "    uk.gov.justice.services.messaging.logging.LoggerUtils.trace(LOGGER, () -> \"Received JMS message\");\n" +
-                "    subscriptionJmsProcessor.process(message, subscriptionManager);\n" +
-                "  }\n" +
-                "}\n"));
+        assertThat(typeSpec.toString(), is("""
+                @uk.gov.justice.services.core.annotation.Adapter("EVENT_LISTENER")
+                @javax.ejb.MessageDriven(
+                    activationConfig = {
+                        @javax.ejb.ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "my-context.handler.command"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "shareSubscriptions", propertyValue = "true"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "subscriptionDurability", propertyValue = "Durable"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "my-context.event.listener.my-context.handler.command")
+                    }
+                )
+                @javax.interceptor.Interceptors({
+                    uk.gov.moj.base.package.name.MyContextEventListenerMyContextHandlerCommandJmsLoggerMetadataInterceptor.class,
+                    uk.gov.moj.base.package.name.MyContextEventListenerMyContextHandlerCommandEventValidationInterceptor.class
+                })
+                @org.jboss.ejb3.annotation.Pool("my-context-handler-command-event-listener-pool")
+                public class MyContextEventListenerMyContextHandlerCommandJmsListener implements javax.jms.MessageListener {
+                  private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(uk.gov.moj.base.package.name.MyContextEventListenerMyContextHandlerCommandJmsListener.class);
+                
+                  @javax.inject.Inject
+                  @uk.gov.justice.services.subscription.annotation.SubscriptionName("subscription")
+                  uk.gov.justice.services.subscription.SubscriptionManager subscriptionManager;
+                
+                  @javax.inject.Inject
+                  uk.gov.justice.services.adapter.messaging.SubscriptionJmsProcessor subscriptionJmsProcessor;
+                
+                  @java.lang.Override
+                  public void onMessage(javax.jms.Message message) {
+                    uk.gov.justice.services.messaging.logging.LoggerUtils.trace(LOGGER, () -> "Received JMS message");
+                    subscriptionJmsProcessor.process(message, subscriptionManager);
+                  }
+                }
+                """));
     }
 
     @Test
@@ -173,35 +174,37 @@ public class MessageListenerCodeGeneratorTest {
 
         final TypeSpec typeSpec = messageListenerCodeGenerator.generate(subscriptionWrapper, subscription, (CommonGeneratorProperties) generatorProperties, classNameFactory);
 
-        assertThat(typeSpec.toString(), is("@uk.gov.justice.services.core.annotation.Adapter(\"COMMAND_HANDLER\")\n" +
-                "@javax.ejb.MessageDriven(\n" +
-                "    activationConfig = {\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"destinationType\", propertyValue = \"javax.jms.Queue\"),\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"destinationLookup\", propertyValue = \"my-context.handler.command\"),\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"shareSubscriptions\", propertyValue = \"true\"),\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"messageSelector\", propertyValue = \"CPPNAME in('my-context.events.something-happened','my-context.events.something-else-happened')\")\n" +
-                "    }\n" +
-                ")\n" +
-                "@javax.interceptor.Interceptors({\n" +
-                "    uk.gov.moj.base.package.name.MyContextCommandHandlerMyContextHandlerCommandJmsLoggerMetadataInterceptor.class,\n" +
-                "    uk.gov.justice.services.adapter.messaging.JsonSchemaValidationInterceptor.class\n" +
-                "})\n" +
-                "public class MyContextCommandHandlerMyContextHandlerCommandJmsListener implements javax.jms.MessageListener {\n" +
-                "  private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(uk.gov.moj.base.package.name.MyContextCommandHandlerMyContextHandlerCommandJmsListener.class);\n" +
-                "\n" +
-                "  @javax.inject.Inject\n" +
-                "  @uk.gov.justice.services.subscription.annotation.SubscriptionName(\"subscription\")\n" +
-                "  uk.gov.justice.services.subscription.SubscriptionManager subscriptionManager;\n" +
-                "\n" +
-                "  @javax.inject.Inject\n" +
-                "  uk.gov.justice.services.adapter.messaging.SubscriptionJmsProcessor subscriptionJmsProcessor;\n" +
-                "\n" +
-                "  @java.lang.Override\n" +
-                "  public void onMessage(javax.jms.Message message) {\n" +
-                "    uk.gov.justice.services.messaging.logging.LoggerUtils.trace(LOGGER, () -> \"Received JMS message\");\n" +
-                "    subscriptionJmsProcessor.process(message, subscriptionManager);\n" +
-                "  }\n" +
-                "}\n"));
+        assertThat(typeSpec.toString(), is("""
+                @uk.gov.justice.services.core.annotation.Adapter("COMMAND_HANDLER")
+                @javax.ejb.MessageDriven(
+                    activationConfig = {
+                        @javax.ejb.ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "my-context.handler.command"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "shareSubscriptions", propertyValue = "true"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "CPPNAME in('my-context.events.something-happened','my-context.events.something-else-happened')")
+                    }
+                )
+                @javax.interceptor.Interceptors({
+                    uk.gov.moj.base.package.name.MyContextCommandHandlerMyContextHandlerCommandJmsLoggerMetadataInterceptor.class,
+                    uk.gov.justice.services.adapter.messaging.JsonSchemaValidationInterceptor.class
+                })
+                public class MyContextCommandHandlerMyContextHandlerCommandJmsListener implements javax.jms.MessageListener {
+                  private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(uk.gov.moj.base.package.name.MyContextCommandHandlerMyContextHandlerCommandJmsListener.class);
+                
+                  @javax.inject.Inject
+                  @uk.gov.justice.services.subscription.annotation.SubscriptionName("subscription")
+                  uk.gov.justice.services.subscription.SubscriptionManager subscriptionManager;
+                
+                  @javax.inject.Inject
+                  uk.gov.justice.services.adapter.messaging.SubscriptionJmsProcessor subscriptionJmsProcessor;
+                
+                  @java.lang.Override
+                  public void onMessage(javax.jms.Message message) {
+                    uk.gov.justice.services.messaging.logging.LoggerUtils.trace(LOGGER, () -> "Received JMS message");
+                    subscriptionJmsProcessor.process(message, subscriptionManager);
+                  }
+                }
+                """));
     }
 
     @Test
@@ -257,34 +260,36 @@ public class MessageListenerCodeGeneratorTest {
 
         final TypeSpec typeSpec = messageListenerCodeGenerator.generate(subscriptionWrapper, subscription, (CommonGeneratorProperties) generatorProperties, classNameFactory);
 
-        assertThat(typeSpec.toString(), is("@uk.gov.justice.services.core.annotation.Adapter(\"COMMAND_API\")\n" +
-                "@javax.ejb.MessageDriven(\n" +
-                "    activationConfig = {\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"destinationType\", propertyValue = \"javax.jms.Queue\"),\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"destinationLookup\", propertyValue = \"my-context.handler.command\"),\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"shareSubscriptions\", propertyValue = \"true\"),\n" +
-                "        @javax.ejb.ActivationConfigProperty(propertyName = \"messageSelector\", propertyValue = \"CPPNAME in('my-context.events.something-happened','my-context.events.something-else-happened')\")\n" +
-                "    }\n" +
-                ")\n" +
-                "@javax.interceptor.Interceptors({\n" +
-                "    uk.gov.moj.base.package.name.MyContextCommandApiMyContextHandlerCommandJmsLoggerMetadataInterceptor.class,\n" +
-                "    uk.gov.justice.services.adapter.messaging.JsonSchemaValidationInterceptor.class\n" +
-                "})\n" +
-                "public class MyContextCommandApiMyContextHandlerCommandJmsListener implements javax.jms.MessageListener {\n" +
-                "  private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(uk.gov.moj.base.package.name.MyContextCommandApiMyContextHandlerCommandJmsListener.class);\n" +
-                "\n" +
-                "  @javax.inject.Inject\n" +
-                "  @uk.gov.justice.services.subscription.annotation.SubscriptionName(\"subscription\")\n" +
-                "  uk.gov.justice.services.subscription.SubscriptionManager subscriptionManager;\n" +
-                "\n" +
-                "  @javax.inject.Inject\n" +
-                "  uk.gov.justice.services.adapter.messaging.SubscriptionJmsProcessor subscriptionJmsProcessor;\n" +
-                "\n" +
-                "  @java.lang.Override\n" +
-                "  public void onMessage(javax.jms.Message message) {\n" +
-                "    uk.gov.justice.services.messaging.logging.LoggerUtils.trace(LOGGER, () -> \"Received JMS message\");\n" +
-                "    subscriptionJmsProcessor.process(message, subscriptionManager);\n" +
-                "  }\n" +
-                "}\n"));
+        assertThat(typeSpec.toString(), is("""
+                @uk.gov.justice.services.core.annotation.Adapter("COMMAND_API")
+                @javax.ejb.MessageDriven(
+                    activationConfig = {
+                        @javax.ejb.ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "my-context.handler.command"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "shareSubscriptions", propertyValue = "true"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "CPPNAME in('my-context.events.something-happened','my-context.events.something-else-happened')")
+                    }
+                )
+                @javax.interceptor.Interceptors({
+                    uk.gov.moj.base.package.name.MyContextCommandApiMyContextHandlerCommandJmsLoggerMetadataInterceptor.class,
+                    uk.gov.justice.services.adapter.messaging.JsonSchemaValidationInterceptor.class
+                })
+                public class MyContextCommandApiMyContextHandlerCommandJmsListener implements javax.jms.MessageListener {
+                  private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(uk.gov.moj.base.package.name.MyContextCommandApiMyContextHandlerCommandJmsListener.class);
+                
+                  @javax.inject.Inject
+                  @uk.gov.justice.services.subscription.annotation.SubscriptionName("subscription")
+                  uk.gov.justice.services.subscription.SubscriptionManager subscriptionManager;
+                
+                  @javax.inject.Inject
+                  uk.gov.justice.services.adapter.messaging.SubscriptionJmsProcessor subscriptionJmsProcessor;
+                
+                  @java.lang.Override
+                  public void onMessage(javax.jms.Message message) {
+                    uk.gov.justice.services.messaging.logging.LoggerUtils.trace(LOGGER, () -> "Received JMS message");
+                    subscriptionJmsProcessor.process(message, subscriptionManager);
+                  }
+                }
+                """));
     }
 }

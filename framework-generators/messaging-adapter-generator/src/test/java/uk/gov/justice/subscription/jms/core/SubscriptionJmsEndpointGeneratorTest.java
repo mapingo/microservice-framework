@@ -838,8 +838,6 @@ public class SubscriptionJmsEndpointGeneratorTest {
         assertThat(activationConfig, hasItemInArray(
                 allOf(propertyName(equalTo("subscriptionDurability")), propertyValue(equalTo("Durable")))));
         assertThat(activationConfig, hasItemInArray(
-                allOf(propertyName(equalTo("clientId")), propertyValue(equalTo("people.event.listener")))));
-        assertThat(activationConfig, hasItemInArray(
                 allOf(propertyName(equalTo("subscriptionName")), propertyValue(equalTo("people.event.listener.people.event")))));
 
     }
