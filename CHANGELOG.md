@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 [Unreleased]
 
+## [17.2.0-M1] - 2023-10-24
+### Changed
+- Centralise all generic library dependencies and versions into maven-common-bom
+
 ## [17.1.1] - 2023-08-29
 ### Removed
 - Remove `clientId` from the header of all generated Message Driven Beans
