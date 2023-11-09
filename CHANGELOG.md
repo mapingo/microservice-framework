@@ -4,12 +4,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
-## [17.3.0-M2] - 2023-11-08
+## [17.3.0] - 2023-11-09
 ### Added
 - Added dependencies required by various contexts to the framework-libraries-common-bom
-
-## [17.3.0-M1] - 2023-11-07
-### Added
 - Added unifiedsearch-core and unifiedsearch-client-generator dependencies to framework-bom
 
 ## [17.2.0] - 2023-11-03
