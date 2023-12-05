@@ -1,8 +1,11 @@
 package uk.gov.justice.framework.command.client.jmx;
 
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
+
 import uk.gov.justice.framework.command.client.io.ToConsolePrinter;
 import uk.gov.justice.services.jmx.api.SystemCommandInvocationFailedException;
 import uk.gov.justice.services.jmx.api.UnrunnableSystemCommandException;
+import uk.gov.justice.services.jmx.api.mbean.CommandRunMode;
 import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
@@ -25,7 +28,7 @@ public class SystemCommandInvoker {
     @Inject
     private ToConsolePrinter toConsolePrinter;
 
-    public void runSystemCommand(final String commandName, final JmxParameters jmxParameters) {
+    public void runSystemCommand(final String commandName, final JmxParameters jmxParameters, final CommandRunMode commandRunMode) {
 
         final String contextName = jmxParameters.getContextName();
 
@@ -39,7 +42,7 @@ public class SystemCommandInvoker {
             toConsolePrinter.printf("Connected to %s context", contextName);
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(contextName);
-            final UUID commandId = systemCommanderMBean.call(commandName);
+            final UUID commandId = systemCommanderMBean.call(commandName, commandRunMode);
             toConsolePrinter.printf("System command '%s' with id '%s' successfully sent to %s", commandName, commandId, contextName);
             commandPoller.runUntilComplete(systemCommanderMBean, commandId, commandName);
 

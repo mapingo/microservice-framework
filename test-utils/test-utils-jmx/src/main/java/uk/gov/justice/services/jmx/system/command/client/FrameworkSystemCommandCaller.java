@@ -1,9 +1,11 @@
 package uk.gov.justice.services.jmx.system.command.client;
 
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
 import static uk.gov.justice.services.jmx.system.command.client.connection.JmxParametersBuilder.jmxParameters;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
+import uk.gov.justice.services.jmx.api.mbean.CommandRunMode;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 import uk.gov.justice.services.management.suspension.commands.SuspendCommand;
 import uk.gov.justice.services.management.suspension.commands.UnsuspendCommand;
@@ -53,7 +55,7 @@ public class FrameworkSystemCommandCaller {
 
     private void callSystemCommand(final SystemCommand systemCommand) {
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
-            systemCommanderClient.getRemote(jmxParameters.getContextName()).call(systemCommand.getName());
+            systemCommanderClient.getRemote(jmxParameters.getContextName()).call(systemCommand.getName(), GUARDED);
         }
     }
 }

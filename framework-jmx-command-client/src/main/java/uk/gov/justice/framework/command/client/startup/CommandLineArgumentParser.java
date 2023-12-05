@@ -37,7 +37,7 @@ public class CommandLineArgumentParser {
                 return of(commandLine);
             }
 
-            toConsolePrinter.println("No system command specifed.");
+            toConsolePrinter.println("No system command specified.");
 
             return empty();
 

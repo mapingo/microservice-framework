@@ -42,16 +42,19 @@ public class SystemCommander implements SystemCommanderMBean {
     private Logger logger;
 
     @Override
-    public UUID call(final String systemCommandName) {
+    public UUID call(final String systemCommandName, final CommandRunMode commandRunMode) {
 
         logger.info(format("Received System Command '%s'", systemCommandName));
+        logger.info(format("Running '%s' in '%s' mode", systemCommandName, commandRunMode));
 
         final SystemCommand systemCommand = systemCommandLocator
                 .forName(systemCommandName)
                 .orElseThrow(() -> new UnrunnableSystemCommandException(format("The system command '%s' is not supported on this context.", systemCommandName)));
 
-        if (systemCommandStateBean.commandInProgress(systemCommand)) {
-            throw new UnrunnableSystemCommandException(format("Cannot run system command '%s'. A previous call to that command is still in progress.", systemCommand.getName()));
+        if (commandRunMode.isGuarded()) {
+            if (systemCommandStateBean.commandInProgress(systemCommand)) {
+                throw new UnrunnableSystemCommandException(format("Cannot run system command '%s'. A previous call to that command is still in progress.", systemCommand.getName()));
+            }
         }
 
         return asynchronousCommandRunner.run(systemCommand);

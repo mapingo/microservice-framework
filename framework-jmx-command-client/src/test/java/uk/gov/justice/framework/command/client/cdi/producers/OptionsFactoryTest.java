@@ -27,7 +27,7 @@ public class OptionsFactoryTest {
 
         final Collection<Option> allOptions = options.getOptions();
 
-        assertThat(allOptions.size(), is(8));
+        assertThat(allOptions.size(), is(9));
 
         assertThat(allOptions, hasItem(new Option("help", false, "Show help.")));
         assertThat(allOptions, hasItem(new Option("cn", "context-name", true, "The name of the context on which to run the command. Required")));
@@ -36,6 +36,7 @@ public class OptionsFactoryTest {
         assertThat(allOptions, hasItem(new Option("p", "port", true, "Wildfly management port. Defaults to 9990")));
         assertThat(allOptions, hasItem(new Option("u", "username", true, "Optional username for Wildfly management security")));
         assertThat(allOptions, hasItem(new Option("pw", "password", true, "Optional password for Wildfly management security")));
+        assertThat(allOptions, hasItem(new Option("f", "force", false, "Run in 'forced' mode. This will bypass the check that any previous call to this command is still in progress. Use with caution.")));
         assertThat(allOptions, hasItem(new Option("l", "list", false, "List of all framework commands")));
     }
 }
