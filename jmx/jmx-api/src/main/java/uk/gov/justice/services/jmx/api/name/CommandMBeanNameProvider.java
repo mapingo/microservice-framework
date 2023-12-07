@@ -11,11 +11,14 @@ public class CommandMBeanNameProvider {
     private static final String OBJECT_NAME_FORMAT = "%s-system-command-handler-mbean";
     private static final String TYPE = "type";
 
+    private final ObjectNameFactory objectNameFactory;
+
     @Inject
-    private ObjectNameFactory objectNameFactory;
+    public CommandMBeanNameProvider(final ObjectNameFactory objectNameFactory) {
+        this.objectNameFactory = objectNameFactory;
+    }
 
     public ObjectName create(final String contextName) {
-
         return objectNameFactory.create(
                 DOMAIN_NAME,
                 TYPE,

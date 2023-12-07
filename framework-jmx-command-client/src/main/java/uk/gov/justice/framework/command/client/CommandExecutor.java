@@ -8,20 +8,22 @@ import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameter
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.apache.commons.cli.CommandLine;
 
 public class CommandExecutor {
 
-    @Inject
-    private SystemCommandInvoker systemCommandInvoker;
+    private final SystemCommandInvoker systemCommandInvoker;
+    private final CommandPrinter commandPrinter;
+    private final CommandRunModeSelector commandRunModeSelector;
 
-    @Inject
-    private CommandPrinter commandPrinter;
-
-    @Inject
-    private CommandRunModeSelector commandRunModeSelector;
+    public CommandExecutor(
+            final SystemCommandInvoker systemCommandInvoker,
+            final CommandPrinter commandPrinter,
+            final CommandRunModeSelector commandRunModeSelector) {
+        this.systemCommandInvoker = systemCommandInvoker;
+        this.commandPrinter = commandPrinter;
+        this.commandRunModeSelector = commandRunModeSelector;
+    }
 
     public void executeCommand(
             final CommandLine commandLine,

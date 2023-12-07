@@ -5,10 +5,16 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 [Unreleased]
 
+## [17.4.0] - 2023-12-08
+### Added
+- Add '-f' '--force' switch to the JmxCommandClient to bypass COMMAND_IN_PROGRESS check
+### Removed
+- Remove CDI and Weld container from JmxCommandClient 
+
 ## [17.3.1] - 2023-11-27
 ### Changed
 - Update common-bom to 17.2.1
-- 
+
 ## [17.3.0] - 2023-11-09
 ### Added
 - Added dependencies required by various contexts to the framework-libraries-common-bom

@@ -12,17 +12,15 @@ import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameter
 import java.util.List;
 import java.util.Optional;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-@ApplicationScoped
 public class ListCommandsInvoker {
 
-    @Inject
-    private SystemCommanderClientFactory systemCommanderClientFactory;
+    private final SystemCommanderClientFactory systemCommanderClientFactory;
+    private final ToConsolePrinter toConsolePrinter;
 
-    @Inject
-    private ToConsolePrinter toConsolePrinter;
+    public ListCommandsInvoker(final SystemCommanderClientFactory systemCommanderClientFactory, final ToConsolePrinter toConsolePrinter) {
+        this.systemCommanderClientFactory = systemCommanderClientFactory;
+        this.toConsolePrinter = toConsolePrinter;
+    }
 
     public Optional<List<SystemCommandDetails>> listSystemCommands(final JmxParameters jmxParameters) {
 

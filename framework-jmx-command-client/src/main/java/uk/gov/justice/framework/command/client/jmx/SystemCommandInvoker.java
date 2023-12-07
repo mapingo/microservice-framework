@@ -1,7 +1,5 @@
 package uk.gov.justice.framework.command.client.jmx;
 
-import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
-
 import uk.gov.justice.framework.command.client.io.ToConsolePrinter;
 import uk.gov.justice.services.jmx.api.SystemCommandInvocationFailedException;
 import uk.gov.justice.services.jmx.api.UnrunnableSystemCommandException;
@@ -13,20 +11,20 @@ import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameter
 
 import java.util.UUID;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-@ApplicationScoped
 public class SystemCommandInvoker {
 
-    @Inject
-    private SystemCommanderClientFactory systemCommanderClientFactory;
+    private final SystemCommanderClientFactory systemCommanderClientFactory;
+    private final CommandPoller commandPoller;
+    private final ToConsolePrinter toConsolePrinter;
 
-    @Inject
-    private CommandPoller commandPoller;
-
-    @Inject
-    private ToConsolePrinter toConsolePrinter;
+    public SystemCommandInvoker(
+            final SystemCommanderClientFactory systemCommanderClientFactory,
+            final CommandPoller commandPoller,
+            final ToConsolePrinter toConsolePrinter) {
+        this.systemCommanderClientFactory = systemCommanderClientFactory;
+        this.commandPoller = commandPoller;
+        this.toConsolePrinter = toConsolePrinter;
+    }
 
     public void runSystemCommand(final String commandName, final JmxParameters jmxParameters, final CommandRunMode commandRunMode) {
 

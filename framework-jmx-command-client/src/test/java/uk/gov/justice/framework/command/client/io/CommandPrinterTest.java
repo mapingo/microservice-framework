@@ -57,6 +57,6 @@ public class CommandPrinterTest {
 
     @Test
     public void shouldStopCoverallsAnnoyingUs() throws Exception {
-        assertThat(new CommandPrinter(), is(notNullValue()));
+        assertThat(new CommandPrinter(toConsolePrinter), is(notNullValue()));
     }
 }

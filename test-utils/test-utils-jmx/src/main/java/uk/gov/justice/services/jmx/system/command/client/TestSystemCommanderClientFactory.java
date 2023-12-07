@@ -1,5 +1,7 @@
 package uk.gov.justice.services.jmx.system.command.client;
 
+import uk.gov.justice.framework.command.client.startup.ObjectFactory;
+import uk.gov.justice.services.jmx.system.command.client.connection.JMXConnectorFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 import uk.gov.justice.services.jmx.system.command.client.connection.MBeanConnector;
 
@@ -19,9 +21,12 @@ public class TestSystemCommanderClientFactory {
 
     public SystemCommanderClient create(final JmxParameters jmxParameters) {
 
+        final JMXConnectorFactory jmxConnectorFactory = objectFactory.jmxConnectorFactory();
         final MBeanConnector mBeanConnector = objectFactory.mBeanConnector();
-        final JMXConnector jmxConnector = objectFactory.jmxConnectorFactory().createJmxConnector(jmxParameters);
 
-        return objectFactory.systemCommanderClient(mBeanConnector, jmxConnector);
+
+        final JMXConnector jmxConnector = jmxConnectorFactory.createJmxConnector(jmxParameters);
+
+        return new SystemCommanderClient(jmxConnector, mBeanConnector);
     }
 }

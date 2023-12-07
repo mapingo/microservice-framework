@@ -4,12 +4,13 @@ import uk.gov.justice.services.jmx.api.command.SystemCommandDetails;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 public class CommandPrinter {
 
-    @Inject
-    private ToConsolePrinter toConsolePrinter;
+    private final ToConsolePrinter toConsolePrinter;
+
+    public CommandPrinter(final ToConsolePrinter toConsolePrinter) {
+        this.toConsolePrinter = toConsolePrinter;
+    }
 
     public void printSystemCommands(final List<SystemCommandDetails> systemCommandDetails) {
 

@@ -11,33 +11,37 @@ import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameter
 import java.util.List;
 import java.util.Optional;
 
-import javax.inject.Inject;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 
 public class MainApplication {
 
-    @Inject
-    private CommandLineArgumentParser commandLineArgumentParser;
+    private final CommandLineArgumentParser commandLineArgumentParser;
+    private final JmxParametersFactory jmxParametersFactory;
+    private final ListCommandsInvoker listCommandsInvoker;
+    private final OptionsFactory optionsFactory;
+    private final HelpFormatter formatter;
+    private final CommandExecutor commandExecutor;
+    private final ReturnCodeFactory returnCodeFactory;
 
-    @Inject
-    private JmxParametersFactory jmxParametersFactory;
+    public MainApplication(
+            final CommandLineArgumentParser commandLineArgumentParser,
+            final JmxParametersFactory jmxParametersFactory,
+            final ListCommandsInvoker listCommandsInvoker,
+            final OptionsFactory optionsFactory,
+            final HelpFormatter formatter,
+            final CommandExecutor commandExecutor,
+            final ReturnCodeFactory returnCodeFactory) {
 
-    @Inject
-    private ListCommandsInvoker listCommandsInvoker;
+        this.commandLineArgumentParser = commandLineArgumentParser;
+        this.jmxParametersFactory = jmxParametersFactory;
+        this.listCommandsInvoker = listCommandsInvoker;
+        this.optionsFactory = optionsFactory;
+        this.formatter = formatter;
+        this.commandExecutor = commandExecutor;
+        this.returnCodeFactory = returnCodeFactory;
+    }
 
-    @Inject
-    private OptionsFactory optionsFactory;
-
-    @Inject
-    private HelpFormatter formatter;
-
-    @Inject
-    private CommandExecutor commandExecutor;
-
-    @Inject
-    private ReturnCodeFactory returnCodeFactory;
 
     public ReturnCode run(final String[] args) {
 

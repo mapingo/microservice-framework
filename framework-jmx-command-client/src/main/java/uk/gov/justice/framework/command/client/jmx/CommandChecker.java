@@ -16,15 +16,15 @@ import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
 public class CommandChecker {
 
-    @Inject
-    private ToConsolePrinter toConsolePrinter;
+    private final ToConsolePrinter toConsolePrinter;
+    private final UtcClock clock;
 
-    @Inject
-    private UtcClock clock;
+    public CommandChecker(final ToConsolePrinter toConsolePrinter, final UtcClock clock) {
+        this.toConsolePrinter = toConsolePrinter;
+        this.clock = clock;
+    }
 
     public boolean commandComplete(final SystemCommanderMBean systemCommanderMBean, final UUID commandId, final ZonedDateTime startTime) {
 

@@ -22,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class JmxHandlesSystemCommandBootstrapperTest {
 
     @Mock
-    private ObjectFactory objectFactory;
+    private JmxCommandBootstrapObjectFactory jmxCommandBootstrapObjectFactory;
 
     @InjectMocks
     private JmxSystemCommandBootstrapper jmxSystemCommandBootstrapper;
@@ -33,7 +33,7 @@ public class JmxHandlesSystemCommandBootstrapperTest {
         final SystemCommandHandlerScanner systemCommandHandlerScanner = mock(SystemCommandHandlerScanner.class);
         final BeanManager beanManager = mock(BeanManager.class);
 
-        when(objectFactory.systemCommandScanner()).thenReturn(systemCommandHandlerScanner);
+        when(jmxCommandBootstrapObjectFactory.systemCommandScanner()).thenReturn(systemCommandHandlerScanner);
 
         jmxSystemCommandBootstrapper.afterDeploymentValidation(mock(AfterDeploymentValidation.class), beanManager);
 
@@ -43,6 +43,6 @@ public class JmxHandlesSystemCommandBootstrapperTest {
     @Test
     public void shouldConstructItselfWithAnObjectFactory() throws Exception {
 
-        assertThat(getValueOfField(new JmxSystemCommandBootstrapper(), "objectFactory", ObjectFactory.class), is(notNullValue()));
+        assertThat(getValueOfField(new JmxSystemCommandBootstrapper(), "jmxCommandBootstrapObjectFactory", JmxCommandBootstrapObjectFactory.class), is(notNullValue()));
     }
 }

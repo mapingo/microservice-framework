@@ -1,32 +1,22 @@
 package uk.gov.justice.framework.command.client.startup;
 
-import uk.gov.justice.framework.command.client.MainApplication;
 import uk.gov.justice.framework.command.client.ReturnCode;
-import uk.gov.justice.framework.command.client.cdi.producers.WeldFactory;
-
-import org.jboss.weld.environment.se.WeldContainer;
-import org.jboss.weld.inject.WeldInstance;
 
 public class Bootstrapper {
 
-    private final WeldFactory weldFactory;
+    private final ObjectFactory objectFactory;
 
     public Bootstrapper() {
-        this(new WeldFactory());
+        this(new ObjectFactory());
     }
 
-    public Bootstrapper(final WeldFactory weldFactory) {
-        this.weldFactory = weldFactory;
+    public Bootstrapper(final ObjectFactory objectFactory) {
+        this.objectFactory = objectFactory;
     }
 
     public ReturnCode startContainerAndRun(final String[] args) {
-        try (final WeldContainer container = weldFactory.create().initialize()) {
+        return objectFactory.mainApplication().run(args);
 
-            final WeldInstance<MainApplication> weldInstance = container.select(MainApplication.class);
-            final MainApplication mainApplication = weldInstance.get();
-
-            return mainApplication.run(args);
-        }
     }
 
     public static void main(String[] args) {
@@ -39,10 +29,10 @@ public class Bootstrapper {
 
 
         final String[] arguments = {
-            "-c", command,
-            "-u", userName,
-            "-pw", password,
-            "-cn", contextName
+                "-c", command,
+                "-u", userName,
+                "-pw", password,
+                "-cn", contextName
         };
 
         new Bootstrapper().startContainerAndRun(arguments);

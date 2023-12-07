@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
 import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
 import uk.gov.justice.services.jmx.api.name.CommandMBeanNameProvider;
@@ -103,9 +102,7 @@ public class MBeanConnectorTest {
     }
 
     private ObjectName createARealObjectName(final String contextName) {
-        final CommandMBeanNameProvider commandMBeanNameProvider = new CommandMBeanNameProvider();
-        setField(commandMBeanNameProvider, "objectNameFactory", new ObjectNameFactory());
-
+        final CommandMBeanNameProvider commandMBeanNameProvider = new CommandMBeanNameProvider(new ObjectNameFactory());
         return commandMBeanNameProvider.create(contextName);
     }
 }
