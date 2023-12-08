@@ -4,15 +4,17 @@ import uk.gov.justice.services.jmx.system.command.client.connection.JMXConnector
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 import uk.gov.justice.services.jmx.system.command.client.connection.MBeanConnector;
 
-import javax.inject.Inject;
-
 public class SystemCommanderClientFactory {
 
-    @Inject
-    private MBeanConnector mBeanConnector;
+    private final MBeanConnector mBeanConnector;
+    private final JMXConnectorFactory jmxConnectorFactory;
 
-    @Inject
-    private JMXConnectorFactory jmxConnectorFactory;
+    public SystemCommanderClientFactory(
+            final MBeanConnector mBeanConnector,
+            final JMXConnectorFactory jmxConnectorFactory) {
+        this.mBeanConnector = mBeanConnector;
+        this.jmxConnectorFactory = jmxConnectorFactory;
+    }
 
     public SystemCommanderClient create(final JmxParameters jmxParameters) {
 

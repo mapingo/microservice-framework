@@ -10,13 +10,13 @@ import uk.gov.justice.services.jmx.api.SystemCommandInvocationFailedException;
 import uk.gov.justice.services.jmx.system.command.client.MBeanClientConnectionException;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxAuthenticationException;
 
-import javax.inject.Inject;
-
 public class ReturnCodeFactory {
 
+    private final ToConsolePrinter toConsolePrinter;
 
-    @Inject
-    private ToConsolePrinter toConsolePrinter;
+    public ReturnCodeFactory(final ToConsolePrinter toConsolePrinter) {
+        this.toConsolePrinter = toConsolePrinter;
+    }
 
     public ReturnCode createFor(final Exception exception) {
 

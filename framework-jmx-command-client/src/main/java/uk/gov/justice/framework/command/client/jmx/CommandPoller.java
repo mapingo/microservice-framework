@@ -11,21 +11,23 @@ import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
 public class CommandPoller {
 
-    @Inject
-    private CommandChecker commandChecker;
+    private final CommandChecker commandChecker;
+    private final UtcClock clock;
+    private final Sleeper sleeper;
+    private final ToConsolePrinter toConsolePrinter;
 
-    @Inject
-    private UtcClock clock;
-
-    @Inject
-    private Sleeper sleeper;
-
-    @Inject
-    private ToConsolePrinter toConsolePrinter;
+    public CommandPoller(
+            final CommandChecker commandChecker,
+            final UtcClock clock,
+            final Sleeper sleeper,
+            final ToConsolePrinter toConsolePrinter) {
+        this.commandChecker = commandChecker;
+        this.clock = clock;
+        this.sleeper = sleeper;
+        this.toConsolePrinter = toConsolePrinter;
+    }
 
     public void runUntilComplete(final SystemCommanderMBean systemCommanderMBean, final UUID commandId, final String commandName) {
 

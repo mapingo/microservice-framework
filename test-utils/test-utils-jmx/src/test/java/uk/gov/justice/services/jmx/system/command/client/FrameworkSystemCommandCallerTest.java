@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
 import static uk.gov.justice.services.management.suspension.commands.SuspendCommand.SUSPEND;
 import static uk.gov.justice.services.management.suspension.commands.UnsuspendCommand.UNSUSPEND;
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
@@ -45,7 +46,7 @@ public class FrameworkSystemCommandCallerTest {
 
         frameworkSystemCommandCaller.callShutter();
 
-        verify(systemCommanderMBean).call(SUSPEND);
+        verify(systemCommanderMBean).call(SUSPEND, GUARDED);
         verify(systemCommanderClient).close();
     }
 
@@ -66,7 +67,7 @@ public class FrameworkSystemCommandCallerTest {
 
         frameworkSystemCommandCaller.callUnshutter();
 
-        verify(systemCommanderMBean).call(UNSUSPEND);
+        verify(systemCommanderMBean).call(UNSUSPEND, GUARDED);
         verify(systemCommanderClient).close();
     }
 

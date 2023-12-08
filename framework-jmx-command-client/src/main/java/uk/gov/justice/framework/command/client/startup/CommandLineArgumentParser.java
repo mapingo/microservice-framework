@@ -11,22 +11,24 @@ import uk.gov.justice.framework.command.client.io.ToConsolePrinter;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 
 public class CommandLineArgumentParser {
 
-    @Inject
-    private ToConsolePrinter toConsolePrinter;
+    private final ToConsolePrinter toConsolePrinter;
+    private final OptionsFactory optionsFactory;
+    private final BasicParser basicParser;
 
-    @Inject
-    private OptionsFactory optionsFactory;
-
-    @Inject
-    private BasicParser basicParser;
+    public CommandLineArgumentParser(
+            final ToConsolePrinter toConsolePrinter,
+            final OptionsFactory optionsFactory,
+            final BasicParser basicParser) {
+        this.toConsolePrinter = toConsolePrinter;
+        this.optionsFactory = optionsFactory;
+        this.basicParser = basicParser;
+    }
 
     public Optional<CommandLine> parse(final String[] args) {
 
@@ -37,7 +39,7 @@ public class CommandLineArgumentParser {
                 return of(commandLine);
             }
 
-            toConsolePrinter.println("No system command specifed.");
+            toConsolePrinter.println("No system command specified.");
 
             return empty();
 

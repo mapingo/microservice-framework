@@ -3,6 +3,7 @@ package uk.gov.justice.framework.command.client.jmx;
 import uk.gov.justice.framework.command.client.io.ToConsolePrinter;
 import uk.gov.justice.services.jmx.api.SystemCommandInvocationFailedException;
 import uk.gov.justice.services.jmx.api.UnrunnableSystemCommandException;
+import uk.gov.justice.services.jmx.api.mbean.CommandRunMode;
 import uk.gov.justice.services.jmx.api.mbean.SystemCommanderMBean;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClient;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
@@ -10,22 +11,22 @@ import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameter
 
 import java.util.UUID;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-@ApplicationScoped
 public class SystemCommandInvoker {
 
-    @Inject
-    private SystemCommanderClientFactory systemCommanderClientFactory;
+    private final SystemCommanderClientFactory systemCommanderClientFactory;
+    private final CommandPoller commandPoller;
+    private final ToConsolePrinter toConsolePrinter;
 
-    @Inject
-    private CommandPoller commandPoller;
+    public SystemCommandInvoker(
+            final SystemCommanderClientFactory systemCommanderClientFactory,
+            final CommandPoller commandPoller,
+            final ToConsolePrinter toConsolePrinter) {
+        this.systemCommanderClientFactory = systemCommanderClientFactory;
+        this.commandPoller = commandPoller;
+        this.toConsolePrinter = toConsolePrinter;
+    }
 
-    @Inject
-    private ToConsolePrinter toConsolePrinter;
-
-    public void runSystemCommand(final String commandName, final JmxParameters jmxParameters) {
+    public void runSystemCommand(final String commandName, final JmxParameters jmxParameters, final CommandRunMode commandRunMode) {
 
         final String contextName = jmxParameters.getContextName();
 
@@ -39,7 +40,7 @@ public class SystemCommandInvoker {
             toConsolePrinter.printf("Connected to %s context", contextName);
 
             final SystemCommanderMBean systemCommanderMBean = systemCommanderClient.getRemote(contextName);
-            final UUID commandId = systemCommanderMBean.call(commandName);
+            final UUID commandId = systemCommanderMBean.call(commandName, commandRunMode);
             toConsolePrinter.printf("System command '%s' with id '%s' successfully sent to %s", commandName, commandId, contextName);
             commandPoller.runUntilComplete(systemCommanderMBean, commandId, commandName);
 

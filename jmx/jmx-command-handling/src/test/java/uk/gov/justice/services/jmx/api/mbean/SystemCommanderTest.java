@@ -11,7 +11,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.FORCED;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
 
 import uk.gov.justice.services.jmx.api.CommandNotFoundException;
 import uk.gov.justice.services.jmx.api.UnrunnableSystemCommandException;
@@ -69,11 +73,12 @@ public class SystemCommanderTest {
         when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
         when(asynchronousCommandRunner.run(testCommand)).thenReturn(commandId);
 
-        assertThat(systemCommander.call("TEST_COMMAND"), is(commandId));
+        assertThat(systemCommander.call("TEST_COMMAND", GUARDED), is(commandId));
 
         final InOrder inOrder = inOrder(logger, asynchronousCommandRunner);
 
         inOrder.verify(logger).info("Received System Command 'TEST_COMMAND'");
+        inOrder.verify(logger).info("Running 'TEST_COMMAND' in 'GUARDED' mode");
         inOrder.verify(asynchronousCommandRunner).run(testCommand);
     }
 
@@ -85,7 +90,7 @@ public class SystemCommanderTest {
         when(systemCommandLocator.forName(testCommand.getName())).thenReturn(empty());
 
         try {
-            systemCommander.call("TEST_COMMAND");
+            systemCommander.call("TEST_COMMAND", GUARDED);
             fail();
         } catch (final UnrunnableSystemCommandException expected) {
             assertThat(expected.getMessage(), is("The system command 'TEST_COMMAND' is not supported on this context."));
@@ -101,11 +106,31 @@ public class SystemCommanderTest {
         when(systemCommandStateBean.commandInProgress(testCommand)).thenReturn(true);
 
         try {
-            systemCommander.call("TEST_COMMAND");
+            systemCommander.call("TEST_COMMAND", GUARDED);
             fail();
         } catch (final UnrunnableSystemCommandException expected) {
             assertThat(expected.getMessage(), is("Cannot run system command 'TEST_COMMAND'. A previous call to that command is still in progress."));
         }
+    }
+
+    @Test
+    public void shouldIgnoreAnyPreviousCommandInProgressIfRunModeIsForced() throws Exception {
+
+        final UUID commandId = randomUUID();
+        final TestCommand testCommand = new TestCommand();
+
+        when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
+        when(asynchronousCommandRunner.run(testCommand)).thenReturn(commandId);
+
+        assertThat(systemCommander.call("TEST_COMMAND", FORCED), is(commandId));
+
+        final InOrder inOrder = inOrder(logger, asynchronousCommandRunner);
+
+        inOrder.verify(logger).info("Received System Command 'TEST_COMMAND'");
+        inOrder.verify(logger).info("Running 'TEST_COMMAND' in 'FORCED' mode");
+        inOrder.verify(asynchronousCommandRunner).run(testCommand);
+
+        verify(systemCommandStateBean, never()).commandInProgress(testCommand);
     }
 
     @Test

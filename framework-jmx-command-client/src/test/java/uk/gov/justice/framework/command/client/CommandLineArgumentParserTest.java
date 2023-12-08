@@ -95,7 +95,7 @@ public class CommandLineArgumentParserTest {
 
         assertThat(commandLineOptional.isPresent(), is(false));
 
-        verify(toConsolePrinter).println("No system command specifed.");
+        verify(toConsolePrinter).println("No system command specified.");
     }
 
     @Test

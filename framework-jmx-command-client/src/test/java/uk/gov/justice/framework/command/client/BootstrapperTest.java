@@ -7,12 +7,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.framework.command.client.ReturnCode.SUCCESS;
 
-import uk.gov.justice.framework.command.client.cdi.producers.WeldFactory;
 import uk.gov.justice.framework.command.client.startup.Bootstrapper;
+import uk.gov.justice.framework.command.client.startup.ObjectFactory;
 
-import org.jboss.weld.environment.se.Weld;
-import org.jboss.weld.environment.se.WeldContainer;
-import org.jboss.weld.inject.WeldInstance;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class BootstrapperTest {
 
     @Mock
-    private WeldFactory weldFactory;
+    private ObjectFactory objectFactory;
 
     @InjectMocks
     private Bootstrapper bootstrapper;
@@ -33,19 +30,14 @@ public class BootstrapperTest {
     public void shouldStartTheWeldCdiContainerGetTheMainApplicationClassAndRun() throws Exception {
 
         final String[] args = {"some", "args"};
+        final ReturnCode returnCode = SUCCESS;
 
-        final Weld weld = mock(Weld.class);
-        final WeldContainer container = mock(WeldContainer.class);
-        final WeldInstance<MainApplication> weldInstance = mock(WeldInstance.class);
         final MainApplication mainApplication = mock(MainApplication.class);
 
-        when(weldFactory.create()).thenReturn(weld);
-        when(weld.initialize()).thenReturn(container);
-        when(container.select(MainApplication.class)).thenReturn(weldInstance);
-        when(weldInstance.get()).thenReturn(mainApplication);
-        when(mainApplication.run(args)).thenReturn(SUCCESS);
+        when(objectFactory.mainApplication()).thenReturn(mainApplication);
+        when(bootstrapper.startContainerAndRun(args)).thenReturn(returnCode);
 
-        assertThat(bootstrapper.startContainerAndRun(args), is(SUCCESS));
+        assertThat(bootstrapper.startContainerAndRun(args), is(returnCode));
         verify(mainApplication).run(args);
     }
 }

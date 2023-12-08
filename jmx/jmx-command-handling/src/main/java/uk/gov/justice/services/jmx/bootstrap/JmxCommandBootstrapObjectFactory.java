@@ -5,7 +5,7 @@ import uk.gov.justice.services.jmx.bootstrap.blacklist.BlacklistedCommandsFilter
 import uk.gov.justice.services.jmx.bootstrap.blacklist.BlacklistedCommandsScanner;
 import uk.gov.justice.services.jmx.command.HandlerMethodValidator;
 
-public class ObjectFactory {
+public class JmxCommandBootstrapObjectFactory {
 
     public CdiInstanceResolver cdiInstanceResolver() {
         return new CdiInstanceResolver();

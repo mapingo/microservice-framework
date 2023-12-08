@@ -14,6 +14,7 @@ public class OptionsFactory {
         options.addOption("u", "username", true, "Optional username for Wildfly management security");
         options.addOption("pw", "password", true, "Optional password for Wildfly management security");
 
+        options.addOption("f", "force", false, "Run in 'forced' mode. This will bypass the check that any previous call to this command is still in progress. Use with caution.");
         options.addOption("help", false, "Show help.");
         options.addOption("l", "list", false, "List of all framework commands");
 
