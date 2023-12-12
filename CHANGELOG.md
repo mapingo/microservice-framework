@@ -5,6 +5,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 [Unreleased]
 
+## [17.4.1] - 2023-12-12
+### Changed
+- Add retry mechanism to jobstore via framework-libraries
+
 ## [17.4.0] - 2023-12-08
 ### Added
 - Add '-f' '--force' switch to the JmxCommandClient to bypass COMMAND_IN_PROGRESS check
