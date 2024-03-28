@@ -60,7 +60,7 @@ In this licence, the terms below have the following meanings:
 
 'Information Provider' means the person or organisation providing the Information under this licence.
 
-'Licensor' means any Information Provider which has the authority to offer Information under the terms of this licence or the Controller of Her Majesty's Stationery Office, who has the authority to offer Information subject to Crown copyright and Crown database rights and Information subject to copyright and database right that has been assigned to or acquired by the Crown, under the terms of this licence.
+'Licensor' means any Information Provider which has the authority to offer Information under the terms of this licence or the Controller of His Majesty's Stationery Office, who has the authority to offer Information subject to Crown copyright and Crown database rights and Information subject to copyright and database right that has been assigned to or acquired by the Crown, under the terms of this licence.
 
 'Use' means doing any act which is restricted by copyright or database right, whether in the original medium or in any other medium, and includes without limitation distributing, copying, adapting, modifying as may be technically necessary to use it in a different mode or format.
 
@@ -68,7 +68,7 @@ In this licence, the terms below have the following meanings:
 
 About the Open Government Licence
 
-The Controller of Her Majesty's Stationery Office (HMSO) has developed this licence as a tool to enable Information Providers in the public sector to license the use and re-use of their Information under a common open licence. The Controller invites public sector bodies owning their own copyright and database rights to permit the use of their Information under this licence.
+The Controller of His Majesty's Stationery Office (HMSO) has developed this licence as a tool to enable Information Providers in the public sector to license the use and re-use of their Information under a common open licence. The Controller invites public sector bodies owning their own copyright and database rights to permit the use of their Information under this licence.
 
 The Controller of HMSO has authority to license Information subject to copyright and database right owned by the Crown. The extent of the Controller's offer to license this Information under the terms of this licence is set out in the UK Government Licensing Framework.
 
