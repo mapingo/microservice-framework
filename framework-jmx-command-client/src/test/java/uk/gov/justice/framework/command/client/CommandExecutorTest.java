@@ -1,6 +1,8 @@
 package uk.gov.justice.framework.command.client;
 
 import static java.util.Arrays.asList;
+import static java.util.UUID.fromString;
+import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -15,6 +17,7 @@ import uk.gov.justice.services.jmx.api.mbean.CommandRunMode;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
 import org.junit.jupiter.api.Test;
@@ -47,6 +50,7 @@ public class CommandExecutorTest {
 
         final String commandName = "CATCHUP";
         final CommandRunMode commandRunMode = GUARDED;
+        final String commandRuntimeId = randomUUID().toString();
 
         final SystemCommandDetails systemCommandDetails_1 = mock(SystemCommandDetails.class);
         final SystemCommandDetails systemCommandDetails_2 = mock(SystemCommandDetails.class);
@@ -58,10 +62,11 @@ public class CommandExecutorTest {
         when(commandLine.hasOption("list")).thenReturn(false);
         when(commandLine.getOptionValue("command")).thenReturn(commandName);
         when(commandRunModeSelector.selectCommandRunMode(commandLine)).thenReturn(commandRunMode);
+        when(commandLine.getOptionValue("crid")).thenReturn(commandRuntimeId);
 
         commandExecutor.executeCommand(commandLine, jmxParameters, systemCommands);
 
-        verify(systemCommandInvoker).runSystemCommand(commandName, jmxParameters, commandRunMode);
+        verify(systemCommandInvoker).runSystemCommand(commandName, jmxParameters, commandRuntimeId, commandRunMode);
     }
 
     @Test

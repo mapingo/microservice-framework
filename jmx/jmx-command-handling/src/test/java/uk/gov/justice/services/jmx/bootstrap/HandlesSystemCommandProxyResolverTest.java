@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import uk.gov.justice.services.framework.utilities.cdi.CdiInstanceResolver;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.bootstrap.blacklist.BlacklistedCommandsFilter;
+import uk.gov.justice.services.jmx.command.CommandHandlerMethodArgumentFactory;
 import uk.gov.justice.services.jmx.command.HandlerMethodValidator;
 import uk.gov.justice.services.jmx.command.HandlesSystemCommand;
 import uk.gov.justice.services.jmx.command.SystemCommandHandlerProxy;
@@ -43,6 +44,9 @@ public class HandlesSystemCommandProxyResolverTest {
     @Mock
     private BlacklistedCommandsFilter blacklistedCommandsFilter;
 
+    @Mock
+    private CommandHandlerMethodArgumentFactory commandHandlerMethodArgumentFactory;
+
     @InjectMocks
     private SystemCommandProxyResolver systemCommandProxyResolver;
 
@@ -74,7 +78,8 @@ public class HandlesSystemCommandProxyResolverTest {
                 HandlesSystemSystemCommand_1.SYSTEM_COMMAND_NAME_1,
                 handlerMethod_1,
                 systemCommandHandler,
-                handlerMethodValidator
+                handlerMethodValidator,
+                commandHandlerMethodArgumentFactory
         )).thenReturn(systemCommandHandlerProxy_1);
 
         when(blacklistedCommandsFilter.isSystemCommandAllowed(HandlesSystemSystemCommand_2.SYSTEM_COMMAND_NAME_2, blacklistedCommands)).thenReturn(true);
@@ -82,7 +87,8 @@ public class HandlesSystemCommandProxyResolverTest {
                 HandlesSystemSystemCommand_2.SYSTEM_COMMAND_NAME_2,
                 handlerMethod_2,
                 systemCommandHandler,
-                handlerMethodValidator
+                handlerMethodValidator,
+                commandHandlerMethodArgumentFactory
         )).thenReturn(systemCommandHandlerProxy_2);
 
         when(blacklistedCommandsFilter.isSystemCommandAllowed(HandlesSystemSystemCommand_3.SYSTEM_COMMAND_NAME_3, blacklistedCommands)).thenReturn(true);
@@ -90,7 +96,8 @@ public class HandlesSystemCommandProxyResolverTest {
                 HandlesSystemSystemCommand_3.SYSTEM_COMMAND_NAME_3,
                 handlerMethod_3,
                 systemCommandHandler,
-                handlerMethodValidator
+                handlerMethodValidator,
+                commandHandlerMethodArgumentFactory
         )).thenReturn(systemCommandHandlerProxy_3);
 
         final List<SystemCommandHandlerProxy> systemCommandHandlerProxies = systemCommandProxyResolver.allCommandProxiesFor(bean, beanManager, blacklistedCommands);
@@ -130,7 +137,8 @@ public class HandlesSystemCommandProxyResolverTest {
                 HandlesSystemSystemCommand_1.SYSTEM_COMMAND_NAME_1,
                 handlerMethod_1,
                 systemCommandHandler,
-                handlerMethodValidator
+                handlerMethodValidator,
+                commandHandlerMethodArgumentFactory
         )).thenReturn(systemCommandHandlerProxy_1);
 
         when(blacklistedCommandsFilter.isSystemCommandAllowed(HandlesSystemSystemCommand_2.SYSTEM_COMMAND_NAME_2, blacklistedCommands)).thenReturn(false);
@@ -140,7 +148,8 @@ public class HandlesSystemCommandProxyResolverTest {
                 HandlesSystemSystemCommand_3.SYSTEM_COMMAND_NAME_3,
                 handlerMethod_3,
                 systemCommandHandler,
-                handlerMethodValidator
+                handlerMethodValidator,
+                commandHandlerMethodArgumentFactory
         )).thenReturn(systemCommandHandlerProxy_3);
 
         final List<SystemCommandHandlerProxy> systemCommandHandlerProxies = systemCommandProxyResolver.allCommandProxiesFor(bean, beanManager, blacklistedCommands);

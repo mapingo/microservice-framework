@@ -3,6 +3,7 @@ package uk.gov.justice.services.jmx.bootstrap;
 import uk.gov.justice.services.framework.utilities.cdi.CdiInstanceResolver;
 import uk.gov.justice.services.jmx.bootstrap.blacklist.BlacklistedCommandsFilter;
 import uk.gov.justice.services.jmx.bootstrap.blacklist.BlacklistedCommandsScanner;
+import uk.gov.justice.services.jmx.command.CommandHandlerMethodArgumentFactory;
 import uk.gov.justice.services.jmx.command.HandlerMethodValidator;
 
 public class JmxCommandBootstrapObjectFactory {
@@ -27,12 +28,17 @@ public class JmxCommandBootstrapObjectFactory {
         return new BlacklistedCommandsFilter();
     }
 
+    public CommandHandlerMethodArgumentFactory commandHandlerMethodArgumentFactory() {
+        return new CommandHandlerMethodArgumentFactory();
+    }
+
     public SystemCommandProxyResolver systemCommandProxyResolver() {
         return new SystemCommandProxyResolver(
                 cdiInstanceResolver(),
                 systemCommandHandlerProxyFactory(),
                 handlerMethodValidator(),
-                blacklistedCommandsFilter());
+                blacklistedCommandsFilter(),
+                commandHandlerMethodArgumentFactory());
     }
 
     public SystemCommandHandlerScanner systemCommandScanner() {

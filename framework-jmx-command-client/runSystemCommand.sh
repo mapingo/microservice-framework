@@ -27,8 +27,18 @@ if [ -z "$1" ]; then
   echo "Listing commands"
   echo
   java -jar target/framework-jmx-command-client-${FRAMEWORK_VERSION}.jar -l -u "$USER_NAME" -pw "$PASSWORD" -cn "$CONTEXT_NAME"
+elif [ "$1" == "--help" ]; then
+  java -jar target/framework-jmx-command-client-${FRAMEWORK_VERSION}.jar --help -u "$USER_NAME" -pw "$PASSWORD" -cn "$CONTEXT_NAME"
+fi
+
+COMMAND=$1
+
+if [ ! -z "$2" ]; then
+  COMMAND_RUNTIME_ID=$2
+  echo "Running command '$COMMAND' with command runtime id '$COMMAND_RUNTIME_ID'"
+  echo
+  java -jar target/framework-jmx-command-client-${FRAMEWORK_VERSION}.jar -c "$COMMAND" -crid "$COMMAND_RUNTIME_ID" -u "$USER_NAME" -pw "$PASSWORD" -cn "$CONTEXT_NAME"
 else
-  COMMAND=$1
   echo "Running command '$COMMAND'"
   echo
   java -jar target/framework-jmx-command-client-${FRAMEWORK_VERSION}.jar -c "$COMMAND" -u "$USER_NAME" -pw "$PASSWORD" -cn "$CONTEXT_NAME"

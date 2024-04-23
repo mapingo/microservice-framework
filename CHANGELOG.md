@@ -5,6 +5,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 [Unreleased]
 
+## [17.4.3-M1] - 2024-04-23
+### Added
+- Add LOG_RUNTIME_ID system command and it's handler to log command runtime id
+- Add REPLAY_EVENT_TO_EVENT_LISTENER and REPLAY_EVENT_TO_EVENT_INDEXER system commands to replay single event
+
 ## [17.4.2] - 2024-02-08
 ### Changed
 - Add jobstore retry migration liquibase via framework-libraries
@@ -17,7 +22,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ### Added
 - Add '-f' '--force' switch to the JmxCommandClient to bypass COMMAND_IN_PROGRESS check
 ### Removed
-- Remove CDI and Weld container from JmxCommandClient 
+- Remove CDI and Weld container from JmxCommandClient
 
 ## [17.3.1] - 2023-11-27
 ### Changed
@@ -53,17 +58,17 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [17.0.1] - 2023-05-10
 ### Changed
 - Update framework-libraries to 17.0.1 in order to:
-  - Remove unnecessary logging of 'skipping generation' message in pojo generator
+    - Remove unnecessary logging of 'skipping generation' message in pojo generator
 
 ## [17.0.0] - 2023-05-05
 ### Changed
 - Update to Java 17
-- Make pojo generator to perform null safe assignment of additionalProperties inside constructor 
+- Make pojo generator to perform null safe assignment of additionalProperties inside constructor
 - Update common-bom to 17.0.0 in order to:
-  - Add byte-buddy 1.12.22 as a replacement for cglib
-  - Downgrade h2 to 1.4.196 as 2.x.x is too strict for the tests
+    - Add byte-buddy 1.12.22 as a replacement for cglib
+    - Downgrade h2 to 1.4.196 as 2.x.x is too strict for the tests
 - Update framework-libraries to 17.0.0 in order to:
-  - Change 'additionalProperties' Map in generated pojos to HashMap to allow serialization
+    - Change 'additionalProperties' Map in generated pojos to HashMap to allow serialization
 ### Removed
 - Remove illegal-access argument from surefire plugin from plugin management (through maven-parent-pom 17.0.0-M6)
 - Remove illegal-access argument from surefire plugin
@@ -77,7 +82,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ### Changed
 - Update to OpenJDK 11
 - Update to JEE 8
-- Improve testability of DefaultRestClientProcessor by extracting WebTargetFactory creation to separate class 
+- Improve testability of DefaultRestClientProcessor by extracting WebTargetFactory creation to separate class
 - Close the client in DefaultRestClientProcessor
 - Updated slf4j/log4j bridge jar from slf4j-log4j12 to slf4j-reload4j
 - MessageProducerClient is now idempotent when calling `startProducer(...)`
@@ -105,7 +110,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
     - wildfly to version 26.1.2.Final
     - artemis to version 2.20.0
     - resteasy-client to version 4.7.7.Final
-    
+
 ## [7.2.23] - 2021-03-29
 ### Changed
 - RestClientProcessor now handles bad request (400) responses by throwing a BadRequestException

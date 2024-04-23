@@ -12,6 +12,7 @@ import javax.management.MXBean;
 public interface SystemCommanderMBean {
 
     UUID call(final String systemCommandName, final CommandRunMode commandRunMode);
+    UUID callWithRuntimeId(final String systemCommandName, final UUID commandRuntimeId, final CommandRunMode commandRunMode);
     List<SystemCommandDetails> listCommands();
     SystemCommandStatus getCommandStatus(UUID commandId);
 }

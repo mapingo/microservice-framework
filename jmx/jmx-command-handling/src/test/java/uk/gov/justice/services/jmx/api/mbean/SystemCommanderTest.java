@@ -1,22 +1,12 @@
 package uk.gov.justice.services.jmx.api.mbean;
 
-import static java.util.Arrays.asList;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static java.util.UUID.fromString;
-import static java.util.UUID.randomUUID;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.FORCED;
-import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
-
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
 import uk.gov.justice.services.jmx.api.CommandNotFoundException;
 import uk.gov.justice.services.jmx.api.UnrunnableSystemCommandException;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
@@ -30,15 +20,21 @@ import uk.gov.justice.services.jmx.runner.AsynchronousCommandRunner;
 import uk.gov.justice.services.jmx.state.observers.SystemCommandStateBean;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InOrder;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
+import static java.util.Arrays.asList;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.UUID.fromString;
+import static java.util.UUID.randomUUID;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.FORCED;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
 
 @ExtendWith(MockitoExtension.class)
 public class SystemCommanderTest {
@@ -59,6 +55,9 @@ public class SystemCommanderTest {
     private CommandConverter commandConverter;
 
     @Mock
+    private SystemCommandVerifier systemCommandVerifier;
+
+    @Mock
     private Logger logger;
 
     @InjectMocks
@@ -69,17 +68,39 @@ public class SystemCommanderTest {
 
         final UUID commandId = randomUUID();
         final TestCommand testCommand = new TestCommand();
+        final Optional<UUID> commandRuntimeId = empty();
 
         when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
-        when(asynchronousCommandRunner.run(testCommand)).thenReturn(commandId);
+        when(asynchronousCommandRunner.run(testCommand, commandRuntimeId)).thenReturn(commandId);
 
         assertThat(systemCommander.call("TEST_COMMAND", GUARDED), is(commandId));
 
-        final InOrder inOrder = inOrder(logger, asynchronousCommandRunner);
+        final InOrder inOrder = inOrder(logger, systemCommandVerifier, asynchronousCommandRunner);
 
         inOrder.verify(logger).info("Received System Command 'TEST_COMMAND'");
         inOrder.verify(logger).info("Running 'TEST_COMMAND' in 'GUARDED' mode");
-        inOrder.verify(asynchronousCommandRunner).run(testCommand);
+        inOrder.verify(systemCommandVerifier).verify(testCommand, commandRuntimeId);
+        inOrder.verify(asynchronousCommandRunner).run(testCommand, commandRuntimeId);
+    }
+
+    @Test
+    public void shouldRunTheSystemCommandWithIdIfSupported() throws Exception {
+
+        final UUID commandId = randomUUID();
+        final UUID commandRuntimeId = fromString("ce37d217-48a4-4a76-8a86-2e1d2d4c1ec2");
+        final TestCommand testCommand = new TestCommand();
+
+        when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
+        when(asynchronousCommandRunner.run(testCommand, of(commandRuntimeId))).thenReturn(commandId);
+
+        assertThat(systemCommander.callWithRuntimeId("TEST_COMMAND", commandRuntimeId, GUARDED), is(commandId));
+
+        final InOrder inOrder = inOrder(logger, systemCommandVerifier, asynchronousCommandRunner);
+
+        inOrder.verify(logger).info("Received System Command 'TEST_COMMAND' with UUID 'ce37d217-48a4-4a76-8a86-2e1d2d4c1ec2'");
+        inOrder.verify(logger).info("Running 'TEST_COMMAND' in 'GUARDED' mode");
+        inOrder.verify(systemCommandVerifier).verify(testCommand, of(commandRuntimeId));
+        inOrder.verify(asynchronousCommandRunner).run(testCommand, of(commandRuntimeId));
     }
 
     @Test
@@ -89,12 +110,8 @@ public class SystemCommanderTest {
 
         when(systemCommandLocator.forName(testCommand.getName())).thenReturn(empty());
 
-        try {
-            systemCommander.call("TEST_COMMAND", GUARDED);
-            fail();
-        } catch (final UnrunnableSystemCommandException expected) {
-            assertThat(expected.getMessage(), is("The system command 'TEST_COMMAND' is not supported on this context."));
-        }
+        final UnrunnableSystemCommandException e = assertThrows(UnrunnableSystemCommandException.class, () -> systemCommander.call("TEST_COMMAND", GUARDED));
+        assertThat(e.getMessage(), is("The system command 'TEST_COMMAND' is not supported on this context."));
     }
 
     @Test
@@ -105,30 +122,28 @@ public class SystemCommanderTest {
         when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
         when(systemCommandStateBean.commandInProgress(testCommand)).thenReturn(true);
 
-        try {
-            systemCommander.call("TEST_COMMAND", GUARDED);
-            fail();
-        } catch (final UnrunnableSystemCommandException expected) {
-            assertThat(expected.getMessage(), is("Cannot run system command 'TEST_COMMAND'. A previous call to that command is still in progress."));
-        }
+        final UnrunnableSystemCommandException e = assertThrows(UnrunnableSystemCommandException.class, () -> systemCommander.call("TEST_COMMAND", GUARDED));
+        assertThat(e.getMessage(), is("Cannot run system command 'TEST_COMMAND'. A previous call to that command is still in progress."));
     }
 
     @Test
     public void shouldIgnoreAnyPreviousCommandInProgressIfRunModeIsForced() throws Exception {
 
         final UUID commandId = randomUUID();
+        final UUID commandRuntimeId = fromString("9132d439-c797-4483-a961-5eb640c55fe7");
         final TestCommand testCommand = new TestCommand();
 
         when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
-        when(asynchronousCommandRunner.run(testCommand)).thenReturn(commandId);
+        when(asynchronousCommandRunner.run(testCommand, of(commandRuntimeId))).thenReturn(commandId);
 
-        assertThat(systemCommander.call("TEST_COMMAND", FORCED), is(commandId));
+        assertThat(systemCommander.callWithRuntimeId("TEST_COMMAND", commandRuntimeId, FORCED), is(commandId));
 
-        final InOrder inOrder = inOrder(logger, asynchronousCommandRunner);
+        final InOrder inOrder = inOrder(logger, systemCommandVerifier, asynchronousCommandRunner);
 
-        inOrder.verify(logger).info("Received System Command 'TEST_COMMAND'");
+        inOrder.verify(logger).info("Received System Command 'TEST_COMMAND' with UUID '9132d439-c797-4483-a961-5eb640c55fe7'");
         inOrder.verify(logger).info("Running 'TEST_COMMAND' in 'FORCED' mode");
-        inOrder.verify(asynchronousCommandRunner).run(testCommand);
+        inOrder.verify(systemCommandVerifier).verify(testCommand, of(commandRuntimeId));
+        inOrder.verify(asynchronousCommandRunner).run(testCommand, of(commandRuntimeId));
 
         verify(systemCommandStateBean, never()).commandInProgress(testCommand);
     }
@@ -179,11 +194,7 @@ public class SystemCommanderTest {
 
         when(systemCommandStateBean.getCommandStatus(commandId)).thenReturn(empty());
 
-        try {
-            systemCommander.getCommandStatus(commandId);
-            fail();
-        } catch (CommandNotFoundException expected) {
-            assertThat(expected.getMessage(), is("No SystemCommand found with id 08fe90e9-c35b-4850-9af2-e5e743f6736e"));
-        }
+        final CommandNotFoundException e = assertThrows(CommandNotFoundException.class, () -> systemCommander.getCommandStatus(commandId));
+        assertThat(e.getMessage(), is("No SystemCommand found with id 08fe90e9-c35b-4850-9af2-e5e743f6736e"));
     }
 }
