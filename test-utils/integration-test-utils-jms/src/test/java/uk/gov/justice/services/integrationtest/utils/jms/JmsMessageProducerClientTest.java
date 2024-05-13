@@ -1,0 +1,110 @@
+package uk.gov.justice.services.integrationtest.utils.jms;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.justice.services.messaging.JsonEnvelope;
+import uk.gov.justice.services.test.utils.core.enveloper.EnvelopeFactory;
+
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.json.JsonObject;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
+import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
+
+@ExtendWith(MockitoExtension.class)
+class JmsMessageProducerClientTest {
+
+    private static final String TOPIC_NAME = "jms.topic.public.event";
+    private static final String QUEUE_URI = "tcp://localhost:61616";
+
+    @Mock
+    private JmsMessageProducerFactory jmsMessageProducerFactory;
+
+    private JmsMessageProducerClient jmsMessageProducerClient;
+
+    @BeforeEach
+    void setUp() {
+        jmsMessageProducerClient = new JmsMessageProducerClient(jmsMessageProducerFactory);
+    }
+
+    @Test
+    void createProducerShouldDelegate() {
+        jmsMessageProducerClient.createProducer(TOPIC_NAME);
+
+        verify(jmsMessageProducerFactory).getOrCreateMessageProducer(TOPIC_NAME, QUEUE_URI);
+    }
+
+    @Nested
+    class SendJsonEnvelopeMessageTest {
+
+        @Test
+        void shouldThrowExceptionWhenMessageProducerNotCreated() {
+            final JsonEnvelope jsonEnvelope = mock(JsonEnvelope.class);
+            final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class,
+                    () -> jmsMessageProducerClient.sendMessage("commandName", jsonEnvelope));
+        }
+
+        @Test
+        void shouldCreateTextMessageAndSend() throws Exception {
+            final MessageProducer messageProducer = mock(MessageProducer.class);
+            final JsonEnvelope jsonEnvelope = mock(JsonEnvelope.class);
+            final Session session = mock(Session.class);
+            final TextMessage textMessage = mock(TextMessage.class);
+            setField(jmsMessageProducerClient, "messageProducer", messageProducer);
+            //noinspection deprecation
+            when(jsonEnvelope.toDebugStringPrettyPrint()).thenReturn("{}");
+            when(jmsMessageProducerFactory.getSession(QUEUE_URI)).thenReturn(session);
+            when(session.createTextMessage()).thenReturn(textMessage);
+
+            jmsMessageProducerClient.sendMessage("commandName", jsonEnvelope);
+
+            verify(textMessage).setText("{}");
+            verify(textMessage).setStringProperty("CPPNAME", "commandName");
+            verify(messageProducer).send(textMessage);
+        }
+
+        @Test
+        void shouldConvertJmsException() throws Exception {
+            final MessageProducer messageProducer = mock(MessageProducer.class);
+            final JsonEnvelope jsonEnvelope = mock(JsonEnvelope.class);
+            final Session session = mock(Session.class);
+            setField(jmsMessageProducerClient, "messageProducer", messageProducer);
+            //noinspection deprecation
+            when(jsonEnvelope.toDebugStringPrettyPrint()).thenReturn("{}");
+            when(jmsMessageProducerFactory.getSession(QUEUE_URI)).thenReturn(session);
+            doThrow(new JMSException("Test")).when(session).createTextMessage();
+
+            final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class,
+                    () -> jmsMessageProducerClient.sendMessage("commandName", jsonEnvelope));
+            assertThat(e.getMessage(), is("Failed to send message. commandName: 'commandName', json: {}"));
+        }
+    }
+
+    @Test
+    void shouldSendJsonObject() {
+        final MessageProducer messageProducer = mock(MessageProducer.class);
+        setField(jmsMessageProducerClient, "messageProducer", messageProducer);
+
+        try (MockedStatic<EnvelopeFactory> envelopeFactory = mockStatic(EnvelopeFactory.class)) {            final JsonObject jsonObject = mock(JsonObject.class);
+            final JsonEnvelope jsonEnvelope = mock(JsonEnvelope.class);
+            envelopeFactory.when(() -> EnvelopeFactory.createEnvelope("commandName",jsonObject)).thenReturn(jsonEnvelope);
+            final JmsMessageProducerClient jmpc = spy(jmsMessageProducerClient); //May not be a nice way to use spy for the class under test, but this avoids duplication of all test scenarios when this method is invoking another method in the same class that is well tested
+            doNothing().when(jmpc).sendMessage("commandName", jsonEnvelope);
+
+            jmpc.sendMessage("commandName", jsonObject);
+
+            verify(jmpc).sendMessage("commandName", jsonEnvelope);
+        }
+    }
+}

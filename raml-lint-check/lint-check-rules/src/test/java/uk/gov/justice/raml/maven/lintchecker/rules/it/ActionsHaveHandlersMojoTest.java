@@ -16,7 +16,6 @@ import java.net.URL;
 
 import org.apache.maven.plugin.MojoExecutionException;
 
-//TODO SAN
 public class ActionsHaveHandlersMojoTest {
 
     public void testShouldFailTest() throws Exception {
