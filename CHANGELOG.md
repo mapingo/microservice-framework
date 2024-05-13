@@ -4,6 +4,9 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+## [17.4.3] - 2024-05-13
+### Added
+- Add JmsMessageConsumerClient and JmsMessageProducerClient for effective management of jms resources in integration tests
 
 ## [17.4.2] - 2024-02-08
 ### Changed
