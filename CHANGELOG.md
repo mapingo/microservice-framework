@@ -4,6 +4,12 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+
+## [17.4.4] - 2024-05-15
+### Changed
+- Refactor JMS resource management extension to extract CloseableResource to separate class and 
+- Close producers along with consumer through @AfterAll hook  
+
 ## [17.4.3] - 2024-05-13
 ### Added
 - Add JmsMessageConsumerClient and JmsMessageProducerClient for effective management of jms resources in integration tests
