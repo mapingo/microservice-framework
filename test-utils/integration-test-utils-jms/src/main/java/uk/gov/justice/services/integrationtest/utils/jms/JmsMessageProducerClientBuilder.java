@@ -15,13 +15,13 @@ public class JmsMessageProducerClientBuilder {
     }
 
     @VisibleForTesting
-    JmsMessageProducerClientBuilder(final String topicName, final JmsSingletonResourceProvider jmsSingletonResourceProvider) {
+    JmsMessageProducerClientBuilder(final String topicName, final JmsResourcesContext jmsResourcesContext) {
         this.topicName = topicName;
-        this.jmsMessageClientFactory = jmsSingletonResourceProvider.getJmsMessageClientFactory();
+        this.jmsMessageClientFactory = jmsResourcesContext.getJmsMessageClientFactory();
     }
 
     private JmsMessageProducerClientBuilder(final String topicName) {
-        this(topicName, new JmsSingletonResourceProvider());
+        this(topicName, new JmsResourcesContextProvider().get());
     }
 
     public JmsMessageProducerClient build() {

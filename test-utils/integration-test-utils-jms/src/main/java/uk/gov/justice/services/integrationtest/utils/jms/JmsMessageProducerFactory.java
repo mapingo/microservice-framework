@@ -9,9 +9,6 @@ import javax.jms.Session;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * This class need to be singleton and it's maintained by {@link JmsSingletonResourceProvider}
- */
 class JmsMessageProducerFactory {
 
     private Session session;
@@ -34,16 +31,19 @@ class JmsMessageProducerFactory {
         return session;
     }
 
-    void close() {
+    void closeProducers() {
         try{
             for(final MessageProducer messageProducer : messageProducers.values()) {
                 messageProducer.close();
             }
             messageProducers.clear();
-            jmsSessionFactory.close(); //closes session and underlying connection, connectionFactory
         } catch (JMSException e) {
             throw new JmsMessagingClientException("Failed to close producers", e);
         }
+    }
+
+    void close() {
+        jmsSessionFactory.close(); //closes session and underlying connection, connectionFactory
     }
 
     private void createSessionIfNull(String queueUri) {

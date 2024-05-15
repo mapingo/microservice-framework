@@ -14,16 +14,16 @@ import static org.mockito.Mockito.when;
 class JmsMessageProducerClientBuilderTest {
 
     @Mock
-    private JmsSingletonResourceProvider jmsSingletonResourceProvider;
+    private JmsResourcesContext jmsResourcesContext;
 
     @Test
     void shouldBuildAndReturnMessageProducerClient() {
         final JmsMessageProducerClient jmsMessageProducerClient = mock(JmsMessageProducerClient.class);
         final JmsMessageClientFactory jmsMessageClientFactory = mock(JmsMessageClientFactory.class);
-        when(jmsSingletonResourceProvider.getJmsMessageClientFactory()).thenReturn(jmsMessageClientFactory);
+        when(jmsResourcesContext.getJmsMessageClientFactory()).thenReturn(jmsMessageClientFactory);
         when(jmsMessageClientFactory.createJmsMessageProducerClient()).thenReturn(jmsMessageProducerClient);
 
-        final JmsMessageProducerClient result = new JmsMessageProducerClientBuilder("jms.topic.public.event", jmsSingletonResourceProvider)
+        final JmsMessageProducerClient result = new JmsMessageProducerClientBuilder("jms.topic.public.event", jmsResourcesContext)
                 .build();
 
         assertThat(result, is(jmsMessageProducerClient));

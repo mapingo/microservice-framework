@@ -130,7 +130,7 @@ class JmsMessageProducerFactoryTest {
     }
 
     @Nested
-    class CloseTest {
+    class CloseProducersTest {
 
         @Test
         void shouldCloseAllMessageProducersAndClearCache() throws Exception {
@@ -139,27 +139,32 @@ class JmsMessageProducerFactoryTest {
             existingProducers.put(TOPIC_NAME, messageProducer);
             ReflectionUtil.setField(jmsMessageProducerFactory, "messageProducers", existingProducers);
 
-            jmsMessageProducerFactory.close();
+            jmsMessageProducerFactory.closeProducers();
 
             verify(messageProducer).close();
             assertThat(existingProducers.size(), is(0));
         }
 
         @Test
-        void shouldCloseSession() throws Exception {
-            jmsMessageProducerFactory.close();
-
-            verify(jmsSessionFactory).close();
-        }
-
-        @Test
         void shouldConvertJmsException() throws Exception {
-            doThrow(new JMSException("Test")).when(jmsSessionFactory).close();
+            final MessageProducer messageProducer = mock(MessageProducer.class);
+            final Map<String, MessageProducer> existingProducers = new ConcurrentHashMap<>();
+            existingProducers.put(TOPIC_NAME, messageProducer);
+            ReflectionUtil.setField(jmsMessageProducerFactory, "messageProducers", existingProducers);
+
+            doThrow(new JMSException("Test")).when(messageProducer).close();
 
             final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class,
-                    () -> jmsMessageProducerFactory.close());
+                    () -> jmsMessageProducerFactory.closeProducers());
 
             assertThat(e.getMessage(), is("Failed to close producers"));
         }
+    }
+
+    @Test
+    void shouldCloseSession() {
+        jmsMessageProducerFactory.close();
+
+        verify(jmsSessionFactory).close();
     }
 }

@@ -30,5 +30,6 @@ class JmsMessageConsumerFactory {
 
     void close() {
         jmsSessionFactory.close(); //closes session and underlying connection, connectionFactory
+        this.session = null;
     }
 }

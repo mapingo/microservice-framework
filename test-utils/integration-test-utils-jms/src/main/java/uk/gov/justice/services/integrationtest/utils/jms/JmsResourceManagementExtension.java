@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
+import org.junit.jupiter.api.extension.ExtensionContext.Store;
 
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
 
@@ -13,32 +13,27 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
  *  This manages Life cycle of Jms consumers and producers created by a Test class using various junit hooks.
  *  As long as this extension is used by an Integration test, as a developer of writing integration tests you don't need to worry about managing underlying jms resources that are created in Tests
  */
-public class JmsResourceManagementExtension implements BeforeAllCallback, BeforeEachCallback, AfterAllCallback, CloseableResource {
+public class JmsResourceManagementExtension implements BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
 
-    private final JmsMessageConsumerPool jmsMessageConsumerPool;
-
-    private final JmsMessageProducerFactory jmsMessageProducerFactory;
-
-    private static boolean registered = false;
+    static final String TEST_SUITE_SHUTDOWN_JMS_RESOURCE_CLEANUP_HOOK = "JMS_RESOURCE_CLEANUP_HOOK";
+    static final String TEST_SUITE_SHUTDOWN_EXECUTION_TIMER_HOOK = "EXECUTION_TIMER_HOOK";
+    private final JmsResourcesContextProvider jmsResourcesContextProvider;
 
     public JmsResourceManagementExtension() {
-        this(new JmsSingletonResourceProvider().getJmsMessageConsumerPool(),
-                new JmsSingletonResourceProvider().getJmsMessageProducerFactory());
+        this(new JmsResourcesContextProvider());
 
     }
 
     @VisibleForTesting
-    JmsResourceManagementExtension(JmsMessageConsumerPool jmsMessageConsumerPool, JmsMessageProducerFactory jmsMessageProducerFactory) {
-        this.jmsMessageConsumerPool = jmsMessageConsumerPool;
-        this.jmsMessageProducerFactory = jmsMessageProducerFactory;
+    JmsResourceManagementExtension(final JmsResourcesContextProvider jmsResourcesContextProvider) {
+        this.jmsResourcesContextProvider = jmsResourcesContextProvider;
     }
 
     @Override
-    public void beforeAll(final ExtensionContext context) {
-        if (!registered) { //Not a nice way but there is no other elegant way to achieve this i.e. register hook only once
-            registered = true;
-            context.getRoot().getStore(GLOBAL).put("Clean JMS resources", this);
-        }
+    public void beforeAll(final ExtensionContext extensionContext) {
+        final Store globalStore = getGlobalStore(extensionContext);
+        registerTestSuiteShutdownHookForJmsResourceCleanup(globalStore);
+        registerTestSuiteShutdownHookForExecutionTimer(globalStore);
     }
 
     /**
@@ -46,24 +41,31 @@ public class JmsResourceManagementExtension implements BeforeAllCallback, Before
      */
     @Override
     public void beforeEach(final ExtensionContext extensionContext) {
-        jmsMessageConsumerPool.clearMessages();
+        jmsResourcesContextProvider.get().clearMessages();
     }
 
     /**
-     * Closes all consumers that are created across all tests within a single Test class.  So, consumers can't be reused across different Test classes (Without this recycling, number of message consumers may outgrow and can cause resource exhaustion)
+     * Closes all consumers/producers that are created across all tests within a single Test class.  So, consumers/producers can't be reused across different Test classes (Without this recycling, number of message consumers may outgrow and can cause resource exhaustion)
      */
     @Override
     public void afterAll(final ExtensionContext extensionContext) {
-        jmsMessageConsumerPool.closeConsumers();
+        jmsResourcesContextProvider.get().closeConsumersAndProducers();
     }
 
-    /**
-     * This is invoked at the end of test suite (through hook registered in beforeAll() method).
-     * This promotes reusing jms session and connection across entire test suite
-     */
-    @Override
-    public void close() {
-        jmsMessageConsumerPool.close();
-        jmsMessageProducerFactory.close();
+    private Store getGlobalStore(ExtensionContext extensionContext) {
+        return extensionContext.getRoot().getStore(GLOBAL);
+    }
+
+    private void registerTestSuiteShutdownHookForJmsResourceCleanup(Store globalStore) {
+        if (globalStore.get(TEST_SUITE_SHUTDOWN_JMS_RESOURCE_CLEANUP_HOOK) == null) {
+            System.out.println("----------Registering test suite shutdown hook (jms resource cleanup)-------------");
+            globalStore.put(TEST_SUITE_SHUTDOWN_JMS_RESOURCE_CLEANUP_HOOK, jmsResourcesContextProvider);
+        }
+    }
+
+    private void registerTestSuiteShutdownHookForExecutionTimer(Store globalStore) {
+        if (globalStore.get(TEST_SUITE_SHUTDOWN_EXECUTION_TIMER_HOOK) == null) {
+            globalStore.put(TEST_SUITE_SHUTDOWN_EXECUTION_TIMER_HOOK, new TestSuiteExecutionTimeCalculator());
+        }
     }
 }

@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * Provides method to clear messages from all cached consumers (so that same consumers can be reused across tests)
  * Provides method to close cached consumers without closing underlying session and connection (provides capability to recycle consumers after each Test class)
  * Provides method to close underlying session/connection
- * This class is created through {@link JmsSingletonResourceProvider} which maintains singleton ness
  */
 class JmsMessageConsumerPool {
 

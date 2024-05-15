@@ -16,16 +16,16 @@ import static org.mockito.Mockito.*;
 class JmsMessageConsumerClientBuilderTest {
 
     @Mock
-    private JmsSingletonResourceProvider jmsSingletonResourceProvider;
+    private JmsResourcesContext jmsResourcesContext;
 
     @Test
     void shouldStartConsumerAndReturnMessageConsumerClient() {
         final JmsMessageConsumerClient jmsMessageConsumerClient = mock(JmsMessageConsumerClient.class);
         final JmsMessageClientFactory jmsMessageClientFactory = mock(JmsMessageClientFactory.class);
-        when(jmsSingletonResourceProvider.getJmsMessageClientFactory()).thenReturn(jmsMessageClientFactory);
+        when(jmsResourcesContext.getJmsMessageClientFactory()).thenReturn(jmsMessageClientFactory);
         when(jmsMessageClientFactory.createJmsMessageConsumerClient()).thenReturn(jmsMessageConsumerClient);
 
-        final JmsMessageConsumerClient result = new JmsMessageConsumerClientBuilder("jms.topic.public.event", jmsSingletonResourceProvider)
+        final JmsMessageConsumerClient result = new JmsMessageConsumerClientBuilder("jms.topic.public.event", jmsResourcesContext)
                 .withEventNames("event1").build();
 
         assertThat(result, is(jmsMessageConsumerClient));
@@ -35,7 +35,7 @@ class JmsMessageConsumerClientBuilderTest {
     @Test
     void shouldThrowErrorWhenEventNameIsNull() {
         final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class,
-                () -> new JmsMessageConsumerClientBuilder("topicName", jmsSingletonResourceProvider)
+                () -> new JmsMessageConsumerClientBuilder("topicName", jmsResourcesContext)
                 .withEventNames(null).build());
 
         assertThat(e.getMessage(), is("eventName must be supplied"));
@@ -44,7 +44,7 @@ class JmsMessageConsumerClientBuilderTest {
     @Test
     void shouldThrowErrorWhenEventNameIsEmpty() {
         final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class,
-                () -> new JmsMessageConsumerClientBuilder("topicName", jmsSingletonResourceProvider)
+                () -> new JmsMessageConsumerClientBuilder("topicName", jmsResourcesContext)
                 .withEventNames("").build());
 
         assertThat(e.getMessage(), is("eventName must be supplied"));

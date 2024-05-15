@@ -13,6 +13,8 @@ import static uk.gov.justice.services.test.utils.core.messaging.QueueUriProvider
 /**
  * Use {@link JmsMessageProducerClientBuilder} to create instance
  * It's safe to create multiple instances of this class with same parameters, as underlying jms producer is cached and it retrieves existing producer
+ *  It's not recommended to cache these classes across Test classes, reusability is recommended only within same Test class. After each Test class all cached producers are closed.
+ *  Hence, don't create instances of this class in Helper/Utility classes and assign it to static class variables. Doing this within a Test class is totally fine though
  * Life cycle of underlying jms producer is not managed by this class (Managed by {@link JmsMessageConsumerPool} through Junit hooks {@link JmsResourceManagementExtension}) and hence these instances can be created without worrying about cleaning underlying jms resources
  * This class provides all various helper methods to send message to underlying topic
  * If there is no convenient method that you are looking for, please enhance this class rather than creating them in context ITs. This approach avoids duplication and promotes reusability across different context Integration tests

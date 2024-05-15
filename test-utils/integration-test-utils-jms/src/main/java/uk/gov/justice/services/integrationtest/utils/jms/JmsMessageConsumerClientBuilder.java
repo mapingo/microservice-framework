@@ -26,13 +26,13 @@ public class JmsMessageConsumerClientBuilder {
     }
 
     @VisibleForTesting
-    JmsMessageConsumerClientBuilder(final String topicName, final JmsSingletonResourceProvider jmsSingletonResourceProvider) {
+    JmsMessageConsumerClientBuilder(final String topicName, final JmsResourcesContext jmsResourcesContext) {
         this.topicName = topicName;
-        this.jmsMessageClientFactory = jmsSingletonResourceProvider.getJmsMessageClientFactory();
+        this.jmsMessageClientFactory = jmsResourcesContext.getJmsMessageClientFactory();
     }
 
     private JmsMessageConsumerClientBuilder(final String topicName) {
-        this(topicName, new JmsSingletonResourceProvider());
+        this(topicName, new JmsResourcesContextProvider().get());
     }
 
     public JmsMessageConsumerClientBuilder withEventNames(final String eventName, final String...additionalEventNames) {
