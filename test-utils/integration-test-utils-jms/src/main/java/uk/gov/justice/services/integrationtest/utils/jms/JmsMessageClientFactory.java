@@ -27,12 +27,12 @@ class JmsMessageClientFactory {
         this.jmsMessageConsumerPool = jmsMessageConsumerPool;
     }
 
-    JmsMessageProducerClient createJmsMessageProducerClient() {
-        return new JmsMessageProducerClient(jmsMessageProducerFactory);
+    DefaultJmsMessageProducerClient createJmsMessageProducerClient() {
+        return new DefaultJmsMessageProducerClient(jmsMessageProducerFactory);
     }
 
-    JmsMessageConsumerClient createJmsMessageConsumerClient() {
-        return new JmsMessageConsumerClient(jmsMessageConsumerPool,
+    DefaultJmsMessageConsumerClient createJmsMessageConsumerClient() {
+        return new DefaultJmsMessageConsumerClient(jmsMessageConsumerPool,
                 jmsMessageReader,
                 toStringMessageConverter,
                 toJsonEnvelopeMessageConverter,

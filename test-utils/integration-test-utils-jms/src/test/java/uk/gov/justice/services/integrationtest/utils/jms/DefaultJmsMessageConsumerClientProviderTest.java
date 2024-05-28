@@ -13,30 +13,30 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class JmsMessageConsumerClientBuilderTest {
+class DefaultJmsMessageConsumerClientProviderTest {
 
     @Mock
     private JmsResourcesContext jmsResourcesContext;
 
     @Test
     void shouldStartConsumerAndReturnMessageConsumerClient() {
-        final JmsMessageConsumerClient jmsMessageConsumerClient = mock(JmsMessageConsumerClient.class);
+        final DefaultJmsMessageConsumerClient defaultJmsMessageConsumerClient = mock(DefaultJmsMessageConsumerClient.class);
         final JmsMessageClientFactory jmsMessageClientFactory = mock(JmsMessageClientFactory.class);
         when(jmsResourcesContext.getJmsMessageClientFactory()).thenReturn(jmsMessageClientFactory);
-        when(jmsMessageClientFactory.createJmsMessageConsumerClient()).thenReturn(jmsMessageConsumerClient);
+        when(jmsMessageClientFactory.createJmsMessageConsumerClient()).thenReturn(defaultJmsMessageConsumerClient);
 
-        final JmsMessageConsumerClient result = new JmsMessageConsumerClientBuilder("jms.topic.public.event", jmsResourcesContext)
-                .withEventNames("event1").build();
+        final DefaultJmsMessageConsumerClient result = new JmsMessageConsumerClientProvider("jms.topic.public.event", jmsResourcesContext)
+                .withEventNames("event1").getMessageConsumerClient();
 
-        assertThat(result, is(jmsMessageConsumerClient));
-        verify(jmsMessageConsumerClient).startConsumer("jms.topic.public.event", List.of("event1"));
+        assertThat(result, is(defaultJmsMessageConsumerClient));
+        verify(defaultJmsMessageConsumerClient).startConsumer("jms.topic.public.event", List.of("event1"));
     }
 
     @Test
     void shouldThrowErrorWhenEventNameIsNull() {
         final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class,
-                () -> new JmsMessageConsumerClientBuilder("topicName", jmsResourcesContext)
-                .withEventNames(null).build());
+                () -> new JmsMessageConsumerClientProvider("topicName", jmsResourcesContext)
+                .withEventNames(null).getMessageConsumerClient());
 
         assertThat(e.getMessage(), is("eventName must be supplied"));
     }
@@ -44,8 +44,8 @@ class JmsMessageConsumerClientBuilderTest {
     @Test
     void shouldThrowErrorWhenEventNameIsEmpty() {
         final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class,
-                () -> new JmsMessageConsumerClientBuilder("topicName", jmsResourcesContext)
-                .withEventNames("").build());
+                () -> new JmsMessageConsumerClientProvider("topicName", jmsResourcesContext)
+                .withEventNames("").getMessageConsumerClient());
 
         assertThat(e.getMessage(), is("eventName must be supplied"));
     }

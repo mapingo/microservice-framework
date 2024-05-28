@@ -4,6 +4,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+### Changed
+- Created interfaces for JmsMessageConsumerClient and JmsMessageProducerClient
+- Renamed JmsMessageProducerClientBuilder to JmsMessageProducerClientProvider
+- Renamed JmsMessageConsumerClientBuilder to JmsMessageConsumerClientProvider
 
 ## [17.4.4] - 2024-05-15
 ### Changed

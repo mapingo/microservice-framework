@@ -35,21 +35,21 @@ class JmsMessageClientFactoryTest {
 
     @Test
     void shouldCreateMessageProducerClient() {
-        final JmsMessageProducerClient jmsMessageProducerClient = jmsMessageClientFactory.createJmsMessageProducerClient();
+        final DefaultJmsMessageProducerClient defaultJmsMessageProducerClient = jmsMessageClientFactory.createJmsMessageProducerClient();
 
-        assertNotNull(jmsMessageProducerClient);
-        assertThat(getValueOfField(jmsMessageProducerClient, "jmsMessageProducerFactory", JmsMessageProducerFactory.class), is(jmsMessageProducerFactory));
+        assertNotNull(defaultJmsMessageProducerClient);
+        assertThat(getValueOfField(defaultJmsMessageProducerClient, "jmsMessageProducerFactory", JmsMessageProducerFactory.class), is(jmsMessageProducerFactory));
     }
 
     @Test
     void shouldCreateMessageConsumerClient() {
-        final JmsMessageConsumerClient jmsMessageConsumerClient = jmsMessageClientFactory.createJmsMessageConsumerClient();
+        final DefaultJmsMessageConsumerClient defaultJmsMessageConsumerClient = jmsMessageClientFactory.createJmsMessageConsumerClient();
 
-        assertNotNull(jmsMessageConsumerClient);
-        assertThat(getValueOfField(jmsMessageConsumerClient, "jmsMessageConsumerPool", JmsMessageConsumerPool.class), is(jmsMessageConsumerPool));
-        assertThat(getValueOfField(jmsMessageConsumerClient, "jmsMessageReader", JmsMessageReader.class), is(jmsMessageReader));
-        assertThat(getValueOfField(jmsMessageConsumerClient, "toStringMessageConverter", ToStringMessageConverter.class), is(toStringMessageConverter));
-        assertThat(getValueOfField(jmsMessageConsumerClient, "toJsonEnvelopeMessageConverter", ToJsonEnvelopeMessageConverter.class), is(toJsonEnvelopeMessageConverter));
-        assertThat(getValueOfField(jmsMessageConsumerClient, "toJsonPathMessageConverter", ToJsonPathMessageConverter.class), is(toJsonPathMessageConverter));
+        assertNotNull(defaultJmsMessageConsumerClient);
+        assertThat(getValueOfField(defaultJmsMessageConsumerClient, "jmsMessageConsumerPool", JmsMessageConsumerPool.class), is(jmsMessageConsumerPool));
+        assertThat(getValueOfField(defaultJmsMessageConsumerClient, "jmsMessageReader", JmsMessageReader.class), is(jmsMessageReader));
+        assertThat(getValueOfField(defaultJmsMessageConsumerClient, "toStringMessageConverter", ToStringMessageConverter.class), is(toStringMessageConverter));
+        assertThat(getValueOfField(defaultJmsMessageConsumerClient, "toJsonEnvelopeMessageConverter", ToJsonEnvelopeMessageConverter.class), is(toJsonEnvelopeMessageConverter));
+        assertThat(getValueOfField(defaultJmsMessageConsumerClient, "toJsonPathMessageConverter", ToJsonPathMessageConverter.class), is(toJsonPathMessageConverter));
     }
 }

@@ -11,21 +11,21 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class JmsMessageProducerClientBuilderTest {
+class DefaultJmsMessageProducerClientProviderTest {
 
     @Mock
     private JmsResourcesContext jmsResourcesContext;
 
     @Test
-    void shouldBuildAndReturnMessageProducerClient() {
-        final JmsMessageProducerClient jmsMessageProducerClient = mock(JmsMessageProducerClient.class);
+    void shouldGetMessageProducerClientAndReturnMessageProducerClient() {
+        final DefaultJmsMessageProducerClient defaultJmsMessageProducerClient = mock(DefaultJmsMessageProducerClient.class);
         final JmsMessageClientFactory jmsMessageClientFactory = mock(JmsMessageClientFactory.class);
         when(jmsResourcesContext.getJmsMessageClientFactory()).thenReturn(jmsMessageClientFactory);
-        when(jmsMessageClientFactory.createJmsMessageProducerClient()).thenReturn(jmsMessageProducerClient);
+        when(jmsMessageClientFactory.createJmsMessageProducerClient()).thenReturn(defaultJmsMessageProducerClient);
 
-        final JmsMessageProducerClient result = new JmsMessageProducerClientBuilder("jms.topic.public.event", jmsResourcesContext)
-                .build();
+        final JmsMessageProducerClient result = new JmsMessageProducerClientProvider("jms.topic.public.event", jmsResourcesContext)
+                .getMessageProducerClient();
 
-        assertThat(result, is(jmsMessageProducerClient));
+        assertThat(result, is(defaultJmsMessageProducerClient));
     }
 }

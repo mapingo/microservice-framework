@@ -29,7 +29,7 @@ import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
 @ExtendWith(MockitoExtension.class)
-class JmsMessageConsumerClientTest {
+class DefaultJmsMessageConsumerClientTest {
 
     private static final String TOPIC_NAME = "jms.topic.public.event";
     private static final List<String> EVENT_NAMES = List.of("event1");
@@ -48,11 +48,11 @@ class JmsMessageConsumerClientTest {
     @Mock
     private ToJsonPathMessageConverter toJsonPathMessageConverter;
 
-    private JmsMessageConsumerClient jmsMessageConsumerClient;
+    private DefaultJmsMessageConsumerClient defaultJmsMessageConsumerClient;
 
     @BeforeEach
     void setUp() {
-        jmsMessageConsumerClient = new JmsMessageConsumerClient(jmsMessageConsumerPool,
+        defaultJmsMessageConsumerClient = new DefaultJmsMessageConsumerClient(jmsMessageConsumerPool,
                 jmsMessageReader,
                 toStringMessageConverter,
                 toJsonEnvelopeMessageConverter,
@@ -63,9 +63,9 @@ class JmsMessageConsumerClientTest {
     void shouldStartConsumer() {
         when(jmsMessageConsumerPool.getOrCreateMessageConsumer(TOPIC_NAME, QUEUE_URI, EVENT_NAMES)).thenReturn(messageConsumer);
 
-        jmsMessageConsumerClient.startConsumer(TOPIC_NAME, EVENT_NAMES);
+        defaultJmsMessageConsumerClient.startConsumer(TOPIC_NAME, EVENT_NAMES);
 
-        assertThat(getValueOfField(jmsMessageConsumerClient, "messageConsumer", MessageConsumer.class), is(messageConsumer));
+        assertThat(getValueOfField(defaultJmsMessageConsumerClient, "messageConsumer", MessageConsumer.class), is(messageConsumer));
     }
 
     @Nested
@@ -73,7 +73,7 @@ class JmsMessageConsumerClientTest {
 
         @BeforeEach
         void setUp() {
-            setField(jmsMessageConsumerClient, "messageConsumer", messageConsumer);
+            setField(defaultJmsMessageConsumerClient, "messageConsumer", messageConsumer);
         }
 
         @Nested
@@ -82,7 +82,7 @@ class JmsMessageConsumerClientTest {
             void shouldDelegate() throws Exception {
                 when(jmsMessageReader.retrieveMessageNoWait(messageConsumer, toStringMessageConverter)).thenReturn(of("message"));
 
-                final Optional<String> result = jmsMessageConsumerClient.retrieveMessageNoWait();
+                final Optional<String> result = defaultJmsMessageConsumerClient.retrieveMessageNoWait();
 
                 assertThat(result, is(of("message")));
             }
@@ -91,7 +91,7 @@ class JmsMessageConsumerClientTest {
             void shouldConvertJmsException() throws Exception {
                 doThrow(jmsException).when(jmsMessageReader).retrieveMessageNoWait(messageConsumer, toStringMessageConverter);
 
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageNoWait());
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageNoWait());
 
                 assertThat(e.getMessage(), is("Failed to read message"));
                 assertThat(e.getCause(), is(jmsException));
@@ -99,8 +99,8 @@ class JmsMessageConsumerClientTest {
 
             @Test
             void shouldThrowExceptionWhenMessageConsumerNotStarted() {
-                setField(jmsMessageConsumerClient, "messageConsumer", null);
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageNoWait());
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", null);
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageNoWait());
 
                 assertThat(e.getMessage(), is("MessageConsumer is not started. Please call startConsumer(...) first"));
             }
@@ -111,20 +111,20 @@ class JmsMessageConsumerClientTest {
 
             @Test
             void shouldDelegate() throws Exception {
-                setField(jmsMessageConsumerClient, "messageConsumer", messageConsumer);
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", messageConsumer);
                 when(jmsMessageReader.retrieveMessage(messageConsumer, toStringMessageConverter, 20_000)).thenReturn(of("message"));
 
-                final Optional<String> result = jmsMessageConsumerClient.retrieveMessage();
+                final Optional<String> result = defaultJmsMessageConsumerClient.retrieveMessage();
 
                 assertThat(result, is(of("message")));
             }
 
             @Test
             void shouldConvertJmsException() throws Exception {
-                setField(jmsMessageConsumerClient, "messageConsumer", messageConsumer);
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", messageConsumer);
                 doThrow(jmsException).when(jmsMessageReader).retrieveMessage(messageConsumer, toStringMessageConverter, 20_000);
 
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessage());
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessage());
 
                 assertThat(e.getMessage(), is("Failed to read message"));
                 assertThat(e.getCause(), is(jmsException));
@@ -132,8 +132,8 @@ class JmsMessageConsumerClientTest {
 
             @Test
             void shouldThrowExceptionWhenMessageConsumerNotStarted() {
-                setField(jmsMessageConsumerClient, "messageConsumer", null);
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessage());
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", null);
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessage());
 
                 assertThat(e.getMessage(), is("MessageConsumer is not started. Please call startConsumer(...) first"));
             }
@@ -144,20 +144,20 @@ class JmsMessageConsumerClientTest {
 
             @Test
             void shouldDelegate() throws Exception {
-                setField(jmsMessageConsumerClient, "messageConsumer", messageConsumer);
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", messageConsumer);
                 when(jmsMessageReader.retrieveMessage(messageConsumer, toStringMessageConverter, 1000)).thenReturn(of("message"));
 
-                final Optional<String> result = jmsMessageConsumerClient.retrieveMessage(1000);
+                final Optional<String> result = defaultJmsMessageConsumerClient.retrieveMessage(1000);
 
                 assertThat(result, is(of("message")));
             }
 
             @Test
             void shouldConvertJmsException() throws Exception {
-                setField(jmsMessageConsumerClient, "messageConsumer", messageConsumer);
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", messageConsumer);
                 doThrow(jmsException).when(jmsMessageReader).retrieveMessage(messageConsumer, toStringMessageConverter, 1000);
 
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessage(1000));
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessage(1000));
 
                 assertThat(e.getMessage(), is("Failed to read message"));
                 assertThat(e.getCause(), is(jmsException));
@@ -165,8 +165,8 @@ class JmsMessageConsumerClientTest {
 
             @Test
             void shouldThrowExceptionWhenMessageConsumerNotStarted() {
-                setField(jmsMessageConsumerClient, "messageConsumer", null);
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessage(1000));
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", null);
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessage(1000));
 
                 assertThat(e.getMessage(), is("MessageConsumer is not started. Please call startConsumer(...) first"));
             }
@@ -179,7 +179,7 @@ class JmsMessageConsumerClientTest {
 
         @BeforeEach
         void setUp() {
-            setField(jmsMessageConsumerClient, "messageConsumer", messageConsumer);
+            setField(defaultJmsMessageConsumerClient, "messageConsumer", messageConsumer);
         }
 
         @Nested
@@ -189,7 +189,7 @@ class JmsMessageConsumerClientTest {
             void shouldDelegate() throws Exception {
                 when(jmsMessageReader.retrieveMessageNoWait(messageConsumer, toJsonEnvelopeMessageConverter)).thenReturn(of(jsonEnvelope));
 
-                final Optional<JsonEnvelope> result = jmsMessageConsumerClient.retrieveMessageAsJsonEnvelopeNoWait();
+                final Optional<JsonEnvelope> result = defaultJmsMessageConsumerClient.retrieveMessageAsJsonEnvelopeNoWait();
 
                 assertThat(result, is(of(jsonEnvelope)));
             }
@@ -198,7 +198,7 @@ class JmsMessageConsumerClientTest {
             void shouldConvertJmsException() throws Exception {
                 doThrow(jmsException).when(jmsMessageReader).retrieveMessageNoWait(messageConsumer, toJsonEnvelopeMessageConverter);
 
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageAsJsonEnvelopeNoWait());
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageAsJsonEnvelopeNoWait());
 
                 assertThat(e.getMessage(), is("Failed to read message"));
                 assertThat(e.getCause(), is(jmsException));
@@ -206,8 +206,8 @@ class JmsMessageConsumerClientTest {
 
             @Test
             void shouldThrowExceptionWhenMessageConsumerNotStarted() {
-                setField(jmsMessageConsumerClient, "messageConsumer", null);
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageAsJsonEnvelopeNoWait());
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", null);
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageAsJsonEnvelopeNoWait());
 
                 assertThat(e.getMessage(), is("MessageConsumer is not started. Please call startConsumer(...) first"));
             }
@@ -219,7 +219,7 @@ class JmsMessageConsumerClientTest {
             void shouldDelegate() throws Exception {
                 when(jmsMessageReader.retrieveMessage(messageConsumer, toJsonEnvelopeMessageConverter, 20_000)).thenReturn(of(jsonEnvelope));
 
-                final Optional<JsonEnvelope> result = jmsMessageConsumerClient.retrieveMessageAsJsonEnvelope();
+                final Optional<JsonEnvelope> result = defaultJmsMessageConsumerClient.retrieveMessageAsJsonEnvelope();
 
                 assertThat(result, is(of(jsonEnvelope)));
             }
@@ -228,7 +228,7 @@ class JmsMessageConsumerClientTest {
             void shouldConvertJmsException() throws Exception {
                 doThrow(jmsException).when(jmsMessageReader).retrieveMessage(messageConsumer, toJsonEnvelopeMessageConverter, 20_000);
 
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageAsJsonEnvelope());
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageAsJsonEnvelope());
 
                 assertThat(e.getMessage(), is("Failed to read message"));
                 assertThat(e.getCause(), is(jmsException));
@@ -236,8 +236,8 @@ class JmsMessageConsumerClientTest {
 
             @Test
             void shouldThrowExceptionWhenMessageConsumerNotStarted() {
-                setField(jmsMessageConsumerClient, "messageConsumer", null);
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageAsJsonEnvelope());
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", null);
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageAsJsonEnvelope());
 
                 assertThat(e.getMessage(), is("MessageConsumer is not started. Please call startConsumer(...) first"));
             }
@@ -250,7 +250,7 @@ class JmsMessageConsumerClientTest {
             void shouldDelegate() throws Exception {
                 when(jmsMessageReader.retrieveMessage(messageConsumer, toJsonEnvelopeMessageConverter, 1000)).thenReturn(of(jsonEnvelope));
 
-                final Optional<JsonEnvelope> result = jmsMessageConsumerClient.retrieveMessageAsJsonEnvelope(1000);
+                final Optional<JsonEnvelope> result = defaultJmsMessageConsumerClient.retrieveMessageAsJsonEnvelope(1000);
 
                 assertThat(result, is(of(jsonEnvelope)));
             }
@@ -259,7 +259,7 @@ class JmsMessageConsumerClientTest {
             void shouldConvertJmsException() throws Exception {
                 doThrow(jmsException).when(jmsMessageReader).retrieveMessage(messageConsumer, toJsonEnvelopeMessageConverter, 1000);
 
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageAsJsonEnvelope(1000));
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageAsJsonEnvelope(1000));
 
                 assertThat(e.getMessage(), is("Failed to read message"));
                 assertThat(e.getCause(), is(jmsException));
@@ -267,8 +267,8 @@ class JmsMessageConsumerClientTest {
 
             @Test
             void shouldThrowExceptionWhenMessageConsumerNotStarted() {
-                setField(jmsMessageConsumerClient, "messageConsumer", null);
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageAsJsonEnvelope(1000));
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", null);
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageAsJsonEnvelope(1000));
 
                 assertThat(e.getMessage(), is("MessageConsumer is not started. Please call startConsumer(...) first"));
             }
@@ -282,7 +282,7 @@ class JmsMessageConsumerClientTest {
 
         @BeforeEach
         void setUp() {
-            setField(jmsMessageConsumerClient, "messageConsumer", messageConsumer);
+            setField(defaultJmsMessageConsumerClient, "messageConsumer", messageConsumer);
         }
 
         @Nested
@@ -291,7 +291,7 @@ class JmsMessageConsumerClientTest {
             void shouldDelegate() throws Exception {
                 when(jmsMessageReader.retrieveMessageNoWait(messageConsumer, toJsonPathMessageConverter)).thenReturn(of(jsonPath));
 
-                final Optional<JsonPath> result = jmsMessageConsumerClient.retrieveMessageAsJsonPathNoWait();
+                final Optional<JsonPath> result = defaultJmsMessageConsumerClient.retrieveMessageAsJsonPathNoWait();
 
                 assertThat(result, is(of(jsonPath)));
             }
@@ -300,7 +300,7 @@ class JmsMessageConsumerClientTest {
             void shouldConvertJmsException() throws Exception {
                 doThrow(jmsException).when(jmsMessageReader).retrieveMessageNoWait(messageConsumer, toJsonPathMessageConverter);
 
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageAsJsonPathNoWait());
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageAsJsonPathNoWait());
 
                 assertThat(e.getMessage(), is("Failed to read message"));
                 assertThat(e.getCause(), is(jmsException));
@@ -308,8 +308,8 @@ class JmsMessageConsumerClientTest {
 
             @Test
             void shouldThrowExceptionWhenMessageConsumerNotStarted() {
-                setField(jmsMessageConsumerClient, "messageConsumer", null);
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageAsJsonPathNoWait());
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", null);
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageAsJsonPathNoWait());
 
                 assertThat(e.getMessage(), is("MessageConsumer is not started. Please call startConsumer(...) first"));
             }
@@ -322,7 +322,7 @@ class JmsMessageConsumerClientTest {
             void shouldDelegate() throws Exception {
                 when(jmsMessageReader.retrieveMessage(messageConsumer, toJsonPathMessageConverter, 20_000)).thenReturn(of(jsonPath));
 
-                final Optional<JsonPath> result = jmsMessageConsumerClient.retrieveMessageAsJsonPath();
+                final Optional<JsonPath> result = defaultJmsMessageConsumerClient.retrieveMessageAsJsonPath();
 
                 assertThat(result, is(of(jsonPath)));
             }
@@ -331,7 +331,7 @@ class JmsMessageConsumerClientTest {
             void shouldConvertJmsException() throws Exception {
                 doThrow(jmsException).when(jmsMessageReader).retrieveMessage(messageConsumer, toJsonPathMessageConverter, 20_000);
 
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageAsJsonPath());
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageAsJsonPath());
 
                 assertThat(e.getMessage(), is("Failed to read message"));
                 assertThat(e.getCause(), is(jmsException));
@@ -339,8 +339,8 @@ class JmsMessageConsumerClientTest {
 
             @Test
             void shouldThrowExceptionWhenMessageConsumerNotStarted() {
-                setField(jmsMessageConsumerClient, "messageConsumer", null);
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageAsJsonPath());
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", null);
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageAsJsonPath());
 
                 assertThat(e.getMessage(), is("MessageConsumer is not started. Please call startConsumer(...) first"));
             }
@@ -353,7 +353,7 @@ class JmsMessageConsumerClientTest {
             void shouldDelegate() throws Exception {
                 when(jmsMessageReader.retrieveMessage(messageConsumer, toJsonPathMessageConverter, 1000)).thenReturn(of(jsonPath));
 
-                final Optional<JsonPath> result = jmsMessageConsumerClient.retrieveMessageAsJsonPath(1000);
+                final Optional<JsonPath> result = defaultJmsMessageConsumerClient.retrieveMessageAsJsonPath(1000);
 
                 assertThat(result, is(of(jsonPath)));
             }
@@ -362,7 +362,7 @@ class JmsMessageConsumerClientTest {
             void shouldConvertJmsException() throws Exception {
                 doThrow(jmsException).when(jmsMessageReader).retrieveMessage(messageConsumer, toJsonPathMessageConverter, 1000);
 
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageAsJsonPath(1000));
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageAsJsonPath(1000));
 
                 assertThat(e.getMessage(), is("Failed to read message"));
                 assertThat(e.getCause(), is(jmsException));
@@ -370,8 +370,8 @@ class JmsMessageConsumerClientTest {
 
             @Test
             void shouldThrowExceptionWhenMessageConsumerNotStarted() {
-                setField(jmsMessageConsumerClient, "messageConsumer", null);
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessageAsJsonPath(1000));
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", null);
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessageAsJsonPath(1000));
 
                 assertThat(e.getMessage(), is("MessageConsumer is not started. Please call startConsumer(...) first"));
             }
@@ -388,7 +388,7 @@ class JmsMessageConsumerClientTest {
                         .thenReturn(of(jsonPath1))
                         .thenReturn(of(jsonPath2));
 
-                final List<JsonPath> result = jmsMessageConsumerClient.retrieveMessagesAsJsonPath(2);
+                final List<JsonPath> result = defaultJmsMessageConsumerClient.retrieveMessagesAsJsonPath(2);
 
                 assertThat(result.size(), is(2));
                 assertThat(result, hasItems(jsonPath1, jsonPath2));
@@ -398,15 +398,15 @@ class JmsMessageConsumerClientTest {
             void shouldReturnNullWhenJmsReaderReturnsEmpty() throws Exception {
                 when(jmsMessageReader.retrieveMessage(messageConsumer, toJsonPathMessageConverter, 20_000)).thenReturn(empty());
 
-                final List<JsonPath> result = jmsMessageConsumerClient.retrieveMessagesAsJsonPath(1);
+                final List<JsonPath> result = defaultJmsMessageConsumerClient.retrieveMessagesAsJsonPath(1);
 
                 assertNull(result.get(0));
             }
 
             @Test
             void shouldThrowExceptionWhenMessageConsumerNotStarted() {
-                setField(jmsMessageConsumerClient, "messageConsumer", null);
-                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.retrieveMessagesAsJsonPath(1));
+                setField(defaultJmsMessageConsumerClient, "messageConsumer", null);
+                final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.retrieveMessagesAsJsonPath(1));
 
                 assertThat(e.getMessage(), is("MessageConsumer is not started. Please call startConsumer(...) first"));
             }
@@ -418,12 +418,12 @@ class JmsMessageConsumerClientTest {
 
         @BeforeEach
         void setUp() {
-            setField(jmsMessageConsumerClient, "messageConsumer", messageConsumer);
+            setField(defaultJmsMessageConsumerClient, "messageConsumer", messageConsumer);
         }
 
         @Test
         void shouldDelegate() throws Exception {
-            jmsMessageConsumerClient.clearMessages();
+            defaultJmsMessageConsumerClient.clearMessages();
 
             verify(jmsMessageReader).clear(messageConsumer);
         }
@@ -432,7 +432,7 @@ class JmsMessageConsumerClientTest {
         void shouldConvertJmsException() throws Exception {
             doThrow(jmsException).when(jmsMessageReader).clear(messageConsumer);
 
-            final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> jmsMessageConsumerClient.clearMessages());
+            final JmsMessagingClientException e = assertThrows(JmsMessagingClientException.class, () -> defaultJmsMessageConsumerClient.clearMessages());
 
             assertThat(e.getMessage(), is("Failed to clear messages"));
         }
