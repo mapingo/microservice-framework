@@ -8,6 +8,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 - Created interfaces for JmsMessageConsumerClient and JmsMessageProducerClient
 - Renamed JmsMessageProducerClientBuilder to JmsMessageProducerClientProvider
 - Renamed JmsMessageConsumerClientBuilder to JmsMessageConsumerClientProvider
+- Add LOG_RUNTIME_ID system command and it's handler to log command runtime id
+- Add REPLAY_EVENT_TO_EVENT_LISTENER and REPLAY_EVENT_TO_EVENT_INDEXER system commands to replay single event
 
 ## [17.4.4] - 2024-05-15
 ### Changed

@@ -30,6 +30,7 @@ import uk.gov.justice.services.jmx.runner.AsynchronousCommandRunner;
 import uk.gov.justice.services.jmx.state.observers.SystemCommandStateBean;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -59,6 +60,9 @@ public class SystemCommanderTest {
     private CommandConverter commandConverter;
 
     @Mock
+    private SystemCommandVerifier systemCommandVerifier;
+
+    @Mock
     private Logger logger;
 
     @InjectMocks
@@ -69,17 +73,40 @@ public class SystemCommanderTest {
 
         final UUID commandId = randomUUID();
         final TestCommand testCommand = new TestCommand();
+        final Optional<UUID> commandRuntimeId = empty();
 
         when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
-        when(asynchronousCommandRunner.run(testCommand)).thenReturn(commandId);
+        when(asynchronousCommandRunner.run(testCommand, commandRuntimeId)).thenReturn(commandId);
 
         assertThat(systemCommander.call("TEST_COMMAND", GUARDED), is(commandId));
 
-        final InOrder inOrder = inOrder(logger, asynchronousCommandRunner);
+        final InOrder inOrder = inOrder(logger, systemCommandVerifier, asynchronousCommandRunner);
 
         inOrder.verify(logger).info("Received System Command 'TEST_COMMAND'");
         inOrder.verify(logger).info("Running 'TEST_COMMAND' in 'GUARDED' mode");
-        inOrder.verify(asynchronousCommandRunner).run(testCommand);
+        inOrder.verify(systemCommandVerifier).verify(testCommand, commandRuntimeId);
+        inOrder.verify(asynchronousCommandRunner).run(testCommand, commandRuntimeId);
+    }
+
+    @Test
+    public void shouldRunTheSystemCommandWithIdIfSupported() throws Exception {
+
+        final UUID commandId = randomUUID();
+        final UUID commandRuntimeId = fromString("ce37d217-48a4-4a76-8a86-2e1d2d4c1ec2");
+        final TestCommand testCommand = new TestCommand();
+        final CommandRunMode commandRunMode = GUARDED;
+
+        when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
+        when(asynchronousCommandRunner.run(testCommand, of(commandRuntimeId))).thenReturn(commandId);
+
+        assertThat(systemCommander.callWithRuntimeId("TEST_COMMAND", commandRuntimeId, commandRunMode), is(commandId));
+
+        final InOrder inOrder = inOrder(logger, systemCommandVerifier, asynchronousCommandRunner);
+
+        inOrder.verify(logger).info("Received System Command 'TEST_COMMAND' with UUID '" + commandRuntimeId + "'");
+        inOrder.verify(logger).info("Running 'TEST_COMMAND' with UUID '%s' in 'GUARDED' mode".formatted(commandRuntimeId));
+        inOrder.verify(systemCommandVerifier).verify(testCommand, of(commandRuntimeId));
+        inOrder.verify(asynchronousCommandRunner).run(testCommand, of(commandRuntimeId));
     }
 
     @Test
@@ -114,13 +141,29 @@ public class SystemCommanderTest {
     }
 
     @Test
+    public void shouldFailIfPreviousSystemCommandWithIdIsInProgress() throws Exception {
+
+        final TestCommand testCommand = new TestCommand();
+
+        when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
+        when(systemCommandStateBean.commandInProgress(testCommand)).thenReturn(true);
+
+        try {
+            systemCommander.call("TEST_COMMAND", GUARDED);
+            fail();
+        } catch (final UnrunnableSystemCommandException expected) {
+            assertThat(expected.getMessage(), is("Cannot run system command 'TEST_COMMAND'. A previous call to that command is still in progress."));
+        }
+    }
+
+    @Test
     public void shouldIgnoreAnyPreviousCommandInProgressIfRunModeIsForced() throws Exception {
 
         final UUID commandId = randomUUID();
         final TestCommand testCommand = new TestCommand();
 
         when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
-        when(asynchronousCommandRunner.run(testCommand)).thenReturn(commandId);
+        when(asynchronousCommandRunner.run(testCommand, empty())).thenReturn(commandId);
 
         assertThat(systemCommander.call("TEST_COMMAND", FORCED), is(commandId));
 
@@ -128,7 +171,7 @@ public class SystemCommanderTest {
 
         inOrder.verify(logger).info("Received System Command 'TEST_COMMAND'");
         inOrder.verify(logger).info("Running 'TEST_COMMAND' in 'FORCED' mode");
-        inOrder.verify(asynchronousCommandRunner).run(testCommand);
+        inOrder.verify(asynchronousCommandRunner).run(testCommand, empty());
 
         verify(systemCommandStateBean, never()).commandInProgress(testCommand);
     }

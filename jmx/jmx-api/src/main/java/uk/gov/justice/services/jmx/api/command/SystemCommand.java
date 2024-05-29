@@ -6,4 +6,12 @@ public interface SystemCommand extends Serializable {
 
     String getName();
     String getDescription();
+
+    default boolean requiresCommandRuntimeId() {
+        return false;
+    }
+
+    default String commandRuntimeIdType() {
+        return "Not required";
+    }
 }

@@ -1,19 +1,17 @@
 package uk.gov.justice.services.jmx.runner;
 
-import static java.lang.String.format;
-import static javax.transaction.Transactional.TxType.NEVER;
-
-import uk.gov.justice.services.framework.utilities.exceptions.StackTraceProvider;
-import uk.gov.justice.services.jmx.api.SystemCommandInvocationFailedException;
+import org.slf4j.Logger;
+import uk.gov.justice.services.jmx.api.SystemCommandInvocationException;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.command.SystemCommandStore;
 
-import java.util.UUID;
-
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.Optional;
+import java.util.UUID;
 
-import org.slf4j.Logger;
+import static java.lang.String.format;
+import static javax.transaction.Transactional.TxType.NEVER;
 
 public class SystemCommandRunner {
 
@@ -21,23 +19,16 @@ public class SystemCommandRunner {
     private SystemCommandStore systemCommandStore;
 
     @Inject
-    private StackTraceProvider stackTraceProvider;
-
-    @Inject
     private Logger logger;
 
     @Transactional(NEVER)
-    public void run(final SystemCommand systemCommand, final UUID commandId) {
-
-        try {
-            systemCommandStore.findCommandProxy(systemCommand).invokeCommand(systemCommand, commandId);
-        } catch (final Throwable e) {
-            final String message = format("Failed to run System Command '%s'", systemCommand.getName());
-            logger.error(message, e);
-
-            throw new SystemCommandInvocationFailedException(
-                    message + ". Caused by " + e.getClass().getName() + ": " + e.getMessage(),
-                    stackTraceProvider.getStackTrace(e));
+    public void run(final SystemCommand systemCommand, final UUID commandId, final Optional<UUID> commandRuntimeId) throws SystemCommandInvocationException {
+        if(commandRuntimeId.isPresent())  {
+            logger.info(format("Running system command '%s' with %s '%s'", systemCommand.getName(), systemCommand.commandRuntimeIdType(), commandRuntimeId.get()));
+        } else {
+            logger.info(format("Running system command '%s'", systemCommand.getName()));
         }
+
+        systemCommandStore.findCommandProxy(systemCommand).invokeCommand(systemCommand, commandId, commandRuntimeId);
     }
 }

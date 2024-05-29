@@ -1,5 +1,6 @@
 package uk.gov.justice.services.jmx.runner;
 
+import static java.util.Optional.empty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.inOrder;
@@ -14,6 +15,7 @@ import uk.gov.justice.services.jmx.command.TestCommand;
 import uk.gov.justice.services.jmx.state.observers.SystemCommandStateBean;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.enterprise.concurrent.ManagedExecutorService;
@@ -40,6 +42,9 @@ public class AsynchronousCommandRunnerTest {
     private SystemCommandRunner systemCommandRunner;
 
     @Mock
+    private SystemCommandInvocationFailureHandler systemCommandInvocationFailureHandler;
+
+    @Mock
     private UtcClock clock;
 
     @InjectMocks
@@ -56,10 +61,11 @@ public class AsynchronousCommandRunnerTest {
 
         final ZonedDateTime now = new UtcClock().now();
         final SystemCommand systemCommand = new TestCommand();
+        final Optional<UUID> commandRuntimeId = empty();
 
         when(clock.now()).thenReturn(now);
 
-        final UUID commandId = asynchronousCommandRunner.run(systemCommand);
+        final UUID commandId = asynchronousCommandRunner.run(systemCommand, commandRuntimeId);
 
         final InOrder inOrder = inOrder(systemCommandStateBean, managedExecutorService);
 
@@ -80,5 +86,6 @@ public class AsynchronousCommandRunnerTest {
         assertThat(getValueOfField(runSystemCommandTask, "systemCommandRunner", SystemCommandRunner.class), is(systemCommandRunner));
         assertThat(getValueOfField(runSystemCommandTask, "systemCommand", SystemCommand.class), is(systemCommand));
         assertThat(getValueOfField(runSystemCommandTask, "commandId", UUID.class), is(commandId));
+        assertThat(getValueOfField(runSystemCommandTask, "systemCommandInvocationFailureHandler", SystemCommandInvocationFailureHandler.class), is(systemCommandInvocationFailureHandler));
     }
 }

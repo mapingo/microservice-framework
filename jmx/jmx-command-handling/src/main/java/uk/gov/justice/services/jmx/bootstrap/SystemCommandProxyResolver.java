@@ -3,6 +3,7 @@ package uk.gov.justice.services.jmx.bootstrap;
 import uk.gov.justice.services.framework.utilities.cdi.CdiInstanceResolver;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.bootstrap.blacklist.BlacklistedCommandsFilter;
+import uk.gov.justice.services.jmx.command.CommandHandlerMethodArgumentFactory;
 import uk.gov.justice.services.jmx.command.HandlerMethodValidator;
 import uk.gov.justice.services.jmx.command.HandlesSystemCommand;
 import uk.gov.justice.services.jmx.command.SystemCommandHandlerProxy;
@@ -21,16 +22,19 @@ public class SystemCommandProxyResolver {
     private final SystemCommandHandlerProxyFactory systemCommandHandlerProxyFactory;
     private final HandlerMethodValidator handlerMethodValidator;
     private final BlacklistedCommandsFilter blacklistedCommandsFilter;
+    private final CommandHandlerMethodArgumentFactory commandHandlerMethodArgumentFactory;
 
     public SystemCommandProxyResolver(
             final CdiInstanceResolver cdiInstanceResolver,
             final SystemCommandHandlerProxyFactory systemCommandHandlerProxyFactory,
             final HandlerMethodValidator handlerMethodValidator,
-            final BlacklistedCommandsFilter blacklistedCommandsFilter) {
+            final BlacklistedCommandsFilter blacklistedCommandsFilter,
+            final CommandHandlerMethodArgumentFactory commandHandlerMethodArgumentFactory) {
         this.cdiInstanceResolver = cdiInstanceResolver;
         this.systemCommandHandlerProxyFactory = systemCommandHandlerProxyFactory;
         this.handlerMethodValidator = handlerMethodValidator;
         this.blacklistedCommandsFilter = blacklistedCommandsFilter;
+        this.commandHandlerMethodArgumentFactory = commandHandlerMethodArgumentFactory;
     }
 
     public List<SystemCommandHandlerProxy> allCommandProxiesFor(final Bean<?> bean, final BeanManager beanManager, final Set<SystemCommand> blacklistedCommands) {
@@ -53,7 +57,8 @@ public class SystemCommandProxyResolver {
                             commandName,
                             method,
                             systemCommandHandler,
-                            handlerMethodValidator
+                            handlerMethodValidator,
+                            commandHandlerMethodArgumentFactory
                     );
                     
                     systemCommandHandlerProxies.add(systemCommandHandlerProxy);

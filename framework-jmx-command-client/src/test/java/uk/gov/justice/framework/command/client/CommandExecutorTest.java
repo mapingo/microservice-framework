@@ -47,6 +47,7 @@ public class CommandExecutorTest {
 
         final String commandName = "CATCHUP";
         final CommandRunMode commandRunMode = GUARDED;
+        final String commandRuntimeId = "SOME_ID";
 
         final SystemCommandDetails systemCommandDetails_1 = mock(SystemCommandDetails.class);
         final SystemCommandDetails systemCommandDetails_2 = mock(SystemCommandDetails.class);
@@ -58,10 +59,11 @@ public class CommandExecutorTest {
         when(commandLine.hasOption("list")).thenReturn(false);
         when(commandLine.getOptionValue("command")).thenReturn(commandName);
         when(commandRunModeSelector.selectCommandRunMode(commandLine)).thenReturn(commandRunMode);
+        when(commandLine.getOptionValue("crid")).thenReturn(commandRuntimeId);
 
         commandExecutor.executeCommand(commandLine, jmxParameters, systemCommands);
 
-        verify(systemCommandInvoker).runSystemCommand(commandName, jmxParameters, commandRunMode);
+        verify(systemCommandInvoker).runSystemCommand(commandName, jmxParameters, commandRuntimeId, commandRunMode);
     }
 
     @Test
