@@ -60,6 +60,6 @@ public class JmsResourcesContext {
          jmsMessageProducerFactory.close();
          stopWatch.stop();
 
-         System.out.printf("----------JMS resources closed in %s secs\n", stopWatch.getTime(TimeUnit.SECONDS));
+         System.out.printf("----------JMS resources closed in %s secs-------------\n", stopWatch.getTime(TimeUnit.SECONDS));
     }
 }
