@@ -4,6 +4,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+### Changed
+- Break dependency on framework-command-client in test-utils-jmx library
 
 ## [17.4.5] - 2024-05-29
 ### Changed

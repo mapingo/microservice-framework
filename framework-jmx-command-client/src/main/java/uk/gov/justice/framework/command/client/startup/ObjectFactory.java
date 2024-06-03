@@ -1,10 +1,8 @@
 package uk.gov.justice.framework.command.client.startup;
 
-import uk.gov.justice.framework.command.client.CommandExecutor;
-import uk.gov.justice.framework.command.client.CommandRunModeSelector;
-import uk.gov.justice.framework.command.client.JmxParametersFactory;
-import uk.gov.justice.framework.command.client.MainApplication;
-import uk.gov.justice.framework.command.client.ReturnCodeFactory;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.HelpFormatter;
+import uk.gov.justice.framework.command.client.*;
 import uk.gov.justice.framework.command.client.cdi.producers.OptionsFactory;
 import uk.gov.justice.framework.command.client.io.CommandPrinter;
 import uk.gov.justice.framework.command.client.io.ToConsolePrinter;
@@ -14,20 +12,16 @@ import uk.gov.justice.framework.command.client.jmx.ListCommandsInvoker;
 import uk.gov.justice.framework.command.client.jmx.SystemCommandInvoker;
 import uk.gov.justice.framework.command.client.util.Sleeper;
 import uk.gov.justice.framework.command.client.util.UtcClock;
-import uk.gov.justice.services.jmx.api.name.CommandMBeanNameProvider;
-import uk.gov.justice.services.jmx.api.name.ObjectNameFactory;
+import uk.gov.justice.services.jmx.system.command.client.ConnectorObjectFactory;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
-import uk.gov.justice.services.jmx.system.command.client.connection.ConnectorWrapper;
-import uk.gov.justice.services.jmx.system.command.client.connection.EnvironmentFactory;
-import uk.gov.justice.services.jmx.system.command.client.connection.JMXConnectorFactory;
-import uk.gov.justice.services.jmx.system.command.client.connection.JmxUrlFactory;
-import uk.gov.justice.services.jmx.system.command.client.connection.MBeanConnector;
-import uk.gov.justice.services.jmx.system.command.client.connection.RemoteMBeanFactory;
-
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.HelpFormatter;
 
 public class ObjectFactory {
+
+    private final ConnectorObjectFactory connectorObjectFactory;
+
+    public ObjectFactory() {
+        this.connectorObjectFactory = new ConnectorObjectFactory();
+    }
 
     public MainApplication mainApplication() {
 
@@ -77,8 +71,8 @@ public class ObjectFactory {
 
     public SystemCommanderClientFactory systemCommanderClientFactory() {
         return new SystemCommanderClientFactory(
-                mBeanConnector(),
-                jmxConnectorFactory()
+                connectorObjectFactory.mBeanConnector(),
+                connectorObjectFactory.jmxConnectorFactory()
         );
     }
 
@@ -118,40 +112,4 @@ public class ObjectFactory {
         return new CommandRunModeSelector();
     }
 
-    public MBeanConnector mBeanConnector() {
-        return new MBeanConnector(
-                commandMBeanNameProvider(),
-                remoteMBeanFactory());
-    }
-    public JMXConnectorFactory jmxConnectorFactory() {
-        return new JMXConnectorFactory(
-                jmxUrlFactory(),
-                connectorWrapper(),
-                environmentFactory()
-        );
-    }
-
-    public JmxUrlFactory jmxUrlFactory() {
-        return new JmxUrlFactory();
-    }
-
-    public ConnectorWrapper connectorWrapper() {
-        return new ConnectorWrapper();
-    }
-
-    public EnvironmentFactory environmentFactory() {
-        return new EnvironmentFactory();
-    }
-
-    public CommandMBeanNameProvider commandMBeanNameProvider() {
-        return new CommandMBeanNameProvider(objectNameFactory());
-    }
-
-    public ObjectNameFactory objectNameFactory() {
-        return new ObjectNameFactory();
-    }
-
-    public RemoteMBeanFactory remoteMBeanFactory() {
-        return new RemoteMBeanFactory();
-    }
 }
