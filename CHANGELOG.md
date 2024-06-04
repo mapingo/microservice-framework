@@ -4,6 +4,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+### Changed
+- Add method to SystemCommanderMBean interface to invoke system command without supplying CommandRunMode (Used by FeatureStubber class)
 
 ## [17.4.6] - 2024-06-03
 ### Changed

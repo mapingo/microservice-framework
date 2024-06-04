@@ -69,6 +69,26 @@ public class SystemCommanderTest {
     private SystemCommander systemCommander;
 
     @Test
+    public void shouldRunTheSystemCommandInForcedModeWhenCommandRunModeNotSupplied() throws Exception {
+
+        final UUID commandId = randomUUID();
+        final TestCommand testCommand = new TestCommand();
+        final Optional<UUID> commandRuntimeId = empty();
+
+        when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
+        when(asynchronousCommandRunner.run(testCommand, commandRuntimeId)).thenReturn(commandId);
+
+        assertThat(systemCommander.call("TEST_COMMAND"), is(commandId));
+
+        final InOrder inOrder = inOrder(logger, systemCommandVerifier, asynchronousCommandRunner);
+
+        inOrder.verify(logger).info("Received System Command 'TEST_COMMAND'");
+        inOrder.verify(logger).info("Running 'TEST_COMMAND' in 'FORCED' mode");
+        inOrder.verify(systemCommandVerifier).verify(testCommand, commandRuntimeId);
+        inOrder.verify(asynchronousCommandRunner).run(testCommand, commandRuntimeId);
+    }
+
+    @Test
     public void shouldRunTheSystemCommandIfSupported() throws Exception {
 
         final UUID commandId = randomUUID();

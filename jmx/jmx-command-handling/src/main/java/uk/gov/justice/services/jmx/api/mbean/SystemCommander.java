@@ -1,10 +1,6 @@
 package uk.gov.justice.services.jmx.api.mbean;
 
-import static java.lang.String.format;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static java.util.stream.Collectors.toList;
-
+import org.slf4j.Logger;
 import uk.gov.justice.services.jmx.api.CommandNotFoundException;
 import uk.gov.justice.services.jmx.api.UnrunnableSystemCommandException;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
@@ -16,13 +12,15 @@ import uk.gov.justice.services.jmx.command.SystemCommandScanner;
 import uk.gov.justice.services.jmx.runner.AsynchronousCommandRunner;
 import uk.gov.justice.services.jmx.state.observers.SystemCommandStateBean;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
+import static java.lang.String.format;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.stream.Collectors.toList;
 
 public class SystemCommander implements SystemCommanderMBean {
 
@@ -46,6 +44,14 @@ public class SystemCommander implements SystemCommanderMBean {
 
     @Inject
     private Logger logger;
+
+    @Override
+    public UUID call(final String systemCommandName) {
+        logger.info(format("Received System Command '%s'", systemCommandName));
+        logger.info(format("Running '%s' in '%s' mode", systemCommandName, CommandRunMode.FORCED));
+
+        return doCall(systemCommandName, empty(), CommandRunMode.FORCED);
+    }
 
     @Override
     public UUID call(final String systemCommandName, final CommandRunMode commandRunMode) {
