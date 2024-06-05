@@ -35,28 +35,30 @@ public class JmsMessageConsumerClientProvider {
         this(topicName, new JmsResourcesContextProvider().get());
     }
 
-    public JmsMessageConsumerClientProvider withEventNames(final String eventName, final String...additionalEventNames) {
-        if(eventName == null || eventName.isBlank()) {
+    public JmsMessageConsumerClientProvider withEventNames(final String eventName, final String... additionalEventNames) {
+        if (eventName == null || eventName.isBlank()) {
             throw new JmsMessagingClientException("eventName must be supplied");
         }
 
         this.eventNames.add(eventName);
 
-        if(additionalEventNames != null && additionalEventNames.length > 0) {
+        if (additionalEventNames != null && additionalEventNames.length > 0) {
             this.eventNames.addAll(asList(additionalEventNames));
         }
 
         return this;
     }
 
-    public DefaultJmsMessageConsumerClient getMessageConsumerClient() {
-        if(eventNames.isEmpty()) {
+    public JmsMessageConsumerClient getMessageConsumerClient() {
+        if (eventNames.isEmpty()) {
             throw new JmsMessagingClientException("eventName(s) must be supplied");
         }
 
-        final DefaultJmsMessageConsumerClient defaultJmsMessageConsumerClient = jmsMessageClientFactory.createJmsMessageConsumerClient();
-        defaultJmsMessageConsumerClient.startConsumer(topicName, eventNames);
+        final DefaultJmsMessageConsumerClient jmsMessageConsumerClient = jmsMessageClientFactory
+                .createJmsMessageConsumerClient();
 
-        return defaultJmsMessageConsumerClient;
+        jmsMessageConsumerClient.startConsumer(topicName, eventNames);
+
+        return jmsMessageConsumerClient;
     }
 }

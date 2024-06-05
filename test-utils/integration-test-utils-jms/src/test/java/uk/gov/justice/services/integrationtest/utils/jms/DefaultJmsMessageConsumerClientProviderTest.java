@@ -25,7 +25,7 @@ class DefaultJmsMessageConsumerClientProviderTest {
         when(jmsResourcesContext.getJmsMessageClientFactory()).thenReturn(jmsMessageClientFactory);
         when(jmsMessageClientFactory.createJmsMessageConsumerClient()).thenReturn(defaultJmsMessageConsumerClient);
 
-        final DefaultJmsMessageConsumerClient result = new JmsMessageConsumerClientProvider("jms.topic.public.event", jmsResourcesContext)
+        final JmsMessageConsumerClient result = new JmsMessageConsumerClientProvider("jms.topic.public.event", jmsResourcesContext)
                 .withEventNames("event1").getMessageConsumerClient();
 
         assertThat(result, is(defaultJmsMessageConsumerClient));
