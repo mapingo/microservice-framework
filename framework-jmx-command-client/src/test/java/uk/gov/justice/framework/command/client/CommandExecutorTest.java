@@ -50,7 +50,7 @@ public class CommandExecutorTest {
 
         final String commandName = "CATCHUP";
         final CommandRunMode commandRunMode = GUARDED;
-        final String commandRuntimeId = randomUUID().toString();
+        final String commandRuntimeId = "SOME_ID";
 
         final SystemCommandDetails systemCommandDetails_1 = mock(SystemCommandDetails.class);
         final SystemCommandDetails systemCommandDetails_2 = mock(SystemCommandDetails.class);

@@ -245,7 +245,6 @@ public class RestAdapterGenerator_ApplicationTest extends BaseRestAdapterGenerat
                         .build(),
                 configurationWithBasePackage(BASE_PACKAGE, outputFolder, new CommonGeneratorProperties(), singletonList(sourcePath)));
 
-        //TODO SAN Revise the fix
         final Path outputPath = Paths.get(File.createTempFile("junit", null, outputFolder).getAbsolutePath(), EXISTING_FILE_PATH);
 
         assertThat(outputPath.toFile().exists(), equalTo(FALSE));

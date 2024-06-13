@@ -32,6 +32,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.FORCED;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
@@ -64,6 +65,26 @@ public class SystemCommanderTest {
     private SystemCommander systemCommander;
 
     @Test
+    public void shouldRunTheSystemCommandInForcedModeWhenCommandRunModeNotSupplied() throws Exception {
+
+        final UUID commandId = randomUUID();
+        final TestCommand testCommand = new TestCommand();
+        final Optional<UUID> commandRuntimeId = empty();
+
+        when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
+        when(asynchronousCommandRunner.run(testCommand, commandRuntimeId)).thenReturn(commandId);
+
+        assertThat(systemCommander.call("TEST_COMMAND"), is(commandId));
+
+        final InOrder inOrder = inOrder(logger, systemCommandVerifier, asynchronousCommandRunner);
+
+        inOrder.verify(logger).info("Received System Command 'TEST_COMMAND'");
+        inOrder.verify(logger).info("Running 'TEST_COMMAND' in 'FORCED' mode");
+        inOrder.verify(systemCommandVerifier).verify(testCommand, commandRuntimeId);
+        inOrder.verify(asynchronousCommandRunner).run(testCommand, commandRuntimeId);
+    }
+
+    @Test
     public void shouldRunTheSystemCommandIfSupported() throws Exception {
 
         final UUID commandId = randomUUID();
@@ -89,16 +110,17 @@ public class SystemCommanderTest {
         final UUID commandId = randomUUID();
         final UUID commandRuntimeId = fromString("ce37d217-48a4-4a76-8a86-2e1d2d4c1ec2");
         final TestCommand testCommand = new TestCommand();
+        final CommandRunMode commandRunMode = GUARDED;
 
         when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
         when(asynchronousCommandRunner.run(testCommand, of(commandRuntimeId))).thenReturn(commandId);
 
-        assertThat(systemCommander.callWithRuntimeId("TEST_COMMAND", commandRuntimeId, GUARDED), is(commandId));
+        assertThat(systemCommander.callWithRuntimeId("TEST_COMMAND", commandRuntimeId, commandRunMode), is(commandId));
 
         final InOrder inOrder = inOrder(logger, systemCommandVerifier, asynchronousCommandRunner);
 
-        inOrder.verify(logger).info("Received System Command 'TEST_COMMAND' with UUID 'ce37d217-48a4-4a76-8a86-2e1d2d4c1ec2'");
-        inOrder.verify(logger).info("Running 'TEST_COMMAND' in 'GUARDED' mode");
+        inOrder.verify(logger).info("Received System Command 'TEST_COMMAND' with UUID '" + commandRuntimeId + "'");
+        inOrder.verify(logger).info("Running 'TEST_COMMAND' with UUID '%s' in 'GUARDED' mode".formatted(commandRuntimeId));
         inOrder.verify(systemCommandVerifier).verify(testCommand, of(commandRuntimeId));
         inOrder.verify(asynchronousCommandRunner).run(testCommand, of(commandRuntimeId));
     }
@@ -122,6 +144,22 @@ public class SystemCommanderTest {
         when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
         when(systemCommandStateBean.commandInProgress(testCommand)).thenReturn(true);
 
+        try {
+            systemCommander.call("TEST_COMMAND", GUARDED);
+            fail();
+        } catch (final UnrunnableSystemCommandException expected) {
+            assertThat(expected.getMessage(), is("Cannot run system command 'TEST_COMMAND'. A previous call to that command is still in progress."));
+        }
+    }
+
+    @Test
+    public void shouldFailIfPreviousSystemCommandWithIdIsInProgress() throws Exception {
+
+        final TestCommand testCommand = new TestCommand();
+
+        when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
+        when(systemCommandStateBean.commandInProgress(testCommand)).thenReturn(true);
+
         final UnrunnableSystemCommandException e = assertThrows(UnrunnableSystemCommandException.class, () -> systemCommander.call("TEST_COMMAND", GUARDED));
         assertThat(e.getMessage(), is("Cannot run system command 'TEST_COMMAND'. A previous call to that command is still in progress."));
     }
@@ -130,23 +168,22 @@ public class SystemCommanderTest {
     public void shouldIgnoreAnyPreviousCommandInProgressIfRunModeIsForced() throws Exception {
 
         final UUID commandId = randomUUID();
-        final UUID commandRuntimeId = fromString("9132d439-c797-4483-a961-5eb640c55fe7");
         final TestCommand testCommand = new TestCommand();
 
         when(systemCommandLocator.forName(testCommand.getName())).thenReturn(of(testCommand));
-        when(asynchronousCommandRunner.run(testCommand, of(commandRuntimeId))).thenReturn(commandId);
+        when(asynchronousCommandRunner.run(testCommand, empty())).thenReturn(commandId);
 
-        assertThat(systemCommander.callWithRuntimeId("TEST_COMMAND", commandRuntimeId, FORCED), is(commandId));
+        assertThat(systemCommander.call("TEST_COMMAND", FORCED), is(commandId));
 
-        final InOrder inOrder = inOrder(logger, systemCommandVerifier, asynchronousCommandRunner);
+        final InOrder inOrder = inOrder(logger, asynchronousCommandRunner);
 
-        inOrder.verify(logger).info("Received System Command 'TEST_COMMAND' with UUID '9132d439-c797-4483-a961-5eb640c55fe7'");
+        inOrder.verify(logger).info("Received System Command 'TEST_COMMAND'");
         inOrder.verify(logger).info("Running 'TEST_COMMAND' in 'FORCED' mode");
-        inOrder.verify(systemCommandVerifier).verify(testCommand, of(commandRuntimeId));
-        inOrder.verify(asynchronousCommandRunner).run(testCommand, of(commandRuntimeId));
+        inOrder.verify(asynchronousCommandRunner).run(testCommand, empty());
 
         verify(systemCommandStateBean, never()).commandInProgress(testCommand);
     }
+
 
     @Test
     public void shouldListAllSystemCommands() throws Exception {

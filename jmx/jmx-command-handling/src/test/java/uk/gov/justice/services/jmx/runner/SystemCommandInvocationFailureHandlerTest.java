@@ -64,6 +64,7 @@ public class SystemCommandInvocationFailureHandlerTest {
     public void shouldLogErrorAndRaiseEventGivenNoCommandRuntimeId() {
         final RuntimeException e = new RuntimeException("exceptionMessage");
         final String commandName = "Ping";
+        final String commandRuntimeIdType = "eventId";
         final SystemCommand systemCommand = mock(SystemCommand.class);
         final ZonedDateTime now = ZonedDateTime.now();
         when(systemCommand.getName()).thenReturn(commandName);

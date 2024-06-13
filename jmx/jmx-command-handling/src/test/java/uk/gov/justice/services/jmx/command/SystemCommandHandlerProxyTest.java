@@ -26,9 +26,10 @@ public class SystemCommandHandlerProxyTest {
     @Test
     public void shouldInvokeTheCommandHandlerMethod() throws Exception {
 
-        final UUID commandId = randomUUID();
         final TestCommand testCommand = new TestCommand();
+        final UUID commandId = randomUUID();
         final Optional<UUID> commandRuntimeId = empty();
+
         final Object[] methodArguments = {testCommand, commandId};
 
         final DummyHandler dummyHandler = new DummyHandler();

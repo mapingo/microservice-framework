@@ -1,5 +1,11 @@
 package uk.gov.justice.services.jmx.api.mbean;
 
+import org.junit.jupiter.api.Test;
+import uk.gov.justice.services.jmx.api.UnrunnableSystemCommandException;
+import uk.gov.justice.services.jmx.api.command.SystemCommand;
+
+import java.util.UUID;
+
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;

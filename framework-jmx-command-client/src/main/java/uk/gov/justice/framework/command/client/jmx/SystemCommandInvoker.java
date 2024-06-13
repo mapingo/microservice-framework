@@ -59,7 +59,7 @@ public class SystemCommandInvoker {
         }
     }
 
-    private UUID invoke(SystemCommanderMBean systemCommanderMBean, String commandName, String commandRuntimeId, final CommandRunMode commandRunMode) {
+    private UUID invoke(final SystemCommanderMBean systemCommanderMBean, final String commandName, final String commandRuntimeId, final CommandRunMode commandRunMode) {
         if(StringUtils.isEmpty(commandRuntimeId)) {
             return systemCommanderMBean.call(commandName, commandRunMode);
         } else {
