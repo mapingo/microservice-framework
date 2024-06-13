@@ -1,29 +1,27 @@
 package uk.gov.justice.services.jmx.system.command.client;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.getValueOfField;
-
-import uk.gov.justice.framework.command.client.startup.ObjectFactory;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.justice.services.jmx.system.command.client.connection.JMXConnectorFactory;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 import uk.gov.justice.services.jmx.system.command.client.connection.MBeanConnector;
 
 import javax.management.remote.JMXConnector;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.getValueOfField;
 
 @ExtendWith(MockitoExtension.class)
 public class TestSystemCommanderClientFactoryTest {
 
     @Mock
-    private ObjectFactory objectFactory;
+    private ConnectorObjectFactory connectorObjectFactory;
 
     @InjectMocks
     private TestSystemCommanderClientFactory testSystemCommanderClientFactory;
@@ -36,8 +34,8 @@ public class TestSystemCommanderClientFactoryTest {
         final JmxParameters jmxParameters = mock(JmxParameters.class);
         final JMXConnector jmxConnector = mock(JMXConnector.class);
 
-        when(objectFactory.jmxConnectorFactory()).thenReturn(jmxConnectorFactory);
-        when(objectFactory.mBeanConnector()).thenReturn(mBeanConnector);
+        when(connectorObjectFactory.jmxConnectorFactory()).thenReturn(jmxConnectorFactory);
+        when(connectorObjectFactory.mBeanConnector()).thenReturn(mBeanConnector);
         when(jmxConnectorFactory.createJmxConnector(jmxParameters)).thenReturn(jmxConnector);
 
         final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters);

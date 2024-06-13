@@ -2,6 +2,8 @@ package uk.gov.justice.framework.command.client.startup;
 
 import uk.gov.justice.framework.command.client.ReturnCode;
 
+import java.util.UUID;
+
 public class Bootstrapper {
 
     private final ObjectFactory objectFactory;
@@ -30,11 +32,11 @@ public class Bootstrapper {
 
 
         final String[] arguments = {
-                "-c", command,
-                "-rcid", commandRuntimeId,
-                "-u", userName,
-                "-pw", password,
-                "-cn", contextName
+            "-c", command,
+            "-rcid", commandRuntimeId,
+            "-u", userName,
+            "-pw", password,
+            "-cn", contextName
         };
 
         new Bootstrapper().startContainerAndRun(arguments);

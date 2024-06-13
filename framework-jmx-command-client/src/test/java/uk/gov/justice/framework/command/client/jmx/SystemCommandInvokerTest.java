@@ -22,8 +22,8 @@ import java.util.UUID;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
@@ -65,7 +65,7 @@ public class SystemCommandInvokerTest {
         when(systemCommanderClient.getRemote(contextName)).thenReturn(systemCommanderMBean);
         when(systemCommanderMBean.call(commandName, commandRunMode)).thenReturn(commandId);
 
-        systemCommandInvoker.runSystemCommand(commandName, jmxParameters, null,commandRunMode);
+        systemCommandInvoker.runSystemCommand(commandName, jmxParameters, null, commandRunMode);
 
         final InOrder inOrder = inOrder(
                 toConsolePrinter,
@@ -132,7 +132,6 @@ public class SystemCommandInvokerTest {
         final int port = 92834;
         final String commandName = "SOME_COMMAND";
         final String commandRuntimeId = "NOT_UUID_INVALID";
-        final UUID commandId = randomUUID();
         final CommandRunMode commandRunMode = GUARDED;
 
         final JmxParameters jmxParameters = mock(JmxParameters.class);
@@ -148,6 +147,7 @@ public class SystemCommandInvokerTest {
 
         final CommandLineException e = assertThrows(CommandLineException.class, () -> systemCommandInvoker.runSystemCommand(commandName, jmxParameters, commandRuntimeId, commandRunMode));
         assertThat(e.getMessage(), is("Unable to invoke command as supplied commandRuntimeId is not uuid format: " + commandRuntimeId));
+        verifyNoInteractions(systemCommanderMBean);
     }
 
     @Test

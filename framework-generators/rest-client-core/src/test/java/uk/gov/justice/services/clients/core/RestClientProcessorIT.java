@@ -667,9 +667,6 @@ public class RestClientProcessorIT {
         assertThat(response.metadata().id().toString(), is(METADATA_ID_VALUE));
         assertThat(response.metadata().name(), is(QUERY_ACTION));
 
-        //TODO SAN
-        //JSONAssert.assertEquals(expectedResponseJson, new DefaultJsonObjectEnvelopeConverter().fromEnvelope(response).toString(), false);
-
         assertThat(response.payloadAsJsonObject().getString(PAYLOAD_ID_NAME), is(PAYLOAD_ID_VALUE));
         assertThat(response.payloadAsJsonObject().getInt(PAYLOAD_VERSION_NAME), is(PAYLOAD_VERSION_VALUE));
         assertThat(response.payloadAsJsonObject().getString(PAYLOAD_NAME_NAME), is(PAYLOAD_NAME_VALUE));

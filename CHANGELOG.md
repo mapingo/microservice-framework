@@ -14,6 +14,40 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ### Changed
 - Add jobstore retry migration liquibase via framework-libraries
 
+
+## [17.5.0] - 2024-06-05
+- JmsMessageConsumerClientProvider now returns JmsMessageConsumerClient interface rather than the implemening class
+
+## [17.4.8] - 2024-06-04
+### Changed
+- Add method to SystemCommanderMBean interface to invoke system command without supplying CommandRunMode (Used by FeatureStubber class)
+
+## [17.4.6] - 2024-06-03
+### Changed
+- Break dependency on framework-command-client in test-utils-jmx library
+
+## [17.4.5] - 2024-05-29
+### Changed
+- Created interfaces for JmsMessageConsumerClient and JmsMessageProducerClient
+- Renamed JmsMessageProducerClientBuilder to JmsMessageProducerClientProvider
+- Renamed JmsMessageConsumerClientBuilder to JmsMessageConsumerClientProvider
+- Add LOG_RUNTIME_ID system command and it's handler to log command runtime id
+- Add REPLAY_EVENT_TO_EVENT_LISTENER and REPLAY_EVENT_TO_EVENT_INDEXER system commands to replay single event
+
+## [17.4.4] - 2024-05-15
+### Changed
+- Refactor JMS resource management extension to extract CloseableResource to separate class and
+- Close producers along with consumer through @AfterAll hook
+
+## [17.4.3] - 2024-05-13
+### Added
+- Add JmsMessageConsumerClient and JmsMessageProducerClient for effective management of jms resources in integration tests
+
+## [17.4.2] - 2024-02-08
+### Changed
+- Add jobstore retry migration liquibase via framework-libraries
+
+
 ## [17.4.1] - 2023-12-12
 ### Changed
 - Add retry mechanism to jobstore via framework-libraries
