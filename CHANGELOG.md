@@ -4,6 +4,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+## [17.6.0] - 2024-06-13
+### Changed
+- Merged in the release-17.x.x branch to keep master up to date
+- Bumped version to 17.6.x.x as the official version of the post java 17 update
 
 ## [17.4.3-M1] - 2024-04-23
 ### Added
@@ -13,7 +17,6 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 ## [17.4.2] - 2024-02-08
 ### Changed
 - Add jobstore retry migration liquibase via framework-libraries
-
 
 ## [17.5.0] - 2024-06-05
 - JmsMessageConsumerClientProvider now returns JmsMessageConsumerClient interface rather than the implemening class
