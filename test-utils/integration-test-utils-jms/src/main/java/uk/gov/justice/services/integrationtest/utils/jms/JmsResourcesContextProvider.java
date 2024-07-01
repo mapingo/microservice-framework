@@ -1,8 +1,9 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
+import uk.gov.justice.services.test.utils.core.messaging.TopicFactory;
+
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
-import uk.gov.justice.services.test.utils.core.messaging.TopicFactory;
 
 class JmsResourcesContextProvider implements CloseableResource {
 

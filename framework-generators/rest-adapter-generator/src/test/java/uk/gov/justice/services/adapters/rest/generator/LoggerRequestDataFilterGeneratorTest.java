@@ -6,7 +6,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 
-import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.maven.generator.io.files.parser.core.GeneratorConfig;
 import uk.gov.justice.services.adapter.rest.filter.LoggerRequestDataAdder;
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
@@ -22,6 +21,7 @@ import javax.ws.rs.container.ContainerResponseContext;
 import com.squareup.javapoet.TypeSpec;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.raml.model.Raml;

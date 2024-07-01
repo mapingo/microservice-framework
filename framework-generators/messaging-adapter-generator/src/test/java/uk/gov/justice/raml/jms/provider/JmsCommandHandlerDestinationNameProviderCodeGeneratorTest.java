@@ -10,8 +10,6 @@ import static uk.gov.justice.raml.jms.core.ClassNameFactory.JMS_HANDLER_DESTINAT
 import static uk.gov.justice.services.generators.test.utils.builder.ResourceBuilder.resource;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 
-import java.lang.reflect.Field;
-import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.raml.jms.core.ClassNameFactory;
 import uk.gov.justice.services.messaging.jms.JmsCommandHandlerDestinationNameProvider;
 
@@ -21,6 +19,7 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.raml.model.Resource;

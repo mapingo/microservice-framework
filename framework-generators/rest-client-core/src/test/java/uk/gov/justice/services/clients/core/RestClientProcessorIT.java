@@ -36,7 +36,6 @@ import static uk.gov.justice.services.common.http.HeaderConstants.USER_ID;
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataOf;
 
-import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
 import uk.gov.justice.services.adapter.rest.parameter.ParameterType;
 import uk.gov.justice.services.clients.core.exception.InvalidResponseException;
@@ -50,6 +49,7 @@ import java.nio.charset.Charset;
 import java.util.Set;
 import java.util.UUID;
 
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Resources;
 import org.junit.jupiter.api.BeforeEach;

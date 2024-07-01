@@ -21,6 +21,7 @@ import uk.gov.justice.services.cdi.LoggerProducer;
 import uk.gov.justice.services.common.annotation.ComponentNameExtractor;
 import uk.gov.justice.services.common.configuration.GlobalValueProducer;
 import uk.gov.justice.services.common.configuration.ServiceContextNameProvider;
+import uk.gov.justice.services.common.configuration.ValueProducer;
 import uk.gov.justice.services.common.converter.ObjectToJsonValueConverter;
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
@@ -69,6 +70,8 @@ import uk.gov.justice.services.jdbc.persistence.JndiAppNameProvider;
 import uk.gov.justice.services.messaging.DefaultJsonObjectEnvelopeConverter;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.jms.DefaultEnvelopeConverter;
+import uk.gov.justice.services.messaging.jms.JmsMessagingConfiguration;
+import uk.gov.justice.services.messaging.jms.OversizeMessageGuard;
 import uk.gov.justice.services.messaging.logging.DefaultJmsMessageLoggerHelper;
 import uk.gov.justice.services.messaging.logging.DefaultTraceLogger;
 import uk.gov.justice.services.subscription.SubscriptionManager;
@@ -93,7 +96,6 @@ import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Module;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
  * Integration tests for the generated JAX-RS classes.
@@ -195,7 +197,11 @@ public class JmsEndpointGenerationIT extends AbstractJmsAdapterGenerationIT {
             RequestResponseEnvelopeValidatorFactory.class,
             EnvelopeValidatorFactory.class,
 
-            MdcWrapper.class
+            MdcWrapper.class,
+
+            OversizeMessageGuard.class,
+            JmsMessagingConfiguration.class,
+            ValueProducer.class
     })
     public WebApp war() {
         return new WebApp()

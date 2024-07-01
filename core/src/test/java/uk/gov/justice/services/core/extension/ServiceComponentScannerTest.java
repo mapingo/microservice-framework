@@ -6,22 +6,17 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_CONTROLLER;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_HANDLER;
 import static uk.gov.justice.services.core.annotation.Component.QUERY_API;
 import static uk.gov.justice.services.core.annotation.Component.QUERY_VIEW;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
 import uk.gov.justice.domain.annotation.Event;
 import uk.gov.justice.services.adapter.direct.SynchronousDirectAdapter;
-import uk.gov.justice.services.core.annotation.AnyLiteral;
 import uk.gov.justice.services.core.annotation.CustomServiceComponent;
 import uk.gov.justice.services.core.annotation.Direct;
 import uk.gov.justice.services.core.annotation.DirectAdapter;
@@ -32,6 +27,8 @@ import uk.gov.justice.services.core.annotation.ServiceComponentLocation;
 import uk.gov.justice.services.core.extension.util.EmptyAfterDeploymentValidation;
 import uk.gov.justice.services.core.extension.util.TestBean;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.util.HashSet;
 
 import javax.enterprise.inject.spi.AfterDeploymentValidation;

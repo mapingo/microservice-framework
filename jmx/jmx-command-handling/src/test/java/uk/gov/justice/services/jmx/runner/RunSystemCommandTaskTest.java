@@ -1,19 +1,20 @@
 package uk.gov.justice.services.jmx.runner;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static java.util.Optional.empty;
+import static java.util.UUID.randomUUID;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.util.Optional.empty;
-import static java.util.UUID.randomUUID;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class RunSystemCommandTaskTest {

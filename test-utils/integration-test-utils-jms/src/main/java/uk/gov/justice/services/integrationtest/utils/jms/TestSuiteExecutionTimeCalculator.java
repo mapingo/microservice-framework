@@ -1,10 +1,10 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
+import java.util.concurrent.TimeUnit;
+
 import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.lang3.time.StopWatch;
 import org.junit.jupiter.api.extension.ExtensionContext;
-
-import java.util.concurrent.TimeUnit;
 
 public class TestSuiteExecutionTimeCalculator implements ExtensionContext.Store.CloseableResource  {
 

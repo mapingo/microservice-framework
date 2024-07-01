@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import uk.gov.justice.maven.test.utils.BetterAbstractMojoTestCase;
 import uk.gov.justice.raml.maven.lintchecker.rules.LintCheckMojo;
 
 import java.io.File;

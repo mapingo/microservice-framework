@@ -1,11 +1,18 @@
 package uk.gov.justice.framework.command.client.jmx;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InOrder;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.UUID.randomUUID;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
+
 import uk.gov.justice.framework.command.client.CommandLineException;
 import uk.gov.justice.framework.command.client.io.ToConsolePrinter;
 import uk.gov.justice.services.jmx.api.SystemCommandInvocationFailedException;
@@ -19,14 +26,12 @@ import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameter
 
 import java.util.UUID;
 
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static java.util.UUID.randomUUID;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
-import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class SystemCommandInvokerTest {

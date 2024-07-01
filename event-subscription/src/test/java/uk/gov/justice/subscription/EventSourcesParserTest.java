@@ -28,7 +28,6 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.everit.json.schema.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 

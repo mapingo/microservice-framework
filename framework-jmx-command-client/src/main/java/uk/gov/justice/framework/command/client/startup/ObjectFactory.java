@@ -1,8 +1,10 @@
 package uk.gov.justice.framework.command.client.startup;
 
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.HelpFormatter;
-import uk.gov.justice.framework.command.client.*;
+import uk.gov.justice.framework.command.client.CommandExecutor;
+import uk.gov.justice.framework.command.client.CommandRunModeSelector;
+import uk.gov.justice.framework.command.client.JmxParametersFactory;
+import uk.gov.justice.framework.command.client.MainApplication;
+import uk.gov.justice.framework.command.client.ReturnCodeFactory;
 import uk.gov.justice.framework.command.client.cdi.producers.OptionsFactory;
 import uk.gov.justice.framework.command.client.io.CommandPrinter;
 import uk.gov.justice.framework.command.client.io.ToConsolePrinter;
@@ -14,6 +16,9 @@ import uk.gov.justice.framework.command.client.util.Sleeper;
 import uk.gov.justice.framework.command.client.util.UtcClock;
 import uk.gov.justice.services.jmx.system.command.client.ConnectorObjectFactory;
 import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFactory;
+
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.HelpFormatter;
 
 public class ObjectFactory {
 

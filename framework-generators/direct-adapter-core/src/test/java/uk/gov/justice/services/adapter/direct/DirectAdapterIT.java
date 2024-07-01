@@ -62,6 +62,8 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.JsonObjectEnvelopeConverter;
 import uk.gov.justice.services.messaging.jms.DefaultEnvelopeConverter;
 import uk.gov.justice.services.messaging.jms.EnvelopeConverter;
+import uk.gov.justice.services.messaging.jms.JmsMessagingConfiguration;
+import uk.gov.justice.services.messaging.jms.OversizeMessageGuard;
 import uk.gov.justice.services.messaging.logging.DefaultTraceLogger;
 import uk.gov.justice.services.test.utils.common.envelope.EnvelopeRecordingInterceptor;
 import uk.gov.justice.services.test.utils.common.envelope.TestEnvelopeRecorder;
@@ -83,7 +85,6 @@ import org.apache.openejb.junit5.RunWithApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Module;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 @RunWithApplicationComposer
 public class DirectAdapterIT {
@@ -177,7 +178,11 @@ public class DirectAdapterIT {
             TestHandlerRegistryCacheProducer.class,
 
             RequestResponseEnvelopeValidatorFactory.class,
-            EnvelopeValidatorFactory.class
+            EnvelopeValidatorFactory.class,
+
+            OversizeMessageGuard.class,
+            JmsMessagingConfiguration.class,
+            ValueProducer.class
     })
     public WebApp war() {
         return new WebApp()

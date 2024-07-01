@@ -1,14 +1,14 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
+import static uk.gov.justice.services.test.utils.core.enveloper.EnvelopeFactory.createEnvelope;
+import static uk.gov.justice.services.test.utils.core.messaging.QueueUriProvider.queueUri;
+
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.TextMessage;
 import javax.json.JsonObject;
-
-import static uk.gov.justice.services.test.utils.core.enveloper.EnvelopeFactory.createEnvelope;
-import static uk.gov.justice.services.test.utils.core.messaging.QueueUriProvider.queueUri;
 
 /**
  * Use {@link JmsMessageProducerClientProvider} to create instance

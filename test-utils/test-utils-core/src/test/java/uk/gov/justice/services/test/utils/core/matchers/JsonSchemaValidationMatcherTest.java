@@ -11,7 +11,6 @@ import static uk.gov.justice.services.test.utils.core.matchers.JsonSchemaValidat
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 
-import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
 import java.io.BufferedWriter;
@@ -21,6 +20,7 @@ import java.io.FileWriter;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class JsonSchemaValidationMatcherTest {
 

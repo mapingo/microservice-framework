@@ -11,7 +11,6 @@ import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtili
 import static uk.gov.justice.subscription.jms.core.ClassNameFactory.EVENT_FILTER;
 import static uk.gov.justice.subscription.jms.core.ClassNameFactory.EVENT_VALIDATION_INTERCEPTOR;
 
-import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.services.adapter.messaging.JsonSchemaValidationInterceptor;
 import uk.gov.justice.services.messaging.jms.HeaderConstants;
 import uk.gov.justice.subscription.jms.core.ClassNameFactory;
@@ -25,6 +24,7 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 

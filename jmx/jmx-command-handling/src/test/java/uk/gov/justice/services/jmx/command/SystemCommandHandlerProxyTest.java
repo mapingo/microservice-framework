@@ -1,6 +1,19 @@
 package uk.gov.justice.services.jmx.command;
 
-import org.junit.jupiter.api.Test;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.UUID.randomUUID;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.gov.justice.services.jmx.command.TestCommand.TEST_COMMAND;
+
 import uk.gov.justice.services.jmx.api.InvalidHandlerMethodException;
 import uk.gov.justice.services.jmx.api.SystemCommandInvocationException;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
@@ -10,16 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static java.util.UUID.randomUUID;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.*;
-import static uk.gov.justice.services.jmx.command.TestCommand.TEST_COMMAND;
+import org.junit.jupiter.api.Test;
 
 public class SystemCommandHandlerProxyTest {
 

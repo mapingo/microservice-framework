@@ -1,13 +1,14 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
-import com.google.common.annotations.VisibleForTesting;
-import org.apache.commons.lang3.time.StopWatch;
 import uk.gov.justice.services.integrationtest.utils.jms.converters.ToJsonEnvelopeMessageConverter;
 import uk.gov.justice.services.integrationtest.utils.jms.converters.ToJsonPathMessageConverter;
 import uk.gov.justice.services.integrationtest.utils.jms.converters.ToStringMessageConverter;
 import uk.gov.justice.services.messaging.DefaultJsonObjectEnvelopeConverter;
 
 import java.util.concurrent.TimeUnit;
+
+import com.google.common.annotations.VisibleForTesting;
+import org.apache.commons.lang3.time.StopWatch;
 
 public class JmsResourcesContext {
 

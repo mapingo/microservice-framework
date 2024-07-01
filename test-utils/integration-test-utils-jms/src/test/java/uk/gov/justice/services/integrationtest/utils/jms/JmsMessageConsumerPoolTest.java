@@ -1,5 +1,24 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
+import uk.gov.justice.services.test.utils.core.messaging.TopicFactory;
+import uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
+
 import org.apache.activemq.artemis.jms.client.ActiveMQTopic;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -7,19 +26,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.justice.services.test.utils.core.messaging.TopicFactory;
-import uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil;
-
-import javax.jms.JMSException;
-import javax.jms.MessageConsumer;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class JmsMessageConsumerPoolTest {

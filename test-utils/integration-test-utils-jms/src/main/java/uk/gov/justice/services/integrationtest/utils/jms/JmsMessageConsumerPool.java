@@ -1,13 +1,15 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
-import org.apache.activemq.artemis.jms.client.ActiveMQTopic;
 import uk.gov.justice.services.test.utils.core.messaging.TopicFactory;
 
-import javax.jms.JMSException;
-import javax.jms.MessageConsumer;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
+
+import org.apache.activemq.artemis.jms.client.ActiveMQTopic;
 
 /**
  * This caches jms consumers that are created with various message selectors to either public/private topics.

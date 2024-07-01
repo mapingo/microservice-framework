@@ -32,7 +32,6 @@ import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Module;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 @RunWithApplicationComposer
 public class FilterValidatorIT extends AbstractJmsAdapterGenerationIT {

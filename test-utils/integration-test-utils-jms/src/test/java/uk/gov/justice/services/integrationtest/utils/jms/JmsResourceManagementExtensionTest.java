@@ -1,5 +1,16 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.gov.justice.services.integrationtest.utils.jms.JmsResourceManagementExtension.TEST_SUITE_SHUTDOWN_EXECUTION_TIMER_HOOK;
+import static uk.gov.justice.services.integrationtest.utils.jms.JmsResourceManagementExtension.TEST_SUITE_SHUTDOWN_JMS_RESOURCE_CLEANUP_HOOK;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -7,12 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
-import static org.mockito.Mockito.*;
-import static uk.gov.justice.services.integrationtest.utils.jms.JmsResourceManagementExtension.TEST_SUITE_SHUTDOWN_EXECUTION_TIMER_HOOK;
-import static uk.gov.justice.services.integrationtest.utils.jms.JmsResourceManagementExtension.TEST_SUITE_SHUTDOWN_JMS_RESOURCE_CLEANUP_HOOK;
 
 @ExtendWith(MockitoExtension.class)
 class JmsResourceManagementExtensionTest {

@@ -1,7 +1,6 @@
 package uk.gov.justice.services.messaging.logging;
 
 import static com.jayway.jsonassert.JsonAssert.with;
-
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.common.http.HeaderConstants.ID;
 import static uk.gov.justice.services.messaging.logging.ResponseLoggerHelper.toResponseTrace;
@@ -9,7 +8,6 @@ import static uk.gov.justice.services.messaging.logging.ResponseLoggerHelper.toR
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.jayway.jsonassert.JsonAssert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

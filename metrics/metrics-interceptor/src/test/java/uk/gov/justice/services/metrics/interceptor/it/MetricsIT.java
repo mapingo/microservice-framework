@@ -13,6 +13,8 @@ import uk.gov.justice.schema.service.SchemaCatalogResolverProducer;
 import uk.gov.justice.services.cdi.LoggerProducer;
 import uk.gov.justice.services.common.annotation.ComponentNameExtractor;
 import uk.gov.justice.services.common.configuration.GlobalValueProducer;
+import uk.gov.justice.services.common.configuration.ServiceContextNameProvider;
+import uk.gov.justice.services.common.configuration.ValueProducer;
 import uk.gov.justice.services.common.converter.ObjectToJsonValueConverter;
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
@@ -57,6 +59,8 @@ import uk.gov.justice.services.messaging.DefaultJsonObjectEnvelopeConverter;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.jms.DefaultEnvelopeConverter;
 import uk.gov.justice.services.messaging.jms.DefaultJmsEnvelopeSender;
+import uk.gov.justice.services.messaging.jms.JmsMessagingConfiguration;
+import uk.gov.justice.services.messaging.jms.OversizeMessageGuard;
 import uk.gov.justice.services.messaging.spi.JsonEnvelopeProvider;
 import uk.gov.justice.services.metrics.interceptor.IndividualActionMetricsInterceptor;
 import uk.gov.justice.services.metrics.interceptor.MetricRegistryProducer;
@@ -79,7 +83,6 @@ import org.apache.openejb.junit5.RunWithApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Module;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 @RunWithApplicationComposer
 @FrameworkComponent("CORE_TEST")
@@ -152,7 +155,12 @@ public class MetricsIT {
             TestHandlerRegistryCacheProducer.class,
 
             RequestResponseEnvelopeValidatorFactory.class,
-            EnvelopeValidatorFactory.class
+            EnvelopeValidatorFactory.class,
+
+            OversizeMessageGuard.class,
+            JmsMessagingConfiguration.class,
+            ValueProducer.class,
+            TestServiceContextNameProvider.class
     })
     public WebApp war() {
         return new WebApp()
@@ -242,6 +250,15 @@ public class MetricsIT {
             interceptorChainTypes.add(new InterceptorChainEntry(1, TotalActionMetricsInterceptor.class));
             interceptorChainTypes.add(new InterceptorChainEntry(2, IndividualActionMetricsInterceptor.class));
             return interceptorChainTypes;
+        }
+    }
+
+    @ApplicationScoped
+    public static class TestServiceContextNameProvider implements ServiceContextNameProvider {
+
+        @Override
+        public String getServiceContextName() {
+            return "test-component";
         }
     }
 }

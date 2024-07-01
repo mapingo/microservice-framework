@@ -1,10 +1,10 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
-import org.apache.activemq.artemis.jms.client.ActiveMQTopic;
-
 import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
 import javax.jms.Session;
+
+import org.apache.activemq.artemis.jms.client.ActiveMQTopic;
 
 class JmsMessageConsumerFactory {
 

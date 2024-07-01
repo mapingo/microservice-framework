@@ -1,13 +1,13 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
-import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
+import static java.lang.String.format;
+import static javax.jms.Session.AUTO_ACKNOWLEDGE;
 
 import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.Session;
 
-import static java.lang.String.format;
-import static javax.jms.Session.AUTO_ACKNOWLEDGE;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 
 class JmsSessionFactory implements AutoCloseable {
 

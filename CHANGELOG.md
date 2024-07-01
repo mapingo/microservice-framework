@@ -4,6 +4,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+### Changed
+- All events pulled from the event queue by the message driven bean now 
+  check the size of the message, and will log an error if the number of bytes 
+  is greater than a new jndi value `messaging.jms.oversize.message.threshold.bytes`
+
 ## [17.6.0] - 2024-06-13
 ### Changed
 - Merged in the release-17.x.x branch to keep master up to date

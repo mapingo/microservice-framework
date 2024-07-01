@@ -2,7 +2,12 @@ package uk.gov.justice.services.jmx.system.command.client;
 
 import uk.gov.justice.services.jmx.api.name.CommandMBeanNameProvider;
 import uk.gov.justice.services.jmx.api.name.ObjectNameFactory;
-import uk.gov.justice.services.jmx.system.command.client.connection.*;
+import uk.gov.justice.services.jmx.system.command.client.connection.ConnectorWrapper;
+import uk.gov.justice.services.jmx.system.command.client.connection.EnvironmentFactory;
+import uk.gov.justice.services.jmx.system.command.client.connection.JMXConnectorFactory;
+import uk.gov.justice.services.jmx.system.command.client.connection.JmxUrlFactory;
+import uk.gov.justice.services.jmx.system.command.client.connection.MBeanConnector;
+import uk.gov.justice.services.jmx.system.command.client.connection.RemoteMBeanFactory;
 
 public class ConnectorObjectFactory {
 

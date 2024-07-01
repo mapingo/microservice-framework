@@ -79,7 +79,6 @@ import org.apache.openejb.util.NetworkUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 @RunWithApplicationComposer
 @ServiceComponent(COMMAND_API)

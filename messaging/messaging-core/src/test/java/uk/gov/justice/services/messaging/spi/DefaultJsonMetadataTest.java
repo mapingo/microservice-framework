@@ -23,7 +23,6 @@ import static uk.gov.justice.services.messaging.JsonMetadata.STREAM;
 import static uk.gov.justice.services.messaging.JsonMetadata.STREAM_ID;
 import static uk.gov.justice.services.messaging.JsonMetadata.USER_ID;
 import static uk.gov.justice.services.messaging.JsonMetadata.VERSION;
-import static uk.gov.justice.services.messaging.JsonObjects.getJsonString;
 import static uk.gov.justice.services.messaging.spi.DefaultJsonMetadata.metadataBuilder;
 import static uk.gov.justice.services.messaging.spi.DefaultJsonMetadata.metadataBuilderFrom;
 
@@ -32,17 +31,14 @@ import uk.gov.justice.services.messaging.Metadata;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonString;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 import com.google.common.testing.EqualsTester;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**

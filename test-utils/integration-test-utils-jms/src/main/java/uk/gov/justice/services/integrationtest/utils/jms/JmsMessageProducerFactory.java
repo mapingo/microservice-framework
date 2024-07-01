@@ -2,12 +2,13 @@ package uk.gov.justice.services.integrationtest.utils.jms;
 
 import uk.gov.justice.services.test.utils.core.messaging.TopicFactory;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 class JmsMessageProducerFactory {
 

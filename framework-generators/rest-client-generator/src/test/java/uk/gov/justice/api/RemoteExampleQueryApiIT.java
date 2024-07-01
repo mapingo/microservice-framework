@@ -20,7 +20,6 @@ import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuil
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataOf;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 
-import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import uk.gov.justice.schema.service.CatalogProducer;
 import uk.gov.justice.schema.service.SchemaCatalogResolverProducer;
 import uk.gov.justice.schema.service.SchemaCatalogService;
@@ -96,6 +95,7 @@ import javax.annotation.Priority;
 import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import org.apache.openejb.OpenEjbContainer;
 import org.apache.openejb.jee.Application;
 import org.apache.openejb.jee.WebApp;

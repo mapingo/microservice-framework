@@ -1,18 +1,19 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.getValueOfField;
+
+import uk.gov.justice.services.integrationtest.utils.jms.converters.ToJsonEnvelopeMessageConverter;
+import uk.gov.justice.services.integrationtest.utils.jms.converters.ToJsonPathMessageConverter;
+import uk.gov.justice.services.integrationtest.utils.jms.converters.ToStringMessageConverter;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.justice.services.integrationtest.utils.jms.converters.ToJsonEnvelopeMessageConverter;
-import uk.gov.justice.services.integrationtest.utils.jms.converters.ToJsonPathMessageConverter;
-import uk.gov.justice.services.integrationtest.utils.jms.converters.ToStringMessageConverter;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.getValueOfField;
 
 @ExtendWith(MockitoExtension.class)
 class JmsMessageClientFactoryTest {
