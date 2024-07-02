@@ -10,7 +10,6 @@ import static uk.gov.justice.raml.jms.core.ClassNameFactory.EVENT_FILTER_INTERCE
 import static uk.gov.justice.raml.jms.core.ClassNameFactory.EVENT_INTERCEPTOR_CHAIN_PROVIDER;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 
-import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.raml.jms.core.ClassNameFactory;
 import uk.gov.justice.services.components.event.listener.interceptors.EventBufferInterceptor;
 import uk.gov.justice.services.core.interceptor.InterceptorChainEntry;
@@ -23,6 +22,7 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 

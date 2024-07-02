@@ -1,13 +1,13 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
+import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
+
 import com.google.common.annotations.VisibleForTesting;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Store;
-
-import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
 
 /**
  *  This manages Life cycle of Jms consumers and producers created by a Test class using various junit hooks.

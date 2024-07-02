@@ -1,17 +1,19 @@
 package uk.gov.justice.services.jmx.runner;
 
-import org.slf4j.Logger;
+import static java.lang.String.format;
+import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED;
+
 import uk.gov.justice.services.common.util.UtcClock;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.state.events.SystemCommandStateChangedEvent;
 
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.lang.String.format;
-import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
 
 public class SystemCommandInvocationFailureHandler {
 

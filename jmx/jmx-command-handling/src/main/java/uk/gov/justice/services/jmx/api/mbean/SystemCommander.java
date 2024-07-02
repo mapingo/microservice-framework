@@ -1,6 +1,10 @@
 package uk.gov.justice.services.jmx.api.mbean;
 
-import org.slf4j.Logger;
+import static java.lang.String.format;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.stream.Collectors.toList;
+
 import uk.gov.justice.services.jmx.api.CommandNotFoundException;
 import uk.gov.justice.services.jmx.api.UnrunnableSystemCommandException;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
@@ -12,15 +16,13 @@ import uk.gov.justice.services.jmx.command.SystemCommandScanner;
 import uk.gov.justice.services.jmx.runner.AsynchronousCommandRunner;
 import uk.gov.justice.services.jmx.state.observers.SystemCommandStateBean;
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.lang.String.format;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static java.util.stream.Collectors.toList;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
 
 public class SystemCommander implements SystemCommanderMBean {
 

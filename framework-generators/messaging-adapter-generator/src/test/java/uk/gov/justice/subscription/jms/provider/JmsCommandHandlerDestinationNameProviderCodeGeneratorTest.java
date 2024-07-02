@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 import static uk.gov.justice.subscription.jms.core.ClassNameFactory.JMS_HANDLER_DESTINATION_NAME_PROVIDER;
 
-import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.services.generators.subscription.parser.SubscriptionWrapper;
 import uk.gov.justice.services.messaging.jms.JmsCommandHandlerDestinationNameProvider;
 import uk.gov.justice.subscription.domain.eventsource.EventSourceDefinition;
@@ -23,6 +22,7 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 

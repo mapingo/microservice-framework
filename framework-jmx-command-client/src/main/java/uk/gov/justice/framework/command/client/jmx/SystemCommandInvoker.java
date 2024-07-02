@@ -1,6 +1,5 @@
 package uk.gov.justice.framework.command.client.jmx;
 
-import org.apache.commons.lang3.StringUtils;
 import uk.gov.justice.framework.command.client.CommandLineException;
 import uk.gov.justice.framework.command.client.io.ToConsolePrinter;
 import uk.gov.justice.services.jmx.api.SystemCommandInvocationFailedException;
@@ -12,6 +11,8 @@ import uk.gov.justice.services.jmx.system.command.client.SystemCommanderClientFa
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 
 import java.util.UUID;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class SystemCommandInvoker {
 

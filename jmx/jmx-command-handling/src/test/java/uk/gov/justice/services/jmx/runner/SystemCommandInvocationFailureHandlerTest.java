@@ -1,22 +1,26 @@
 package uk.gov.justice.services.jmx.runner;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED;
+
+import uk.gov.justice.services.common.util.UtcClock;
+import uk.gov.justice.services.jmx.api.command.SystemCommand;
+import uk.gov.justice.services.jmx.state.events.SystemCommandStateChangedEvent;
+
+import java.time.ZonedDateTime;
+import java.util.Optional;
+import java.util.UUID;
+
+import javax.enterprise.event.Event;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
-import uk.gov.justice.services.common.util.UtcClock;
-import uk.gov.justice.services.jmx.api.command.SystemCommand;
-import uk.gov.justice.services.jmx.state.events.SystemCommandStateChangedEvent;
-
-import javax.enterprise.event.Event;
-import java.time.ZonedDateTime;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.mockito.Mockito.*;
-import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED;
 
 @ExtendWith(MockitoExtension.class)
 public class SystemCommandInvocationFailureHandlerTest {

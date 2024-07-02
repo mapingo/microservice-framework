@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import static uk.gov.justice.raml.jms.core.ClassNameFactory.JMS_LOGGER_METADATA_INTERCEPTOR;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 
-import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.raml.jms.core.ClassNameFactory;
 import uk.gov.justice.services.adapter.messaging.JmsLoggerMetadataAdder;
 import uk.gov.justice.services.generators.commons.config.CommonGeneratorProperties;
@@ -25,6 +24,7 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 

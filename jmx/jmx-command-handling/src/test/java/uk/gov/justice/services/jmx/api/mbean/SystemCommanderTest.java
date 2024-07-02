@@ -1,12 +1,23 @@
 package uk.gov.justice.services.jmx.api.mbean;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InOrder;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
+import static java.util.Arrays.asList;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.UUID.fromString;
+import static java.util.UUID.randomUUID;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.FORCED;
+import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
+
 import uk.gov.justice.services.jmx.api.CommandNotFoundException;
 import uk.gov.justice.services.jmx.api.UnrunnableSystemCommandException;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
@@ -23,19 +34,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.util.Arrays.asList;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static java.util.UUID.fromString;
-import static java.util.UUID.randomUUID;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.*;
-import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.FORCED;
-import static uk.gov.justice.services.jmx.api.mbean.CommandRunMode.GUARDED;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
 
 @ExtendWith(MockitoExtension.class)
 public class SystemCommanderTest {

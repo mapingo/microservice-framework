@@ -2,8 +2,6 @@ package uk.gov.justice.framework.command.client.startup;
 
 import uk.gov.justice.framework.command.client.ReturnCode;
 
-import java.util.UUID;
-
 public class Bootstrapper {
 
     private final ObjectFactory objectFactory;

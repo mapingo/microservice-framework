@@ -1,22 +1,5 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
-import io.restassured.path.json.JsonPath;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.justice.services.integrationtest.utils.jms.converters.ToJsonEnvelopeMessageConverter;
-import uk.gov.justice.services.integrationtest.utils.jms.converters.ToJsonPathMessageConverter;
-import uk.gov.justice.services.integrationtest.utils.jms.converters.ToStringMessageConverter;
-import uk.gov.justice.services.messaging.JsonEnvelope;
-
-import javax.jms.JMSException;
-import javax.jms.MessageConsumer;
-import java.util.List;
-import java.util.Optional;
-
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -24,9 +7,31 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.getValueOfField;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
+
+import uk.gov.justice.services.integrationtest.utils.jms.converters.ToJsonEnvelopeMessageConverter;
+import uk.gov.justice.services.integrationtest.utils.jms.converters.ToJsonPathMessageConverter;
+import uk.gov.justice.services.integrationtest.utils.jms.converters.ToStringMessageConverter;
+import uk.gov.justice.services.messaging.JsonEnvelope;
+
+import java.util.List;
+import java.util.Optional;
+
+import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
+
+import io.restassured.path.json.JsonPath;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class DefaultJmsMessageConsumerClientTest {

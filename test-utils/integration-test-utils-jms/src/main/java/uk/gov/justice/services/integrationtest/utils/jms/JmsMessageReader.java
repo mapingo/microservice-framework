@@ -3,11 +3,12 @@ package uk.gov.justice.services.integrationtest.utils.jms;
 import uk.gov.justice.services.integrationtest.utils.jms.converters.MessageConverter;
 import uk.gov.justice.services.integrationtest.utils.jms.converters.ToStringMessageConverter;
 
+import java.util.Optional;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.TextMessage;
-import java.util.Optional;
 
 
 class JmsMessageReader {

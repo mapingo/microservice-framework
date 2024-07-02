@@ -1,18 +1,10 @@
 package uk.gov.justice.services.jmx.runner;
 
-import org.slf4j.Logger;
-import uk.gov.justice.services.common.util.UtcClock;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
-import uk.gov.justice.services.jmx.state.events.SystemCommandStateChangedEvent;
 
-import javax.enterprise.event.Event;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-
-import static java.lang.String.format;
-import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
-import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED;
 
 public class RunSystemCommandTask implements Callable<Boolean> {
 

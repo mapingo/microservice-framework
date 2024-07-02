@@ -1,8 +1,6 @@
 package uk.gov.justice.framework.command.client;
 
 import static java.util.Arrays.asList;
-import static java.util.UUID.fromString;
-import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -17,7 +15,6 @@ import uk.gov.justice.services.jmx.api.mbean.CommandRunMode;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
 import org.junit.jupiter.api.Test;

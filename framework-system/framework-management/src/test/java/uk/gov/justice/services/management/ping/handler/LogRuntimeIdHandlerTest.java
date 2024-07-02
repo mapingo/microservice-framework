@@ -1,19 +1,5 @@
 package uk.gov.justice.services.management.ping.handler;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import uk.gov.justice.services.common.util.UtcClock;
-import uk.gov.justice.services.jmx.state.events.SystemCommandStateChangedEvent;
-import uk.gov.justice.services.management.ping.commands.LogRuntimeIdCommand;
-
-import javax.enterprise.event.Event;
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.UUID;
-
 import static java.time.ZoneOffset.UTC;
 import static java.time.ZonedDateTime.of;
 import static java.util.UUID.fromString;
@@ -24,6 +10,26 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_IN_PROGRESS;
+
+import uk.gov.justice.services.common.util.UtcClock;
+import uk.gov.justice.services.jmx.state.events.SystemCommandStateChangedEvent;
+import uk.gov.justice.services.management.ping.commands.LogRuntimeIdCommand;
+
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import javax.enterprise.event.Event;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InOrder;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
 
 @ExtendWith(MockitoExtension.class)
 public class LogRuntimeIdHandlerTest {

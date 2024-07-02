@@ -1,17 +1,19 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
-
-import java.lang.reflect.Field;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.getField;
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.getValueOfField;
+
+import java.lang.reflect.Field;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
 
 class JmsResourcesContextProviderTest {
 

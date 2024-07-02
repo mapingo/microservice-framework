@@ -5,7 +5,11 @@ import static uk.gov.justice.services.messaging.jms.HeaderConstants.JMS_HEADER_C
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.JsonObjectEnvelopeConverter;
+import uk.gov.justice.services.messaging.Metadata;
 import uk.gov.justice.services.messaging.jms.exception.JmsConverterException;
+
+import java.util.Optional;
+import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -20,18 +24,29 @@ import javax.jms.TextMessage;
 public class DefaultEnvelopeConverter implements EnvelopeConverter {
 
     @Inject
-    StringToJsonObjectConverter stringToJsonObjectConverter;
+    private StringToJsonObjectConverter stringToJsonObjectConverter;
 
     @Inject
-    JsonObjectEnvelopeConverter jsonObjectEnvelopeConverter;
+    private JsonObjectEnvelopeConverter jsonObjectEnvelopeConverter;
+
+    @Inject
+    private OversizeMessageGuard oversizeMessageGuard;
 
     @Override
     public JsonEnvelope fromMessage(final TextMessage message) {
-        String messageAsString;
 
         try {
-            messageAsString = message.getText();
-            return jsonObjectEnvelopeConverter.asEnvelope(stringToJsonObjectConverter.convert(messageAsString));
+            final String messageAsString = message.getText();
+            final JsonEnvelope jsonEnvelope = jsonObjectEnvelopeConverter.asEnvelope(stringToJsonObjectConverter.convert(messageAsString));
+
+            final Metadata metadata = jsonEnvelope.metadata();
+            final String envelopeName = metadata.name();
+            final UUID envelopeId = metadata.id();
+            final Optional<UUID> streamId = metadata.streamId();
+
+            oversizeMessageGuard.checkSizeOf(messageAsString, envelopeName, envelopeId, streamId);
+
+            return jsonEnvelope;
         } catch (JMSException e) {
             throw createJmsConverterException(message, e);
         }

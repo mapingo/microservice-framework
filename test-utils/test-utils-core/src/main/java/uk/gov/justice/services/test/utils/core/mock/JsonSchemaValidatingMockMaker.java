@@ -21,14 +21,13 @@ import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockMaker;
-
-import org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker;
 
 /**
  * Mockito extension to test if payloads passed to {@link Sender} and returned by {@link Requester},

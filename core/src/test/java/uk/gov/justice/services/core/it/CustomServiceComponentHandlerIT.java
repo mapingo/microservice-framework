@@ -88,7 +88,6 @@ import org.apache.openejb.junit5.RunWithApplicationComposer;
 import org.apache.openejb.testing.Classes;
 import org.apache.openejb.testing.Module;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 @RunWithApplicationComposer
 @CustomAdapter("CUSTOM_COMPONENT_TEST")

@@ -1,5 +1,7 @@
 package uk.gov.justice.services.messaging.jms;
 
+import static java.util.Optional.of;
+import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -13,6 +15,9 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.JsonObjectEnvelopeConverter;
 import uk.gov.justice.services.messaging.Metadata;
 import uk.gov.justice.services.messaging.jms.exception.JmsConverterException;
+
+import java.util.Optional;
+import java.util.UUID;
 
 import javax.jms.JMSException;
 import javax.jms.Session;
@@ -31,14 +36,17 @@ public class DefaultEnvelopeConverterTest {
     private static final String MESSAGE_TEXT = "Test Message";
     private static final String NAME = "name";
 
-    @InjectMocks
-    private DefaultEnvelopeConverter envelopeConverter;
+    @Mock
+    private OversizeMessageGuard oversizeMessageGuard;
 
     @Mock
     private StringToJsonObjectConverter stringToJsonObjectConverter;
 
     @Mock
     private JsonObjectEnvelopeConverter jsonObjectEnvelopeConverter;
+
+    @InjectMocks
+    private DefaultEnvelopeConverter envelopeConverter;
 
     @Mock
     private TextMessage textMessage;
@@ -57,13 +65,24 @@ public class DefaultEnvelopeConverterTest {
 
     @Test
     public void shouldReturnEnvelope() throws Exception {
+
+        final String envelopeName = "some.envelope.name";
+        final UUID envelopeId = randomUUID();
+        final UUID streamId = randomUUID();
+
         when(textMessage.getText()).thenReturn(MESSAGE_TEXT);
         when(stringToJsonObjectConverter.convert(MESSAGE_TEXT)).thenReturn(messageAsJsonObject);
         when(jsonObjectEnvelopeConverter.asEnvelope(messageAsJsonObject)).thenReturn(envelope);
+        when(envelope.metadata()).thenReturn(metadata);
+        when(metadata.name()).thenReturn(envelopeName);
+        when(metadata.id()).thenReturn(envelopeId);
+        when(metadata.streamId()).thenReturn(of(streamId));
 
-        JsonEnvelope actualEnvelope = envelopeConverter.fromMessage(textMessage);
+        final JsonEnvelope actualEnvelope = envelopeConverter.fromMessage(textMessage);
 
         assertThat(actualEnvelope, equalTo(envelope));
+
+        verify(oversizeMessageGuard).checkSizeOf(MESSAGE_TEXT, envelopeName, envelopeId, of(streamId));
     }
 
     @Test

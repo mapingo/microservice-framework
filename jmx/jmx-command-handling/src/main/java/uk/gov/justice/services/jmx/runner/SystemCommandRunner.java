@@ -1,17 +1,19 @@
 package uk.gov.justice.services.jmx.runner;
 
-import org.slf4j.Logger;
+import static java.lang.String.format;
+import static javax.transaction.Transactional.TxType.NEVER;
+
 import uk.gov.justice.services.jmx.api.SystemCommandInvocationException;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.command.SystemCommandStore;
 
-import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.lang.String.format;
-import static javax.transaction.Transactional.TxType.NEVER;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
 
 public class SystemCommandRunner {
 

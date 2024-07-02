@@ -17,7 +17,6 @@ import javax.jms.TextMessage;
 import javax.json.JsonObjectBuilder;
 
 import org.slf4j.Logger;
-import org.slf4j.MDC;
 
 /**
  * Gets the Metadata from the payload and adds metadata information to the Logger Mapped Diagnostic

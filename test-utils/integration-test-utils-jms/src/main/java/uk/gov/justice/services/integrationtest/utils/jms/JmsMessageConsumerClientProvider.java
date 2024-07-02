@@ -1,11 +1,11 @@
 package uk.gov.justice.services.integrationtest.utils.jms;
 
-import com.google.common.annotations.VisibleForTesting;
+import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Arrays.asList;
+import com.google.common.annotations.VisibleForTesting;
 
 public class JmsMessageConsumerClientProvider {
     private final JmsMessageClientFactory jmsMessageClientFactory;

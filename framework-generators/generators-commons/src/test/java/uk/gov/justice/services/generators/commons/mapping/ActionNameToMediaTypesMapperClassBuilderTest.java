@@ -8,7 +8,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility.javaCompilerUtil;
 
-import org.junit.jupiter.api.io.TempDir;
 import uk.gov.justice.services.core.annotation.MediaTypesMapper;
 import uk.gov.justice.services.core.mapping.ActionNameToMediaTypesMapper;
 import uk.gov.justice.services.core.mapping.MediaType;
@@ -21,6 +20,7 @@ import java.util.Map;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 @SuppressWarnings("ConstantConditions")
 public class ActionNameToMediaTypesMapperClassBuilderTest {

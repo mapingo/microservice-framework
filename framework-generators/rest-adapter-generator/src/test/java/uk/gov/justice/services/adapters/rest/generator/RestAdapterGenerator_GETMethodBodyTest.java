@@ -50,7 +50,6 @@ import java.util.function.Function;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
-import org.apache.cxf.jaxrs.impl.tl.ThreadLocalHttpHeaders;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
