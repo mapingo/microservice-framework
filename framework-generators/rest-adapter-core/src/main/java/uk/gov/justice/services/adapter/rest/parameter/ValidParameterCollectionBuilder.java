@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.common.collect.ImmutableMap;
+import org.slf4j.Logger;
 
 /**
  * Validates added query and path parameters and builds an {@link ImmutableMap}.
@@ -22,6 +23,14 @@ public class ValidParameterCollectionBuilder implements ParameterCollectionBuild
     private static final String INVALID_PARAM_VALUE = "Invalid parameter value.";
 
     private final Collection<Parameter> parameters = new ArrayList<>();
+
+    private final HttpParameterEncoder httpParameterEncoder;
+    private final Logger logger;
+
+    public ValidParameterCollectionBuilder(final HttpParameterEncoder httpParameterEncoder, final Logger logger) {
+        this.httpParameterEncoder = httpParameterEncoder;
+        this.logger = logger;
+    }
 
     /**
      * returns collection of all valid parameters.
@@ -70,7 +79,20 @@ public class ValidParameterCollectionBuilder implements ParameterCollectionBuild
 
     private void addParam(final String name, final String value, final ParameterType type) {
         try {
-            parameters.add(DefaultParameter.valueOf(name, value, type));
+
+            final String encodedValue = httpParameterEncoder.encodeForHtmlAttribute(value);
+
+            if (! encodedValue.equals(value)) {
+                logger.warn(format("SUSPICIOUS HTTP PARAMETER DETECTED: The http parameter '%s' " +
+                        "was encoded to prevent cross site scripting attack. " +
+                        "Original parameter value '%s' " +
+                        "encoded as '%s'",
+                        name,
+                        value,
+                        encodedValue));
+            }
+
+            parameters.add(DefaultParameter.valueOf(name, encodedValue, type));
         } catch (IllegalArgumentException e) {
             throw new BadRequestException(INVALID_PARAM_VALUE, e);
         }

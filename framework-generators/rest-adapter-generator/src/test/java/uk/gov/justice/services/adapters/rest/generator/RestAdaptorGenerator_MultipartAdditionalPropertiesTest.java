@@ -4,12 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import uk.gov.justice.api.resource.DefaultCommandApiPhotographsUseridResource;
 import uk.gov.justice.services.adapter.rest.mapping.ActionMapper;
 import uk.gov.justice.services.adapter.rest.multipart.FileInputDetailsFactory;
+import uk.gov.justice.services.adapter.rest.parameter.HttpParameterEncoder;
 import uk.gov.justice.services.adapter.rest.parameter.Parameter;
 import uk.gov.justice.services.adapter.rest.parameter.ParameterCollectionBuilderFactory;
 import uk.gov.justice.services.adapter.rest.parameter.ValidParameterCollectionBuilder;
@@ -41,6 +43,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
 
 @ExtendWith(MockitoExtension.class)
 public class RestAdaptorGenerator_MultipartAdditionalPropertiesTest {
@@ -82,6 +85,9 @@ public class RestAdaptorGenerator_MultipartAdditionalPropertiesTest {
     @Mock
     private InputPart additionalProperty;
 
+    @Mock
+    private HttpParameterEncoder httpParameterEncoder;
+
     @Captor
     private ArgumentCaptor<Collection<Parameter>> parametersCaptor;
 
@@ -97,13 +103,13 @@ public class RestAdaptorGenerator_MultipartAdditionalPropertiesTest {
         inputPartList.add(additionalProperty);
         inputParts.put(DOCUMENT_TYPE, inputPartList);
 
-        when(validParameterCollectionBuilderFactory.create()).thenReturn(new ValidParameterCollectionBuilder());
+        when(validParameterCollectionBuilderFactory.create()).thenReturn(new ValidParameterCollectionBuilder(httpParameterEncoder, mock(Logger.class)));
         when(multipartFormDataInput.getFormDataMap()).thenReturn(inputParts);
         when(additionalProperty.getMediaType()).thenReturn(mediaType);
         when(mediaType.getType()).thenReturn("text");
         when(additionalProperty.getBodyAsString()).thenReturn(BODY);
         when(actionMapper.actionOf(any(String.class), any(String.class), eq(headers))).thenReturn(action);
-
+        when(httpParameterEncoder.encodeForHtmlAttribute(anyString())).thenAnswer(i -> i.getArguments()[0]);
 
         defaultCommandApiPhotographsUseridResource.postPeopleUploadPhotographPhotographsByUserid(UUID.randomUUID().toString(), multipartFormDataInput);
         verify(restProcessor).process(anyString(), any(Function.class), anyString(), any(HttpHeaders.class),

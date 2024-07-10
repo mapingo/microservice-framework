@@ -1,10 +1,17 @@
 package uk.gov.justice.services.adapter.rest.parameter;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.getValueOfField;
+
+import uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ValidParameterCollectionBuilderFactoryTest {
 
@@ -14,6 +21,7 @@ public class ValidParameterCollectionBuilderFactoryTest {
 
         assertThat(collectionBuilder, instanceOf(ValidParameterCollectionBuilder.class));
         assertThat(collectionBuilder, instanceOf(ParameterCollectionBuilder.class));
+        assertThat(getValueOfField(collectionBuilder, "logger", Logger.class), is(notNullValue()));
     }
 
     @Test

@@ -27,6 +27,7 @@ import uk.gov.justice.services.adapter.rest.mapping.BasicActionMapperHelper;
 import uk.gov.justice.services.adapter.rest.multipart.DefaultFileInputDetailsFactory;
 import uk.gov.justice.services.adapter.rest.multipart.FileBasedInterceptorContextFactory;
 import uk.gov.justice.services.adapter.rest.multipart.InputPartFileNameExtractor;
+import uk.gov.justice.services.adapter.rest.parameter.HttpParameterEncoder;
 import uk.gov.justice.services.adapter.rest.parameter.ValidParameterCollectionBuilderFactory;
 import uk.gov.justice.services.adapter.rest.processor.DefaultRestProcessor;
 import uk.gov.justice.services.adapter.rest.processor.ResponseStrategyCache;
@@ -188,6 +189,7 @@ public class AcceptedWithResponseBodyIT {
             JndiAppNameProvider.class,
 
             SchemaValidationErrorMessageGenerator.class,
+            HttpParameterEncoder.class,
             MdcWrapper.class
     })
     public WebApp war() {
