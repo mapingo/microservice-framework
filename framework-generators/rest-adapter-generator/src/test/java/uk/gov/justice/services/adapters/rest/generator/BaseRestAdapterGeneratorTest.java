@@ -7,6 +7,7 @@ import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.
 
 import uk.gov.justice.services.adapter.rest.mapping.ActionMapper;
 import uk.gov.justice.services.adapter.rest.multipart.FileInputDetailsFactory;
+import uk.gov.justice.services.adapter.rest.parameter.HttpParameterEncoder;
 import uk.gov.justice.services.adapter.rest.parameter.ParameterCollectionBuilderFactory;
 import uk.gov.justice.services.adapter.rest.parameter.ValidParameterCollectionBuilder;
 import uk.gov.justice.services.adapter.rest.processor.RestProcessor;
@@ -19,6 +20,7 @@ import uk.gov.justice.services.messaging.logging.TraceLogger;
 import uk.gov.justice.services.test.utils.core.compiler.JavaCompilerUtility;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.ws.rs.core.HttpHeaders;
 
@@ -80,6 +82,9 @@ public abstract class BaseRestAdapterGeneratorTest {
     @Mock
     protected HttpHeaders httpHeaders;
 
+    @Mock
+    protected HttpParameterEncoder httpParameterEncoder;
+
     @TempDir
     public File outputFolder;
 
@@ -93,8 +98,8 @@ public abstract class BaseRestAdapterGeneratorTest {
         setField(generator, LOGGER_FIELD, logger);
     }
 
-    protected Object getInstanceOf(final Class<?> resourceClass) throws InstantiationException, IllegalAccessException {
-        final Object resourceObject = resourceClass.newInstance();
+    protected Object getInstanceOf(final Class<?> resourceClass) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        final Object resourceObject = resourceClass.getDeclaredConstructor().newInstance();
         setField(resourceObject, REST_PROCESSOR, restProcessor);
         setField(resourceObject, INTERCEPTOR_CHAIN_PROCESSOR, interceptorChainProcessor);
         setField(resourceObject, ACTION_MAPPER, actionMapper);
@@ -105,7 +110,7 @@ public abstract class BaseRestAdapterGeneratorTest {
         setField(resourceObject, HTTP_HEADERS_FIELD, httpHeaders);
 
 
-        when(validParameterCollectionBuilderFactory.create()).thenReturn(new ValidParameterCollectionBuilder());
+        when(validParameterCollectionBuilderFactory.create()).thenReturn(new ValidParameterCollectionBuilder(httpParameterEncoder, logger));
 
         return resourceObject;
     }

@@ -358,6 +358,7 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
 
         final String action = "theAction";
         when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+        when(httpParameterEncoder.encodeForHtmlAttribute("paramValue1234")).thenReturn("paramValue1234");
 
         final Object resourceObject = getInstanceOf(resourceClass);
 
@@ -396,6 +397,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
 
         final String action = "theAction";
         when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+        when(httpParameterEncoder.encodeForHtmlAttribute("paramValueABC")).thenReturn("paramValueABC");
+        when(httpParameterEncoder.encodeForHtmlAttribute("paramValueDEF")).thenReturn("paramValueDEF");
 
         final Object resourceObject = getInstanceOf(resourceClass);
 
@@ -430,6 +433,7 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
 
         final String action = "theAction";
         when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+        when(httpParameterEncoder.encodeForHtmlAttribute("paramValue1234")).thenReturn("paramValue1234");
 
         final Class<?> resourceClass = COMPILER.compiledClassOf(
                 outputFolder,
@@ -486,8 +490,11 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
 
         boolean queryParam1IsFirstMethodParameter = method.getParameters()[0].getName().equals("queryParam1");
         if (queryParam1IsFirstMethodParameter) {
+            when(httpParameterEncoder.encodeForHtmlAttribute("paramValueABC")).thenReturn("paramValueABC");
             method.invoke(resourceObject, "paramValueABC", "2");
         } else {
+            when(httpParameterEncoder.encodeForHtmlAttribute("paramValueABC")).thenReturn("paramValueABC");
+            when(httpParameterEncoder.encodeForHtmlAttribute("2")).thenReturn("2");
             method.invoke(resourceObject, "2", "paramValueABC");
         }
 
@@ -503,7 +510,6 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 allOf(hasProperty("name", equalTo("queryParam1")), hasProperty("stringValue", equalTo("paramValueABC"))),
                 allOf(hasProperty("name", equalTo("queryParam2")), hasProperty("numericValue", equalTo(BigDecimal.valueOf(2))))
         ));
-
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -529,6 +535,7 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
 
         final String action = "theAction";
         when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+        when(httpParameterEncoder.encodeForHtmlAttribute("false")).thenReturn("false");
 
         final Object resourceObject = getInstanceOf(resourceClass);
 
@@ -573,6 +580,8 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
         final Object resourceObject = getInstanceOf(resourceClass);
         final String action = "theAction";
         when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+        when(httpParameterEncoder.encodeForHtmlAttribute("paramValueABC")).thenReturn("paramValueABC");
+        when(httpParameterEncoder.encodeForHtmlAttribute("paramValueDEF")).thenReturn("paramValueDEF");
 
         final Method method = firstMethodOf(resourceClass).get();
         method.invoke(resourceObject, "paramValueABC", "paramValueDEF");
@@ -589,8 +598,6 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
                 allOf(hasProperty("name", equalTo("param")), hasProperty("stringValue", equalTo("paramValueABC"))),
                 allOf(hasProperty("name", equalTo("queryParam")), hasProperty("stringValue", equalTo("paramValueDEF")))
         ));
-
-
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -614,6 +621,7 @@ public class RestAdapterGenerator_GETMethodBodyTest extends BaseRestAdapterGener
 
         final String action = "theAction";
         when(actionMapper.actionOf(any(String.class), any(String.class), eq(httpHeaders))).thenReturn(action);
+        when(httpParameterEncoder.encodeForHtmlAttribute("paramValueABC")).thenReturn("paramValueABC");
 
         final Object resourceObject = getInstanceOf(resourceClass);
 
