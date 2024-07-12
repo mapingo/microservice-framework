@@ -7,6 +7,7 @@ import static javax.lang.model.element.Modifier.FINAL;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.element.Modifier.STATIC;
+import static uk.gov.justice.raml.jms.core.JmsEndPointGeneratorUtil.maxSessionPropertyFor;
 import static uk.gov.justice.subscription.jms.core.ClassNameFactory.EVENT_VALIDATION_INTERCEPTOR;
 import static uk.gov.justice.subscription.jms.core.ClassNameFactory.JMS_LISTENER;
 import static uk.gov.justice.subscription.jms.core.ClassNameFactory.JMS_LOGGER_METADATA_INTERCEPTOR;
@@ -69,6 +70,7 @@ public class MessageListenerCodeGenerator {
     private static final String DURABLE = "Durable";
     private static final String SUBSCRIPTION_NAME = "subscriptionName";
     private static final String SHARE_SUBSCRIPTIONS = "shareSubscriptions";
+    public static final String MAX_SESSION = "maxSession";
 
     private final ComponentDestinationType componentDestinationType = new ComponentDestinationType();
     private final JmsUriToDestinationConverter jmsUriToDestinationConverter = new JmsUriToDestinationConverter();
@@ -239,6 +241,9 @@ public class MessageListenerCodeGenerator {
                     .addMember(ACTIVATION_CONFIG_PARAMETER, "$L",
                             generateActivationConfigPropertyAnnotation(SUBSCRIPTION_NAME, subscriptionNameOf(destination, clientId)));
         }
+
+        builder.addMember(ACTIVATION_CONFIG_PARAMETER, "$L",
+                generateActivationConfigPropertyAnnotation(MAX_SESSION, maxSessionPropertyFor(component)));
 
         return builder.build();
     }

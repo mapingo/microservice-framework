@@ -2,6 +2,7 @@ package uk.gov.justice.raml.jms.core;
 
 import static uk.gov.justice.raml.jms.core.MediaTypesUtil.containsGeneralJsonMimeType;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_LISTENER;
+import static uk.gov.justice.subscription.jms.core.MessageListenerCodeGenerator.MAX_SESSION;
 
 import uk.gov.justice.services.generators.commons.helper.MessagingAdapterBaseUri;
 
@@ -32,5 +33,9 @@ public class JmsEndPointGeneratorUtil {
 
     static boolean shouldListenToAllMessages(final Map<ActionType, Action> resourceActions, final MessagingAdapterBaseUri baseUri) {
         return EVENT_LISTENER.equals(baseUri.component()) || containsGeneralJsonMimeType(resourceActions);
+    }
+
+    public static String maxSessionPropertyFor(final String component) {
+        return "${property.mdb.%s.%s}".formatted(component, MAX_SESSION);
     }
 }

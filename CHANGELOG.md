@@ -5,6 +5,7 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 [Unreleased]
 ### Changed
+- Adding maxSession for all MessageDrivenBeans PEG-208
 - All events pulled from the event queue by the message driven bean now 
   check the size of the message, and will log an error if the number of bytes 
   is greater than a new jndi value `messaging.jms.oversize.message.threshold.bytes`

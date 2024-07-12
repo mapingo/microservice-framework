@@ -1,5 +1,6 @@
 package uk.gov.justice.subscription.jms.it;
 
+import static java.lang.System.setProperty;
 import static javax.json.Json.createObjectBuilder;
 import static org.junit.jupiter.api.Assertions.fail;
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
@@ -29,6 +30,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractJmsAdapterGenerationIT {
+
+    static {
+        //Needed to make integration tests pass
+        setProperty("property.mdb.EVENT_LISTENER.maxSession", "15");
+        setProperty("property.mdb.COMMAND_HANDLER.maxSession", "15");
+        setProperty("property.mdb.COMMAND_API.maxSession", "15");
+        setProperty("property.mdb.COMMAND_CONTROLLER.maxSession", "15");
+        setProperty("property.mdb.EVENT_PROCESSOR.maxSession", "15");
+        setProperty("property.mdb.EVENT_INDEXER.maxSession", "15");
+    }
 
     private static int port = -1;
     private static final Logger LOG = LoggerFactory.getLogger(AbstractJmsAdapterGenerationIT.class);
