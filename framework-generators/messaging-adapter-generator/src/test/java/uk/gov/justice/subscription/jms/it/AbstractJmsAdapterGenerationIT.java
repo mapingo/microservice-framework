@@ -31,14 +31,15 @@ import org.slf4j.LoggerFactory;
 
 public abstract class AbstractJmsAdapterGenerationIT {
 
+    private static final String DEFAULT_MAX_SESSION = "15";
     static {
         //Needed to make integration tests pass
-        setProperty("property.mdb.EVENT_LISTENER.maxSession", "15");
-        setProperty("property.mdb.COMMAND_HANDLER.maxSession", "15");
-        setProperty("property.mdb.COMMAND_API.maxSession", "15");
-        setProperty("property.mdb.COMMAND_CONTROLLER.maxSession", "15");
-        setProperty("property.mdb.EVENT_PROCESSOR.maxSession", "15");
-        setProperty("property.mdb.EVENT_INDEXER.maxSession", "15");
+        setProperty("property.mdb.EVENT_LISTENER.maxSession", DEFAULT_MAX_SESSION);
+        setProperty("property.mdb.COMMAND_HANDLER.maxSession", DEFAULT_MAX_SESSION);
+        setProperty("property.mdb.COMMAND_API.maxSession", DEFAULT_MAX_SESSION);
+        setProperty("property.mdb.COMMAND_CONTROLLER.maxSession", DEFAULT_MAX_SESSION);
+        setProperty("property.mdb.EVENT_PROCESSOR.maxSession", DEFAULT_MAX_SESSION);
+        setProperty("property.mdb.EVENT_INDEXER.maxSession", DEFAULT_MAX_SESSION);
     }
 
     private static int port = -1;
