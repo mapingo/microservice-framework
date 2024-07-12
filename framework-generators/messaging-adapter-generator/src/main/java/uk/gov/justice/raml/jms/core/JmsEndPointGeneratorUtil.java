@@ -36,6 +36,6 @@ public class JmsEndPointGeneratorUtil {
     }
 
     public static String maxSessionPropertyFor(final String component) {
-        return "${property.mdb.%s.%s}".formatted(component, MAX_SESSION);
+        return "${property.mdb.%s.%s:15}".formatted(component, MAX_SESSION);
     }
 }

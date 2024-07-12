@@ -171,6 +171,17 @@
                             <systemPropertyVariables>
                                 <random.jms.port>${random-jms-port}</random.jms.port>
                                 <random.http.port>${random-http-port}</random.http.port>
+                                <!--
+                                The placeholder delimiter for Wildfly is ':' i.e. ${myIntegerPropertyPlaceHolder:77}
+                                The one for Tomee/openEJB is ':-' i.e ${myIntegerPropertyPlaceHolder:-77}
+                                So, we need to force OpenEJB to use the same delimiter as wildfly
+                                by setting the system property 'openejb.placehodler.delimiter' which contains a typo.
+                                So, we have 2 properties defined below. one with the typo and the correct one.
+                                I have opened a defect against OpenEJB code base at
+                                https://issues.apache.org/jira/browse/TOMEE-4368
+                                -->
+                                <openejb.placehodler.delimiter>:</openejb.placehodler.delimiter>
+                                <openejb.placeholder.delimiter>:</openejb.placeholder.delimiter>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
