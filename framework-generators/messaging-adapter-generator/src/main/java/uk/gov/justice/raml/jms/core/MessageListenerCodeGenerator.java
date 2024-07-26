@@ -8,12 +8,14 @@ import static javax.lang.model.element.Modifier.PUBLIC;
 import static javax.lang.model.element.Modifier.STATIC;
 import static uk.gov.justice.raml.jms.core.ClassNameFactory.EVENT_VALIDATION_INTERCEPTOR;
 import static uk.gov.justice.raml.jms.core.ClassNameFactory.JMS_LISTENER;
+import static uk.gov.justice.raml.jms.core.JmsEndPointGeneratorUtil.maxSessionPropertyFor;
 import static uk.gov.justice.raml.jms.core.JmsEndPointGeneratorUtil.shouldGenerateEventFilter;
 import static uk.gov.justice.raml.jms.core.JmsEndPointGeneratorUtil.shouldListenToAllMessages;
 import static uk.gov.justice.raml.jms.core.MediaTypesUtil.containsGeneralJsonMimeType;
 import static uk.gov.justice.raml.jms.core.MediaTypesUtil.mediaTypesFrom;
 import static uk.gov.justice.services.generators.commons.helper.Names.namesListStringFrom;
 import static uk.gov.justice.subscription.jms.core.ClassNameFactory.JMS_LOGGER_METADATA_INTERCEPTOR;
+import static uk.gov.justice.subscription.jms.core.MessageListenerCodeGenerator.MAX_SESSION;
 
 import uk.gov.justice.services.adapter.messaging.JmsProcessor;
 import uk.gov.justice.services.adapter.messaging.JsonSchemaValidationInterceptor;
@@ -228,6 +230,9 @@ class MessageListenerCodeGenerator {
                     .addMember(ACTIVATION_CONFIG_PARAMETER, "$L",
                             generateActivationConfigPropertyAnnotation(SUBSCRIPTION_NAME, subscriptionNameOf(resourceUri, clientId)));
         }
+
+        builder.addMember(ACTIVATION_CONFIG_PARAMETER, "$L",
+                generateActivationConfigPropertyAnnotation(MAX_SESSION, maxSessionPropertyFor(component)));
 
         return builder.build();
     }

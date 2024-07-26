@@ -94,7 +94,8 @@ public class MessageListenerCodeGeneratorTest {
                         @javax.ejb.ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "my-context.handler.command"),
                         @javax.ejb.ActivationConfigProperty(propertyName = "shareSubscriptions", propertyValue = "true"),
                         @javax.ejb.ActivationConfigProperty(propertyName = "subscriptionDurability", propertyValue = "Durable"),
-                        @javax.ejb.ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "my-context.event.listener.my-context.handler.command")
+                        @javax.ejb.ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "my-context.event.listener.my-context.handler.command"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "maxSession", propertyValue = "${property.mdb.EVENT_LISTENER.maxSession:15}")
                     }
                 )
                 @javax.interceptor.Interceptors({
@@ -181,7 +182,8 @@ public class MessageListenerCodeGeneratorTest {
                         @javax.ejb.ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
                         @javax.ejb.ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "my-context.handler.command"),
                         @javax.ejb.ActivationConfigProperty(propertyName = "shareSubscriptions", propertyValue = "true"),
-                        @javax.ejb.ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "CPPNAME in('my-context.events.something-happened','my-context.events.something-else-happened')")
+                        @javax.ejb.ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "CPPNAME in('my-context.events.something-happened','my-context.events.something-else-happened')"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "maxSession", propertyValue = "${property.mdb.COMMAND_HANDLER.maxSession:15}")
                     }
                 )
                 @javax.interceptor.Interceptors({
@@ -267,7 +269,8 @@ public class MessageListenerCodeGeneratorTest {
                         @javax.ejb.ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
                         @javax.ejb.ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "my-context.handler.command"),
                         @javax.ejb.ActivationConfigProperty(propertyName = "shareSubscriptions", propertyValue = "true"),
-                        @javax.ejb.ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "CPPNAME in('my-context.events.something-happened','my-context.events.something-else-happened')")
+                        @javax.ejb.ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "CPPNAME in('my-context.events.something-happened','my-context.events.something-else-happened')"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "maxSession", propertyValue = "${property.mdb.COMMAND_API.maxSession:15}")
                     }
                 )
                 @javax.interceptor.Interceptors({
