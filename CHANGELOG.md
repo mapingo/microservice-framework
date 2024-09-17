@@ -5,9 +5,15 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 
 [Unreleased]
 
+## [17.6.2] - 2024-09-17
+### Changed
+- Update framework libraries to 17.6.2 in order to:
+  - Update jobstore to process tasks with higher priority first
+  - Fix for Jackson single argument constructor issue inspired from  https://github.com/FasterXML/jackson-databind/issues/1498
+
 ## [17.6.1] - 2024-07-12
 ### Changed
-- Adding maxSession for all MessageDrivenBeans PEG-208
+- Adding maxSession for all MessageDrivenBeans 
 - All events pulled from the event queue by the message driven bean now 
   check the size of the message, and will log an error if the number of bytes 
   is greater than a new jndi value `messaging.jms.oversize.message.threshold.bytes`
