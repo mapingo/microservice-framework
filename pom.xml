@@ -12,7 +12,7 @@
 
     <groupId>uk.gov.justice.services</groupId>
     <artifactId>microservice-framework</artifactId>
-    <version>17.6.6-SNAPSHOT</version>
+    <version>17.6.7</version>
     <packaging>pom</packaging>
 
     <name>Microservice Framework</name>
@@ -47,7 +47,7 @@
     
     <properties>
         <cpp.repo.name>microservice_framework</cpp.repo.name>
-        <framework-libraries.version>17.6.5</framework-libraries.version>
+        <framework-libraries.version>17.6.7</framework-libraries.version>
     </properties>
 
     <dependencyManagement>
