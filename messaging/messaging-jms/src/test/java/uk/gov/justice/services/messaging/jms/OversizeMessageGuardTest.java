@@ -51,7 +51,7 @@ public class OversizeMessageGuardTest {
                 "The size of message 'some.event.name', " +
                 "with id '22c9aa4f-1365-45a2-9572-bb6fa88cd20b' " +
                 "and streamId 'd4445eaa-77b7-4990-a17f-ac9b84052944' is 44 bytes. " +
-                "This exceeds the message size threshold of 43 byes.");
+                "This exceeds the message size threshold of 43 bytes.");
     }
 
     @Test
