@@ -29,6 +29,41 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class MessageListenerCodeGeneratorTest {
 
+    private static final String DEFAULT_TOPIC_EVENT_PROCESSOR_TYPE_SPEC = """
+            @uk.gov.justice.services.core.annotation.Adapter("EVENT_PROCESSOR")
+            @javax.ejb.MessageDriven(
+                activationConfig = {
+                    @javax.ejb.ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
+                    @javax.ejb.ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "my-context.event"),
+                    @javax.ejb.ActivationConfigProperty(propertyName = "shareSubscriptions", propertyValue = "true"),
+                    @javax.ejb.ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "CPPNAME in('my-context.events.something-happened')"),
+                    @javax.ejb.ActivationConfigProperty(propertyName = "subscriptionDurability", propertyValue = "Durable"),
+                    @javax.ejb.ActivationConfigProperty(propertyName = "subscriptionName", propertyValue = "my-context.event.processor.my-context.event"),
+                    @javax.ejb.ActivationConfigProperty(propertyName = "maxSession", propertyValue = "${property.mdb.EVENT_PROCESSOR.maxSession:15}")
+                }
+            )
+            @javax.interceptor.Interceptors({
+                uk.gov.moj.base.package.name.MyContextEventProcessorMyContextEventJmsLoggerMetadataInterceptor.class,
+                uk.gov.justice.services.adapter.messaging.JsonSchemaValidationInterceptor.class
+            })
+            public class MyContextEventProcessorMyContextEventJmsListener implements javax.jms.MessageListener {
+              private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(uk.gov.moj.base.package.name.MyContextEventProcessorMyContextEventJmsListener.class);
+                            
+              @javax.inject.Inject
+              @uk.gov.justice.services.subscription.annotation.SubscriptionName("subscription")
+              uk.gov.justice.services.subscription.SubscriptionManager subscriptionManager;
+                            
+              @javax.inject.Inject
+              uk.gov.justice.services.adapter.messaging.SubscriptionJmsProcessor subscriptionJmsProcessor;
+                            
+              @java.lang.Override
+              public void onMessage(javax.jms.Message message) {
+                uk.gov.justice.services.messaging.logging.LoggerUtils.trace(LOGGER, () -> "Received JMS message");
+                subscriptionJmsProcessor.process(message, subscriptionManager);
+              }
+            }
+            """;
+
     @InjectMocks
     private MessageListenerCodeGenerator messageListenerCodeGenerator;
 
@@ -294,5 +329,107 @@ public class MessageListenerCodeGeneratorTest {
                   }
                 }
                 """));
+    }
+
+    @Test
+    public void shouldGenerateMDBForEventProcessorAsQueue() {
+
+        final TypeSpec typeSpec = getTypeSpecForEventProcessor("queue");
+
+        assertThat(typeSpec.toString(), is("""
+                @uk.gov.justice.services.core.annotation.Adapter("EVENT_PROCESSOR")
+                @javax.ejb.MessageDriven(
+                    activationConfig = {
+                        @javax.ejb.ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "my-context.event"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "shareSubscriptions", propertyValue = "true"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "messageSelector", propertyValue = "CPPNAME in('my-context.events.something-happened')"),
+                        @javax.ejb.ActivationConfigProperty(propertyName = "maxSession", propertyValue = "${property.mdb.EVENT_PROCESSOR.maxSession:15}")
+                    }
+                )
+                @javax.interceptor.Interceptors({
+                    uk.gov.moj.base.package.name.MyContextEventProcessorMyContextEventJmsLoggerMetadataInterceptor.class,
+                    uk.gov.justice.services.adapter.messaging.JsonSchemaValidationInterceptor.class
+                })
+                public class MyContextEventProcessorMyContextEventJmsListener implements javax.jms.MessageListener {
+                  private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(uk.gov.moj.base.package.name.MyContextEventProcessorMyContextEventJmsListener.class);
+                
+                  @javax.inject.Inject
+                  @uk.gov.justice.services.subscription.annotation.SubscriptionName("subscription")
+                  uk.gov.justice.services.subscription.SubscriptionManager subscriptionManager;
+                
+                  @javax.inject.Inject
+                  uk.gov.justice.services.adapter.messaging.SubscriptionJmsProcessor subscriptionJmsProcessor;
+                
+                  @java.lang.Override
+                  public void onMessage(javax.jms.Message message) {
+                    uk.gov.justice.services.messaging.logging.LoggerUtils.trace(LOGGER, () -> "Received JMS message");
+                    subscriptionJmsProcessor.process(message, subscriptionManager);
+                  }
+                }
+                """));
+    }
+
+    @Test
+    public void shouldGenerateMDBForEventProcessorAsTopic() {
+
+        final TypeSpec typeSpec = getTypeSpecForEventProcessor("topic");
+
+        assertThat(typeSpec.toString(), is(DEFAULT_TOPIC_EVENT_PROCESSOR_TYPE_SPEC));
+    }
+
+    @Test
+    public void shouldGenerateMDBForEventProcessorAsTopicForUnexpectedDestinationType() {
+
+        final TypeSpec typeSpec = getTypeSpecForEventProcessor("unexpected destination type");
+
+        assertThat(typeSpec.toString(), is(DEFAULT_TOPIC_EVENT_PROCESSOR_TYPE_SPEC));
+    }
+
+    private TypeSpec getTypeSpecForEventProcessor(final String destinationType) {
+        final String basePackageName = "uk.gov.moj.base.package.name";
+        final String serviceName = "my-context";
+        final String componentName = "EVENT_PROCESSOR";
+        final String jmsUri = "jms:%s:my-context.event".formatted(destinationType);
+
+        final Event event_1 = event()
+                .withName("my-context.events.something-happened")
+                .withSchemaUri("http://justice.gov.uk/json/schemas/domains/example/my-context.events.something-happened.json")
+                .build();
+
+        final EventSourceDefinition eventSourceDefinition = eventSourceDefinition()
+                .withName("eventsource")
+                .withLocation(location()
+                        .withJmsUri(jmsUri)
+                        .withRestUri("http://localhost:8080/example/event-source-api/rest")
+                        .build())
+                .build();
+
+        final List<EventSourceDefinition> eventSourceDefinitions = singletonList(eventSourceDefinition);
+
+        final Subscription subscription = subscription()
+                .withName("subscription")
+                .withEvent(event_1)
+                .withEventSourceName("eventsource")
+                .build();
+
+        final SubscriptionsDescriptor subscriptionsDescriptor = subscriptionsDescriptor()
+                .withSpecVersion("1.0.0")
+                .withService(serviceName)
+                .withServiceComponent(componentName)
+                .withSubscription(subscription)
+                .build();
+
+        final ClassNameFactory classNameFactory = new ClassNameFactory(
+                basePackageName,
+                serviceName,
+                componentName,
+                jmsUri);
+
+        final GeneratorProperties generatorProperties = new GeneratorPropertiesFactory().withServiceComponentOf("EVENT_PROCESSOR");
+
+        final SubscriptionWrapper subscriptionWrapper = new SubscriptionWrapper(subscriptionsDescriptor, eventSourceDefinitions);
+
+        return messageListenerCodeGenerator.generate(subscriptionWrapper, subscription, (CommonGeneratorProperties) generatorProperties, classNameFactory);
     }
 }

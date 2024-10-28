@@ -29,6 +29,7 @@ import uk.gov.justice.subscription.domain.subscriptiondescriptor.Subscription;
 import uk.gov.justice.subscription.domain.subscriptiondescriptor.SubscriptionsDescriptor;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
@@ -74,6 +75,7 @@ public class MessageListenerCodeGenerator {
 
     private final ComponentDestinationType componentDestinationType = new ComponentDestinationType();
     private final JmsUriToDestinationConverter jmsUriToDestinationConverter = new JmsUriToDestinationConverter();
+    private final JmsUriToDestinationTypeConverter jmsUriToDestinationTypeConverter = new JmsUriToDestinationTypeConverter();
 
     /**
      * Create an implementation of the {@link MessageListener}.
@@ -113,7 +115,11 @@ public class MessageListenerCodeGenerator {
 
             final ClassName className = classNameFactory.classNameFor(JMS_LISTENER);
             final EventSourceDefinition eventSourceDefinition = subscriptionWrapper.getEventSourceByName(subscription.getEventSourceName());
-            final String destination = jmsUriToDestinationConverter.convert(eventSourceDefinition.getLocation().getJmsUri());
+            final String jmsUri = eventSourceDefinition.getLocation().getJmsUri();
+            final String destination = jmsUriToDestinationConverter.convert(jmsUri);
+            final Optional<Class<? extends Destination>> destinationTypeOption = jmsUriToDestinationTypeConverter.convertForEventProcessor(serviceComponent, jmsUri);
+            final Class<? extends Destination> destinationType = destinationTypeOption.orElse(componentDestinationType.inputTypeFor(serviceComponent));
+
 
             final TypeSpec.Builder typeSpecBuilder = classBuilder(className)
                     .addModifiers(PUBLIC)
@@ -134,7 +140,8 @@ public class MessageListenerCodeGenerator {
                     .addAnnotation(AnnotationSpec.builder(Adapter.class)
                             .addMember(DEFAULT_ANNOTATION_PARAMETER, "$S", serviceComponent)
                             .build())
-                    .addAnnotation(messageDrivenAnnotation(serviceComponent, subscriptionsDescriptor.getService(), subscription, destination));
+                    .addAnnotation(messageDrivenAnnotation(serviceComponent, subscriptionsDescriptor.getService(), subscription, destination,
+                            destinationType));
 
             if (!subscription.getEvents().isEmpty()) {
                 AnnotationSpec.Builder builder = AnnotationSpec.builder(Interceptors.class)
@@ -216,13 +223,12 @@ public class MessageListenerCodeGenerator {
     private AnnotationSpec messageDrivenAnnotation(final String component,
                                                    final String service,
                                                    final Subscription subscription,
-                                                   final String destination) {
-
-        final Class<? extends Destination> inputType = componentDestinationType.inputTypeFor(component);
+                                                   final String destination,
+                                                   Class<? extends Destination> destinationType) {
 
         AnnotationSpec.Builder builder = AnnotationSpec.builder(MessageDriven.class)
                 .addMember(ACTIVATION_CONFIG_PARAMETER, "$L",
-                        generateActivationConfigPropertyAnnotation(DESTINATION_TYPE, inputType.getName()))
+                        generateActivationConfigPropertyAnnotation(DESTINATION_TYPE, destinationType.getName()))
                 .addMember(ACTIVATION_CONFIG_PARAMETER, "$L",
                         generateActivationConfigPropertyAnnotation(DESTINATION_LOOKUP, destination))
                 .addMember(ACTIVATION_CONFIG_PARAMETER, "$L",
@@ -233,7 +239,7 @@ public class MessageListenerCodeGenerator {
                     generateActivationConfigPropertyAnnotation(MESSAGE_SELECTOR, messageSelectorsFrom(subscription.getEvents())));
         }
 
-        if (Topic.class.equals(inputType)) {
+        if (Topic.class.equals(destinationType)) {
             final String clientId = adapterClientId(service, component);
             builder
                     .addMember(ACTIVATION_CONFIG_PARAMETER, "$L",
@@ -293,4 +299,6 @@ public class MessageListenerCodeGenerator {
     private String subscriptionNameOf(final String destination, final String clientId) {
         return format("%s.%s", clientId, destination);
     }
+
+
 }

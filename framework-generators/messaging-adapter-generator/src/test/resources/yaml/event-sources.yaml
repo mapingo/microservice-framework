@@ -28,3 +28,8 @@ event_sources:
   location:
     jms_uri:  jms:topic:structure.event
     rest_uri: http://localhost:8080/example/event-source-api/rest
+
+- name: queuestructure.event.processor.service
+  location:
+    jms_uri:  jms:queue:queuestructure.event
+    rest_uri: http://localhost:8080/example/event-source-api/rest

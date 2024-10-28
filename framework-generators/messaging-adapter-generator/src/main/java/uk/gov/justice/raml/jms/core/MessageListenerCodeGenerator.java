@@ -27,6 +27,7 @@ import uk.gov.justice.services.generators.commons.helper.MessagingResourceUri;
 import uk.gov.justice.services.messaging.logging.LoggerUtils;
 
 import java.util.Map;
+import java.util.Optional;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
@@ -73,7 +74,7 @@ class MessageListenerCodeGenerator {
     private static final String SHARE_SUBSCRIPTIONS = "shareSubscriptions";
 
     private final ComponentDestinationType componentDestinationType = new ComponentDestinationType();
-
+    private final EventSourcesDestinationTypeFinder destinationTypeFinder = new EventSourcesDestinationTypeFinderFactory().create();
     /**
      * Create an implementation of the {@link MessageListener}.
      *
@@ -152,6 +153,7 @@ class MessageListenerCodeGenerator {
         throw new IllegalStateException(format("JMS Endpoint generation is unsupported for framework component type %s", serviceComponent));
     }
 
+
     private ClassName getValidationInterceptorClassName(final ClassNameFactory classNameFactory,
                                                         final Resource resource,
                                                         final MessagingAdapterBaseUri baseUri) {
@@ -207,7 +209,8 @@ class MessageListenerCodeGenerator {
                                                    final MessagingResourceUri resourceUri,
                                                    final MessagingAdapterBaseUri baseUri) {
 
-        final Class<? extends Destination> inputType = componentDestinationType.inputTypeFor(component);
+        final Optional<Class<? extends Destination>> destination =  destinationTypeFinder.findForEventProcessor(component, resourceUri.destinationName());
+        final Class<? extends Destination>  inputType =  destination.orElse(componentDestinationType.inputTypeFor(component));
 
         AnnotationSpec.Builder builder = AnnotationSpec.builder(MessageDriven.class)
                 .addMember(ACTIVATION_CONFIG_PARAMETER, "$L",
