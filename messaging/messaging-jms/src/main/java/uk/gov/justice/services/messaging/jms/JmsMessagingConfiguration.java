@@ -9,7 +9,7 @@ import javax.inject.Inject;
 public class JmsMessagingConfiguration {
 
     @Inject
-    @Value(key = "messaging.jms.oversize.message.threshold.bytes", defaultValue = "1024")
+    @Value(key = "messaging.jms.oversize.message.threshold.bytes", defaultValue = "262144")
     private String oversizeMessageThresholdBytes;
 
     public int getOversizeMessageThresholdBytes() {

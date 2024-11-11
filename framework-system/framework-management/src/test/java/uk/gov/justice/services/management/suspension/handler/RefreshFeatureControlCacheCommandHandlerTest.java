@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_IN_PROGRESS;
+import static uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters.withNoCommandParameters;
 
 import uk.gov.justice.services.common.util.UtcClock;
 import uk.gov.justice.services.core.featurecontrol.remote.CachingFeatureProviderTimerBean;
@@ -65,7 +66,8 @@ public class RefreshFeatureControlCacheCommandHandlerTest {
 
         refreshFeatureControlCacheCommandHandler.onRefreshFeatureControlCache(
                 refreshFeatureControlCacheCommand,
-                commandId
+                commandId,
+                withNoCommandParameters()
         );
 
         final InOrder inOrder = inOrder(
@@ -111,7 +113,8 @@ public class RefreshFeatureControlCacheCommandHandlerTest {
 
         refreshFeatureControlCacheCommandHandler.onRefreshFeatureControlCache(
                 refreshFeatureControlCacheCommand,
-                commandId
+                commandId,
+                withNoCommandParameters()
         );
 
         final InOrder inOrder = inOrder(

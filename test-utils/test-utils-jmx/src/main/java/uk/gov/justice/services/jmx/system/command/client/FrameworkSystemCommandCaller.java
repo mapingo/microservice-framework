@@ -5,6 +5,7 @@ import static uk.gov.justice.services.jmx.system.command.client.connection.JmxPa
 import static uk.gov.justice.services.test.utils.common.host.TestHostProvider.getHost;
 
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 import uk.gov.justice.services.management.suspension.commands.SuspendCommand;
 import uk.gov.justice.services.management.suspension.commands.UnsuspendCommand;
@@ -20,27 +21,34 @@ public class FrameworkSystemCommandCaller {
     @SuppressWarnings("squid:S2068")
     private static final String PASSWORD = "admin";
 
-
-    private final TestSystemCommanderClientFactory testSystemCommanderClientFactory;
     private final JmxParameters jmxParameters;
+    private final JmxCommandRuntimeParameters jmxCommandRuntimeParameters;
+    private final TestSystemCommanderClientFactory testSystemCommanderClientFactory;
 
-    public FrameworkSystemCommandCaller(final String contextName) {
+    public FrameworkSystemCommandCaller(final String contextName, final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
         this(jmxParameters()
                 .withContextName(contextName)
                 .withHost(HOST)
                 .withPort(JMX_PORT)
                 .withUsername(USERNAME)
                 .withPassword(PASSWORD)
-                .build());
+                .build(),
+                jmxCommandRuntimeParameters);
     }
 
-    public FrameworkSystemCommandCaller(final JmxParameters jmxParameters) {
-        this(jmxParameters, new TestSystemCommanderClientFactory());
+    public FrameworkSystemCommandCaller(
+            final JmxParameters jmxParameters,
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
+        this(jmxParameters, jmxCommandRuntimeParameters, new TestSystemCommanderClientFactory());
     }
 
     @VisibleForTesting
-    FrameworkSystemCommandCaller(final JmxParameters jmxParameters, final TestSystemCommanderClientFactory testSystemCommanderClientFactory) {
+    FrameworkSystemCommandCaller(
+            final JmxParameters jmxParameters,
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters,
+            final TestSystemCommanderClientFactory testSystemCommanderClientFactory) {
         this.jmxParameters = jmxParameters;
+        this.jmxCommandRuntimeParameters = jmxCommandRuntimeParameters;
         this.testSystemCommanderClientFactory = testSystemCommanderClientFactory;
     }
 
@@ -54,7 +62,7 @@ public class FrameworkSystemCommandCaller {
 
     private void callSystemCommand(final SystemCommand systemCommand) {
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
-            systemCommanderClient.getRemote(jmxParameters.getContextName()).call(systemCommand.getName(), GUARDED);
+            systemCommanderClient.getRemote(jmxParameters.getContextName()).call(systemCommand.getName(), jmxCommandRuntimeParameters, GUARDED);
         }
     }
 }

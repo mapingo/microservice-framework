@@ -7,9 +7,9 @@ import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_RECEIV
 import uk.gov.justice.services.common.util.UtcClock;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
 import uk.gov.justice.services.jmx.api.domain.SystemCommandStatus;
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
 import uk.gov.justice.services.jmx.state.observers.SystemCommandStateBean;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -32,7 +32,7 @@ public class AsynchronousCommandRunner {
 
     @Inject SystemCommandInvocationFailureHandler systemCommandInvocationFailureHandler;
 
-    public UUID run(final SystemCommand systemCommand, final Optional<UUID> commandRuntimeId) {
+    public UUID run(final SystemCommand systemCommand, final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
 
         final UUID commandId = randomUUID();
 
@@ -42,7 +42,7 @@ public class AsynchronousCommandRunner {
                 systemCommandRunner,
                 systemCommand,
                 commandId,
-                commandRuntimeId,
+                jmxCommandRuntimeParameters,
                 systemCommandInvocationFailureHandler
         ));
 

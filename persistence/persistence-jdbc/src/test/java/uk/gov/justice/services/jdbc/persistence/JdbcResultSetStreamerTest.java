@@ -55,6 +55,7 @@ public class JdbcResultSetStreamerTest {
             assertThat(students.get(1).getAge(), is(59));
         }
 
+        verify(preparedStatementWrapper).setFetchSize();
         verify(preparedStatementWrapper).close();
     }
 
@@ -82,6 +83,7 @@ public class JdbcResultSetStreamerTest {
             assertThat(expected.getCause(), is(nullPointerException));
         }
 
+        verify(preparedStatementWrapper).setFetchSize();
         verify(preparedStatementWrapper).close();
     }
 

@@ -1,8 +1,6 @@
 package uk.gov.justice.services.messaging.spi;
 
 import static java.util.Objects.requireNonNullElse;
-import static javax.json.JsonValue.EMPTY_JSON_ARRAY;
-import static javax.json.JsonValue.EMPTY_JSON_OBJECT;
 import static javax.json.JsonValue.NULL;
 import static uk.gov.justice.services.common.converter.JSONObjectValueObfuscator.obfuscated;
 import static uk.gov.justice.services.messaging.JsonEnvelopeWriter.writeJsonObject;
@@ -16,7 +14,6 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import javax.json.Json;

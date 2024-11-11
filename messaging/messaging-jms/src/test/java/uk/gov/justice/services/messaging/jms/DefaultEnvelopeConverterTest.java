@@ -16,7 +16,6 @@ import uk.gov.justice.services.messaging.JsonObjectEnvelopeConverter;
 import uk.gov.justice.services.messaging.Metadata;
 import uk.gov.justice.services.messaging.jms.exception.JmsConverterException;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.jms.JMSException;

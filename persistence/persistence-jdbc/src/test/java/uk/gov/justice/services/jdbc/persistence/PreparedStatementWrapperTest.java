@@ -2,8 +2,10 @@ package uk.gov.justice.services.jdbc.persistence;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -67,7 +69,6 @@ public class PreparedStatementWrapperTest {
         final String query = "someQuery3";
         when(connection.prepareStatement(query)).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-
 
         final PreparedStatementWrapper ps = PreparedStatementWrapper.valueOf(connection, query);
         ps.executeQuery();
@@ -181,8 +182,6 @@ public class PreparedStatementWrapperTest {
         final InOrder inOrder = inOrder(preparedStatement, connection);
         inOrder.verify(preparedStatement).close();
         inOrder.verify(connection).close();
-
-
     }
 
     @Test
@@ -205,7 +204,6 @@ public class PreparedStatementWrapperTest {
 
     }
 
-
     @Test
     public void shouldCloseStatementOnExceptionOnSetLong() throws SQLException {
         final String query = "dummy";
@@ -226,5 +224,39 @@ public class PreparedStatementWrapperTest {
 
     }
 
+    @Test
+    public void shouldSetFetchSizeIfNotInTransaction() throws SQLException {
+        final String query = "someQuery3";
+        when(connection.prepareStatement(query)).thenReturn(preparedStatement);
+        when(preparedStatement.getConnection()).thenReturn(connection);
+
+        when(connection.getAutoCommit()).thenReturn(true);
+
+        try (final PreparedStatementWrapper ps = PreparedStatementWrapper.valueOf(connection, query)) {
+            ps.setFetchSize();
+        }
+
+        final InOrder inOrder = inOrder(resultSet, preparedStatement, connection);
+
+        inOrder.verify(preparedStatement).setFetchSize(200);
+        inOrder.verify(connection, never()).setAutoCommit(anyBoolean());
+    }
+
+    @Test
+    public void shouldSetFetchSizeIfInTransaction() throws SQLException {
+        final String query = "someQuery3";
+        when(connection.prepareStatement(query)).thenReturn(preparedStatement);
+        when(preparedStatement.getConnection()).thenReturn(connection);
+        when(connection.getAutoCommit()).thenReturn(false);
+
+        try(final PreparedStatementWrapper ps = PreparedStatementWrapper.valueOf(connection, query)){
+            ps.setFetchSize();
+        }
+
+        final InOrder inOrder = inOrder(resultSet, preparedStatement, connection);
+
+        inOrder.verify(connection, never()).setAutoCommit(false);
+        inOrder.verify(preparedStatement).setFetchSize(200);
+    }
 
 }

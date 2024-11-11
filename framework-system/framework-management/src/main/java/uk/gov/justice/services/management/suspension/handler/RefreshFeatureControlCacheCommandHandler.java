@@ -8,6 +8,7 @@ import static uk.gov.justice.services.management.suspension.commands.RefreshFeat
 
 import uk.gov.justice.services.common.util.UtcClock;
 import uk.gov.justice.services.core.featurecontrol.remote.CachingFeatureProviderTimerBean;
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
 import uk.gov.justice.services.jmx.command.HandlesSystemCommand;
 import uk.gov.justice.services.jmx.state.events.SystemCommandStateChangedEvent;
 import uk.gov.justice.services.management.suspension.commands.RefreshFeatureControlCacheCommand;
@@ -35,7 +36,10 @@ public class RefreshFeatureControlCacheCommandHandler {
     private Logger logger;
 
     @HandlesSystemCommand(REFRESH_FEATURE_CACHE)
-    public void onRefreshFeatureControlCache(final RefreshFeatureControlCacheCommand refreshFeatureControlCacheCommand, final UUID commandId) {
+    public void onRefreshFeatureControlCache(
+            final RefreshFeatureControlCacheCommand refreshFeatureControlCacheCommand,
+            final UUID commandId,
+            @SuppressWarnings("unused") final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
 
         final String systemCommandName = refreshFeatureControlCacheCommand.getName();
 
