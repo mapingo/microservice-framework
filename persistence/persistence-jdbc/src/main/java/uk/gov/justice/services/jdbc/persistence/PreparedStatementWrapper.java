@@ -8,10 +8,21 @@ import java.sql.Timestamp;
 import java.util.Deque;
 import java.util.LinkedList;
 
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.gov.justice.services.common.configuration.Value;
+
 public class PreparedStatementWrapper implements AutoCloseable {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PreparedStatementWrapper.class);
+    private static final int DEFAULT_FETCH_SIZE = 200;
     private final PreparedStatement preparedStatement;
     private final Deque<AutoCloseable> closeables = new LinkedList<>();
 
+    @Inject
+    @Value(key = "jdbc.statement.fetchSize", defaultValue = "" + DEFAULT_FETCH_SIZE)
+    private int fetchSize;
 
     public static PreparedStatementWrapper valueOf(final Connection connection, final String queryTemplate) throws SQLException {
         PreparedStatementWrapper preparedStatementWrapper = null;
@@ -92,6 +103,26 @@ public class PreparedStatementWrapper implements AutoCloseable {
         return result;
     }
 
+    public void setFetchSize() throws SQLException {
+        try {
+
+            final boolean notInTransaction = preparedStatement.getConnection().getAutoCommit();
+            if (notInTransaction) {
+                /* For fetchSize to work, we need autocommit to be set to false i.e. we need to be in a DB transaction
+                  see https://jdbc.postgresql.org/documentation/query/#getting-results-based-on-a-cursor
+                  To be backward compatible, we do not throw an exception here
+                 */
+                LOGGER.error("=======setFetchSize() requires a transaction to work! You may get a read timeout error or an OutOfMemoryError!!!");
+            }
+
+            // Prevent 0 because it is as if no value was set and the whole data will be loaded
+            this.preparedStatement.setFetchSize(fetchSize > 0 ? fetchSize : DEFAULT_FETCH_SIZE);
+
+        } catch (SQLException e) {
+            handle(e, this);
+        }
+    }
+
     private PreparedStatementWrapper(final Connection connection, final PreparedStatement preparedStatement) {
         this.closeables.add(preparedStatement);
         this.closeables.add(connection);
@@ -113,7 +144,9 @@ public class PreparedStatementWrapper implements AutoCloseable {
         this.closeables.forEach(c -> {
             try (AutoCloseable c1 = c) {
             } catch (Exception e) {
-                throw new JdbcRepositoryException(e);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Failed to close resource", e);
+                }
             }
         });
     }

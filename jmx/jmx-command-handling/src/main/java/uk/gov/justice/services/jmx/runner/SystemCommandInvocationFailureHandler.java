@@ -1,10 +1,12 @@
 package uk.gov.justice.services.jmx.runner;
 
 import static java.lang.String.format;
+import static java.util.Optional.ofNullable;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_FAILED;
 
 import uk.gov.justice.services.common.util.UtcClock;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
 import uk.gov.justice.services.jmx.state.events.SystemCommandStateChangedEvent;
 
 import java.util.Optional;
@@ -28,9 +30,10 @@ public class SystemCommandInvocationFailureHandler {
 
     public void handle(final Exception e, final SystemCommand systemCommand,
                        final UUID commandId,
-                       final Optional<UUID> commandRuntimeId) {
+                       final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
         final StringBuilder message = new StringBuilder(format("Failed to run System Command '%s'", systemCommand.getName()));
 
+        final Optional<UUID> commandRuntimeId = ofNullable(jmxCommandRuntimeParameters.getCommandRuntimeId());
         commandRuntimeId.ifPresent(commandRuntimeUuid -> message.append(format(" for %s '%s'", systemCommand.commandRuntimeIdType(), commandRuntimeUuid)));
 
         logger.error(message.toString(), e);

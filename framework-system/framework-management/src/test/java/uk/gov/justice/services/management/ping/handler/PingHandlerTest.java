@@ -9,6 +9,7 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_COMPLETE;
 import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_IN_PROGRESS;
+import static uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters.withNoCommandParameters;
 
 import uk.gov.justice.services.common.util.UtcClock;
 import uk.gov.justice.services.jmx.state.events.SystemCommandStateChangedEvent;
@@ -59,7 +60,7 @@ public class PingHandlerTest {
 
         when(clock.now()).thenReturn(startedAt, completeAt);
 
-        pingHandler.ping(pingCommand, commandId);
+        pingHandler.ping(pingCommand, commandId, withNoCommandParameters());
 
         final InOrder inOrder = inOrder(systemCommandStateChangedEventFirer, logger);
 

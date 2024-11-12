@@ -5,10 +5,10 @@ import static java.lang.String.format;
 import uk.gov.justice.services.jmx.api.InvalidHandlerMethodException;
 import uk.gov.justice.services.jmx.api.SystemCommandInvocationException;
 import uk.gov.justice.services.jmx.api.command.SystemCommand;
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Optional;
 import java.util.UUID;
 
 public class SystemCommandHandlerProxy {
@@ -39,16 +39,15 @@ public class SystemCommandHandlerProxy {
         return instance;
     }
 
-    public void invokeCommand(final SystemCommand systemCommand, final UUID commandId, final Optional<UUID> commandRuntimeId) throws SystemCommandInvocationException {
+    public void invokeCommand(final SystemCommand systemCommand, final UUID commandId, final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) throws SystemCommandInvocationException {
         try {
-            handlerMethodValidator.checkHandlerMethodIsValid(method, instance, commandRuntimeId);
+            handlerMethodValidator.checkHandlerMethodIsValid(method, instance, jmxCommandRuntimeParameters);
             final Object[] methodArguments = commandHandlerMethodArgumentFactory.createMethodArguments(
                     systemCommand,
                     commandId,
-                    commandRuntimeId);
+                    jmxCommandRuntimeParameters);
             method.invoke(instance, methodArguments);
         } catch (final InvalidHandlerMethodException e) {
-
             throw new SystemCommandInvocationException(e.getMessage(), e);
         } catch (final IllegalAccessException e) {
 

@@ -5,6 +5,7 @@ import static uk.gov.justice.services.jmx.api.domain.CommandState.COMMAND_IN_PRO
 import static uk.gov.justice.services.management.ping.commands.PingCommand.PING;
 
 import uk.gov.justice.services.common.util.UtcClock;
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
 import uk.gov.justice.services.jmx.command.HandlesSystemCommand;
 import uk.gov.justice.services.jmx.state.events.SystemCommandStateChangedEvent;
 import uk.gov.justice.services.management.ping.commands.PingCommand;
@@ -29,7 +30,9 @@ public class PingHandler {
     private Logger logger;
 
     @HandlesSystemCommand(PING)
-    public void ping(@SuppressWarnings("unused") final PingCommand pingCommand, @SuppressWarnings("unused") final UUID commandId) {
+    public void ping(@SuppressWarnings("unused") final PingCommand pingCommand,
+                     @SuppressWarnings("unused") final UUID commandId,
+                     @SuppressWarnings("unused") final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
 
         final ZonedDateTime startedAt = clock.now();
         systemCommandStateChangedEventFirer.fire(new SystemCommandStateChangedEvent(

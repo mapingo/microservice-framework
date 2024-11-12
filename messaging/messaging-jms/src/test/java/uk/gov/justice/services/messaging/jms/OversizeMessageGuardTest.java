@@ -2,7 +2,6 @@ package uk.gov.justice.services.messaging.jms;
 
 import static java.util.Optional.of;
 import static java.util.UUID.fromString;
-import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;

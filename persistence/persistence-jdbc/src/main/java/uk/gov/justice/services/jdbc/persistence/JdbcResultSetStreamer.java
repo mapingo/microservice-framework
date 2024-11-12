@@ -13,15 +13,17 @@ import java.util.stream.Stream;
 
 /**
  * Provides methods for returning result sets as streams
+ * WARNING: the returned stream needs to be closed,
+ * preferably in a try-with-resource otherwise,
+ * connections, statement, etc are left open
  */
 public class JdbcResultSetStreamer {
 
-    private static final int FETCH_SIZE = 50;
-
     public <T> Stream<T> streamOf(final PreparedStatementWrapper psWrapper, final Function<ResultSet, T> resultSetToEntityMapper) throws SQLException {
 
+        // In order to stream data, set fetchSize on statement before querying
+        psWrapper.setFetchSize();
         final ResultSet resultSet = psWrapper.executeQuery();
-        resultSet.setFetchSize(FETCH_SIZE);
 
         return internalStreamOf(psWrapper, resultSet, resultSetToEntityMapper);
     }
@@ -34,6 +36,7 @@ public class JdbcResultSetStreamer {
                 throw handled(ex, psWrapper);
             }
         });
+
     }
 
     private  <U> Stream<U> spliteratorStreamOf(final PreparedStatementWrapper psWrapper, final ResultSet resultSet, final Function<ResultSet, U> resultSetToEntityMapper) {

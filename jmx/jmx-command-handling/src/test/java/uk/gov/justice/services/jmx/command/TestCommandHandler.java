@@ -1,51 +1,71 @@
 package uk.gov.justice.services.jmx.command;
 
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
+
 import java.util.UUID;
 
 public class TestCommandHandler {
 
     @HandlesSystemCommand("some-command_1")
-    public void validHandlerMethodWithOutRuntimeId(final TestCommand testCommand, final UUID commandId) {
+    public void validHandlerMethod(
+            final TestCommand testCommand,
+            final UUID commandId,
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
         
     }
 
     @HandlesSystemCommand("some-command_2")
-    private void invalidPrivateHandlerMethodWithOutRuntimeId(final TestCommand testCommand, final UUID commandId) {
-
-    }
-
-    @HandlesSystemCommand("some-command_4")
-    public void validHandlerMethodWithRuntimeId(final TestCommand testCommand, final UUID commandId, final UUID commandRuntimeId) {
-
-    }
-
-    @HandlesSystemCommand("some-command_5")
-    private void invalidPrivateHandlerMethodWithRuntimeId(final TestCommand testCommand, final UUID commandId, final UUID commandRuntimeId) {
+    private void privateHandlerMethod(
+            final TestCommand testCommand,
+            final UUID commandId,
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
 
     }
 
     @HandlesSystemCommand("some-command_3")
-    public void invalidMissingParameterHandlerMethod() {
+    protected void protectedHandlerMethod(
+            final TestCommand testCommand,
+            final UUID commandId,
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
 
     }
 
     @HandlesSystemCommand("some-command_4")
-    public void invalidTooManyParametersHandlerMethod(final TestCommand testCommand, final UUID commandId, final UUID commandRuntimeId, final String someString) {
+    void packageProtectedHandlerMethod(
+            final TestCommand testCommand,
+            final UUID commandId,
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
 
     }
 
     @HandlesSystemCommand("some-command_5")
-    public void invalidNoSystemCommandHandlerMethod(final String someString) {
+    public void missingSystemCommand(
+            final String thisShouldBeASystemCommand,
+            final UUID commandId,
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
+
+    }
+
+    @HandlesSystemCommand("some-command_5")
+    public void missingCommandId(
+            final TestCommand testCommand,
+            final String thisShouldBeACommandId,
+            final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
 
     }
 
     @HandlesSystemCommand("some-command_6")
-    public void invalidNoCommandIdMethod(final TestCommand testCommand) {
+    public void missingJmxCommandRuntimeParameters(
+            final TestCommand testCommand,
+            final UUID commandId,
+            final String thisShouldBeJmxCommandRuntimeParameters) {
 
     }
 
-    @HandlesSystemCommand("some-command_6")
-    public void invalidNoCommandRuntimeIdMethod(final TestCommand testCommand, final UUID commandId) {
+    @HandlesSystemCommand("some-command_7")
+    public void tooFewParameters(
+            final TestCommand testCommand,
+            final UUID commandId) {
 
     }
 }

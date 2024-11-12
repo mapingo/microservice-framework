@@ -49,15 +49,15 @@ public class ListCommandsInvokerTest {
 
         final JmxParameters jmxParameters = mock(JmxParameters.class);
         final SystemCommanderClient systemCommanderClient = mock(SystemCommanderClient.class);
-        final SystemCommanderMBean commanderMBean = mock(SystemCommanderMBean.class);
+        final SystemCommanderMBean systemCommanderMBean = mock(SystemCommanderMBean.class);
 
         when(jmxParameters.getContextName()).thenReturn(contextName);
         when(jmxParameters.getHost()).thenReturn(host);
         when(jmxParameters.getPort()).thenReturn(port);
         when(jmxParameters.getCredentials()).thenReturn(empty());
         when(systemCommanderClientFactory.create(jmxParameters)).thenReturn(systemCommanderClient);
-        when(systemCommanderClient.getRemote(contextName)).thenReturn(commanderMBean);
-        when(commanderMBean.listCommands()).thenReturn(systemCommandDetails);
+        when(systemCommanderClient.getRemote(contextName)).thenReturn(systemCommanderMBean);
+        when(systemCommanderMBean.listCommands()).thenReturn(systemCommandDetails);
 
         assertThat(listCommandsInvoker.listSystemCommands(jmxParameters), is(of(systemCommandDetails)));
 
@@ -85,7 +85,7 @@ public class ListCommandsInvokerTest {
         final Credentials credentials = mock(Credentials.class);
         final JmxParameters jmxParameters = mock(JmxParameters.class);
         final SystemCommanderClient systemCommanderClient = mock(SystemCommanderClient.class);
-        final SystemCommanderMBean commanderMBean = mock(SystemCommanderMBean.class);
+        final SystemCommanderMBean systemCommanderMBean = mock(SystemCommanderMBean.class);
 
         when(jmxParameters.getContextName()).thenReturn(contextName);
         when(jmxParameters.getHost()).thenReturn(host);
@@ -93,8 +93,8 @@ public class ListCommandsInvokerTest {
         when(jmxParameters.getCredentials()).thenReturn(of(credentials));
         when(credentials.getUsername()).thenReturn(username);
         when(systemCommanderClientFactory.create(jmxParameters)).thenReturn(systemCommanderClient);
-        when(systemCommanderClient.getRemote(contextName)).thenReturn(commanderMBean);
-        when(commanderMBean.listCommands()).thenReturn(systemCommandDetails);
+        when(systemCommanderClient.getRemote(contextName)).thenReturn(systemCommanderMBean);
+        when(systemCommanderMBean.listCommands()).thenReturn(systemCommandDetails);
 
         assertThat(listCommandsInvoker.listSystemCommands(jmxParameters), is(of(systemCommandDetails)));
 

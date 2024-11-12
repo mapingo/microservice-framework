@@ -45,14 +45,14 @@ public class MBeanConnectorTest {
         final JMXConnector jmxConnector =  mock(JMXConnector.class);
         final ObjectName objectName = mock(ObjectName.class);
         final MBeanServerConnection connection = mock(MBeanServerConnection.class);
-        final SystemCommanderMBean systemCommanderMBean = mock(SystemCommanderMBean.class);
+        final SystemCommanderMBean jmxCommandMBean = mock(SystemCommanderMBean.class);
 
         when(commandMBeanNameProvider.create(contextName)).thenReturn(objectName);
         when(jmxConnector.getMBeanServerConnection()).thenReturn(connection);
         when(connection.isRegistered(objectName)).thenReturn(true);
-        when(remoteMBeanFactory.createRemote(connection, objectName, mBeanInterface)).thenReturn(systemCommanderMBean);
+        when(remoteMBeanFactory.createRemote(connection, objectName, mBeanInterface)).thenReturn(jmxCommandMBean);
 
-        assertThat(mBeanConnector.connect(contextName, mBeanInterface, jmxConnector), is(systemCommanderMBean));
+        assertThat(mBeanConnector.connect(contextName, mBeanInterface, jmxConnector), is(jmxCommandMBean));
     }
 
     @Test

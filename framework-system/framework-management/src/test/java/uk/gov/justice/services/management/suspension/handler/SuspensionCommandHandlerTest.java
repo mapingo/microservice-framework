@@ -2,6 +2,7 @@ package uk.gov.justice.services.management.suspension.handler;
 
 import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.inOrder;
+import static uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters.withNoCommandParameters;
 
 import uk.gov.justice.services.management.suspension.commands.SuspendCommand;
 import uk.gov.justice.services.management.suspension.commands.UnsuspendCommand;
@@ -36,7 +37,7 @@ public class SuspensionCommandHandlerTest {
 
         final InOrder inOrder = inOrder(logger, suspensionBean);
 
-        suspensionCommandHandler.onSuspendRequested(suspendCommand, commandId);
+        suspensionCommandHandler.onSuspendRequested(suspendCommand, commandId, withNoCommandParameters());
 
         inOrder.verify(logger).info("Received SUSPEND application command");
         inOrder.verify(suspensionBean).runSuspension(commandId, suspendCommand);
@@ -50,7 +51,7 @@ public class SuspensionCommandHandlerTest {
 
         final InOrder inOrder = inOrder(logger, suspensionBean);
 
-        suspensionCommandHandler.onUnsuspendRequested(shutterCommand, commandId);
+        suspensionCommandHandler.onUnsuspendRequested(shutterCommand, commandId, withNoCommandParameters());
 
         inOrder.verify(logger).info("Received UNSUSPEND application command");
         inOrder.verify(suspensionBean).runSuspension(commandId, shutterCommand);

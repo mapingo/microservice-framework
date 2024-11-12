@@ -4,6 +4,7 @@ import static java.lang.String.format;
 import static uk.gov.justice.services.management.suspension.commands.SuspendCommand.SUSPEND;
 import static uk.gov.justice.services.management.suspension.commands.UnsuspendCommand.UNSUSPEND;
 
+import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
 import uk.gov.justice.services.jmx.command.HandlesSystemCommand;
 import uk.gov.justice.services.management.suspension.commands.SuspendCommand;
 import uk.gov.justice.services.management.suspension.commands.SuspensionCommand;
@@ -24,12 +25,18 @@ public class SuspensionCommandHandler {
     private Logger logger;
 
     @HandlesSystemCommand(SUSPEND)
-    public void onSuspendRequested(final SuspendCommand suspendCommand, final UUID commandId) {
+    public void onSuspendRequested(
+            final SuspendCommand suspendCommand,
+            final UUID commandId,
+            @SuppressWarnings("unused") final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
         doRun(suspendCommand, commandId);
     }
 
     @HandlesSystemCommand(UNSUSPEND)
-    public void onUnsuspendRequested(final UnsuspendCommand unsuspendCommand, final UUID commandId) {
+    public void onUnsuspendRequested(
+            final UnsuspendCommand unsuspendCommand,
+            final UUID commandId,
+            @SuppressWarnings("unused") final JmxCommandRuntimeParameters jmxCommandRuntimeParameters) {
         doRun(unsuspendCommand, commandId);
     }
 
