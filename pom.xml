@@ -25,7 +25,6 @@
     </scm>
 
     <modules>
-        <module>aggregate</module>
         <module>components</module>
         <module>core</module>
         <module>common</module>
