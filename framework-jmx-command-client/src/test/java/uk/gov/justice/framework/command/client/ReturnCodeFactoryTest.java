@@ -2,6 +2,7 @@ package uk.gov.justice.framework.command.client;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static uk.gov.justice.framework.command.client.ReturnCode.AUTHENTICATION_FAILED;
@@ -16,6 +17,7 @@ import uk.gov.justice.services.jmx.system.command.client.connection.JmxAuthentic
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -59,8 +61,16 @@ public class ReturnCodeFactoryTest {
 
         assertThat(returnCodeFactory.createFor(new SystemCommandInvocationFailedException("Test", "Stack Trace")), is(EXCEPTION_OCCURRED));
 
-        verify(toConsolePrinter).printf("Test");
-        verify(toConsolePrinter).println("Stack Trace");
+
+        final InOrder inOrder = inOrder(toConsolePrinter);
+
+        inOrder.verify(toConsolePrinter).printf("-------------------------------------------------");
+        inOrder.verify(toConsolePrinter).printf("SystemCommandInvocationFailedException occurred on server: Test");
+        inOrder.verify(toConsolePrinter).printf("-------------------------------------------------");
+        inOrder.verify(toConsolePrinter).println("Stack Trace");
+        inOrder.verify(toConsolePrinter).printf("-------------------------------------------------");
+        inOrder.verify(toConsolePrinter).printf("End SystemCommandInvocationFailedException from server");
+        inOrder.verify(toConsolePrinter).printf("-------------------------------------------------");
     }
 
     @Test

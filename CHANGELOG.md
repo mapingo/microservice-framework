@@ -4,6 +4,12 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+## [17.100.2] - 2024-11-22
+### Fixed
+- Removed test classes erroneously included in framework-command-client.jar
+### Changed
+- Improved error messages printed whilst running framework-command-client.jar 
+
 ## [17.100.1] - 2024-11-12
 ### Changed
 - Jmx commands can now have and extra optional String `command-runtime-string` that can ba
