@@ -35,8 +35,13 @@ public class ReturnCodeFactory {
         }
 
         if (exception instanceof SystemCommandInvocationFailedException) {
-            toConsolePrinter.printf(exception.getMessage());
+            toConsolePrinter.printf("-------------------------------------------------");
+            toConsolePrinter.printf(exception.getClass().getSimpleName() + " occurred on server: " + exception.getMessage());
+            toConsolePrinter.printf("-------------------------------------------------");
             toConsolePrinter.println(((SystemCommandInvocationFailedException) exception).getServerStackTrace());
+            toConsolePrinter.printf("-------------------------------------------------");
+            toConsolePrinter.printf("End "  + exception.getClass().getSimpleName() + " from server");
+            toConsolePrinter.printf("-------------------------------------------------");
             return EXCEPTION_OCCURRED;
         }
 
