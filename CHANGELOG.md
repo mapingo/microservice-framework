@@ -4,6 +4,10 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+## [17.100.3] - 2024-11-26
+### Removed
+- Removed @MXBean annotation from Jmx interface class to change from MXBean to MBean
+
 ## [17.100.2] - 2024-11-22
 ### Fixed
 - Removed test classes erroneously included in framework-command-client.jar

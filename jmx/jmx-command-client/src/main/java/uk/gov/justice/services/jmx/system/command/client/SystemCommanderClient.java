@@ -6,6 +6,7 @@ import uk.gov.justice.services.jmx.system.command.client.connection.MBeanConnect
 import java.io.Closeable;
 import java.io.IOException;
 
+import javax.management.MBeanServerConnection;
 import javax.management.remote.JMXConnector;
 
 
