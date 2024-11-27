@@ -46,7 +46,11 @@ public class SystemCommandInvoker {
             toConsolePrinter.printf("Connected to %s context", contextName);
 
             final SystemCommanderMBean jmxCommandMBean = systemCommanderClient.getRemote(contextName);
-            final UUID commandId = jmxCommandMBean.call(commandName, jmxCommandRuntimeParameters, commandRunMode);
+
+            final UUID commandRuntimeId = jmxCommandRuntimeParameters.getCommandRuntimeId();
+            final String commandRuntimeString = jmxCommandRuntimeParameters.getCommandRuntimeString();
+
+            final UUID commandId = jmxCommandMBean.call(commandName, commandRuntimeId,commandRuntimeString, commandRunMode.isGuarded());
             toConsolePrinter.printf("System command '%s' with id '%s' successfully sent to %s", commandName, commandId, contextName);
             commandPoller.runUntilComplete(jmxCommandMBean, commandId, commandName);
 
