@@ -10,6 +10,8 @@ import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameter
 import uk.gov.justice.services.management.suspension.commands.SuspendCommand;
 import uk.gov.justice.services.management.suspension.commands.UnsuspendCommand;
 
+import java.util.UUID;
+
 import com.google.common.annotations.VisibleForTesting;
 
 public class FrameworkSystemCommandCaller {
@@ -62,7 +64,9 @@ public class FrameworkSystemCommandCaller {
 
     private void callSystemCommand(final SystemCommand systemCommand) {
         try (final SystemCommanderClient systemCommanderClient = testSystemCommanderClientFactory.create(jmxParameters)) {
-            systemCommanderClient.getRemote(jmxParameters.getContextName()).call(systemCommand.getName(), jmxCommandRuntimeParameters, GUARDED);
+            final UUID commandRuntimeId = jmxCommandRuntimeParameters.getCommandRuntimeId();
+            final String commandRuntimeString = jmxCommandRuntimeParameters.getCommandRuntimeString();
+            systemCommanderClient.getRemote(jmxParameters.getContextName()).call(systemCommand.getName(), commandRuntimeId, commandRuntimeString, GUARDED.isGuarded());
         }
     }
 }

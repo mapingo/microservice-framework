@@ -9,8 +9,7 @@ import java.util.UUID;
 
 public interface SystemCommanderMBean {
 
-    UUID call(final String systemCommandName, final JmxCommandRuntimeParameters jmxCommandRuntimeParameters);
-    UUID call(final String systemCommandName, final JmxCommandRuntimeParameters jmxCommandRuntimeParameters, final CommandRunMode commandRunMode);
+    UUID call(final String systemCommandName, final UUID commandRuntimeId, final String commandRuntimeString, final boolean guarded);
     List<SystemCommandDetails> listCommands();
     SystemCommandStatus getCommandStatus(final UUID commandId);
 }

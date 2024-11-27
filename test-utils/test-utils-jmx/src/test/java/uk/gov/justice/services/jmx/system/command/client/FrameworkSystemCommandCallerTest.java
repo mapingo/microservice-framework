@@ -19,6 +19,7 @@ import uk.gov.justice.services.jmx.system.command.client.connection.Credentials;
 import uk.gov.justice.services.jmx.system.command.client.connection.JmxParameters;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,9 +36,11 @@ public class FrameworkSystemCommandCallerTest {
     public void shouldCallShutter() throws Exception {
 
         final String contextName = "contextName";
+        final UUID nullCommandRuntimeId = null;
+        final String nullCommandRuntimeString = null;
+        final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = withNoCommandParameters();
 
         final JmxParameters jmxParameters = mock(JmxParameters.class);
-        final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = mock(JmxCommandRuntimeParameters.class);
         final SystemCommanderClient systemCommanderClient = mock(SystemCommanderClient.class);
         final SystemCommanderMBean systemCommanderMBean = mock(SystemCommanderMBean.class);
 
@@ -52,7 +55,7 @@ public class FrameworkSystemCommandCallerTest {
 
         frameworkSystemCommandCaller.callShutter();
 
-        verify(systemCommanderMBean).call(SUSPEND, jmxCommandRuntimeParameters, GUARDED);
+        verify(systemCommanderMBean).call(SUSPEND, nullCommandRuntimeId, nullCommandRuntimeString, true);
         verify(systemCommanderClient).close();
     }
 
@@ -60,9 +63,11 @@ public class FrameworkSystemCommandCallerTest {
     public void shouldCallUnshutter() throws Exception {
 
         final String contextName = "contextName";
+        final UUID nullCommandRuntimeId = null;
+        final String nullCommandRuntimeString = null;
+        final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = withNoCommandParameters();
 
         final JmxParameters jmxParameters = mock(JmxParameters.class);
-        final JmxCommandRuntimeParameters jmxCommandRuntimeParameters = mock(JmxCommandRuntimeParameters.class);
         final SystemCommanderClient systemCommanderClient = mock(SystemCommanderClient.class);
         final SystemCommanderMBean systemCommanderMBean = mock(SystemCommanderMBean.class);
 
@@ -77,7 +82,7 @@ public class FrameworkSystemCommandCallerTest {
 
         frameworkSystemCommandCaller.callUnshutter();
 
-        verify(systemCommanderMBean).call(UNSUSPEND, jmxCommandRuntimeParameters, GUARDED);
+        verify(systemCommanderMBean).call(UNSUSPEND, nullCommandRuntimeId, nullCommandRuntimeString, true);
         verify(systemCommanderClient).close();
     }
 
