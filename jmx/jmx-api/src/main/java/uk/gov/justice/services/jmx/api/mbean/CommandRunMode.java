@@ -14,4 +14,13 @@ public enum CommandRunMode {
     public boolean isGuarded() {
         return guarded;
     }
+
+    public static CommandRunMode fromBoolean(final boolean guarded) {
+
+        if (guarded) {
+            return GUARDED;
+        }
+
+        return FORCED;
+    }
 }
