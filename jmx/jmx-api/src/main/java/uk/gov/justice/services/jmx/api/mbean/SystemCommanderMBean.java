@@ -7,13 +7,9 @@ import uk.gov.justice.services.jmx.api.parameters.JmxCommandRuntimeParameters;
 import java.util.List;
 import java.util.UUID;
 
-import javax.management.MXBean;
-
-@MXBean
 public interface SystemCommanderMBean {
 
-    UUID call(final String systemCommandName, final JmxCommandRuntimeParameters jmxCommandRuntimeParameters);
-    UUID call(final String systemCommandName, final JmxCommandRuntimeParameters jmxCommandRuntimeParameters, final CommandRunMode commandRunMode);
+    UUID call(final String systemCommandName, final UUID commandRuntimeId, final String commandRuntimeString, final boolean guarded);
     List<SystemCommandDetails> listCommands();
     SystemCommandStatus getCommandStatus(final UUID commandId);
 }

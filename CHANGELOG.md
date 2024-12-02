@@ -9,6 +9,21 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
   stop liquibase collecting anonymous analytics if we should ever upgrade to liquibase  
   4.30.0 or greater. Details can be found here: https://www.liquibase.com/blog/product-update-liquibase-now-collects-anonymous-usage-analytics
 
+## [17.100.4] - 2024-11-27
+### Changed
+- Jmx MBean `SystemCommanderMBean` now only takes basic Java Objects to keep the JMX handling interoperable
+### Removed
+- Removed `JmxCommandParameters` and `CommandRunMode` from JMX SystemCommanderMBean call
+
+## [17.100.3] - 2024-11-26
+### Removed
+- Removed @MXBean annotation from Jmx interface class to change from MXBean to MBean
+
+## [17.100.2] - 2024-11-22
+### Fixed
+- Removed test classes erroneously included in framework-command-client.jar
+### Changed
+- Improved error messages printed whilst running framework-command-client.jar 
 
 ## [17.100.1] - 2024-11-12
 ### Changed
