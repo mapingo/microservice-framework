@@ -4,6 +4,11 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 [Unreleased]
+
+
+## [17.101.0] - 2024-12-02
+### Changed
+- Bump version to 17.101.0
 ### Added
 - Add 'liquibase.analytics.enabled: false' to all liquibase.properties files to
   stop liquibase collecting anonymous analytics if we should ever upgrade to liquibase  
